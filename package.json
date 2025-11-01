@@ -1,8 +1,8 @@
 {
-  "name": "ao3-read-tracker",
-  "displayName": "AO3 Read Tracker",
+  "name": "ao3-mark-as-read",
+  "displayName": "AO3 Mark as Read",
   "version": "1.0.0",
-  "description": "Mark fics as read on AO3",
+  "description": "Mark fics as read or ignore them on AO3",
   "main": "index.js",
   "type": "module",
   "scripts": {
