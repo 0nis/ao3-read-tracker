@@ -97,7 +97,7 @@ export const Storage = {
     };
 
     const exportData = {
-      __ao3ReadTracker: true,
+      __ao3MarkAsRead: true,
       version: VERSION,
       exportedAt: new Date().toISOString(),
       data: data,
@@ -127,7 +127,7 @@ export const Storage = {
           if (
             typeof imported === "object" &&
             imported !== null &&
-            imported.__ao3ReadTracker === true &&
+            imported.__ao3MarkAsRead === true &&
             typeof imported.data === "object"
           ) {
             const { readFics, ignoredFics, settings } = imported.data;
