@@ -13,11 +13,13 @@ export async function handleMarkFicAsRead(
   if (result.success) showNotification(`Fic ${id} marked as read.`);
   else showNotification(`Failed to mark fic ${id} as read: ${result.error}`);
 }
+
 export async function handleMarkFicAsUnread(id: string): Promise<void> {
   const result = await Storage.remove(STORAGE_KEYS.READ, id);
   if (result.success) showNotification(`Fic ${id} marked as unread.`);
   else showNotification(`Failed to mark fic ${id} as unread: ${result.error}`);
 }
+
 export async function handleIgnoreFic(
   id: string,
   title?: string,
@@ -31,6 +33,7 @@ export async function handleIgnoreFic(
   if (result.success) showNotification(`Fic ${id} is now being ignored.`);
   else showNotification(`Failed to ignore fic ${id}: ${result.error}`);
 }
+
 export async function handleUnignoreFic(id: string): Promise<void> {
   const result = await Storage.remove(STORAGE_KEYS.IGNORED, id);
   if (result.success) showNotification(`Fic ${id} is no longer being ignored.`);

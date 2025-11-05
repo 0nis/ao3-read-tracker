@@ -1,55 +1,45 @@
-import {
-  handleIgnoreFic,
-  handleMarkFicAsRead,
-  handleMarkFicAsUnread,
-  handleUnignoreFic,
-} from "./handlers";
-import { addButtonToNav } from "../../utils/ui";
 import { getIdFromUrl } from "../../utils/ao3";
+import { getTrackedFics } from "../../services/tracking";
+import { STORAGE_KEYS } from "../../constants/settings";
 
-function addReadButton() {
-  const nav = document.querySelector("ul.work.navigation.actions");
-  if (!nav) return;
-  addButtonToNav(
-    nav as HTMLElement,
-    async (ev, isOn) => {
-      ev.preventDefault();
-      const ficId = getIdFromUrl();
-      if (!ficId) return;
-      if (isOn) await handleMarkFicAsUnread(ficId);
-      else await handleMarkFicAsRead(ficId);
-    },
-    null,
-    {
-      ON: "Mark as Unread",
-      OFF: "Mark as Read",
-    },
-    true
-  );
+interface ToggleButtonConfig {
+  storageKey: string;
+  labels: { ON: string; OFF: string };
+  onActivate: (id: string) => Promise<void>;
+  onDeactivate: (id: string) => Promise<void>;
 }
 
-function addIgnoreButton() {
+export async function addToggleButton(config: ToggleButtonConfig) {
   const nav = document.querySelector("ul.work.navigation.actions");
   if (!nav) return;
-  addButtonToNav(
-    nav as HTMLElement,
-    async (ev, isOn) => {
-      ev.preventDefault();
-      const ficId = getIdFromUrl();
-      if (!ficId) return;
-      if (isOn) await handleUnignoreFic(ficId);
-      else await handleIgnoreFic(ficId);
-    },
-    null,
-    {
-      ON: "Unignore",
-      OFF: "Ignore",
-    },
-    true
-  );
-}
 
-export function initializeNavigationButtons() {
-  addReadButton();
-  addIgnoreButton();
+  const ficId = getIdFromUrl();
+  if (!ficId) return;
+
+  const tracked = await getTrackedFics();
+  const initialState =
+    config.storageKey === STORAGE_KEYS.READ
+      ? !!tracked.read[ficId]
+      : !!tracked.ignored[ficId];
+
+  const li = document.createElement("li");
+  const button = document.createElement("a");
+  button.href = "#";
+  button.textContent = initialState ? config.labels.ON : config.labels.OFF;
+
+  button.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    const isOn = button.textContent === config.labels.ON;
+
+    if (isOn) {
+      button.textContent = config.labels.OFF;
+      await config.onDeactivate(ficId);
+    } else {
+      button.textContent = config.labels.ON;
+      await config.onActivate(ficId);
+    }
+  });
+
+  li.appendChild(button);
+  nav.appendChild(li);
 }

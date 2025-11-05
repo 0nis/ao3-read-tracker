@@ -1,7 +1,7 @@
 import { SETTINGS_PAGE_URL } from "../../constants/settings";
 import { Router } from "../router";
 import { addSettingsButtonToNav } from "./navigation";
-import { render } from "./render";
+import { render } from "./renderer";
 
 export const Settings = {
   init() {
