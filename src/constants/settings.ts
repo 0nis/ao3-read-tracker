@@ -5,3 +5,5 @@ export const STORAGE_KEYS = {
   IGNORED: "ao3ReadTracker_ignoredFics",
   SETTINGS: "ao3ReadTracker_settings",
 } as const;
+
+export const SETTINGS_PAGE_URL = "/settings/mark-as-read";

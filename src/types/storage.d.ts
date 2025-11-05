@@ -10,12 +10,14 @@ export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
 export type ReadFicsEntry = {
   id: string;
   timestamp: number;
+  title?: string;
 };
 export type ReadFics = ReadFicsEntry[];
 
 export type IgnoredFicsEntry = {
   id: string;
   timestamp: number;
+  title?: string;
   reason?: string;
 };
 export type IgnoredFics = IgnoredFicsEntry[];

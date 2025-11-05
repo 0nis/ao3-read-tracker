@@ -1,14 +1,13 @@
 import { addButtonToNav } from "../../utils/ui";
 
-export function addSettingsButtonToNav(url: string): void {
+export function addSettingsButton(open: () => void): void {
   const nav = document.querySelector("ul.primary.navigation.actions");
   if (!nav) return;
   addButtonToNav(
     nav as HTMLElement,
     async (ev) => {
       ev.preventDefault();
-      history.pushState({}, "", url);
-      window.dispatchEvent(new Event("urlchange"));
+      open();
     },
     "⚙️ Read Tracker",
     null,
