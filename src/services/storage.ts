@@ -3,15 +3,14 @@ import { ChromeLocalAdapter } from "../adapters/chrome/chromeLocal.js";
 import { FirefoxLocalAdapter } from "../adapters/firefox/firefoxLocal.js";
 
 import {
-  ArrayKeys,
+  RecordStorageMap,
   StorageAdapter,
   StorageData,
-  StorageEntryMap,
   StorageKey,
   StorageKeyMap,
 } from "../types/storage";
 
-import { VERSION } from "../constants/settings";
+import { DEFAULT_SETTINGS, VERSION } from "../constants/settings";
 import { STORAGE_KEYS } from "../constants/settings";
 import { safeExecute } from "../utils/storage.js";
 
@@ -53,30 +52,50 @@ export const Storage = {
   /**
    * Adds a new entry to the given key in storage.
    * @param key The key to add the entry to
-   * @param entry The entry to add
+   * @param id The ID of the entry to add
+   * @param value The value of the entry to add
+   * @returns A promise that resolves when the entry has been added
    */
-  add: <K extends ArrayKeys>(key: K, entry: StorageEntryMap[K]) =>
-    safeExecute(
-      () => getStorageAdapter().add(key, entry),
-      `Storage.add:${key}`
-    ),
+  async add<K extends keyof RecordStorageMap>(
+    key: K,
+    id: string,
+    value: RecordStorageMap[K][string]
+  ) {
+    return await safeExecute(async () => {
+      const result =
+        ((await getStorageAdapter().get(key)) as RecordStorageMap[K]) || {};
+      result[id] = value;
+      await this.set(key, result);
+    }, `Storage.add:${key}`);
+  },
 
   /**
    * Removes an entry from the given key in storage.
    * @param key The key to remove the entry from
    * @param id The ID of the entry to remove
    */
-  remove: <K extends ArrayKeys>(key: K, id: string) =>
-    safeExecute(
-      () => getStorageAdapter().remove(key, id),
-      `Storage.remove:${key}`
-    ),
+  async remove<K extends keyof RecordStorageMap>(key: K, id: string) {
+    return await safeExecute(async () => {
+      const result =
+        ((await getStorageAdapter().get(key)) as RecordStorageMap[K]) || {};
+      delete result[id];
+      await this.set(key, result);
+    }, `Storage.remove:${key}`);
+  },
 
   /**
    * Exports the given data as a JSON file.
    * @param data The data to export
    */
-  async export(data: StorageData): Promise<void> {
+  async export(): Promise<void> {
+    const data: StorageData = {
+      readFics: (await getStorageAdapter().get(STORAGE_KEYS.READ)) || {},
+      ignoredFics: (await getStorageAdapter().get(STORAGE_KEYS.IGNORED)) || {},
+      settings:
+        (await getStorageAdapter().get(STORAGE_KEYS.SETTINGS)) ||
+        DEFAULT_SETTINGS,
+    };
+
     const exportData = {
       __ao3ReadTracker: true,
       version: VERSION,
@@ -112,17 +131,17 @@ export const Storage = {
             typeof imported.data === "object"
           ) {
             const { readFics, ignoredFics, settings } = imported.data;
-            const currentAdapter = await getStorageAdapter();
-            if (Array.isArray(readFics))
+            const currentAdapter = getStorageAdapter();
+            if (readFics && typeof readFics === "object")
               await currentAdapter.set(STORAGE_KEYS.READ, readFics);
-            if (Array.isArray(ignoredFics))
+            if (ignoredFics && typeof ignoredFics === "object")
               await currentAdapter.set(STORAGE_KEYS.IGNORED, ignoredFics);
             await currentAdapter.set(STORAGE_KEYS.SETTINGS, settings);
             resolve(imported.data);
           } else {
             reject(
               new Error(
-                "[AO3 Read Tracker] Invalid AO3 Read Tracker export file."
+                "[AO3 Mark as Read] Invalid AO3 Mark as Read export file."
               )
             );
           }

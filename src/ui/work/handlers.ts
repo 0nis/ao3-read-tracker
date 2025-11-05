@@ -6,8 +6,7 @@ export async function handleMarkFicAsRead(
   id: string,
   title?: string
 ): Promise<void> {
-  const result = await Storage.add(STORAGE_KEYS.READ, {
-    id: id,
+  const result = await Storage.add(STORAGE_KEYS.READ, id, {
     timestamp: Date.now(),
     title: title,
   });
@@ -24,8 +23,7 @@ export async function handleIgnoreFic(
   title?: string,
   reason?: string
 ): Promise<void> {
-  const result = await Storage.add(STORAGE_KEYS.IGNORED, {
-    id: id,
+  const result = await Storage.add(STORAGE_KEYS.IGNORED, id, {
     timestamp: Date.now(),
     title: title,
     reason: reason,

@@ -26,3 +26,4 @@ import { UI } from "./ui/core";
 // TODO: Add export/import functionality
 
 // TODO: Account for edge cases in listings
+// - Observe mutations in listings

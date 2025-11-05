@@ -7,20 +7,18 @@ import { Settings } from "./settings";
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
 
-export type ReadFicsEntry = {
-  id: string;
+export interface ReadFicInfo {
   timestamp: number;
   title?: string;
-};
-export type ReadFics = ReadFicsEntry[];
+}
+export type ReadFics = Record<string, ReadFicInfo>;
 
-export type IgnoredFicsEntry = {
-  id: string;
+export interface IgnoredFicInfo {
   timestamp: number;
   title?: string;
   reason?: string;
-};
-export type IgnoredFics = IgnoredFicsEntry[];
+}
+export type IgnoredFics = Record<string, IgnoredFicInfo>;
 
 // --------------------------------
 // |       Storage Mappings       |
@@ -32,13 +30,13 @@ export interface StorageKeyMap {
   [STORAGE_KEYS.SETTINGS]: Settings;
 }
 
-export type StorageEntryMap = {
-  [K in keyof StorageKeyMap]: StorageKeyMap[K] extends (infer U)[] ? U : never;
-};
+type StringKeyedRecord<T> = T extends { [key: string]: infer V } ? T : never;
 
-export type ArrayKeys = {
-  [K in keyof StorageKeyMap]: StorageKeyMap[K] extends any[] ? K : never;
-}[keyof StorageKeyMap];
+export type RecordStorageMap = {
+  [K in keyof StorageKeyMap as StringKeyedRecord<StorageKeyMap[K]> extends never
+    ? never
+    : K]: StringKeyedRecord<StorageKeyMap[K]>;
+};
 
 export type StorageData = {
   readFics: ReadFics;
@@ -50,6 +48,8 @@ export type StorageResult<T = void> =
   | { success: true; data?: T }
   | { success: false; error: unknown };
 
+type RecordValue<T> = T extends Record<string, infer V> ? V : never;
+
 // ---------------------------------
 // |       Adapter Interface       |
 // ---------------------------------
@@ -60,9 +60,4 @@ export interface StorageAdapter {
     key: K,
     value: StorageKeyMap[K]
   ): Promise<void | null>;
-  add<K extends ArrayKeys>(
-    key: K,
-    value: StorageEntryMap[K]
-  ): Promise<void | null>;
-  remove<K extends ArrayKeys>(key: K, id: string): Promise<void | null>;
 }
