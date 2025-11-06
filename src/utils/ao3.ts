@@ -19,3 +19,14 @@ export function hijackAo3Page(
   main.className = `ao3-mark-as-read__${className}`;
   return main;
 }
+
+export function extractWorkIdFromListingId(id: string): string | null {
+  const match = id.match(/^work_(\d+)/);
+  return match ? match[1] : null;
+}
+
+export function getWorksListFromListing(): HTMLElement | null {
+  const main = document.getElementById("main");
+  if (!main?.classList.contains("works-index")) return null;
+  return main.querySelector("ol.work.index.group");
+}
