@@ -1,4 +1,3 @@
-import { STORAGE_KEYS } from "../../constants/settings";
 import {
   handleIgnoreFic,
   handleMarkFicAsRead,
@@ -10,14 +9,14 @@ import { addToggleButton } from "./navigation";
 export const Work = {
   async init() {
     await addToggleButton({
-      storageKey: STORAGE_KEYS.READ,
+      type: "read",
       labels: { ON: "Mark as Unread", OFF: "Mark as Read" },
       onActivate: handleMarkFicAsRead,
       onDeactivate: handleMarkFicAsUnread,
     });
 
     await addToggleButton({
-      storageKey: STORAGE_KEYS.IGNORED,
+      type: "ignored",
       labels: { ON: "Unignore", OFF: "Ignore" },
       onActivate: handleIgnoreFic,
       onDeactivate: handleUnignoreFic,

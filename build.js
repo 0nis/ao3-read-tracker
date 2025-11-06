@@ -1,7 +1,7 @@
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
-import { VALID_BROWSERS, VALID_STORAGE } from "./constants.js";
+import { VALID_BROWSERS } from "./constants.js";
 
 const __dirname = path.resolve();
 const outDir = path.resolve(__dirname, "build");
@@ -30,19 +30,10 @@ function parseArgs() {
 
 const args = parseArgs();
 const browser = args.browser || "all";
-const storage = args.storage || "local";
 
 if (!VALID_BROWSERS.includes(browser)) {
   throw new Error(
     `Invalid browser: ${browser}. Valid options are: ${VALID_BROWSERS.join(
-      ", "
-    )}`
-  );
-}
-
-if (!VALID_STORAGE.includes(storage)) {
-  throw new Error(
-    `Invalid storage: ${storage}. Valid options are: ${VALID_STORAGE.join(
       ", "
     )}`
   );
@@ -64,7 +55,7 @@ function mergeManifest(templatePath, destPath) {
 }
 
 async function buildForBrowser(targetBrowser) {
-  console.log(`\nBuilding for ${targetBrowser} (storage=${storage})...`);
+  console.log(`\nBuilding for ${targetBrowser}...`);
 
   if (fs.existsSync(outDir)) {
     fs.rmSync(outDir, { recursive: true, force: true });
@@ -82,11 +73,10 @@ async function buildForBrowser(targetBrowser) {
     target: ["es2018"],
     define: {
       __BROWSER__: JSON.stringify(targetBrowser),
-      __STORAGE__: JSON.stringify(storage),
     },
   });
 
-  const distPath = path.join(distDir, `${targetBrowser}-${storage}`);
+  const distPath = path.join(distDir, `${targetBrowser}`);
 
   const manifestSrc = path.resolve(
     __dirname,
@@ -109,9 +99,7 @@ async function buildForBrowser(targetBrowser) {
   );
   mergeManifest(manifestSrc, manifestDest);
 
-  console.log(
-    `✅ Build complete for ${targetBrowser} (storage=${storage}). Output: ${distPath}`
-  );
+  console.log(`✅ Build complete for ${targetBrowser}. Output: ${distPath}`);
 }
 
 async function buildOnce() {

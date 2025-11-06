@@ -1,11 +1,10 @@
-import { getIdFromUrl } from "../../utils/ao3";
-import { getTrackedFics } from "../../services/tracking";
-import { STORAGE_KEYS } from "../../constants/settings";
+import { getIdFromUrl, getTitleFromWorkPage } from "../../utils/ao3";
+import { StorageService } from "../../services/storage";
 
 interface ToggleButtonConfig {
-  storageKey: string;
+  type: "read" | "ignored";
   labels: { ON: string; OFF: string };
-  onActivate: (id: string) => Promise<void>;
+  onActivate: (id: string, title?: string) => Promise<void>;
   onDeactivate: (id: string) => Promise<void>;
 }
 
@@ -16,16 +15,26 @@ export async function addToggleButton(config: ToggleButtonConfig) {
   const ficId = getIdFromUrl();
   if (!ficId) return;
 
-  const tracked = await getTrackedFics();
+  const ficTitle = getTitleFromWorkPage() || undefined;
+
   const initialState =
-    config.storageKey === STORAGE_KEYS.READ
-      ? !!tracked.read[ficId]
-      : !!tracked.ignored[ficId];
+    config.type === "read"
+      ? await StorageService.isRead(ficId)
+      : await StorageService.isIgnored(ficId);
+
+  if (!initialState.success) {
+    console.error(
+      "Failed to retrieve initial state for toggle button:",
+      initialState.error
+    );
+    return;
+  }
+  if (initialState.data === undefined) return;
 
   const li = document.createElement("li");
   const button = document.createElement("a");
   button.href = "#";
-  button.textContent = initialState ? config.labels.ON : config.labels.OFF;
+  button.textContent = initialState.data ? config.labels.ON : config.labels.OFF;
 
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
@@ -36,7 +45,7 @@ export async function addToggleButton(config: ToggleButtonConfig) {
       await config.onDeactivate(ficId);
     } else {
       button.textContent = config.labels.ON;
-      await config.onActivate(ficId);
+      await config.onActivate(ficId, ficTitle);
     }
   });
 

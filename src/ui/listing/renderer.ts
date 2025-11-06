@@ -5,8 +5,8 @@ import {
   READ_CLASS,
   TOGGLE_CLASS,
 } from "../../constants/classes";
-import { getTrackedFics } from "../../services/tracking";
-import { IgnoredFicInfo, ReadFicInfo } from "../../types/storage";
+import { StorageService } from "../../services/storage";
+import { IgnoredFic, ReadFic } from "../../types/storage";
 import {
   extractWorkIdFromListingId,
   getWorksListFromListing,
@@ -16,10 +16,26 @@ export async function markFicsOnPage(): Promise<void> {
   const worksList = getWorksListFromListing();
   if (!worksList) return;
 
-  const tracked = await getTrackedFics();
   const items = Array.from(
     worksList.querySelectorAll<HTMLLIElement>("li.work")
   );
+  if (items.length === 0) return;
+
+  const ficIds = items
+    .map((item) => extractWorkIdFromListingId(item.id))
+    .filter((id): id is string => typeof id === "string");
+
+  const storedDataResult = await StorageService.getByIds(ficIds);
+  if (!storedDataResult.success) {
+    console.error(
+      "Failed to retrieve stored fic data:",
+      storedDataResult.error
+    );
+    return;
+  }
+  if (!storedDataResult.data) return;
+
+  const { readFics, ignoredFics } = storedDataResult.data;
 
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
@@ -27,19 +43,19 @@ export async function markFicsOnPage(): Promise<void> {
 
     item.classList.remove(READ_CLASS, IGNORED_CLASS);
 
-    if (tracked.read[id]) markAsRead(item, tracked.read[id]);
-    if (tracked.ignored[id]) markAsIgnored(item, tracked.ignored[id]);
+    if (readFics[id]) markAsRead(item, readFics[id]);
+    if (ignoredFics[id]) markAsIgnored(item, ignoredFics[id]);
   }
 }
 
-function markAsRead(work: HTMLElement, item: ReadFicInfo) {
+function markAsRead(work: HTMLElement, item: ReadFic) {
   work.classList.add(READ_CLASS);
   // TODO: Allow modification of behavior through settings
   addTextIndicator(work, "read", item);
   collapse(work, "gentle");
 }
 
-function markAsIgnored(work: HTMLElement, item: IgnoredFicInfo) {
+function markAsIgnored(work: HTMLElement, item: IgnoredFic) {
   work.classList.add(IGNORED_CLASS);
   // TODO: Allow modification of behavior through settings
   addTextIndicator(work, "ignored", item);
@@ -55,7 +71,7 @@ function markAsIgnored(work: HTMLElement, item: IgnoredFicInfo) {
 function addTextIndicator(
   work: HTMLElement,
   type: "read" | "ignored",
-  item: ReadFicInfo | IgnoredFicInfo
+  item: ReadFic | IgnoredFic
 ) {
   const indicator = document.createElement("p");
   indicator.classList.add(INDICATOR_CLASS, `${INDICATOR_CLASS}__${type}`);

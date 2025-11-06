@@ -1,8 +1,16 @@
+import { db } from "./data/db";
 import { UI } from "./ui/core";
 
 (async function main() {
   // Entry point for the application
-  UI.init();
+  await db
+    .open()
+    .then(() => {
+      UI.init();
+    })
+    .catch((err) => {
+      console.error("Failed to open database:", err);
+    });
 })();
 
 // TODO: Implement "read" functionality
