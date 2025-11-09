@@ -109,9 +109,8 @@ export function collapse(
 
   work.classList.add(COLLAPSED_CLASS);
 
-  for (const el of elementsToHide) el.classList.add("ao3-mark-as-read__hidden");
-  if (mode === "aggressive" && header)
-    header.classList.add("ao3-mark-as-read__hidden");
+  for (const el of elementsToHide) el.classList.add("ext-mar__hidden");
+  if (mode === "aggressive" && header) header.classList.add("ext-mar__hidden");
 
   const toggle = createCollapseToggle(work, elementsToHide);
   work.appendChild(toggle);
@@ -137,7 +136,7 @@ function createCollapseToggle(
     const isCollapsed = toggle.textContent === "Show details";
 
     for (const el of elementsToToggle)
-      el.classList.toggle("ao3-mark-as-read__hidden", !isCollapsed);
+      el.classList.toggle("ext-mar__hidden", !isCollapsed);
 
     toggle.textContent = isCollapsed ? "Hide details" : "Show details";
     work.classList.toggle(COLLAPSED_CLASS, !isCollapsed);
@@ -153,5 +152,5 @@ function createCollapseToggle(
  */
 export async function hide(id: string): Promise<void> {
   const work = document.getElementById(`work_${id}`);
-  if (work) work.classList.add("ao3-mark-as-read__hidden");
+  if (work) work.classList.add("ext-mar__hidden");
 }

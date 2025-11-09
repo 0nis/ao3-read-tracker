@@ -1,4 +1,5 @@
 import { IGNORE_SETTINGS_ID, READ_SETTINGS_ID } from "../../constants/settings";
+import { addFormStyles } from "./form/style";
 import { handleGetSettings } from "./handlers";
 import {
   handleIgnoreFic,
@@ -10,6 +11,8 @@ import { addButton } from "./navigation";
 
 export const Work = {
   async init() {
+    addFormStyles();
+
     const {
       [READ_SETTINGS_ID]: readSettings,
       [IGNORE_SETTINGS_ID]: ignoreSettings,

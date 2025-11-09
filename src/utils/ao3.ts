@@ -16,7 +16,7 @@ export function hijackAo3Page(
   const main = document.getElementById("main");
   if (!main) return null;
   main.innerHTML = "";
-  main.className = `ao3-mark-as-read__${className}`;
+  main.className = `ext-mar__${className}`;
   return main;
 }
 

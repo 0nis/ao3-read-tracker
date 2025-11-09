@@ -6,11 +6,11 @@ export async function showIgnoredFicForm(
   id: string,
   title: string
 ): Promise<void> {
-  const container = createFormContainer("Ignore Fic");
+  const container = createFormContainer("ext-mar__ignored-form", "Ignore Fic");
   const post = container.querySelector(".post")!;
 
   const form = document.createElement("form");
-  form.className = "ao3-mark-as-read__details-form";
+  form.className = "ext-mar__details-form";
 
   form.innerHTML = `
     <fieldset>

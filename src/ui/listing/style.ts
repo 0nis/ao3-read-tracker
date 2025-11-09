@@ -1,17 +1,17 @@
 export function addListingStyles(): void {
   const style = document.createElement("style");
   style.textContent = `
-    .ao3-mark-as-read__indicator {
+    .ext-mar__indicator {
       float: right;
     }
-    .ao3-mark-as-read__collapsed .ao3-mark-as-read__indicator {
+    .ext-mar__collapsed .ext-mar__indicator {
       float: left;
     }
-    .ao3-mark-as-read__collapsed .ao3-mark-as-read__toggle {
+    .ext-mar__collapsed .ext-mar__toggle {
       float: right;
       margin: 4px 0px;
     }
-    .ao3-mark-as-read__hidden {
+    .ext-mar__hidden {
       display: none !important;
     }
   `;

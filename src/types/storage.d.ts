@@ -4,7 +4,7 @@ export interface ReadFic {
   id: string;
   timestamp: number;
   title?: string;
-  keeper?: boolean;
+  reread?: boolean;
   count?: number;
   notes?: string;
 }

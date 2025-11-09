@@ -1,6 +1,7 @@
-export function createFormContainer(title: string): HTMLDivElement {
+export function createFormContainer(id: string, title: string): HTMLDivElement {
   const wrapper = document.createElement("div");
-  wrapper.className = "wrapper toggled ao3-mark-as-read__form";
+  wrapper.className = "wrapper toggled";
+  wrapper.id = id;
   wrapper.style.display = "block";
 
   const post = document.createElement("div");
