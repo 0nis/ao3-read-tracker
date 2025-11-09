@@ -1,12 +1,16 @@
 import Dexie, { Table } from "dexie";
-import { ReadFic, IgnoredFic } from "../types/storage";
-import { DATABASE_NAME, DATABASE_VERSION } from "../constants/settings";
-import { Settings } from "../types/settings";
+import { ReadFic, IgnoredFic, Settings } from "../types/storage";
+import {
+  DATABASE_NAME,
+  DATABASE_VERSION,
+  DEFAULT_IGNORE_SETTINGS,
+  DEFAULT_READ_SETTINGS,
+} from "../constants/settings";
 
 export class Ao3MarkAsReadDb extends Dexie {
   readFics!: Table<ReadFic>;
   ignoredFics!: Table<IgnoredFic>;
-  settings!: Table<{ id: string; data: Settings }>;
+  settings!: Table<Settings>;
 
   constructor() {
     super(DATABASE_NAME);
@@ -15,6 +19,10 @@ export class Ao3MarkAsReadDb extends Dexie {
       readFics: "id",
       ignoredFics: "id",
       settings: "id",
+    });
+
+    this.on("populate", async () => {
+      this.settings.bulkAdd([DEFAULT_READ_SETTINGS, DEFAULT_IGNORE_SETTINGS]);
     });
   }
 }

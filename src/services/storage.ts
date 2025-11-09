@@ -3,6 +3,7 @@ import { VERSION } from "../constants/settings";
 import type {
   IgnoredFic,
   ReadFic,
+  Settings,
   StorageData,
   StorageResult,
 } from "../types/storage";
@@ -16,9 +17,25 @@ export const StorageService = {
       return {
         readFics: await ReadFicsData.getAll(),
         ignoredFics: await IgnoredFicsData.getAll(),
-        settings: await SettingsData.get(),
+        settings: await SettingsData.getAll(),
       };
     }, "StorageService.getAll");
+  },
+
+  async getSettings(
+    id?: string
+  ): Promise<StorageResult<Settings | Record<string, Settings> | undefined>> {
+    return safeExecute(async () => {
+      if (!id) return await SettingsData.getAll();
+      const setting = await SettingsData.getByIds([id]);
+      return setting[id];
+    }, "StorageService.getSettings");
+  },
+
+  async updateSettings(settings: Settings): Promise<StorageResult<void>> {
+    return safeExecute(async () => {
+      await SettingsData.put(settings);
+    }, "StorageService.updateSettings");
   },
 
   async getByIds(
@@ -101,7 +118,7 @@ export const StorageService = {
       const { readFics, ignoredFics, settings } = imported.data;
       await ReadFicsData.replaceAll(readFics as ReadFic[]);
       await IgnoredFicsData.replaceAll(ignoredFics as IgnoredFic[]);
-      await SettingsData.replace(settings);
+      await SettingsData.replaceAll(settings as Settings[]);
 
       return imported.data as StorageData;
     }, "StorageService.import");
