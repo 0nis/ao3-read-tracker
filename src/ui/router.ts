@@ -2,19 +2,11 @@ export const Router = {
   routes: [] as Route[],
 
   setup() {
-    const run = () => this.resolve();
+    this.resolve();
+  },
 
-    window.addEventListener("popstate", run);
-
-    const push = history.pushState;
-    history.pushState = function (...args) {
-      const result = push.apply(this, args as any);
-      window.dispatchEvent(new Event("urlchange"));
-      return result;
-    };
-
-    window.addEventListener("urlchange", run);
-    run();
+  navigate(path: string) {
+    window.location.href = path;
   },
 
   register(path: string, render: () => void) {

@@ -1,3 +1,5 @@
+import { Router } from "../router";
+
 export function addSettingsButtonToNav(url: string): void {
   const nav = document.querySelector("ul.primary.navigation.actions");
   if (!nav) return;
@@ -9,8 +11,7 @@ export function addSettingsButtonToNav(url: string): void {
 
   button.addEventListener("click", (ev) => {
     ev.preventDefault();
-    history.pushState({}, "", url);
-    window.dispatchEvent(new Event("urlchange"));
+    Router.navigate(url);
   });
 
   li.appendChild(button);
