@@ -11,7 +11,7 @@ export function addListingStyles(): void {
       float: right;
       margin: 4px 0px;
     }
-    .hidden {
+    .ao3-mark-as-read__hidden {
       display: none !important;
     }
   `;
