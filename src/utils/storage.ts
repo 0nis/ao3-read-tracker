@@ -1,3 +1,4 @@
+import { BaseData } from "../data/base";
 import { StorageResult } from "../types/storage";
 
 /**
@@ -14,7 +15,42 @@ export async function safeExecute<T>(
     const data = await fn();
     return { success: true, data };
   } catch (error) {
-    console.error(`[AO3 Word Replacer] Error in ${context}:`, error);
-    return { success: false, error };
+    console.error(`[AO3 Mark as Read] Error in ${context}:`, error);
+    return { success: false, error, data: undefined };
   }
+}
+
+/**
+ * Automatically wraps every async method in BaseData<T> with safeExecute().
+ * @param name The name of the service, used for error context.
+ * @param data The BaseData<T> instance to wrap.
+ * @returns An object with the same methods as BaseData<T>, but wrapped in safeExecute().
+ */
+export function createSafeService<
+  T extends { id: string },
+  D extends BaseData<T>
+>(
+  name: string,
+  data: D
+): {
+  [K in keyof D]: D[K] extends (...args: infer A) => Promise<infer R>
+    ? (...args: A) => Promise<StorageResult<R>>
+    : D[K];
+} {
+  const wrapped: any = {};
+
+  for (const key of Object.getOwnPropertyNames(
+    Object.getPrototypeOf(data)
+  ) as (keyof D)[]) {
+    const value = data[key];
+    if (typeof value === "function" && key !== "constructor") {
+      wrapped[key] = (...args: unknown[]) =>
+        safeExecute(
+          () => (value as any).apply(data, args),
+          `${name}.${String(key)}`
+        );
+    }
+  }
+
+  return wrapped;
 }

@@ -9,7 +9,8 @@ import { Settings } from "../../types/storage";
 import { showNotification } from "../../utils/ui";
 
 export async function getReadSettings(): Promise<Settings> {
-  const result = await StorageService.getSettings(READ_SETTINGS_ID);
+  // const result = await StorageService.getSettings(READ_SETTINGS_ID);
+  const result = await StorageService.settings.getById(READ_SETTINGS_ID);
   if (result.success) {
     return (result.data as Settings) || DEFAULT_READ_SETTINGS;
   } else {
@@ -21,7 +22,8 @@ export async function getReadSettings(): Promise<Settings> {
 }
 
 export async function getIgnoreSettings(): Promise<Settings> {
-  const result = await StorageService.getSettings(IGNORE_SETTINGS_ID);
+  //   const result = await StorageService.getSettings(IGNORE_SETTINGS_ID);
+  const result = await StorageService.settings.getById(IGNORE_SETTINGS_ID);
   if (result.success) {
     return (result.data as Settings) || DEFAULT_IGNORE_SETTINGS;
   } else {
@@ -33,7 +35,8 @@ export async function getIgnoreSettings(): Promise<Settings> {
 }
 
 export async function updateReadSettings(settings: Settings): Promise<void> {
-  const result = await StorageService.updateSettings(settings);
+  // const result = await StorageService.updateSettings(settings);
+  const result = await StorageService.settings.put(settings);
   if (result.success) {
     showNotification("Read settings updated successfully.");
   } else {
@@ -42,7 +45,8 @@ export async function updateReadSettings(settings: Settings): Promise<void> {
 }
 
 export async function updateIgnoreSettings(settings: Settings): Promise<void> {
-  const result = await StorageService.updateSettings(settings);
+  // const result = await StorageService.updateSettings(settings);
+  const result = await StorageService.settings.put(settings);
   if (result.success) {
     showNotification("Ignore settings updated successfully.");
   } else {

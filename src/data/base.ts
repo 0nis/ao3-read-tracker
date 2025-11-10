@@ -4,9 +4,13 @@ import { Table } from "dexie";
 export class BaseData<T extends { id: string }> {
   constructor(private readonly table: Table<T, string>) {}
 
-  async getAll(): Promise<Record<string, T>> {
+  async get(): Promise<Record<string, T>> {
     const records = await this.table.toArray();
     return Object.fromEntries(records.map((r) => [r.id, r]));
+  }
+
+  async getById(id: string): Promise<T | undefined> {
+    return await this.table.get(id);
   }
 
   async getByIds(ids: string[]): Promise<Record<string, T>> {

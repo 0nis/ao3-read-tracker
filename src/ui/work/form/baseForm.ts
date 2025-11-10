@@ -5,7 +5,7 @@ export function createFormContainer(id: string, title: string): HTMLDivElement {
   wrapper.style.display = "block";
 
   const post = document.createElement("div");
-  post.className = "post";
+  post.className = "post mark-as-read";
   post.innerHTML = `<h3 class="landmark heading">${title}</h3>`;
   wrapper.appendChild(post);
 

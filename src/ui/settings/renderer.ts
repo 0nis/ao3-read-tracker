@@ -26,7 +26,7 @@ export function render(): void {
     </form>
   `;
 
-  StorageService.getSettings(READ_SETTINGS_ID).then((result) => {
+  StorageService.settings.getById(READ_SETTINGS_ID).then((result) => {
     if (result.success && result.data) {
       const simpleModeEnabled = (result.data as any).simpleMode;
       (content.querySelector("#simple-mode") as HTMLInputElement).checked =
@@ -39,15 +39,17 @@ export function render(): void {
     const simpleModeEnabled = (
       document.getElementById("simple-mode") as HTMLInputElement
     ).checked;
-    StorageService.updateSettings({
-      ...DEFAULT_READ_SETTINGS,
-      simpleMode: simpleModeEnabled,
-    }).then((result) => {
-      if (result.success) {
-        alert("Settings saved successfully.");
-      }
-    });
-    StorageService.updateSettings({
+    StorageService.settings
+      .put({
+        ...DEFAULT_READ_SETTINGS,
+        simpleMode: simpleModeEnabled,
+      })
+      .then((result) => {
+        if (result.success) {
+          alert("Settings saved successfully.");
+        }
+      });
+    StorageService.settings.put({
       ...DEFAULT_IGNORE_SETTINGS,
       simpleMode: simpleModeEnabled,
     });

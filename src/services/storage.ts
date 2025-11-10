@@ -8,34 +8,22 @@ import type {
   StorageResult,
 } from "../types/storage";
 import { IgnoredFicsData, ReadFicsData, SettingsData } from "../data/data";
-import { safeExecute } from "../utils/storage";
+import { createSafeService, safeExecute } from "../utils/storage";
 import { readFileAsText } from "../utils/file";
 
 export const StorageService = {
+  readFics: createSafeService("StorageService.readFics", ReadFicsData),
+  ignoredFics: createSafeService("StorageService.ignoredFics", IgnoredFicsData),
+  settings: createSafeService("StorageService.settings", SettingsData),
+
   async getAll(): Promise<StorageResult<StorageData>> {
     return safeExecute(async () => {
       return {
-        readFics: await ReadFicsData.getAll(),
-        ignoredFics: await IgnoredFicsData.getAll(),
-        settings: await SettingsData.getAll(),
+        readFics: await ReadFicsData.get(),
+        ignoredFics: await IgnoredFicsData.get(),
+        settings: await SettingsData.get(),
       };
     }, "StorageService.getAll");
-  },
-
-  async getSettings(
-    id?: string
-  ): Promise<StorageResult<Settings | Record<string, Settings> | undefined>> {
-    return safeExecute(async () => {
-      if (!id) return await SettingsData.getAll();
-      const setting = await SettingsData.getByIds([id]);
-      return setting[id];
-    }, "StorageService.getSettings");
-  },
-
-  async updateSettings(settings: Settings): Promise<StorageResult<void>> {
-    return safeExecute(async () => {
-      await SettingsData.put(settings);
-    }, "StorageService.updateSettings");
   },
 
   async getByIds(
@@ -47,42 +35,6 @@ export const StorageService = {
         ignoredFics: await IgnoredFicsData.getByIds(ids),
       };
     }, "StorageService.getByIds");
-  },
-
-  async addReadFic(data: ReadFic): Promise<StorageResult<void>> {
-    return safeExecute(async () => {
-      await ReadFicsData.put(data);
-    }, "StorageService.addReadFic");
-  },
-
-  async addIgnoredFic(data: IgnoredFic): Promise<StorageResult<void>> {
-    return safeExecute(async () => {
-      await IgnoredFicsData.put(data);
-    }, "StorageService.addIgnoredFic");
-  },
-
-  async removeReadFic(id: string): Promise<StorageResult<void>> {
-    return safeExecute(async () => {
-      await ReadFicsData.delete(id);
-    }, "StorageService.removeReadFic");
-  },
-
-  async removeIgnoredFic(id: string): Promise<StorageResult<void>> {
-    return safeExecute(async () => {
-      await IgnoredFicsData.delete(id);
-    }, "StorageService.removeIgnoredFic");
-  },
-
-  async isRead(id: string): Promise<StorageResult<boolean>> {
-    return safeExecute(async () => {
-      return await ReadFicsData.exists(id);
-    }, "StorageService.doesReadFicExist");
-  },
-
-  async isIgnored(id: string): Promise<StorageResult<boolean>> {
-    return safeExecute(async () => {
-      return await IgnoredFicsData.exists(id);
-    }, "StorageService.doesIgnoredFicExist");
   },
 
   async export(): Promise<void> {

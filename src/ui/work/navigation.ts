@@ -8,13 +8,13 @@ interface BaseButtonConfig {
 
 interface ToggleButtonConfig extends BaseButtonConfig {
   mode: "toggle";
-  onActivate: (id: string, title: string) => Promise<void>;
-  onDeactivate: (id: string, title: string) => Promise<void>;
+  onActivate: (id: string) => Promise<void>;
+  onDeactivate: (id: string) => Promise<void>;
 }
 
 interface ClickButtonConfig extends BaseButtonConfig {
   mode: "click";
-  onClick: (id: string, title: string) => Promise<void>;
+  onClick: (id: string) => Promise<void>;
 }
 
 type ButtonConfig = ToggleButtonConfig | ClickButtonConfig;
@@ -25,12 +25,11 @@ export async function addButton(config: ButtonConfig) {
 
   const ficId = getIdFromUrl();
   if (!ficId) return;
-  const ficTitle = getTitleFromWorkPage() || "Untitled";
 
   const initialState =
     config.type === "read"
-      ? await StorageService.isRead(ficId)
-      : await StorageService.isIgnored(ficId);
+      ? await StorageService.readFics.exists(ficId)
+      : await StorageService.ignoredFics.exists(ficId);
 
   if (!initialState.success) {
     console.error(
@@ -56,13 +55,13 @@ export async function addButton(config: ButtonConfig) {
       const isOn = button.textContent === config.labels.ON;
       if (isOn) {
         button.textContent = config.labels.OFF;
-        await config.onDeactivate(ficId, ficTitle);
+        await config.onDeactivate(ficId);
       } else {
         button.textContent = config.labels.ON;
-        await config.onActivate(ficId, ficTitle);
+        await config.onActivate(ficId);
       }
     } else {
-      await config.onClick(ficId, ficTitle);
+      await config.onClick(ficId);
     }
   });
 

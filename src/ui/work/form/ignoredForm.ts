@@ -3,8 +3,8 @@ import { createFormContainer, appendFormToFeedback } from "./baseForm";
 import { StorageService } from "../../../services/storage";
 
 export async function showIgnoredFicForm(
-  id: string,
-  title: string
+  exists: boolean,
+  data: Partial<IgnoredFic>
 ): Promise<void> {
   const container = createFormContainer("ext-mar__ignored-form", "Ignore Fic");
   const post = container.querySelector(".post")!;
@@ -37,8 +37,13 @@ export async function showIgnoredFicForm(
       form.querySelector("#reason") as HTMLTextAreaElement
     ).value.trim();
 
-    const fic: IgnoredFic = { id, title, timestamp: Date.now(), reason };
-    await StorageService.addIgnoredFic(fic);
+    const fic: IgnoredFic = {
+      id: data.id!,
+      title: data.title!,
+      timestamp: Date.now(),
+      reason,
+    };
+    await StorageService.ignoredFics.put(fic);
 
     container.remove();
   });

@@ -1,10 +1,11 @@
 import { ReadFic } from "../../../types/storage";
 import { createFormContainer, appendFormToFeedback } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-
+import { showNotification } from "../../../utils/ui";
+// TODO: Add mark as unread button when already marked as read
 export async function showReadFicForm(
-  id: string,
-  title: string
+  exists: boolean,
+  data: Partial<ReadFic>
 ): Promise<void> {
   const container = createFormContainer(
     "ext-mar__read-form",
@@ -22,7 +23,9 @@ export async function showReadFicForm(
         <a href="#comments" aria-label="cancel" id="ext-mar__read-form__close">×</a>
       </p>
 
-      <h4 class="heading byline">Mark this fic as read!</h4>
+      <h4 class="heading byline">${
+        exists ? "Edit Read Fic Info" : "Mark this fic as read!"
+      }</h4>
 
       <dl>
         <dt><label for="ext-mar__read-form__notes">Notes</label></dt>
@@ -35,7 +38,7 @@ export async function showReadFicForm(
             class="observe_textlength" 
             rows="3" 
             aria-describedby="ext-mar__read-form__notes__description"
-          ></textarea>
+            >${exists ? data.notes || "" : ""}</textarea>
         </dd>
 
         <dt><label for="ext-mar__read-form__count">Times Read</label></dt>
@@ -47,7 +50,7 @@ export async function showReadFicForm(
             type="number" 
             id="ext-mar__read-form__count" 
             min="1" 
-            value="1"
+            value="${exists ? data.count || 1 : 1}"
             aria-describedby="ext-mar__read-form__count__description"
            />
         </dd>
@@ -61,6 +64,7 @@ export async function showReadFicForm(
             type="checkbox" 
             id="ext-mar__read-form__reread" 
             aria-describedby="ext-mar__read-form__reread__description" 
+            ${exists && data.reread ? "checked" : ""}
           />
         </dd>
         
@@ -72,34 +76,36 @@ export async function showReadFicForm(
     </fieldset>
   `;
 
+  const reread = form.querySelector(
+    "#ext-mar__read-form__reread"
+  ) as HTMLInputElement;
+  const count = form.querySelector(
+    "#ext-mar__read-form__count"
+  ) as HTMLInputElement;
+  const notes = form.querySelector(
+    "#ext-mar__read-form__notes"
+  ) as HTMLTextAreaElement;
+
   post.appendChild(form);
   appendFormToFeedback(container);
 
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    const reread = (
-      form.querySelector("#ext-mar__read-form__reread") as HTMLInputElement
-    ).checked;
-    const count =
-      parseInt(
-        (form.querySelector("#ext-mar__read-form__count") as HTMLInputElement)
-          .value,
-        10
-      ) || 1;
-    const notes = (
-      form.querySelector("#ext-mar__read-form__notes") as HTMLTextAreaElement
-    ).value.trim();
 
     const fic: ReadFic = {
-      id,
-      title,
+      id: data.id!,
+      title: data.title!,
       timestamp: Date.now(),
-      reread,
-      count,
-      notes,
+      reread: reread.checked,
+      count: parseInt(count.value, 10),
+      notes: notes.value.trim(),
     };
-    await StorageService.addReadFic(fic);
-
+    const result = await StorageService.readFics.put(fic);
+    if (result.success) showNotification(`Fic ${data.id} marked as read.`);
+    else
+      showNotification(
+        `Failed to mark fic ${data.id} as read: ${result.error}`
+      );
     container.remove();
   });
 

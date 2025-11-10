@@ -29,6 +29,8 @@ export type StorageData = {
   settings: Record<string, Settings>;
 };
 
-export type StorageResult<T = void> =
-  | { success: true; data?: T }
-  | { success: false; error: unknown };
+export type StorageResult<T = void> = {
+  data?: T;
+  error?: unknown;
+  success: boolean;
+};

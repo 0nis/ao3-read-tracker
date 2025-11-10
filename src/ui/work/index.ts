@@ -1,7 +1,9 @@
 import { IGNORE_SETTINGS_ID, READ_SETTINGS_ID } from "../../constants/settings";
 import { addFormStyles } from "./form/style";
-import { handleGetSettings } from "./handlers";
 import {
+  handleEditIgnoredFicInfo,
+  handleEditReadFicInfo,
+  handleGetSettings,
   handleIgnoreFic,
   handleMarkFicAsRead,
   handleMarkFicAsUnread,
@@ -23,7 +25,7 @@ export const Work = {
         mode: "toggle",
         type: "read",
         labels: { ON: "Mark as Unread", OFF: "Mark as Read" },
-        onActivate: handleMarkFicAsRead,
+        onActivate: (id) => handleMarkFicAsRead({ id }),
         onDeactivate: handleMarkFicAsUnread,
       });
     } else {
@@ -31,7 +33,7 @@ export const Work = {
         mode: "click",
         type: "read",
         labels: { ON: "Edit Read Info", OFF: "Mark as Read" },
-        onClick: (id, title) => handleMarkFicAsRead(id, title, false),
+        onClick: (id) => handleEditReadFicInfo(id),
       });
     }
 
@@ -40,7 +42,7 @@ export const Work = {
         mode: "toggle",
         type: "ignored",
         labels: { ON: "Unignore", OFF: "Ignore" },
-        onActivate: handleIgnoreFic,
+        onActivate: (id) => handleIgnoreFic({ id }),
         onDeactivate: handleUnignoreFic,
       });
     } else {
@@ -48,7 +50,7 @@ export const Work = {
         mode: "click",
         type: "ignored",
         labels: { ON: "Edit Ignore Info", OFF: "Ignore" },
-        onClick: (id, title) => handleIgnoreFic(id, title, false),
+        onClick: (id) => handleEditIgnoredFicInfo(id),
       });
     }
   },
