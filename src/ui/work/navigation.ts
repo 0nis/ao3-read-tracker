@@ -26,27 +26,16 @@ export async function addButton(config: ButtonConfig) {
   const ficId = getIdFromUrl();
   if (!ficId) return;
 
-  const initialState =
+  const exists = (
     config.type === "read"
       ? await StorageService.readFics.exists(ficId)
-      : await StorageService.ignoredFics.exists(ficId);
-
-  if (!initialState.success) {
-    console.error(
-      "Failed to retrieve initial state for button:",
-      initialState.error
-    );
-    return;
-  }
-  if (initialState.data === undefined) return;
+      : await StorageService.ignoredFics.exists(ficId)
+  ).data;
 
   const li = document.createElement("li");
   const button = document.createElement("a");
   button.href = "#";
-  button.textContent =
-    config.mode === "toggle" && initialState.data
-      ? config.labels.ON
-      : config.labels.OFF;
+  button.textContent = exists ? config.labels.ON : config.labels.OFF;
 
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
