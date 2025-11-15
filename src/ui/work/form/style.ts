@@ -1,7 +1,9 @@
+import { CLASS_PREFIX } from "../../../constants/classes";
+
 export const addFormStyles = (): void => {
   const style = document.createElement("style");
   style.textContent = `
-    .ext-mar__footnote {
+    .${CLASS_PREFIX}__footnote {
       padding-bottom: 0.643em !important;
     }
   `;

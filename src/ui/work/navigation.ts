@@ -1,4 +1,4 @@
-import { getIdFromUrl, getTitleFromWorkPage } from "../../utils/ao3";
+import { getIdFromUrl } from "../../utils/ao3";
 import { StorageService } from "../../services/storage";
 
 interface BaseButtonConfig {

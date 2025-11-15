@@ -1,3 +1,5 @@
+import { CLASS_PREFIX } from "../constants/classes";
+
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
   return match ? match[1] : null;
@@ -16,7 +18,7 @@ export function hijackAo3Page(
   const main = document.getElementById("main");
   if (!main) return null;
   main.innerHTML = "";
-  main.className = `ext-mar__${className}`;
+  main.className = `${CLASS_PREFIX}__${className}`;
   return main;
 }
 

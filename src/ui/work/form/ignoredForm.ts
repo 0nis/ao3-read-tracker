@@ -1,14 +1,15 @@
 import { IgnoredFic } from "../../../types/storage";
 import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-import { showNotification } from "../../../utils/ui";
+import { showNotification } from "../../../utils/dom";
+import { CLASS_PREFIX } from "../../../constants/classes";
 
 export async function showIgnoredFicForm(
   exists: boolean,
   data: Partial<IgnoredFic>
 ): Promise<void> {
   await createFicForm<IgnoredFic>({
-    id: "ext-mar__ignored-form",
+    id: `${CLASS_PREFIX}__ignored-form`,
     title: "Ignore Fic",
     exists,
     data,
@@ -35,7 +36,7 @@ const getIgnoredFicFormMarkup = (
         <dl>
             <dt><label for="${prefix}__reason">Reason for ignoring</label></dt>
             <dd>
-                <p class="ext-mar__footnote footnote" id="ext-mar__ignored-form__reason__description">
+                <p class="${CLASS_PREFIX}__footnote footnote" id="${CLASS_PREFIX}__ignored-form__reason__description">
                     A private reason that will appear in the work summary block for this fic.
                 </p>
                 <textarea id="${prefix}__reason" rows="3">${
@@ -65,7 +66,9 @@ const markFicAsIgnored = async (
   data: Partial<IgnoredFic>
 ) => {
   const reason = (
-    form.querySelector("#ext-mar__ignored-form__reason") as HTMLTextAreaElement
+    form.querySelector(
+      `#${CLASS_PREFIX}__ignored-form__reason`
+    ) as HTMLTextAreaElement
   ).value.trim();
   const fic: IgnoredFic = {
     id: data.id!,

@@ -5,7 +5,7 @@ import {
 import { StorageService } from "../../services/storage";
 import { IgnoredFic, ReadFic, Settings } from "../../types/storage";
 import { getTitleFromWorkPage } from "../../utils/ao3";
-import { showNotification } from "../../utils/ui";
+import { showNotification } from "../../utils/dom";
 import { showIgnoredFicForm } from "./form/ignoredForm";
 import { showReadFicForm } from "./form/readForm";
 

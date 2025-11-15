@@ -1,14 +1,15 @@
 import { ReadFic } from "../../../types/storage";
 import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-import { showNotification } from "../../../utils/ui";
+import { showNotification } from "../../../utils/dom";
+import { CLASS_PREFIX } from "../../../constants/classes";
 
 export async function showReadFicForm(
   exists: boolean,
   data: Partial<ReadFic>
 ): Promise<void> {
   await createFicForm<ReadFic>({
-    id: "ext-mar__read-form",
+    id: `${CLASS_PREFIX}__read-form`,
     title: "Mark Fic as Read",
     exists,
     data,
@@ -35,7 +36,7 @@ const getReadFicFormMarkup = (
         <dl>
             <dt><label for="${prefix}__notes">Notes</label></dt>
             <dd>
-            <p class="ext-mar__footnote footnote" id="${prefix}__notes__description">
+            <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__notes__description">
                 Private notes that will appear in the work summary block for this fic.
             </p>
             <textarea id="${prefix}__notes" rows="3">${
@@ -72,15 +73,22 @@ const markFicAsUnread = async (id: string) => {
 
 const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
   const notes = (
-    form.querySelector("#ext-mar__read-form__notes") as HTMLTextAreaElement
+    form.querySelector(
+      `#${CLASS_PREFIX}__read-form__notes`
+    ) as HTMLTextAreaElement
   ).value.trim();
   const count = parseInt(
-    (form.querySelector("#ext-mar__read-form__count") as HTMLInputElement)
-      .value,
+    (
+      form.querySelector(
+        `#${CLASS_PREFIX}__read-form__count`
+      ) as HTMLInputElement
+    ).value,
     10
   );
   const reread = (
-    form.querySelector("#ext-mar__read-form__reread") as HTMLInputElement
+    form.querySelector(
+      `#${CLASS_PREFIX}__read-form__reread`
+    ) as HTMLInputElement
   ).checked;
 
   const fic: ReadFic = {

@@ -1,4 +1,4 @@
-import { markFicsOnPage } from "./renderer";
+import { markFicsOnPage } from "./rendering";
 import { addListingStyles } from "./style";
 
 export const Listing = {

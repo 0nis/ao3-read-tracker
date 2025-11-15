@@ -8,8 +8,11 @@ import type {
   StorageResult,
 } from "../types/storage";
 import { IgnoredFicsData, ReadFicsData, SettingsData } from "../data/data";
-import { createSafeService, safeExecute } from "../utils/storage";
-import { readFileAsText } from "../utils/file";
+import {
+  createSafeService,
+  safeExecute,
+  readFileAsText,
+} from "../utils/storage";
 
 export const StorageService = {
   readFics: createSafeService("StorageService.readFics", ReadFicsData),

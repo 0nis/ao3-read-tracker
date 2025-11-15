@@ -6,7 +6,7 @@ import {
 } from "../../constants/settings";
 import { StorageService } from "../../services/storage";
 import { Settings } from "../../types/storage";
-import { showNotification } from "../../utils/ui";
+import { showNotification } from "../../utils/dom";
 
 export async function getReadSettings(): Promise<Settings> {
   // const result = await StorageService.getSettings(READ_SETTINGS_ID);
