@@ -11,6 +11,7 @@ import { collapse } from "./collapse";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
 import { addSymbols } from "./symbols";
 import { getOrCreateElement } from "../../../utils/dom";
+import { CollapseMode, WorkState } from "../../../types/enums";
 
 export async function markFicsOnPage(): Promise<void> {
   const { worksList, data } = await getFicStatusData();
@@ -38,14 +39,14 @@ export async function markFicsOnPage(): Promise<void> {
 function markAsRead(work: HTMLElement, item: ReadFic) {
   work.classList.add(READ_CLASS);
   if (item.reread) work.classList.add(REREAD_WORTHY_CLASS);
-  addText(work, "read", item);
-  addSymbols(work, "read", item);
+  addText(work, WorkState.READ, item);
+  addSymbols(work, WorkState.READ, item);
 }
 
 function markAsIgnored(work: HTMLElement, item: IgnoredFic) {
   work.classList.add(IGNORED_CLASS);
-  addText(work, "ignored", item);
-  addSymbols(work, "ignored", item);
+  addText(work, WorkState.IGNORED, item);
+  addSymbols(work, WorkState.IGNORED, item);
 }
 
 function adjustWorkDisplay(
@@ -55,8 +56,8 @@ function adjustWorkDisplay(
 ) {
   // TODO: Allow modification of behavior through settings
   // Ignored works take precedence over read works for work display adjustment
-  if (isIgnored) collapse(work, "aggressive");
-  else if (isRead) collapse(work, "gentle");
+  if (isIgnored) collapse(work, CollapseMode.AGGRESSIVE);
+  else if (isRead) collapse(work, CollapseMode.GENTLE);
 }
 
 function createOrModifyLandmarkHeading(work: HTMLElement) {

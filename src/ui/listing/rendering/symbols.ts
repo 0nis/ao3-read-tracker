@@ -1,16 +1,17 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
+import { WorkState } from "../../../types/enums";
 import { IgnoredFic, ReadFic } from "../../../types/storage";
 import { getOrCreateElement } from "../../../utils/dom";
 
 /**
  * Adds symbols to a work element showing information like read/ignored status, reread worthiness, and read count.
  * @param work The fic to modify
- * @param type What information the text is for: "read" or "ignored"
+ * @param type What type of information the text is for, like a fic marked as read or ignored
  * @param item The item data containing optional additional information
  */
 export function addSymbols(
   work: HTMLElement,
-  type: "read" | "ignored",
+  type: WorkState,
   item: ReadFic | IgnoredFic
 ) {
   addStyles();
@@ -21,7 +22,8 @@ export function addSymbols(
     "ul"
   );
 
-  if (type === "read") renderReadSymbol(symbolIndicatorList, item as ReadFic);
+  if (type === WorkState.READ)
+    renderReadSymbol(symbolIndicatorList, item as ReadFic);
   else renderIgnoredSymbol(symbolIndicatorList, item as IgnoredFic);
 
   work.querySelector(".header.module")?.appendChild(symbolIndicatorList);

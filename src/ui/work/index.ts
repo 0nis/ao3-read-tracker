@@ -1,4 +1,5 @@
 import { IGNORE_SETTINGS_ID, READ_SETTINGS_ID } from "../../constants/settings";
+import { ButtonAction, WorkState } from "../../types/enums";
 import { addFormStyles } from "./form/style";
 import {
   handleEditIgnoredFicInfo,
@@ -22,16 +23,16 @@ export const Work = {
 
     if (readSettings.simpleMode) {
       await addButton({
-        mode: "toggle",
-        type: "read",
+        mode: ButtonAction.TOGGLE as ButtonAction.TOGGLE,
+        type: WorkState.READ,
         labels: { ON: "Mark as Unread", OFF: "Mark as Read" },
         onActivate: (id) => handleMarkFicAsRead({ id }),
         onDeactivate: handleMarkFicAsUnread,
       });
     } else {
       await addButton({
-        mode: "click",
-        type: "read",
+        mode: ButtonAction.CLICK as ButtonAction.CLICK,
+        type: WorkState.READ,
         labels: { ON: "Edit Read Info", OFF: "Mark as Read" },
         onClick: (id) => handleEditReadFicInfo(id),
       });
@@ -39,16 +40,16 @@ export const Work = {
 
     if (ignoreSettings.simpleMode) {
       await addButton({
-        mode: "toggle",
-        type: "ignored",
+        mode: ButtonAction.TOGGLE as ButtonAction.TOGGLE,
+        type: WorkState.IGNORED,
         labels: { ON: "Unignore", OFF: "Ignore" },
         onActivate: (id) => handleIgnoreFic({ id }),
         onDeactivate: handleUnignoreFic,
       });
     } else {
       await addButton({
-        mode: "click",
-        type: "ignored",
+        mode: ButtonAction.CLICK as ButtonAction.CLICK,
+        type: WorkState.IGNORED,
         labels: { ON: "Edit Ignore Info", OFF: "Ignore" },
         onClick: (id) => handleEditIgnoredFicInfo(id),
       });

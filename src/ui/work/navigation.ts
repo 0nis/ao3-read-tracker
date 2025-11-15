@@ -1,19 +1,20 @@
 import { getIdFromUrl } from "../../utils/ao3";
 import { StorageService } from "../../services/storage";
+import { ButtonAction, WorkState } from "../../types/enums";
 
 interface BaseButtonConfig {
-  type: "read" | "ignored";
+  type: WorkState;
   labels: { ON: string; OFF: string };
 }
 
 interface ToggleButtonConfig extends BaseButtonConfig {
-  mode: "toggle";
+  mode: ButtonAction.TOGGLE;
   onActivate: (id: string) => Promise<void>;
   onDeactivate: (id: string) => Promise<void>;
 }
 
 interface ClickButtonConfig extends BaseButtonConfig {
-  mode: "click";
+  mode: ButtonAction.CLICK;
   onClick: (id: string) => Promise<void>;
 }
 
@@ -27,7 +28,7 @@ export async function addButton(config: ButtonConfig) {
   if (!ficId) return;
 
   const exists = (
-    config.type === "read"
+    config.type === WorkState.READ
       ? await StorageService.readFics.exists(ficId)
       : await StorageService.ignoredFics.exists(ficId)
   ).data;
@@ -40,7 +41,7 @@ export async function addButton(config: ButtonConfig) {
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
 
-    if (config.mode === "toggle") {
+    if (config.mode === ButtonAction.TOGGLE) {
       const isOn = button.textContent === config.labels.ON;
       if (isOn) {
         button.textContent = config.labels.OFF;

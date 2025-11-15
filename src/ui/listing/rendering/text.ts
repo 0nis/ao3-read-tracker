@@ -1,4 +1,5 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
+import { WorkState } from "../../../types/enums";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
 import { getOrCreateElement } from "../../../utils/dom";
@@ -6,12 +7,12 @@ import { getOrCreateElement } from "../../../utils/dom";
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
  * @param work The fic to modify
- * @param type What information the text is for: "read" or "ignored"
+ * @param type What type of information the text is for, like a fic marked as read or ignored
  * @param item The item data containing optional additional information
  */
 export function addText(
   work: HTMLElement,
-  type: "read" | "ignored",
+  type: WorkState,
   item: ReadFic | IgnoredFic
 ) {
   addStyles();
@@ -22,7 +23,7 @@ export function addText(
     "ul"
   );
 
-  if (type === "read")
+  if (type === WorkState.READ)
     renderReadInformation(work, indicatorList, item as ReadFic);
   else renderIgnoredInformation(work, indicatorList, item as IgnoredFic);
 }
@@ -32,7 +33,7 @@ function renderReadInformation(
   indicatorList: HTMLElement,
   item: ReadFic
 ) {
-  indicatorList.appendChild(createIndicator("read", item.timestamp));
+  indicatorList.appendChild(createIndicator(WorkState.READ, item.timestamp));
   if (item.notes) {
     addNotesText(work, item.notes, `${CLASS_PREFIX}__notes--read`);
   }
@@ -43,16 +44,13 @@ function renderIgnoredInformation(
   indicatorList: HTMLElement,
   item: IgnoredFic
 ) {
-  indicatorList.appendChild(createIndicator("ignored", item.timestamp));
+  indicatorList.appendChild(createIndicator(WorkState.IGNORED, item.timestamp));
   if (item.reason) {
     addNotesText(work, item.reason, `${CLASS_PREFIX}__notes--ignored`);
   }
 }
 
-function createIndicator(
-  type: "read" | "ignored",
-  timestamp: number
-): HTMLElement {
+function createIndicator(type: WorkState, timestamp: number): HTMLElement {
   const indicator = document.createElement("li");
   indicator.classList.add(`${CLASS_PREFIX}__text-indicator--${type}`);
   const text = createIndicatorText(type, timestamp);
@@ -61,7 +59,7 @@ function createIndicator(
 }
 
 function createIndicatorText(
-  type: "read" | "ignored",
+  type: WorkState,
   timestamp: number
 ): HTMLParagraphElement {
   const p = document.createElement("p");
@@ -108,6 +106,7 @@ export function addStyles() {
     }
     .${CLASS_PREFIX}__text-indicator__notes {
       float: left;
+      margin-top: 1em !important;
     }
   `;
   document.head.appendChild(style);

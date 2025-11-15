@@ -1,4 +1,4 @@
-import { COLLAPSE_MODE } from "../constants/settings";
+import { CollapseMode } from "../constants/settings";
 
 export interface ReadFic {
   id: string;
@@ -20,7 +20,7 @@ export interface Settings {
   id: string;
   simpleMode: boolean;
   collapse: boolean;
-  collapseMode: (typeof COLLAPSE_MODE)[keyof typeof COLLAPSE_MODE];
+  collapseMode: CollapseMode;
 }
 
 export type StorageData = {
