@@ -23,3 +23,14 @@ export function getOrCreateElement(
   }
   return element;
 }
+
+/**
+ * Gets an element by selector within a parent element.
+ * @param parent The parent element to search within
+ * @param selector The selector of the element to get
+ * @returns The found HTMLElement or null if not found
+ */
+export const getElement = (
+  parent: HTMLElement,
+  selector: string
+): HTMLElement | null => parent.querySelector(selector);

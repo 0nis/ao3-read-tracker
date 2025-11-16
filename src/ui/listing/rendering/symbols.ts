@@ -1,7 +1,8 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { WorkState } from "../../../types/enums";
+import { WorkState } from "../../../constants/enums";
 import { IgnoredFic, ReadFic } from "../../../types/storage";
-import { getOrCreateElement } from "../../../utils/dom";
+import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
+import { getElement, getOrCreateElement } from "../../../utils/dom";
 
 /**
  * Adds symbols to a work element showing information like read/ignored status, reread worthiness, and read count.
@@ -23,22 +24,52 @@ export function addSymbols(
   );
 
   if (type === WorkState.READ)
-    renderReadSymbol(symbolIndicatorList, item as ReadFic);
+    renderReadSymbol(work, symbolIndicatorList, item as ReadFic);
   else renderIgnoredSymbol(symbolIndicatorList, item as IgnoredFic);
 
   work.querySelector(".header.module")?.appendChild(symbolIndicatorList);
 }
 
-function renderReadSymbol(indicatorList: HTMLElement, item: ReadFic) {
-  addListItemToIndicator(indicatorList, "✅", "Marked as read");
-  if (item.reread)
+/**
+ * Removes any symbols added by this module from a work element.
+ * @param work The fic to modify
+ */
+export function removeSymbols(work: HTMLElement) {
+  const elementsToRemove = [
+    getElement(work, `.${CLASS_PREFIX}__symbol-indicator`),
+  ].filter((el): el is HTMLElement => el !== null);
+  elementsToRemove.forEach((el) => el.remove());
+}
+
+function renderReadSymbol(
+  work: HTMLElement,
+  indicatorList: HTMLElement,
+  item: ReadFic
+) {
+  if (item.isReading) {
+    addListItemToIndicator(indicatorList, "📖", "Still reading");
+  } else addListItemToIndicator(indicatorList, "✅", "Marked as read");
+
+  if (item.reread) {
     addListItemToIndicator(indicatorList, "🔁", "Marked as re-read worthy");
-  if (item.count)
+  }
+
+  if (item.count) {
     addListItemToIndicator(
       indicatorList,
       `📚x${item.count}`,
       `Read ${item.count} ${item.count === 1 ? "time" : "times"}`
     );
+  }
+
+  if (item.isReading && item.lastReadChapter) {
+    if (item.lastReadChapter < (getLatestChapterFromWorkListing(work) || 0))
+      addListItemToIndicator(
+        indicatorList,
+        "‼️",
+        `New chapters available! (last read: chapter ${item.lastReadChapter})`
+      );
+  }
 }
 
 function renderIgnoredSymbol(indicatorList: HTMLElement, item: IgnoredFic) {

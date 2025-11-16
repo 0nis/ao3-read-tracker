@@ -1,4 +1,4 @@
-import { CollapseMode } from "../types/enums";
+import { CollapseMode } from "./enums";
 import { Settings } from "../types/storage";
 
 export const VERSION: number = 1;

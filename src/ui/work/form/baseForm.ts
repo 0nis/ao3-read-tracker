@@ -1,3 +1,6 @@
+import { IgnoredFic, ReadFic } from "../../../types/storage";
+import { Router } from "../../router";
+
 export interface FicFormConfig<T> {
   /** Unique identifier for the form, not the fic ID! */
   id: string;
@@ -36,11 +39,12 @@ export async function createFicForm<T>(
   form.addEventListener("remove", () => {
     container.remove();
     window.scrollTo(0, prevScrollPos);
+    Router.back();
     onClose?.();
   });
 
   post.appendChild(form);
-  appendFormToFeedback(container);
+  appendFormToFeedback(container, id);
 
   const deleteBtn = form.querySelector(
     `#${id}__delete`
@@ -72,18 +76,19 @@ export function createFormContainer(id: string, title: string): HTMLDivElement {
 
   const post = document.createElement("div");
   post.className = "post mark-as-read";
+  post.id = `mark`;
   post.innerHTML = `<h3 class="landmark heading">${title}</h3>`;
   wrapper.appendChild(post);
 
   return wrapper;
 }
 
-export function appendFormToFeedback(form: HTMLElement): void {
+export function appendFormToFeedback(form: HTMLElement, id: string): void {
   const feedback = document.getElementById("feedback");
   if (!feedback) {
     console.error("[AO3 Mark as Read] Could not find #feedback container");
     return;
   }
   feedback.appendChild(form);
-  form.scrollIntoView({ behavior: "instant", block: "start" });
+  Router.addHash(id);
 }

@@ -1,8 +1,9 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { WorkState } from "../../../types/enums";
+import { WorkState } from "../../../constants/enums";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
+import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
-import { getOrCreateElement } from "../../../utils/dom";
+import { getElement, getOrCreateElement } from "../../../utils/dom";
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
@@ -28,14 +29,31 @@ export function addText(
   else renderIgnoredInformation(work, indicatorList, item as IgnoredFic);
 }
 
+/**
+ * Removes any text added by this module from a work element.
+ * @param work The fic to modify
+ */
+export function removeText(work: HTMLElement) {
+  const elementsToRemove = [
+    getElement(work, `.${CLASS_PREFIX}__text-indicator`),
+    getElement(work, `.${CLASS_PREFIX}__text-indicator__notes`),
+  ].filter((el): el is HTMLElement => el !== null);
+  elementsToRemove.forEach((el) => el.remove());
+}
+
 function renderReadInformation(
   work: HTMLElement,
   indicatorList: HTMLElement,
   item: ReadFic
 ) {
-  indicatorList.appendChild(createIndicator(WorkState.READ, item.timestamp));
-  if (item.notes) {
+  if (item.notes)
     addNotesText(work, item.notes, `${CLASS_PREFIX}__notes--read`);
+  if (item.isReading) {
+    indicatorList.appendChild(
+      createStillReadingText(work, item.modifiedAt, item.lastReadChapter)
+    );
+  } else {
+    indicatorList.appendChild(createIndicator(WorkState.READ, item.modifiedAt));
   }
 }
 
@@ -45,9 +63,8 @@ function renderIgnoredInformation(
   item: IgnoredFic
 ) {
   indicatorList.appendChild(createIndicator(WorkState.IGNORED, item.timestamp));
-  if (item.reason) {
+  if (item.reason)
     addNotesText(work, item.reason, `${CLASS_PREFIX}__notes--ignored`);
-  }
 }
 
 function createIndicator(type: WorkState, timestamp: number): HTMLElement {
@@ -65,13 +82,37 @@ function createIndicatorText(
   const p = document.createElement("p");
   const timeEl = document.createElement("time");
   timeEl.dateTime = new Date(timestamp).toISOString();
-
-  const formattedDate = getFormattedDate(timestamp);
-  const formattedTime = getFormattedTime(timestamp);
-  timeEl.textContent = `${formattedDate} at ${formattedTime}`;
+  timeEl.textContent = `${getFormattedDate(timestamp)} at ${getFormattedTime(
+    timestamp
+  )}`;
   p.innerHTML = `Marked as ${type} on `;
   p.appendChild(timeEl);
   return p;
+}
+
+function createStillReadingText(
+  work: HTMLElement,
+  timestamp: number,
+  chapter: number | undefined
+): HTMLLIElement {
+  const indicator = document.createElement("li");
+  indicator.classList.add(`${CLASS_PREFIX}__text-indicator--still-reading`);
+
+  const timeEl = document.createElement("time");
+  timeEl.dateTime = new Date(timestamp).toISOString();
+  timeEl.textContent = getFormattedDate(timestamp);
+
+  const p = document.createElement("p");
+  p.append(
+    "Still reading as of ",
+    timeEl,
+    chapter
+      ? ` (chapter ${chapter}/${getLatestChapterFromWorkListing(work) || "?"})`
+      : ""
+  );
+  indicator.appendChild(p);
+
+  return indicator;
 }
 
 function addNotesText(work: HTMLElement, notes: string, className?: string) {

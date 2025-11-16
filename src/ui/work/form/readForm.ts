@@ -3,6 +3,7 @@ import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
 import { showNotification } from "../../../utils/dom";
 import { CLASS_PREFIX } from "../../../constants/classes";
+import { getCurrentChapterFromWorkPage } from "../../../utils/ao3";
 
 export async function showReadFicForm(
   exists: boolean,
@@ -18,6 +19,23 @@ export async function showReadFicForm(
     onSubmit: async (form) => await markFicAsRead(form, data),
     onDelete: async () => await markFicAsUnread(data.id!),
   });
+
+  const isReadingCheckbox = document.querySelector(
+    `#${CLASS_PREFIX}__read-form__isreading`
+  ) as HTMLInputElement;
+  const lastReadChapterInput = document.querySelector(
+    `#${CLASS_PREFIX}__read-form__lastReadChapter`
+  ) as HTMLInputElement;
+
+  if (isReadingCheckbox && lastReadChapterInput) {
+    isReadingCheckbox.addEventListener("change", () => {
+      const chapter = getCurrentChapterFromWorkPage();
+      lastReadChapterInput.disabled = !isReadingCheckbox.checked;
+      if (isReadingCheckbox.checked && chapter !== null)
+        lastReadChapterInput.value = chapter.toString();
+      else lastReadChapterInput.value = "";
+    });
+  }
 }
 
 // prettier-ignore
@@ -36,23 +54,57 @@ const getReadFicFormMarkup = (
         <dl>
             <dt><label for="${prefix}__notes">Notes</label></dt>
             <dd>
-            <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__notes__description">
-                Private notes that will appear in the work summary block for this fic.
-            </p>
-            <textarea id="${prefix}__notes" rows="3">${
-                exists ? d.notes || "" : ""
-            }</textarea>
+              <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__notes__description">
+                  Private notes that will appear in the work summary block for this fic.
+              </p>
+              <textarea 
+                id="${prefix}__notes" 
+                rows="3" 
+                aria-describedby="${prefix}__notes__description">${exists && d.notes || ""}</textarea>
             </dd>
 
-            <dt><label for="${prefix}__count">Times Read</label></dt>
-            <dd><input type="number" id="${prefix}__count" min="1" value="${
-                exists ? d.count || 1 : 1
-            }" /></dd>
+            <dt><label for="${prefix}__count">Times read</label></dt>
+            <dd>
+              <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__count__description">
+                  The number of times you've read this fic.
+              </p>
+              <input 
+                type="number" 
+                id="${prefix}__count" 
+                min="1" 
+                aria-describedby="${prefix}__count__description" 
+                value="${exists && d.count || 1}" 
+              />
+            </dd>
 
-            <dt><label for="${prefix}__reread">Re-read Worthy</label></dt>
-            <dd><input type="checkbox" id="${prefix}__reread" ${
-                exists && d.reread ? "checked" : ""
-            } /></dd>
+            <div class="${CLASS_PREFIX}__align-horizontally">
+
+              <div>
+                <dt><label for="${prefix}__reread">Re-read worthy?</label></dt>
+                <dd><input type="checkbox" id="${prefix}__reread" ${
+                    exists && d.reread ? "checked" : ""
+                } /></dd>
+              </div>
+
+              <div>
+                <dt><label for="${prefix}__isreading">Still reading?</label></dt>
+                <dd>
+                <input type="checkbox" id="${prefix}__isreading" ${
+                    exists && d.isReading ? "checked" : ""
+                } /></dd>
+              </div>
+
+              <div>
+                <dt><label for="${prefix}__lastReadChapter">Last read chapter</label></dt>
+                <dd><input type="number" id="${prefix}__lastReadChapter" min="0" value="${
+                    exists && d.lastReadChapter ? d.lastReadChapter : null
+                }" disabled="${
+                    exists && d.isReading ? "disabled" : ""
+                }"/></dd>
+              </div>
+
+            </div>
+            
         </dl>
 
         <p id="${prefix}__submit" class="submit actions">
@@ -72,32 +124,48 @@ const markFicAsUnread = async (id: string) => {
 };
 
 const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
-  const notes = (
-    form.querySelector(
-      `#${CLASS_PREFIX}__read-form__notes`
-    ) as HTMLTextAreaElement
-  ).value.trim();
-  const count = parseInt(
-    (
-      form.querySelector(
-        `#${CLASS_PREFIX}__read-form__count`
-      ) as HTMLInputElement
-    ).value,
-    10
-  );
-  const reread = (
-    form.querySelector(
-      `#${CLASS_PREFIX}__read-form__reread`
-    ) as HTMLInputElement
-  ).checked;
+  const getInputValue = <T>(
+    selector: string,
+    parser: (val: HTMLInputElement | HTMLTextAreaElement) => T,
+    defaultValue: T
+  ): T => {
+    const input = form.querySelector(selector) as
+      | HTMLInputElement
+      | HTMLTextAreaElement;
+    if (!input) return defaultValue;
+    return parser(input);
+  };
 
   const fic: ReadFic = {
     id: data.id!,
     title: data.title!,
-    timestamp: Date.now(),
-    reread,
-    count,
-    notes,
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
+    reread: getInputValue<boolean>(
+      `#${CLASS_PREFIX}__read-form__reread`,
+      (val) => (val as HTMLInputElement).checked,
+      false
+    ),
+    count: getInputValue<number>(
+      `#${CLASS_PREFIX}__read-form__count`,
+      (val) => parseInt(val.value, 10),
+      1
+    ),
+    notes: getInputValue<string>(
+      `#${CLASS_PREFIX}__read-form__notes`,
+      (val) => val.value.trim(),
+      ""
+    ),
+    isReading: getInputValue<boolean>(
+      `#${CLASS_PREFIX}__read-form__isreading`,
+      (val) => (val as HTMLInputElement).checked,
+      false
+    ),
+    lastReadChapter: getInputValue<number | undefined>(
+      `#${CLASS_PREFIX}__read-form__lastReadChapter`,
+      (val) => parseInt(val.value, 10),
+      undefined
+    ),
   };
   const result = await StorageService.readFics.put(fic);
   showNotification(

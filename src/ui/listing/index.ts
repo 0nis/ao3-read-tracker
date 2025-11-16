@@ -1,4 +1,4 @@
-import { markFicsOnPage } from "./rendering";
+import { markFicsOnPage, updateFicsOnPage } from "./rendering";
 import { addListingStyles } from "./style";
 
 export const Listing = {
@@ -6,17 +6,9 @@ export const Listing = {
     addListingStyles();
     await markFicsOnPage();
 
-    // TODO: Check if MutationObserver is necessary
-    // TODO: Trigger a markFicsOnPage call when navigated back
-    // That requires an explicit reload at the moment
-
-    // const observer = new MutationObserver(() => {
-    //   markFicsOnPage();
-    // });
-
-    // observer.observe(document.getElementById("main")!, {
-    //   childList: true,
-    //   subtree: true,
-    // });
+    // Handles BFCache restoration (back/forward navigation)
+    window.addEventListener("pageshow", async (e) => {
+      if (e.persisted) await updateFicsOnPage();
+    });
   },
 };

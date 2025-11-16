@@ -11,3 +11,14 @@ export async function hide(id: string): Promise<void> {
   if (work.classList.contains(`${CLASS_PREFIX}__hidden`)) return; // Already hidden
   if (work) work.classList.add(`${CLASS_PREFIX}__hidden`);
 }
+
+/**
+ * Unhides a work in the listing, making it visible again.
+ * @param id ID of the work to unhide
+ */
+export async function unhide(id: string): Promise<void> {
+  const work = document.getElementById(`work_${id}`);
+  if (!work) return;
+  if (!work.classList.contains(`${CLASS_PREFIX}__hidden`)) return;
+  if (work) work.classList.remove(`${CLASS_PREFIX}__hidden`);
+}

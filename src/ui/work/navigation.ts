@@ -1,6 +1,6 @@
 import { getIdFromUrl } from "../../utils/ao3";
 import { StorageService } from "../../services/storage";
-import { ButtonAction, WorkState } from "../../types/enums";
+import { ButtonAction, WorkState } from "../../constants/enums";
 
 interface BaseButtonConfig {
   type: WorkState;

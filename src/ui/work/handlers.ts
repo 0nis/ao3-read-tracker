@@ -1,3 +1,4 @@
+import { CLASS_PREFIX } from "../../constants/classes";
 import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
@@ -6,10 +7,16 @@ import { StorageService } from "../../services/storage";
 import { IgnoredFic, ReadFic, Settings } from "../../types/storage";
 import { getTitleFromWorkPage } from "../../utils/ao3";
 import { showNotification } from "../../utils/dom";
+import { Router } from "../router";
 import { showIgnoredFicForm } from "./form/ignoredForm";
 import { showReadFicForm } from "./form/readForm";
 
 export async function handleEditReadFicInfo(id: string): Promise<void> {
+  const form = document.getElementById(`${CLASS_PREFIX}__read-form`);
+  if (form) {
+    Router.addHash(form.id);
+    return;
+  }
   const { data } = await StorageService.readFics.getById(id);
   showReadFicForm(!!data, {
     ...data,
@@ -25,7 +32,8 @@ export async function handleMarkFicAsRead(
   const result = await StorageService.readFics.put({
     ...data,
     id: data.id!,
-    timestamp: Date.now(),
+    createdAt: Date.now(),
+    modifiedAt: Date.now(),
     title: title,
   });
   if (result.success) showNotification(`Fic ${data.id} marked as read.`);
@@ -40,6 +48,11 @@ export async function handleMarkFicAsUnread(id: string): Promise<void> {
 }
 
 export async function handleEditIgnoredFicInfo(id: string): Promise<void> {
+  const form = document.getElementById(`${CLASS_PREFIX}__ignored-form`);
+  if (form) {
+    Router.addHash(form.id);
+    return;
+  }
   const { data } = await StorageService.ignoredFics.getById(id);
   showIgnoredFicForm(!!data, {
     ...data,

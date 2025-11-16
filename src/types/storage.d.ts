@@ -2,11 +2,14 @@ import { CollapseMode } from "../constants/settings";
 
 export interface ReadFic {
   id: string;
-  timestamp: number;
+  createdAt: number;
+  modifiedAt: number;
   title?: string;
   reread?: boolean;
   count?: number;
   notes?: string;
+  isReading?: boolean;
+  lastReadChapter?: number;
 }
 
 export interface IgnoredFic {

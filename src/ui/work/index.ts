@@ -1,5 +1,5 @@
 import { IGNORE_SETTINGS_ID, READ_SETTINGS_ID } from "../../constants/settings";
-import { ButtonAction, WorkState } from "../../types/enums";
+import { ButtonAction, WorkState } from "../../constants/enums";
 import { addFormStyles } from "./form/style";
 import {
   handleEditIgnoredFicInfo,

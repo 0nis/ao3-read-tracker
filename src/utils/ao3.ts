@@ -10,6 +10,22 @@ export function getTitleFromWorkPage(): string | null {
   return titleElement ? titleElement.textContent?.trim() || null : null;
 }
 
+export function getCurrentChapterFromWorkPage(): number | null {
+  const titleElement = document.querySelector("h3.title");
+  if (!titleElement) return null;
+  const chapterMatch = titleElement.textContent?.match(/Chapter (\d+)/);
+  return chapterMatch ? parseInt(chapterMatch[1]) : null;
+}
+
+export function getLatestChapterFromWorkListing(
+  work: HTMLElement
+): number | null {
+  const chapterElement = work.querySelector("dd.chapters");
+  if (!chapterElement) return null;
+  const chapterMatch = chapterElement.textContent?.match(/(\d+)\/\d+/);
+  return chapterMatch ? parseInt(chapterMatch[1]) : null;
+}
+
 export function hijackAo3Page(
   title: string,
   className: string
