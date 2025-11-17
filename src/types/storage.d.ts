@@ -1,3 +1,4 @@
+import { ButtonPlacement, DisplayMode } from "../constants/enums";
 import { CollapseMode } from "../constants/settings";
 
 export interface ReadFic {
@@ -5,7 +6,7 @@ export interface ReadFic {
   createdAt: number;
   modifiedAt: number;
   title?: string;
-  reread?: boolean;
+  rereadWorthy?: boolean;
   count?: number;
   notes?: string;
   isReading?: boolean;
@@ -19,17 +20,35 @@ export interface IgnoredFic {
   reason?: string;
 }
 
-export interface Settings {
+export interface ReadSettings {
   id: string;
-  simpleMode: boolean;
-  collapse: boolean;
-  collapseMode: CollapseMode;
+  simpleModeEnabled: boolean;
+  defaultDisplayMode: DisplayMode;
+  stillReadingDisplayMode: DisplayMode;
+  rereadWorthyDisplayMode: DisplayMode;
 }
 
-export type StorageData = {
+export interface IgnoreSettings {
+  id: string;
+  simpleModeEnabled: boolean;
+  defaultDisplayMode: DisplayMode;
+}
+
+export interface GeneralSettings {
+  id: string;
+  hideSymbols: boolean;
+  buttonPlacement: ButtonPlacement;
+}
+
+export type FicData = {
   readFics: Record<string, ReadFic>;
   ignoredFics: Record<string, IgnoredFic>;
-  settings: Record<string, Settings>;
+};
+
+export type SettingsData = {
+  readSettings: ReadSettings;
+  ignoreSettings: IgnoreSettings;
+  generalSettings: GeneralSettings;
 };
 
 export type StorageResult<T = void> = {

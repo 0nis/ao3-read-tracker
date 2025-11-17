@@ -1,10 +1,12 @@
 import { CLASS_PREFIX } from "../../constants/classes";
+import { SettingsType } from "../../constants/enums";
 import {
+  DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../constants/settings";
 import { StorageService } from "../../services/storage";
-import { IgnoredFic, ReadFic, Settings } from "../../types/storage";
+import { IgnoredFic, ReadFic, SettingsData } from "../../types/storage";
 import { getTitleFromWorkPage } from "../../utils/ao3";
 import { showNotification } from "../../utils/dom";
 import { Router } from "../router";
@@ -81,12 +83,12 @@ export async function handleUnignoreFic(id: string): Promise<void> {
   else showNotification(`Failed to unignore fic ${id}: ${result.error}`);
 }
 
-export async function handleGetSettings(): Promise<Record<string, Settings>> {
-  const { data } = await StorageService.settings.get();
-  if (!data || Object.keys(data).length === 0)
-    return {
-      READ_SETTINGS_ID: DEFAULT_READ_SETTINGS,
-      IGNORE_SETTINGS_ID: DEFAULT_IGNORE_SETTINGS,
-    };
-  return data as Record<string, Settings>;
+export async function handleGetSettings(): Promise<SettingsData> {
+  const { data } = await StorageService.getAllSettings();
+  const { readSettings, ignoreSettings, generalSettings } = data || {};
+  return {
+    readSettings: readSettings || DEFAULT_READ_SETTINGS,
+    ignoreSettings: ignoreSettings || DEFAULT_IGNORE_SETTINGS,
+    generalSettings: generalSettings || DEFAULT_GENERAL_SETTINGS,
+  };
 }

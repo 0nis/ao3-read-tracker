@@ -1,4 +1,5 @@
 import { BaseData } from "../data/base";
+import { SettingsData } from "../data/settings";
 import { StorageResult } from "../types/storage";
 
 /**
@@ -28,7 +29,7 @@ export async function safeExecute<T>(
  */
 export function createSafeService<
   T extends { id: string },
-  D extends BaseData<T>
+  D extends BaseData<T> | SettingsData<T>
 >(
   name: string,
   data: D

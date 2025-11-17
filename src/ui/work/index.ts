@@ -1,5 +1,4 @@
-import { IGNORE_SETTINGS_ID, READ_SETTINGS_ID } from "../../constants/settings";
-import { ButtonAction, WorkState } from "../../constants/enums";
+import { ButtonAction, SettingsType, WorkState } from "../../constants/enums";
 import { addFormStyles } from "./form/style";
 import {
   handleEditIgnoredFicInfo,
@@ -16,12 +15,9 @@ export const Work = {
   async init() {
     addFormStyles();
 
-    const {
-      [READ_SETTINGS_ID]: readSettings,
-      [IGNORE_SETTINGS_ID]: ignoreSettings,
-    } = await handleGetSettings();
+    const { readSettings, ignoreSettings } = await handleGetSettings();
 
-    if (readSettings.simpleMode) {
+    if (readSettings.simpleModeEnabled) {
       await addButton({
         mode: ButtonAction.TOGGLE as ButtonAction.TOGGLE,
         type: WorkState.READ,
@@ -38,7 +34,7 @@ export const Work = {
       });
     }
 
-    if (ignoreSettings.simpleMode) {
+    if (ignoreSettings.simpleModeEnabled) {
       await addButton({
         mode: ButtonAction.TOGGLE as ButtonAction.TOGGLE,
         type: WorkState.IGNORED,

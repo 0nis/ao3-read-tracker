@@ -1,7 +1,6 @@
 import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
-  READ_SETTINGS_ID,
 } from "../../constants/settings";
 import { StorageService } from "../../services/storage";
 import { hijackAo3Page } from "../../utils/ao3";
@@ -26,7 +25,7 @@ export function render(): void {
     </form>
   `;
 
-  StorageService.settings.getById(READ_SETTINGS_ID).then((result) => {
+  StorageService.readSettings.get().then((result) => {
     if (result.success && result.data) {
       const simpleModeEnabled = (result.data as any).simpleMode;
       (content.querySelector("#simple-mode") as HTMLInputElement).checked =
@@ -39,19 +38,19 @@ export function render(): void {
     const simpleModeEnabled = (
       document.getElementById("simple-mode") as HTMLInputElement
     ).checked;
-    StorageService.settings
-      .put({
+    StorageService.readSettings
+      .set({
         ...DEFAULT_READ_SETTINGS,
-        simpleMode: simpleModeEnabled,
+        simpleModeEnabled: simpleModeEnabled,
       })
       .then((result) => {
         if (result.success) {
           alert("Settings saved successfully.");
         }
       });
-    StorageService.settings.put({
+    StorageService.ignoreSettings.set({
       ...DEFAULT_IGNORE_SETTINGS,
-      simpleMode: simpleModeEnabled,
+      simpleModeEnabled: simpleModeEnabled,
     });
   });
   main.append(heading, content);

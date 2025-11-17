@@ -1,5 +1,9 @@
-import { CollapseMode } from "./enums";
-import { Settings } from "../types/storage";
+import { ButtonPlacement, DisplayMode, SettingsType } from "./enums";
+import {
+  GeneralSettings,
+  IgnoreSettings,
+  ReadSettings,
+} from "../types/storage";
 
 export const VERSION: number = 1;
 
@@ -8,19 +12,22 @@ export const DATABASE_VERSION = VERSION;
 
 export const SETTINGS_PAGE_URL = "/settings/mark-as-read";
 
-export const READ_SETTINGS_ID: string = "READ_SETTINGS";
-export const IGNORE_SETTINGS_ID: string = "IGNORE_SETTINGS";
-
-export const DEFAULT_READ_SETTINGS: Settings = {
-  id: READ_SETTINGS_ID,
-  simpleMode: true,
-  collapse: true,
-  collapseMode: CollapseMode.GENTLE,
+export const DEFAULT_READ_SETTINGS: ReadSettings = {
+  id: SettingsType.READ,
+  simpleModeEnabled: true,
+  defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  stillReadingDisplayMode: DisplayMode.NONE,
+  rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,
 };
 
-export const DEFAULT_IGNORE_SETTINGS: Settings = {
-  id: IGNORE_SETTINGS_ID,
-  simpleMode: true,
-  collapse: true,
-  collapseMode: CollapseMode.AGGRESSIVE,
+export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
+  id: SettingsType.IGNORE,
+  simpleModeEnabled: false,
+  defaultDisplayMode: DisplayMode.COLLAPSE_AGGRESSIVE,
+};
+
+export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
+  id: SettingsType.GENERAL,
+  hideSymbols: false,
+  buttonPlacement: ButtonPlacement.TOP,
 };

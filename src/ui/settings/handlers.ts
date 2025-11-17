@@ -1,55 +1,33 @@
-import {
-  DEFAULT_IGNORE_SETTINGS,
-  DEFAULT_READ_SETTINGS,
-  IGNORE_SETTINGS_ID,
-  READ_SETTINGS_ID,
-} from "../../constants/settings";
 import { StorageService } from "../../services/storage";
-import { Settings } from "../../types/storage";
 import { showNotification } from "../../utils/dom";
 
-export async function getReadSettings(): Promise<Settings> {
-  // const result = await StorageService.getSettings(READ_SETTINGS_ID);
-  const result = await StorageService.settings.getById(READ_SETTINGS_ID);
-  if (result.success) {
-    return (result.data as Settings) || DEFAULT_READ_SETTINGS;
+export async function getSettings<T>(
+  service: ReturnType<typeof StorageService.readSettings.get>,
+  defaultSettings: T,
+  label: string
+): Promise<T> {
+  const result = await service;
+  if (result.success && result.data) {
+    return result.data as T;
   } else {
     showNotification(
-      `Failed to retrieve read settings: ${result.error}. Using default settings.`
+      `Failed to retrieve ${label} settings${
+        result.error ? `: ${result.error}` : ""
+      }. Using default settings.`
     );
-    return DEFAULT_READ_SETTINGS;
+    return defaultSettings;
   }
 }
 
-export async function getIgnoreSettings(): Promise<Settings> {
-  //   const result = await StorageService.getSettings(IGNORE_SETTINGS_ID);
-  const result = await StorageService.settings.getById(IGNORE_SETTINGS_ID);
+export async function updateSettings<T extends { id: string }>(
+  service: (settings: T) => Promise<any>,
+  settings: T,
+  label: string
+): Promise<void> {
+  const result = await service(settings);
   if (result.success) {
-    return (result.data as Settings) || DEFAULT_IGNORE_SETTINGS;
+    showNotification(`${label} settings updated successfully.`);
   } else {
-    showNotification(
-      `Failed to retrieve ignore settings: ${result.error}. Using default settings.`
-    );
-    return DEFAULT_IGNORE_SETTINGS;
-  }
-}
-
-export async function updateReadSettings(settings: Settings): Promise<void> {
-  // const result = await StorageService.updateSettings(settings);
-  const result = await StorageService.settings.put(settings);
-  if (result.success) {
-    showNotification("Read settings updated successfully.");
-  } else {
-    showNotification(`Failed to update read settings: ${result.error}.`);
-  }
-}
-
-export async function updateIgnoreSettings(settings: Settings): Promise<void> {
-  // const result = await StorageService.updateSettings(settings);
-  const result = await StorageService.settings.put(settings);
-  if (result.success) {
-    showNotification("Ignore settings updated successfully.");
-  } else {
-    showNotification(`Failed to update ignore settings: ${result.error}.`);
+    showNotification(`Failed to update ${label} settings: ${result.error}.`);
   }
 }

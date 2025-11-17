@@ -3,11 +3,11 @@ import {
   extractWorkIdFromListingId,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import type { StorageData } from "../../types/storage";
+import type { FicData } from "../../types/storage";
 
 export async function getFicStatusData(): Promise<{
   worksList: HTMLElement | null;
-  data: Pick<StorageData, "readFics" | "ignoredFics"> | undefined | null;
+  data: FicData | undefined | null;
 }> {
   const worksList = getWorksListFromListing();
   if (!worksList) return { worksList: null, data: null };

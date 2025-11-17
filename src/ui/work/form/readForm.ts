@@ -82,7 +82,7 @@ const getReadFicFormMarkup = (
               <div>
                 <dt><label for="${prefix}__reread">Re-read worthy?</label></dt>
                 <dd><input type="checkbox" id="${prefix}__reread" ${
-                    exists && d.reread ? "checked" : ""
+                    exists && d.rereadWorthy ? "checked" : ""
                 } /></dd>
               </div>
 
@@ -141,7 +141,7 @@ const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
     title: data.title!,
     createdAt: data.createdAt || Date.now(),
     modifiedAt: Date.now(),
-    reread: getInputValue<boolean>(
+    rereadWorthy: getInputValue<boolean>(
       `#${CLASS_PREFIX}__read-form__reread`,
       (val) => (val as HTMLInputElement).checked,
       false

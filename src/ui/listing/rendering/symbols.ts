@@ -50,7 +50,7 @@ function renderReadSymbol(
     addListItemToIndicator(indicatorList, "📖", "Still reading");
   } else addListItemToIndicator(indicatorList, "✅", "Marked as read");
 
-  if (item.reread) {
+  if (item.rereadWorthy) {
     addListItemToIndicator(indicatorList, "🔁", "Marked as re-read worthy");
   }
 

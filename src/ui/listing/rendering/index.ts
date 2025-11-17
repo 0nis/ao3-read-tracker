@@ -87,7 +87,7 @@ function applyMarksToWork(
 
 function markAsRead(work: HTMLElement, item: ReadFic) {
   work.classList.add(READ_CLASS);
-  if (item.reread) work.classList.add(REREAD_WORTHY_CLASS);
+  if (item.rereadWorthy) work.classList.add(REREAD_WORTHY_CLASS);
   if (item.isReading) work.classList.add(STILL_READING_CLASS);
   addText(work, WorkState.READ, item);
   addSymbols(work, WorkState.READ, item);
