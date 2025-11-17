@@ -1,7 +1,9 @@
+import { CLASS_PREFIX } from "../../constants/classes";
+
 export function addModalStyles(): void {
   const style = document.createElement("style");
   style.textContent = `
-    .read-tracker__overlay {
+    .${CLASS_PREFIX}__modal-overlay {
       position: fixed;
       top: 0; left: 0;
       width: 100%;
@@ -9,7 +11,7 @@ export function addModalStyles(): void {
       background: rgba(0, 0, 0, 0.5);
       z-index: 98;
     }
-    .read-tracker__modal {
+    .${CLASS_PREFIX}__modal {
       position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
@@ -23,22 +25,32 @@ export function addModalStyles(): void {
       overflow: auto;
       z-index: 99;
     }
-    .read-tracker__header {
-      display: flex;
-      justify-content: space-between;
+    .${CLASS_PREFIX}__modal-header {
+      margin-bottom: 1em;
     }
-    .read-tracker__settings {
+    .${CLASS_PREFIX}__modal-message {
+      margin-bottom: 1.5em;
+    }
+    .${CLASS_PREFIX}__modal-buttons {
       display: flex;
       justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 3px;
-      margin-bottom: 3px;
+      gap: 10px;
     }
-    .read-tracker__btn:hover {
+    .${CLASS_PREFIX}__modal-btn {
+      padding: 8px 16px;
+      border: 1px solid currentColor;
+      background: transparent;
+      color: inherit;
       cursor: pointer;
+    }
+    .${CLASS_PREFIX}__modal-btn:hover {
       opacity: 0.8;
     }
-    .hidden {
+    .${CLASS_PREFIX}__modal-btn--primary {
+      background: currentColor;
+      color: var(--background, #fff);
+    }
+    .${CLASS_PREFIX}__hidden {
       display: none !important;
     }
   `;

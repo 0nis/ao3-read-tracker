@@ -2,7 +2,7 @@
   "name": "ao3-mark-as-read",
   "displayName": "AO3 Mark as Read",
   "version": "1.0.0",
-  "description": "Mark fics as read or ignore them on AO3",
+  "description": "Never forget which AO3 works you've read - mark them as read or ignored",
   "main": "index.js",
   "type": "module",
   "scripts": {

@@ -1,6 +1,6 @@
-import { CLASS_PREFIX } from "../../constants/classes";
+import { CLASS_PREFIX } from "../constants/classes";
 
-export function addListingStyles(): void {
+export function addStyles(): void {
   const style = document.createElement("style");
   style.textContent = `
     .${CLASS_PREFIX}__hidden {
