@@ -14,7 +14,7 @@ export enum ButtonAction {
 }
 
 export enum DisplayMode {
-  NONE = "none",
+  DEFAULT = "default",
   HIDE = "hide",
   COLLAPSE_GENTLE = "collapse_gentle",
   COLLAPSE_AGGRESSIVE = "collapse_aggressive",

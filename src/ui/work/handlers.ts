@@ -1,5 +1,4 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import { SettingsType } from "../../constants/enums";
 import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,

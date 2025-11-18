@@ -38,6 +38,8 @@ export interface GeneralSettings {
   id: string;
   hideSymbols: boolean;
   buttonPlacement: ButtonPlacement;
+  replaceMarkForLaterText: boolean;
+  markForLaterReplacementLabel: string;
 }
 
 export type FicData = {

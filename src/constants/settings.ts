@@ -14,9 +14,9 @@ export const SETTINGS_PAGE_URL = "/settings/mark-as-read";
 
 export const DEFAULT_READ_SETTINGS: ReadSettings = {
   id: SettingsType.READ,
-  simpleModeEnabled: true,
+  simpleModeEnabled: false,
   defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  stillReadingDisplayMode: DisplayMode.NONE,
+  stillReadingDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,
 };
 
@@ -30,4 +30,6 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   hideSymbols: false,
   buttonPlacement: ButtonPlacement.TOP,
+  replaceMarkForLaterText: true,
+  markForLaterReplacementLabel: "Finished",
 };
