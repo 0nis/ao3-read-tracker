@@ -2,7 +2,7 @@ import { CLASS_PREFIX } from "../../../constants/classes";
 import { WorkState } from "../../../constants/enums";
 import { IgnoredFic, ReadFic } from "../../../types/storage";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
-import { getElement, getOrCreateElement } from "../../../utils/dom";
+import { el, ensureChild, getElement, injectStyles } from "../../../utils/dom";
 
 /**
  * Adds symbols to a work element showing information like read/ignored status, reread worthiness, and read count.
@@ -15,10 +15,13 @@ export function addSymbols(
   type: WorkState,
   item: ReadFic | IgnoredFic
 ) {
-  addStyles();
+  injectStyles(
+    `${CLASS_PREFIX}__styles--listing-symbols`,
+    getStyles(CLASS_PREFIX)
+  );
 
-  const symbolIndicatorList = getOrCreateElement(
-    work,
+  const symbolIndicatorList = ensureChild(
+    work.querySelector(".header.module")!,
     `${CLASS_PREFIX}__symbol-indicator`,
     "ul"
   );
@@ -26,8 +29,6 @@ export function addSymbols(
   if (type === WorkState.READ)
     renderReadSymbol(work, symbolIndicatorList, item as ReadFic);
   else renderIgnoredSymbol(symbolIndicatorList, item as IgnoredFic);
-
-  work.querySelector(".header.module")?.appendChild(symbolIndicatorList);
 }
 
 /**
@@ -62,13 +63,16 @@ function renderReadSymbol(
     );
   }
 
-  if (item.isReading && item.lastReadChapter) {
-    if (item.lastReadChapter < (getLatestChapterFromWorkListing(work) || 0))
-      addListItemToIndicator(
-        indicatorList,
-        "‼️",
-        `New chapters available! (last read: chapter ${item.lastReadChapter})`
-      );
+  if (
+    item.isReading &&
+    item.lastReadChapter &&
+    item.lastReadChapter < (getLatestChapterFromWorkListing(work) || 0)
+  ) {
+    addListItemToIndicator(
+      indicatorList,
+      "‼️",
+      `New chapters available! (last read: chapter ${item.lastReadChapter})`
+    );
   }
 }
 
@@ -81,23 +85,27 @@ function addListItemToIndicator(
   text: string,
   label: string
 ) {
-  const listItem = document.createElement("li");
-  listItem.setAttribute("aria-label", label);
-  listItem.setAttribute("title", label);
-
-  const symbolSpan = document.createElement("span");
-  symbolSpan.textContent = text;
-  // Don't torture screen reader users with emoji readouts
-  symbolSpan.setAttribute("aria-hidden", "true");
-
-  listItem.appendChild(symbolSpan);
+  const listItem = el(
+    "li",
+    {
+      attrs: {
+        "aria-label": label,
+        title: label,
+      },
+    },
+    [
+      el("span", {
+        textContent: text,
+        attrs: { "aria-hidden": "true" },
+      }),
+    ]
+  );
   indicatorList.appendChild(listItem);
 }
 
-function addStyles() {
-  const style = document.createElement("style");
-  style.textContent = `
-    .${CLASS_PREFIX}__symbol-indicator {
+function getStyles(prefix: string): string {
+  return `
+    .${prefix}__symbol-indicator {
       display: inline !important;
       margin: 0 !important;
       float: right;
@@ -106,5 +114,4 @@ function addStyles() {
       right: 0px;
     }
   `;
-  document.head.appendChild(style);
 }

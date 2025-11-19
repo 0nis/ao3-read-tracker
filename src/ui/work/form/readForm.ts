@@ -9,22 +9,22 @@ export async function showReadFicForm(
   exists: boolean,
   data: Partial<ReadFic>
 ): Promise<void> {
-  await createFicForm<ReadFic>({
-    id: `${CLASS_PREFIX}__read-form`,
+  const id = `${CLASS_PREFIX}__read-form`;
+  const form = await createFicForm<ReadFic>({
+    id,
     title: "Mark Fic as Read",
     exists,
     data,
-    buildInnerHTML: (prefix, d, exists) =>
-      getReadFicFormMarkup(prefix, d, exists),
+    buildInnerHTML: (d, exists) => getReadFicFormMarkup(id, d, exists),
     onSubmit: async (form) => await markFicAsRead(form, data),
     onDelete: async () => await markFicAsUnread(data.id!),
   });
 
-  const isReadingCheckbox = document.querySelector(
-    `#${CLASS_PREFIX}__read-form__isreading`
+  const isReadingCheckbox = form.querySelector(
+    `#${id}__isreading`
   ) as HTMLInputElement;
-  const lastReadChapterInput = document.querySelector(
-    `#${CLASS_PREFIX}__read-form__lastReadChapter`
+  const lastReadChapterInput = form.querySelector(
+    `#${id}__lastReadChapter`
   ) as HTMLInputElement;
 
   if (isReadingCheckbox && lastReadChapterInput) {
@@ -36,6 +36,16 @@ export async function showReadFicForm(
       else lastReadChapterInput.value = "";
     });
   }
+
+  form.querySelector(`#${id}__close`)?.addEventListener("click", (e) => {
+    e.preventDefault();
+    form.dispatchEvent(new CustomEvent("fic:close"));
+  });
+
+  form.querySelector(`#${id}__delete`)?.addEventListener("click", (e) => {
+    e.preventDefault();
+    form.dispatchEvent(new CustomEvent("fic:delete"));
+  });
 }
 
 // prettier-ignore

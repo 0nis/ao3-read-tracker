@@ -38,6 +38,10 @@ export function hijackAo3Page(
   return main;
 }
 
+export function getWork(id: string): HTMLElement | null {
+  return document.getElementById(`work_${id}`) as HTMLElement | null;
+}
+
 export function extractWorkIdFromListingId(id: string): string | null {
   const match = id.match(/^work_(\d+)/);
   return match ? match[1] : null;

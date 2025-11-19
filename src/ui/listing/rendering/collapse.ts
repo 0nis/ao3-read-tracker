@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { CollapseMode } from "../../../constants/enums";
-import { getElement } from "../../../utils/dom";
+import { el, getElement, injectStyles } from "../../../utils/dom";
 
 /**
  * Hides the details of a work in the listing to take up less space.
@@ -10,10 +10,14 @@ import { getElement } from "../../../utils/dom";
 export function collapse(workOrId: HTMLElement | string, mode: CollapseMode) {
   const work = getWork(workOrId);
   if (!work) return;
-  if (work.classList.contains(`${CLASS_PREFIX}__collapsed`)) return; // Already collapsed
+  const isCollapsed = work.classList.contains(`${CLASS_PREFIX}__collapsed`);
+  if (isCollapsed) return;
 
   work.appendChild(createClearSpacer());
-  addStyles();
+  injectStyles(
+    `${CLASS_PREFIX}__styles--listing-collapse`,
+    getStyles(CLASS_PREFIX)
+  );
 
   const header = work.querySelector<HTMLElement>(".header.module");
   const textIndicator = work.querySelector<HTMLElement>(
@@ -31,10 +35,8 @@ export function collapse(workOrId: HTMLElement | string, mode: CollapseMode) {
     `${CLASS_PREFIX}__collapsed--${mode}`
   );
   for (const el of elementsToHide) el.classList.add(`${CLASS_PREFIX}__hidden`);
-  if (mode === CollapseMode.AGGRESSIVE && header)
-    header.classList.add(`${CLASS_PREFIX}__hidden`);
 
-  const toggle = createCollapseToggle(work, elementsToHide);
+  const toggle = createCollapseToggle(work, elementsToHide, isCollapsed);
   work.appendChild(toggle);
 }
 
@@ -68,12 +70,14 @@ function getWork(workOrId: HTMLElement | string): HTMLElement | null {
 
 function createCollapseToggle(
   work: HTMLElement,
-  elementsToToggle: Element[]
+  elementsToToggle: Element[],
+  isCollapsed: boolean = true
 ): HTMLButtonElement {
-  const toggle = document.createElement("button");
-  toggle.type = "button";
-  toggle.className = `${CLASS_PREFIX}__collapsed__toggle`;
-  toggle.textContent = "Show details";
+  const toggle = el("button", {
+    type: "button",
+    className: `${CLASS_PREFIX}__collapsed__toggle`,
+    textContent: isCollapsed ? "Hide details" : "Show details",
+  });
 
   toggle.addEventListener("click", (ev) => {
     ev.preventDefault();
@@ -90,23 +94,23 @@ function createCollapseToggle(
 }
 
 function createClearSpacer(): HTMLElement {
-  const spacer = document.createElement("div");
-  spacer.style.clear = "both";
-  return spacer;
+  return el("div", {
+    className: `${CLASS_PREFIX}__collapsed__spacer`,
+    style: { clear: "both" },
+  });
 }
 
-export function addStyles() {
-  const style = document.createElement("style");
-  style.textContent = `
-    .${CLASS_PREFIX}__collapsed__toggle {
+function getStyles(prefix: string): string {
+  return `
+    .${prefix}__collapsed__toggle {
       float: right;
     }
-    .${CLASS_PREFIX}__collapsed .${CLASS_PREFIX}__text-indicator {
+    .${prefix}__collapsed .${prefix}__text-indicator {
       float: left;
       margin-top: 0em;
       text-align: left;
     }
-    .${CLASS_PREFIX}__collapsed .${CLASS_PREFIX}__toggle {
+    .${prefix}__collapsed .${prefix}__toggle {
       float: right;
       margin: 4px 0px;
       position: relative;
@@ -114,5 +118,4 @@ export function addStyles() {
       left: auto;
     }
   `;
-  document.head.appendChild(style);
 }

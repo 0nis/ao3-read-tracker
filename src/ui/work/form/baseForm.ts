@@ -1,4 +1,5 @@
 import { IgnoredFic, ReadFic } from "../../../types/storage";
+import { el } from "../../../utils/dom";
 import { Router } from "../../router";
 
 export interface FicFormConfig<T> {
@@ -7,7 +8,7 @@ export interface FicFormConfig<T> {
   title: string;
   exists: boolean;
   data: Partial<T>;
-  buildInnerHTML: (prefix: string, data: Partial<T>, exists: boolean) => string;
+  buildInnerHTML: (data: Partial<T>, exists: boolean) => string;
   onSubmit: (form: HTMLFormElement) => Promise<void>;
   onDelete?: (form: HTMLFormElement) => Promise<void>;
   onClose?: () => void;
@@ -15,7 +16,7 @@ export interface FicFormConfig<T> {
 
 export async function createFicForm<T>(
   config: FicFormConfig<T>
-): Promise<void> {
+): Promise<HTMLFormElement> {
   const {
     id,
     title,
@@ -31,10 +32,10 @@ export async function createFicForm<T>(
   const container = createFormContainer(id, title);
   const post = container.querySelector(".post")!;
 
-  const form = document.createElement("form");
-  form.className = `${id}__details`;
-
-  form.innerHTML = buildInnerHTML(id, data, exists);
+  const form = el("form", {
+    className: `${id}__details`,
+    html: buildInnerHTML(data, exists),
+  });
 
   form.addEventListener("remove", () => {
     container.remove();
@@ -46,15 +47,14 @@ export async function createFicForm<T>(
   post.appendChild(form);
   appendFormToFeedback(container, id);
 
-  const deleteBtn = form.querySelector(
-    `#${id}__delete`
-  ) as HTMLButtonElement | null;
-  if (exists && deleteBtn && onDelete) {
-    deleteBtn.addEventListener("click", async () => {
-      await onDelete(form);
-      form.dispatchEvent(new Event("remove"));
-    });
-  }
+  form.addEventListener("fic:close", () => {
+    form.dispatchEvent(new Event("remove")); // your existing remove logic
+  });
+
+  form.addEventListener("fic:delete", async () => {
+    if (onDelete) await onDelete(form);
+    form.dispatchEvent(new Event("remove"));
+  });
 
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
@@ -62,23 +62,25 @@ export async function createFicForm<T>(
     form.dispatchEvent(new Event("remove"));
   });
 
-  form.querySelector(`#${id}__close`)?.addEventListener("click", (e) => {
-    e.preventDefault();
-    form.dispatchEvent(new Event("remove"));
-  });
+  return form;
 }
 
 export function createFormContainer(id: string, title: string): HTMLDivElement {
-  const wrapper = document.createElement("div");
-  wrapper.className = "wrapper toggled";
-  wrapper.id = id;
-  wrapper.style.display = "block";
+  const post = el("div", {
+    className: "post mark-as-read",
+    id: "mark",
+    html: `<h3 class="landmark heading">${title}</h3>`,
+  });
 
-  const post = document.createElement("div");
-  post.className = "post mark-as-read";
-  post.id = `mark`;
-  post.innerHTML = `<h3 class="landmark heading">${title}</h3>`;
-  wrapper.appendChild(post);
+  const wrapper = el(
+    "div",
+    {
+      className: "wrapper toggled",
+      id,
+      style: { display: "block" },
+    },
+    [post]
+  );
 
   return wrapper;
 }

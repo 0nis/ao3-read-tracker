@@ -8,15 +8,25 @@ export async function showIgnoredFicForm(
   exists: boolean,
   data: Partial<IgnoredFic>
 ): Promise<void> {
-  await createFicForm<IgnoredFic>({
-    id: `${CLASS_PREFIX}__ignored-form`,
+  const id = `${CLASS_PREFIX}__ignored-form`;
+  const form = await createFicForm<IgnoredFic>({
+    id,
     title: "Ignore Fic",
     exists,
     data,
-    buildInnerHTML: (prefix, d, exists) =>
-      getIgnoredFicFormMarkup(prefix, d, exists),
+    buildInnerHTML: (d, exists) => getIgnoredFicFormMarkup(id, d, exists),
     onSubmit: async (form) => await markFicAsIgnored(form, data),
     onDelete: async () => await markFicAsUnignored(data.id!),
+  });
+
+  form.querySelector(`#${id}__close`)?.addEventListener("click", (e) => {
+    e.preventDefault();
+    form.dispatchEvent(new CustomEvent("fic:close"));
+  });
+
+  form.querySelector(`#${id}__delete`)?.addEventListener("click", (e) => {
+    e.preventDefault();
+    form.dispatchEvent(new CustomEvent("fic:delete"));
   });
 }
 

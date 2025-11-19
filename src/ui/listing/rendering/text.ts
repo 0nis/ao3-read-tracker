@@ -3,7 +3,7 @@ import { WorkState } from "../../../constants/enums";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
-import { getElement, getOrCreateElement } from "../../../utils/dom";
+import { el, ensureChild, getElement, injectStyles } from "../../../utils/dom";
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
@@ -16,9 +16,12 @@ export function addText(
   type: WorkState,
   item: ReadFic | IgnoredFic
 ) {
-  addStyles();
+  injectStyles(
+    `${CLASS_PREFIX}__styles--listing-text`,
+    getStyles(CLASS_PREFIX)
+  );
 
-  const indicatorList = getOrCreateElement(
+  const indicatorList = ensureChild(
     work,
     `${CLASS_PREFIX}__text-indicator`,
     "ul"
@@ -68,26 +71,28 @@ function renderIgnoredInformation(
 }
 
 function createIndicator(type: WorkState, timestamp: number): HTMLElement {
-  const indicator = document.createElement("li");
-  indicator.classList.add(`${CLASS_PREFIX}__text-indicator--${type}`);
-  const text = createIndicatorText(type, timestamp);
-  indicator.appendChild(text);
-  return indicator;
+  return el(
+    "li",
+    {
+      className: `${CLASS_PREFIX}__text-indicator--${type}`,
+    },
+    [createIndicatorText(type, timestamp)]
+  );
 }
 
 function createIndicatorText(
   type: WorkState,
   timestamp: number
 ): HTMLParagraphElement {
-  const p = document.createElement("p");
-  const timeEl = document.createElement("time");
-  timeEl.dateTime = new Date(timestamp).toISOString();
-  timeEl.textContent = `${getFormattedDate(timestamp)} at ${getFormattedTime(
-    timestamp
-  )}`;
-  p.innerHTML = `Marked as ${type} on `;
-  p.appendChild(timeEl);
-  return p;
+  return el("p", {}, [
+    `Marked as ${type} on `,
+    el("time", {
+      dateTime: new Date(timestamp).toISOString(),
+      textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
+        timestamp
+      )}`,
+    }),
+  ]);
 }
 
 function createStillReadingText(
@@ -95,60 +100,53 @@ function createStillReadingText(
   timestamp: number,
   chapter: number | undefined
 ): HTMLLIElement {
-  const indicator = document.createElement("li");
-  indicator.classList.add(`${CLASS_PREFIX}__text-indicator--still-reading`);
-
-  const timeEl = document.createElement("time");
-  timeEl.dateTime = new Date(timestamp).toISOString();
-  timeEl.textContent = getFormattedDate(timestamp);
-
-  const p = document.createElement("p");
-  p.append(
-    "Still reading as of ",
-    timeEl,
-    chapter
-      ? ` (chapter ${chapter}/${getLatestChapterFromWorkListing(work) || "?"})`
-      : ""
+  return el(
+    "li",
+    { className: `${CLASS_PREFIX}__text-indicator--still-reading` },
+    [
+      el("p", {}, [
+        "Still reading as of ",
+        el("time", {
+          dateTime: new Date(timestamp).toISOString(),
+          textContent: getFormattedDate(timestamp),
+        }),
+        chapter
+          ? ` (chapter ${chapter}/${
+              getLatestChapterFromWorkListing(work) || "?"
+            })`
+          : "",
+      ]),
+    ]
   );
-  indicator.appendChild(p);
-
-  return indicator;
 }
 
 function addNotesText(work: HTMLElement, notes: string, className?: string) {
-  let section = work.querySelector(
-    `.${CLASS_PREFIX}__text-indicator__notes`
-  ) as HTMLElement | null;
-  if (!section) {
-    section = document.createElement("blockquote");
-    section.classList.add(`${CLASS_PREFIX}__text-indicator__notes`);
-    work.appendChild(section);
-  }
-  section.innerHTML += `
-    <p>${notes}</p>
-  `;
+  const section = ensureChild(
+    work,
+    `${CLASS_PREFIX}__text-indicator__notes`,
+    "blockquote"
+  );
+  section.appendChild(el("p", { html: notes }));
   if (className) section.classList.add(className);
 }
 
-export function addStyles() {
-  const style = document.createElement("style");
-  style.textContent = `
-    .${CLASS_PREFIX}__text-indicator {
+function getStyles(prefix: string): string {
+  return `
+    .${prefix}__text-indicator {
       float: right;
       margin-top: 1em;
       text-align: right;
     }
-    .${CLASS_PREFIX}__text-indicator li {
+    .${prefix}__text-indicator li {
       padding: 0;
       margin: 0;
     }
-    .${CLASS_PREFIX}__text-indicator li p {
+    .${prefix}__text-indicator li p {
       margin: 0.2em 0;
     }
-    .${CLASS_PREFIX}__text-indicator__notes {
+    .${prefix}__text-indicator__notes {
       float: left;
       margin-top: 1em !important;
     }
   `;
-  document.head.appendChild(style);
 }

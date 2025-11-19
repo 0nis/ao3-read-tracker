@@ -4,7 +4,7 @@ import { addSymbols, removeSymbols } from "./symbols";
 
 import { getFicStatusData } from "../handlers";
 import { extractWorkIdFromListingId } from "../../../utils/ao3";
-import { getOrCreateElement } from "../../../utils/dom";
+import { ensureChild } from "../../../utils/dom";
 
 import {
   READ_CLASS,
@@ -111,11 +111,8 @@ function adjustWorkDisplay(
 }
 
 function createOrModifyLandmarkHeading(work: HTMLElement) {
-  const heading = getOrCreateElement(
-    work,
-    `${CLASS_PREFIX}__text-indicator__landmark`,
-    "h6"
-  );
-  heading.classList.add("landmark", "heading");
-  heading.textContent = "Mark as Read Extension Information";
+  ensureChild(work, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
+    className: "landmark heading",
+    textContent: "Mark as Read Extension Information",
+  });
 }

@@ -13,6 +13,7 @@ import {
   handleMarkFicAsUnread,
   handleUnignoreFic,
 } from "./handlers";
+import { el } from "../../utils/dom";
 
 interface BaseButtonConfig {
   type: WorkState;
@@ -64,10 +65,10 @@ async function createAndAppendButton(parent: Element, config: ButtonConfig) {
       : await StorageService.ignoredFics.exists(ficId)
   ).data;
 
-  const li = document.createElement("li");
-  const button = document.createElement("a");
-  button.href = "#";
-  button.textContent = exists ? config.labels.ON : config.labels.OFF;
+  const button = el("a", {
+    href: "#",
+    textContent: exists ? config.labels.ON : config.labels.OFF,
+  });
 
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
@@ -86,7 +87,7 @@ async function createAndAppendButton(parent: Element, config: ButtonConfig) {
     }
   });
 
-  li.appendChild(button);
+  const li = el("li", {}, button);
   parent.appendChild(li);
 }
 
