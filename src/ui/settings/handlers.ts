@@ -1,13 +1,14 @@
 import { StorageService } from "../../services/storage";
+import { StorageResult } from "../../types/storage";
 import { showNotification } from "../../utils/dom";
 
-export async function getSettings<T>(
-  service: ReturnType<typeof StorageService.readSettings.get>,
+export async function getSettingsHandler<T>(
+  service: () => Promise<StorageResult<T>>,
   defaultSettings: T,
   label: string
 ): Promise<T> {
-  const result = await service;
-  if (result.success && result.data) {
+  const result = await service();
+  if (result.success && result.data && result.data !== undefined) {
     return result.data as T;
   } else {
     showNotification(
@@ -19,7 +20,7 @@ export async function getSettings<T>(
   }
 }
 
-export async function updateSettings<T extends { id: string }>(
+export async function updateSettingsHandler<T extends { id: string }>(
   service: (settings: T) => Promise<any>,
   settings: T,
   label: string

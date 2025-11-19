@@ -48,7 +48,7 @@ export async function createFicForm<T>(
   appendFormToFeedback(container, id);
 
   form.addEventListener("fic:close", () => {
-    form.dispatchEvent(new Event("remove")); // your existing remove logic
+    form.dispatchEvent(new Event("remove"));
   });
 
   form.addEventListener("fic:delete", async () => {

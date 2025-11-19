@@ -97,3 +97,26 @@ export const getElement = (
   parent: HTMLElement,
   selector: string
 ): HTMLElement | null => parent.querySelector(selector);
+
+/**
+ * Builds a select element from an enum-like object.
+ * @param enumObj The enum-like object to build options from
+ * @param selected The value to mark as selected (optional)
+ * @returns The constructed HTMLSelectElement
+ */
+export function buildSelectFromEnum<T extends Record<string, string>>(
+  enumObj: T,
+  selected?: T[keyof T],
+  attrs?: Record<string, string>
+): HTMLSelectElement {
+  const select = el("select", { attrs }) as HTMLSelectElement;
+  Object.values(enumObj).forEach((v) => {
+    const option = el("option", {
+      value: String(v),
+      textContent: String(v).replace(/_/g, " "),
+    });
+    if (selected && selected === v) option.selected = true;
+    select.appendChild(option);
+  });
+  return select;
+}
