@@ -19,6 +19,7 @@ interface BaseButtonConfig {
   type: WorkState;
   labels: { ON: string; OFF: string };
   placement: ButtonPlacement;
+  href: string;
 }
 
 interface ToggleButtonConfig extends BaseButtonConfig {
@@ -66,7 +67,7 @@ async function createAndAppendButton(parent: Element, config: ButtonConfig) {
   ).data;
 
   const button = el("a", {
-    href: "#",
+    href: config.href,
     textContent: exists ? config.labels.ON : config.labels.OFF,
   });
 
@@ -101,6 +102,7 @@ export async function setupReadButton(
       type: WorkState.READ,
       placement: buttonPlacement,
       labels: { ON: "Mark as Unread", OFF: "Mark as Read" },
+      href: "#ext-mar__read-form",
       onActivate: (id) => handleMarkFicAsRead({ id }),
       onDeactivate: handleMarkFicAsUnread,
     });
@@ -110,6 +112,7 @@ export async function setupReadButton(
       type: WorkState.READ,
       placement: buttonPlacement,
       labels: { ON: "Edit Read Info", OFF: "Mark as Read" },
+      href: "#ext-mar__read-form",
       onClick: (id) => handleEditReadFicInfo(id),
     });
   }
@@ -125,6 +128,7 @@ export async function setupIgnoreButton(
       type: WorkState.IGNORED,
       placement: buttonPlacement,
       labels: { ON: "Unignore", OFF: "Ignore" },
+      href: "#ext-mar__ignored-form",
       onActivate: (id) => handleIgnoreFic({ id }),
       onDeactivate: handleUnignoreFic,
     });
@@ -134,6 +138,7 @@ export async function setupIgnoreButton(
       type: WorkState.IGNORED,
       placement: buttonPlacement,
       labels: { ON: "Edit Ignore Info", OFF: "Ignore" },
+      href: "#ext-mar__ignored-form",
       onClick: (id) => handleEditIgnoredFicInfo(id),
     });
   }

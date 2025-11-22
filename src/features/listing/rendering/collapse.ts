@@ -37,7 +37,7 @@ export function collapse(workOrId: HTMLElement | string, mode: CollapseMode) {
   );
   for (const el of elementsToHide) el.classList.add(`${CLASS_PREFIX}__hidden`);
 
-  const toggle = createCollapseToggle(work, elementsToHide, isCollapsed);
+  const toggle = createCollapseToggle(work, elementsToHide, true);
   work.appendChild(toggle);
 }
 
@@ -76,18 +76,23 @@ function createCollapseToggle(
   const toggle = el("button", {
     type: "button",
     className: `${CLASS_PREFIX}__collapsed__toggle`,
-    textContent: isCollapsed ? "Hide details" : "Show details",
+    textContent: isCollapsed ? "Show details" : "Hide details",
+    attrs: {
+      "aria-expanded": String(!isCollapsed),
+      "aria-controls": work.id,
+    },
   });
 
   toggle.addEventListener("click", (ev) => {
     ev.preventDefault();
-    const isCollapsed = toggle.textContent === "Show details";
-
+    const isExpanding = work.classList.contains(`${CLASS_PREFIX}__collapsed`);
+    console.log("Is collapsed? ", isCollapsed);
     for (const el of elementsToToggle)
-      el.classList.toggle(`${CLASS_PREFIX}__hidden`, !isCollapsed);
+      el.classList.toggle(`${CLASS_PREFIX}__hidden`, !isExpanding);
 
-    toggle.textContent = isCollapsed ? "Hide details" : "Show details";
-    work.classList.toggle(`${CLASS_PREFIX}__collapsed`, !isCollapsed);
+    toggle.textContent = isExpanding ? "Hide details" : "Show details";
+    toggle.setAttribute("aria-expanded", String(isExpanding));
+    work.classList.toggle(`${CLASS_PREFIX}__collapsed`, !isExpanding);
   });
 
   return toggle;

@@ -2,23 +2,26 @@ import { PREFIX } from "../..";
 import { DisplayMode } from "../../../../constants/enums";
 import { el } from "../../../../utils/dom";
 import { buildSelectFromEnum } from "../../../../utils/form";
-import { createSection } from "./base";
+import { createField, createSection } from "./base";
 
 export function buildIgnoreSection(): HTMLElement {
-  const simpleField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Enable Simple Mode"]),
-    el("input", {
-      type: "checkbox",
-      attrs: { "data-field": "simpleModeEnabled" },
-    }),
-  ]);
+  const simpleField = createField({
+    section: "ignore",
+    label: "Enable Simple Mode",
+    input: el("input", { type: "checkbox" }),
+    dataField: "simpleModeEnabled",
+    description:
+      "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",
+  });
 
-  const defaultDisplayField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Default Display Mode"]),
-    buildSelectFromEnum(DisplayMode, undefined, {
-      "data-field": "defaultDisplayMode",
-    }),
-  ]);
+  const defaultDisplayField = createField({
+    section: "ignore",
+    label: "Default Display Mode",
+    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    dataField: "defaultDisplayMode",
+    description:
+      "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",
+  });
 
   return createSection({
     id: "ignore",

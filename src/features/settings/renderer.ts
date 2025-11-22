@@ -12,14 +12,14 @@ import {
   showNotification,
 } from "../../utils/dialogs";
 import { extractSectionValues, populateSection } from "../../utils/form";
-import { el } from "../../utils/dom";
+import { el, getElement } from "../../utils/dom";
 
 import { getSettingsHandler, updateSettingsHandler } from "./handlers";
 
 import { buildReadSection } from "./components/sections/read";
 import { buildIgnoreSection } from "./components/sections/ignore";
 import { buildGeneralSection } from "./components/sections/general";
-import { buildTopbar } from "./components/topBar";
+import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
 import { getManifest } from "../../utils/manifest";
 
@@ -28,10 +28,7 @@ export async function render(): Promise<void> {
   const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
   if (!main) return;
 
-  const heading = document.createElement("h2");
-  heading.textContent = `⚙️ ${extensionName} Settings`;
-
-  const { topbar, exportBtn, importBtn, clearBtn } = buildTopbar();
+  const { header, exportBtn, importBtn, clearBtn } = buildHeader(extensionName);
   const readSection = buildReadSection();
   const ignoreSection = buildIgnoreSection();
   const generalSection = buildGeneralSection();
@@ -60,7 +57,7 @@ export async function render(): Promise<void> {
     ]),
   ]);
 
-  main.append(heading, topbar, wrapper);
+  main.append(header, wrapper);
 
   await loadAllSections(readSection, ignoreSection, generalSection);
   setupSaveHandlers(readSection, ignoreSection, generalSection);
@@ -110,7 +107,10 @@ export function setupSaveHandlers(
   ignoreSection: HTMLElement,
   generalSection: HTMLElement
 ) {
-  const readSave = readSection.querySelector("button")!;
+  const readSave = getElement(
+    readSection,
+    `.${PREFIX}__button`
+  ) as HTMLInputElement;
   readSave.addEventListener("click", async () => {
     const values = extractSectionValues(readSection);
     const payload = { ...DEFAULT_READ_SETTINGS, ...values };
@@ -121,7 +121,10 @@ export function setupSaveHandlers(
     );
   });
 
-  const ignoreSave = ignoreSection.querySelector("button")!;
+  const ignoreSave = getElement(
+    ignoreSection,
+    `.${PREFIX}__button`
+  ) as HTMLInputElement;
   ignoreSave.addEventListener("click", async () => {
     const values = extractSectionValues(ignoreSection);
     const payload = { ...DEFAULT_IGNORE_SETTINGS, ...values };
@@ -132,7 +135,10 @@ export function setupSaveHandlers(
     );
   });
 
-  const generalSave = generalSection.querySelector("button")!;
+  const generalSave = getElement(
+    generalSection,
+    `.${PREFIX}__button`
+  ) as HTMLInputElement;
   generalSave.addEventListener("click", async () => {
     const values = extractSectionValues(generalSection);
     const payload = { ...DEFAULT_GENERAL_SETTINGS, ...values };

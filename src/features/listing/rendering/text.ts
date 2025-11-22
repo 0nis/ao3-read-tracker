@@ -127,6 +127,7 @@ function addNotesText(work: HTMLElement, notes: string, className?: string) {
     "blockquote"
   );
   section.appendChild(el("p", { html: notes }));
+  section.setAttribute("aria-label", "User notes");
   if (className) section.classList.add(className);
 }
 

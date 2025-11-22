@@ -131,10 +131,18 @@ const getReadFicFormMarkup = (
         <p id="${prefix}__submit" class="submit actions">
             ${
               exists
-                ? `<button type="button" id="${prefix}__delete">Mark as Unread</button>`
+                ? `<button 
+                      type="button" 
+                      id="${prefix}__delete"
+                      aria-label="Remove ${d.title || "this work"} from your read list"
+                    >Mark as Unread</button>`
                 : ""
             }
-            <button type="submit">Save</button>
+            <button 
+              id="${prefix}__save"
+              type="submit"
+              aria-label="Save and mark ${d.title || "this work"} as read"
+            >Save</button>
         </p>
     </fieldset>
 `;

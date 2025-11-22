@@ -2,41 +2,44 @@ import { PREFIX } from "../..";
 import { DisplayMode } from "../../../../constants/enums";
 import { el } from "../../../../utils/dom";
 import { buildSelectFromEnum } from "../../../../utils/form";
-import { createSection } from "./base";
+import { createField, createSection } from "./base";
 
 export function buildReadSection(): HTMLElement {
-  const simpleField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Enable Simple Mode"]),
-    el("input", {
-      type: "checkbox",
-      attrs: { "data-field": "simpleModeEnabled" },
-    }),
-  ]);
+  const simpleField = createField({
+    section: "read",
+    label: "Enable Simple Mode",
+    input: el("input", { type: "checkbox" }),
+    dataField: "simpleModeEnabled",
+    description:
+      "If enabled, the read feature will not ask you for additional information like notes. It will simply mark the work as read immediately.",
+  });
 
-  const defaultDisplayField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Default Display Mode"]),
-    buildSelectFromEnum(DisplayMode, undefined, {
-      "data-field": "defaultDisplayMode",
-    }),
-  ]);
+  const defaultDisplayField = createField({
+    section: "read",
+    label: "Default Display Mode",
+    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    dataField: "defaultDisplayMode",
+    description:
+      "What the work listing will look like when you've marked a work as read. For example, 'collapse gentle' will hide everything but the header.",
+  });
 
-  const stillReadingDisplayField = el(
-    "div",
-    { className: `${PREFIX}__field` },
-    [
-      el("label", {}, ["Still reading Display Mode"]),
-      buildSelectFromEnum(DisplayMode, undefined, {
-        "data-field": "stillReadingDisplayMode",
-      }),
-    ]
-  );
+  const stillReadingDisplayField = createField({
+    section: "read",
+    label: "Still reading Display Mode",
+    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    dataField: "stillReadingDisplayMode",
+    description:
+      "What the work listing will look like when you've marked a work as still reading.",
+  });
 
-  const rereadDisplayField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Reread worthy Display Mode"]),
-    buildSelectFromEnum(DisplayMode, undefined, {
-      "data-field": "rereadWorthyDisplayMode",
-    }),
-  ]);
+  const rereadDisplayField = createField({
+    section: "read",
+    label: "Reread worthy Display Mode",
+    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    dataField: "rereadWorthyDisplayMode",
+    description:
+      "What the work listing will look like when you've marked a work as reread worthy.",
+  });
 
   return createSection({
     id: "read",

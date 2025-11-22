@@ -36,6 +36,7 @@ export async function createFicForm<T>(
   const form = el("form", {
     className: `${id}__details`,
     html: buildInnerHTML(data, exists),
+    attrs: { "aria-label": title },
   });
 
   form.addEventListener("remove", () => {

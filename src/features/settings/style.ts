@@ -2,8 +2,8 @@ export function getStyles(prefix: string): string {
   return `
     .${prefix}__wrapper {
       display: flex;
-      gap: 24px;
       align-items: flex-start;
+      gap: 24px;
       margin-top: 12px;
     }
 
@@ -14,53 +14,94 @@ export function getStyles(prefix: string): string {
     }
 
     .${prefix}__nav ul {
+      display: flex;
+      flex-direction: column;
       list-style: none;
       padding-left: 0;
       margin: 0;
     }
 
     .${prefix}__nav li {
-      margin: 8px 0;
+      margin: 0.5em 0;
     }
 
     .${prefix}__nav a {
       cursor: pointer;
       text-decoration: none;
       color: inherit;
+      border-bottom: 0px;
     }
 
-    /* Content area */
+    .${prefix}__nav a:hover {
+      color: #900;
+      border-bottom: 1px solid;
+    }
+
+    .${prefix}__nav a.selected {
+      color: #900;
+      border-bottom: 1px solid;
+    }
+
     .${prefix}__content {
       flex: 1;
-      min-width: 420px;
     }
 
     .${prefix}__section {
       background: transparent;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
+      padding: 0 0 10px 0;
+    }
+
+    .${prefix}__section__title {
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .${prefix}__field__wrapper {
+      margin: 1em 0;
     }
 
     .${prefix}__field {
-      margin: 8px 0;
+      padding: 8px 0;
       display: flex;
       gap: 12px;
       align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+    }
+
+    .${prefix}__field__label__wrapper {
+      max-width: 70%;
     }
 
     .${prefix}__field label {
-      min-width: 220px;
       font-weight: 600;
     }
 
-    .${prefix}__actions {
-      margin-top: 12px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
+    .${prefix}__field input, .${prefix}__field select, .${prefix}__field textarea {
+      width: auto !important;
     }
 
-    .${prefix}__topbar {
+    .${prefix}__field select {
+      font: 100% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
+      border: 1px solid #bbb;
+      box-shadow: inset 0 1px 2px #ccc;
+    }
+
+    .${prefix}__field__description {
+      color: #666;
+      font-size: 0.95em;
+      margin-top: 6px;
+    }
+
+    .${prefix}__actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 12px;
+      gap: 8px;
+    }
+
+    .${prefix}__header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -68,15 +109,14 @@ export function getStyles(prefix: string): string {
       margin-bottom: 12px;
     }
 
-    .${prefix}__button--danger {
-      color: #900;
-      border-color: #900;
+    .${prefix}__header__actions {
+      display: flex;
+      gap: 8px;
     }
 
-    .${prefix}__note {
-      color: #666;
-      font-size: 0.95em;
-      margin-top: 6px;
+    .${prefix}__button--danger {
+      color: #900 !important;
+      border-color: #900 !important;
     }
 
     @media (max-width: 800px) {
@@ -89,6 +129,27 @@ export function getStyles(prefix: string): string {
         border-right: none;
         border-bottom: 1px solid #eee;
         padding-bottom: 8px;
+      }
+
+      .${prefix}__nav ul {
+        flex-direction: row;
+        gap: 1em;
+      }
+
+      .${prefix}__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+      }
+
+      .${prefix}__field__label__wrapper {
+        max-width: 100%;
+      }
+
+      .${prefix}__field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
       }
     }
   `;

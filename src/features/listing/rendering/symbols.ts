@@ -96,7 +96,7 @@ function addListItemToIndicator(
     [
       el("span", {
         textContent: text,
-        attrs: { "aria-hidden": "true" },
+        attrs: { "aria-hidden": "true", role: "img" },
       }),
     ]
   );

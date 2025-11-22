@@ -2,41 +2,47 @@ import { PREFIX } from "../..";
 import { ButtonPlacement } from "../../../../constants/enums";
 import { el } from "../../../../utils/dom";
 import { buildSelectFromEnum } from "../../../../utils/form";
-import { createSection } from "./base";
+import { createField, createSection } from "./base";
 
 export function buildGeneralSection(): HTMLElement {
-  const hideSymbolsField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Hide symbols"]),
-    el("input", { type: "checkbox", attrs: { "data-field": "hideSymbols" } }),
-  ]);
+  const hideSymbolsField = createField({
+    section: "general",
+    label: "Hide symbols?",
+    input: el("input", { type: "checkbox" }),
+    dataField: "hideSymbols",
+    description:
+      "Toggles the emojis next to the title of the fics in the Works list.",
+  });
 
-  const buttonPlacementField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Button placement"]),
-    buildSelectFromEnum(ButtonPlacement, undefined, {
-      "data-field": "buttonPlacement",
-    }),
-  ]);
+  const buttonPlacementField = createField({
+    section: "general",
+    label: "Button placement",
+    input: buildSelectFromEnum(ButtonPlacement) as HTMLElement,
+    dataField: "buttonPlacement",
+    description:
+      "Choose where the 'Mark as Read' and 'Ignore' buttons appear on work pages.",
+  });
 
-  const replaceMarkForLaterField = el(
-    "div",
-    { className: `${PREFIX}__field` },
-    [
-      el("label", {}, ['Replace AO3\'s default "Mark as Read" button text']),
-      el("input", {
-        type: "checkbox",
-        attrs: { "data-field": "replaceMarkForLaterText" },
-      }),
-    ]
-  );
+  const replaceMarkForLaterField = createField({
+    section: "general",
+    label: "Replace 'Mark as Read' button text?",
+    input: el("input", { type: "checkbox" }),
+    dataField: "replaceMarkForLaterText",
+    description:
+      "Whether to replace AO3's default 'Mark as Read' button (the one that appears when you mark a fic for later) with custom text.",
+  });
 
-  const replacementLabelField = el("div", { className: `${PREFIX}__field` }, [
-    el("label", {}, ["Custom label for 'Mark as Read' button"]),
-    el("input", {
+  const replacementLabelField = createField({
+    section: "general",
+    label: "Custom label for 'Mark as Read' button",
+    input: el("input", {
       type: "text",
       placeholder: "e.g., Finished",
-      attrs: { "data-field": "markForLaterReplacementLabel" },
     }),
-  ]);
+    dataField: "markForLaterReplacementLabel",
+    description:
+      "The custom label to use for the 'Mark as Read' button if you have chosen to replace it.",
+  });
 
   return createSection({
     id: "general",

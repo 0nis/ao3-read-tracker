@@ -54,10 +54,14 @@ const getIgnoredFicFormMarkup = (
         <dl>
             <dt><label for="${prefix}__reason">Reason for ignoring</label></dt>
             <dd>
-                <p class="${CLASS_PREFIX}__footnote footnote" id="${CLASS_PREFIX}__ignored-form__reason__description">
+                <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__reason__description">
                     A private reason that will appear in the work summary block for this fic.
                 </p>
-                <textarea id="${prefix}__reason" rows="3">${
+                <textarea 
+                  id="${prefix}__reason" 
+                  rows="3"
+                  aria-describedby="${prefix}__reason__description"
+                >${
                     exists ? d.reason || "" : ""
                 }</textarea>
             </dd>
@@ -66,10 +70,18 @@ const getIgnoredFicFormMarkup = (
         <p id="${prefix}__submit" class="submit actions">
             ${
             exists
-                ? `<button type="button" id="${prefix}__delete">Unignore</button>`
+                ? `<button 
+                    type="button" 
+                    id="${prefix}__delete"
+                    aria-label="Remove ${d.title || "this work"} from ignored list"
+                  >Unignore</button>`
                 : ""
             }
-            <button type="submit">Save</button>
+            <button 
+              id="${prefix}__save"
+              type="submit"
+              aria-label="Save and ignore ${d.title || "this work"}"
+            >Save</button>
         </p>
     </fieldset>
 `;
