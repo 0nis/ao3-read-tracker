@@ -1,6 +1,6 @@
+import { Router } from "../../../app/router";
 import { IgnoredFic, ReadFic } from "../../../types/storage";
 import { el } from "../../../utils/dom";
-import { Router } from "../../router";
 
 export interface FicFormConfig<T> {
   /** Unique identifier for the form, not the fic ID! */

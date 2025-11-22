@@ -1,12 +1,12 @@
 import { CLASS_PREFIX } from "../constants/classes";
+import { Listing } from "../features/listing";
+import { Settings } from "../features/settings";
+import { Work } from "../features/work";
 import { injectStyles } from "../utils/dom";
-import { Listing } from "./listing";
 import { Router } from "./router";
-import { Settings } from "./settings";
 import { getGlobalStyles } from "./style";
-import { Work } from "./work";
 
-export const UI = {
+export const App = {
   init() {
     injectStyles(
       `${CLASS_PREFIX}__styles--global`,

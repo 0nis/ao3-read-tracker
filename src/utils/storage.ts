@@ -3,10 +3,12 @@ import { SettingsData } from "../data/settings";
 import { StorageResult } from "../types/storage";
 
 /**
- * Safely execute a function and handle errors.
- * @param fn The function to execute.
- * @param context The context in which the function is executed.
- * @returns The result of the function or null if an error occurred.
+ * Safely executes an async function and wraps the result in a StorageResult.
+ * Catches any errors and logs them with context.
+ *
+ * @param fn The async function to execute
+ * @param context A description of where this function is called (for error logging)
+ * @returns A StorageResult with either the data or error information
  */
 export async function safeExecute<T>(
   fn: () => Promise<T>,
@@ -22,10 +24,12 @@ export async function safeExecute<T>(
 }
 
 /**
- * Automatically wraps every async method in BaseData<T> with safeExecute().
- * @param name The name of the service, used for error context.
- * @param data The BaseData<T> instance to wrap.
- * @returns An object with the same methods as BaseData<T>, but wrapped in safeExecute().
+ * Wraps all async methods of a data service with error handling.
+ * Each method will return a StorageResult instead of throwing errors.
+ *
+ * @param name The name of the service (used for error logging context)
+ * @param data The BaseData or SettingsData instance to wrap
+ * @returns A wrapped service where all methods return StorageResult
  */
 export function createSafeService<
   T extends { id: string },
@@ -57,9 +61,7 @@ export function createSafeService<
 }
 
 /**
- * Reads the content of a File object as text.
- * @param file The File object to read.
- * @returns A promise that resolves with the file content as a string.
+ * @deprecated Switching to a different import/export method
  */
 export function readFileAsText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {

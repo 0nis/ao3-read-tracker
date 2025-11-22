@@ -1,3 +1,7 @@
+/**
+ * Converts a timestamp to a formatted date string (YYYY/MM/DD)
+ * (I chose this date format to prevent confusion between MM/DD and DD/MM, forgive me)
+ */
 export const getFormattedDate = (timestamp: number): string => {
   const date = new Date(timestamp);
   const year = date.getFullYear();
@@ -6,6 +10,9 @@ export const getFormattedDate = (timestamp: number): string => {
   return `${year}/${month}/${day}`;
 };
 
+/**
+ * Formats a timestamp to a localized time string (HH:MM)
+ */
 export const getFormattedTime = (timestamp: number): string => {
   const date = new Date(timestamp);
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

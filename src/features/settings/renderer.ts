@@ -7,16 +7,17 @@ import {
 
 import { StorageService } from "../../services/storage";
 import { hijackAo3Page } from "../../utils/ao3";
-import { el, showNotification } from "../../utils/dom";
+import { showNotification } from "../../utils/dialogs";
+import { extractSectionValues, populateSection } from "../../utils/form";
+import { el } from "../../utils/dom";
 
-import { extractSectionValues, populateSection } from "./helpers";
 import { getSettingsHandler, updateSettingsHandler } from "./handlers";
 
-import { buildReadSection } from "./ui/sections/read";
-import { buildIgnoreSection } from "./ui/sections/ignore";
-import { buildGeneralSection } from "./ui/sections/general";
-import { buildTopbar } from "./ui/topBar";
-import { buildNav } from "./ui/nav";
+import { buildReadSection } from "./components/sections/read";
+import { buildIgnoreSection } from "./components/sections/ignore";
+import { buildGeneralSection } from "./components/sections/general";
+import { buildTopbar } from "./components/topBar";
+import { buildNav } from "./components/nav";
 
 export async function render(): Promise<void> {
   const main = hijackAo3Page("Mark as Read - Settings", "settings-page");

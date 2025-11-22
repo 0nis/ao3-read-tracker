@@ -1,4 +1,4 @@
-import { PREFIX } from "../";
+import { PREFIX } from "..";
 import { el } from "../../../utils/dom";
 
 export function buildNav(

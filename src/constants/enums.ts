@@ -31,3 +31,11 @@ export enum SettingsType {
   IGNORE = "ignore_settings",
   GENERAL = "general_settings",
 }
+
+export enum MessageType {
+  INFO = "info",
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+  LOADING = "loading",
+}

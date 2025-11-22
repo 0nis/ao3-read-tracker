@@ -1,5 +1,6 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { CollapseMode } from "../../../constants/enums";
+import { getWorkById } from "../../../utils/ao3";
 import { el, getElement, injectStyles } from "../../../utils/dom";
 
 /**
@@ -63,8 +64,7 @@ export function unCollapse(workOrId: HTMLElement | string) {
 }
 
 function getWork(workOrId: HTMLElement | string): HTMLElement | null {
-  if (typeof workOrId === "string")
-    return document.getElementById(`work_${workOrId}`);
+  if (typeof workOrId === "string") return getWorkById(workOrId);
   return workOrId;
 }
 

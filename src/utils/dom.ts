@@ -1,10 +1,6 @@
-// TODO: Replace alert with a better notification system
-export function showNotification(message: string): void {
-  alert(message);
-}
-
 /**
  * Helper to create new elements quickly
+ *
  * @param tag The HTML tag name to create
  * @param props Optional DOM properties, attributes, or HTML injection
  * @param children Optional child elements or text to append
@@ -75,8 +71,10 @@ export function ensureChild<K extends keyof HTMLElementTagNameMap>(
 }
 
 /**
- * Injects CSS styles into the document head if not already present.
- * @param id The ID to assign to the style element
+ * Injects CSS styles into the document head.
+ * If a style element with the given ID already exists, does nothing (idempotent).
+ *
+ * @param id Unique ID for the style element (used to prevent duplicates)
  * @param css The CSS string to inject
  */
 export function injectStyles(id: string, css: string): void {
@@ -89,34 +87,8 @@ export function injectStyles(id: string, css: string): void {
 
 /**
  * Gets an element by selector within a parent element.
- * @param parent The parent element to search within
- * @param selector The selector of the element to get
- * @returns The found HTMLElement or null if not found
  */
 export const getElement = (
   parent: HTMLElement,
   selector: string
 ): HTMLElement | null => parent.querySelector(selector);
-
-/**
- * Builds a select element from an enum-like object.
- * @param enumObj The enum-like object to build options from
- * @param selected The value to mark as selected (optional)
- * @returns The constructed HTMLSelectElement
- */
-export function buildSelectFromEnum<T extends Record<string, string>>(
-  enumObj: T,
-  selected?: T[keyof T],
-  attrs?: Record<string, string>
-): HTMLSelectElement {
-  const select = el("select", { attrs }) as HTMLSelectElement;
-  Object.values(enumObj).forEach((v) => {
-    const option = el("option", {
-      value: String(v),
-      textContent: String(v).replace(/_/g, " "),
-    });
-    if (selected && selected === v) option.selected = true;
-    select.appendChild(option);
-  });
-  return select;
-}

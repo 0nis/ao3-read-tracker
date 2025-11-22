@@ -1,7 +1,7 @@
 import { IgnoredFic } from "../../../types/storage";
 import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-import { showNotification } from "../../../utils/dom";
+import { showNotification } from "../../../utils/dialogs";
 import { CLASS_PREFIX } from "../../../constants/classes";
 
 export async function showIgnoredFicForm(

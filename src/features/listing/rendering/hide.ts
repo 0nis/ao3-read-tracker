@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { getWork } from "../../../utils/ao3";
+import { getWorkById } from "../../../utils/ao3";
 
 /**
  * Completely hides a work from the listing.
@@ -7,7 +7,7 @@ import { getWork } from "../../../utils/ao3";
  * @param id ID of the work to hide
  */
 export async function hide(id: string): Promise<void> {
-  const work = getWork(id);
+  const work = getWorkById(id);
   if (!work) return;
   if (!work.classList.contains(`${CLASS_PREFIX}__hidden`))
     work.classList.add(`${CLASS_PREFIX}__hidden`);
@@ -18,7 +18,7 @@ export async function hide(id: string): Promise<void> {
  * @param id ID of the work to unhide
  */
 export async function unhide(id: string): Promise<void> {
-  const work = getWork(id);
+  const work = getWorkById(id);
   if (!work) return;
   if (work.classList.contains(`${CLASS_PREFIX}__hidden`)) {
     work.classList.remove(`${CLASS_PREFIX}__hidden`);

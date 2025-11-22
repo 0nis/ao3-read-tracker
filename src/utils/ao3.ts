@@ -17,6 +17,10 @@ export function getCurrentChapterFromWorkPage(): number | null {
   return chapterMatch ? parseInt(chapterMatch[1]) : null;
 }
 
+/**
+ * Finds the newest chapter from a work listing element
+ * When there are 12/? chapters, for example, it returns "12".
+ */
 export function getLatestChapterFromWorkListing(
   work: HTMLElement
 ): number | null {
@@ -26,6 +30,10 @@ export function getLatestChapterFromWorkListing(
   return chapterMatch ? parseInt(chapterMatch[1]) : null;
 }
 
+/**
+ * "Hijacking" meaning we change the page title and clear the
+ * main content area to prepare it for our own content.
+ */
 export function hijackAo3Page(
   title: string,
   className: string
@@ -38,7 +46,7 @@ export function hijackAo3Page(
   return main;
 }
 
-export function getWork(id: string): HTMLElement | null {
+export function getWorkById(id: string): HTMLElement | null {
   return document.getElementById(`work_${id}`) as HTMLElement | null;
 }
 

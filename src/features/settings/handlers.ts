@@ -1,6 +1,6 @@
 import { StorageService } from "../../services/storage";
 import { StorageResult } from "../../types/storage";
-import { showNotification } from "../../utils/dom";
+import { showNotification } from "../../utils/dialogs";
 
 export async function getSettingsHandler<T>(
   service: () => Promise<StorageResult<T>>,

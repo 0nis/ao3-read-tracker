@@ -1,7 +1,7 @@
+import { Router } from "../../app/router";
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SETTINGS_PAGE_URL } from "../../constants/settings";
 import { el, injectStyles } from "../../utils/dom";
-import { Router } from "../router";
 import { render } from "./renderer";
 import { getStyles } from "./style";
 
@@ -11,7 +11,7 @@ export const Settings = {
   init() {
     injectStyles(PREFIX, getStyles(PREFIX));
     addSettingsButtonToNav(SETTINGS_PAGE_URL);
-    Router.register(SETTINGS_PAGE_URL, () => render(PREFIX));
+    Router.register(SETTINGS_PAGE_URL, render);
   },
 };
 
