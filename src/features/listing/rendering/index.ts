@@ -16,6 +16,7 @@ import {
 import { CollapseMode, WorkState } from "../../../constants/enums";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
 import { unhide } from "./hide";
+import { getManifest } from "../../../utils/manifest";
 
 /**
  * Marks fics on the current listing page as read/ignored based on stored data, with their appropriate indicators.
@@ -113,6 +114,8 @@ function adjustWorkDisplay(
 function createOrModifyLandmarkHeading(work: HTMLElement) {
   ensureChild(work, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
     className: "landmark heading",
-    textContent: "Mark as Read Extension Information",
+    textContent: `${
+      getManifest().data?.name || "Mark as Read"
+    } Extension Information`,
   });
 }

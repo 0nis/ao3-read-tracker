@@ -1,14 +1,25 @@
 import { ReadFic } from "../../../types/storage";
 import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-import { showNotification } from "../../../utils/dialogs";
+import {
+  reportExtensionFailure,
+  showNotification,
+} from "../../../utils/dialogs";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { getCurrentChapterFromWorkPage } from "../../../utils/ao3";
+import { createFlashNotice, handleStorageResult } from "../../../utils/form";
+import { createExtensionMsg } from "../../../utils/manifest";
 
 export async function showReadFicForm(
   exists: boolean,
   data: Partial<ReadFic>
 ): Promise<void> {
+  if (!data.id) {
+    console.warn(
+      createExtensionMsg("Cannot show Read Fic form without an ID.")
+    );
+    return;
+  }
   const id = `${CLASS_PREFIX}__read-form`;
   const form = await createFicForm<ReadFic>({
     id,
@@ -17,7 +28,7 @@ export async function showReadFicForm(
     data,
     buildInnerHTML: (d, exists) => getReadFicFormMarkup(id, d, exists),
     onSubmit: async (form) => await markFicAsRead(form, data),
-    onDelete: async () => await markFicAsUnread(data.id!),
+    onDelete: async () => await markFicAsUnread(data.id!, data.title),
   });
 
   const isReadingCheckbox = form.querySelector(
@@ -128,9 +139,14 @@ const getReadFicFormMarkup = (
     </fieldset>
 `;
 
-const markFicAsUnread = async (id: string) => {
-  await StorageService.readFics.delete(id!);
-  showNotification(`Fic ${id} marked as unread.`);
+const markFicAsUnread = async (id: string, title?: string) => {
+  const result = await StorageService.readFics.delete(id);
+
+  handleStorageResult(
+    result,
+    `You have successfully marked ${title || "this work"} as unread.`,
+    `Failed to mark ${title || "this work"} as unread.`
+  );
 };
 
 const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
@@ -178,9 +194,9 @@ const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
     ),
   };
   const result = await StorageService.readFics.put(fic);
-  showNotification(
-    result.success
-      ? `Fic ${data.id} marked as read.`
-      : `Failed: ${result.error}`
+  handleStorageResult(
+    result,
+    `You have successfully marked ${data.title || "this work"} as read.`,
+    `Failed to mark ${data.title || "this work"} as read.`
   );
 };

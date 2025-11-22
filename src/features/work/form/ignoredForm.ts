@@ -3,11 +3,19 @@ import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
 import { showNotification } from "../../../utils/dialogs";
 import { CLASS_PREFIX } from "../../../constants/classes";
+import { createExtensionMsg } from "../../../utils/manifest";
+import { handleStorageResult } from "../../../utils/form";
 
 export async function showIgnoredFicForm(
   exists: boolean,
   data: Partial<IgnoredFic>
 ): Promise<void> {
+  if (!data.id) {
+    console.warn(
+      createExtensionMsg("Cannot show Ignored Fic form without an ID.")
+    );
+    return;
+  }
   const id = `${CLASS_PREFIX}__ignored-form`;
   const form = await createFicForm<IgnoredFic>({
     id,
@@ -16,7 +24,7 @@ export async function showIgnoredFicForm(
     data,
     buildInnerHTML: (d, exists) => getIgnoredFicFormMarkup(id, d, exists),
     onSubmit: async (form) => await markFicAsIgnored(form, data),
-    onDelete: async () => await markFicAsUnignored(data.id!),
+    onDelete: async () => await markFicAsUnignored(data.id!, data.title),
   });
 
   form.querySelector(`#${id}__close`)?.addEventListener("click", (e) => {
@@ -66,9 +74,13 @@ const getIgnoredFicFormMarkup = (
     </fieldset>
 `;
 
-const markFicAsUnignored = async (id: string) => {
-  await StorageService.ignoredFics.delete(id!);
-  showNotification(`Fic ${id} is no longer being ignored.`);
+const markFicAsUnignored = async (id: string, title?: string) => {
+  const result = await StorageService.ignoredFics.delete(id!);
+  handleStorageResult(
+    result,
+    `${title || "This work"} will no longer be ignored.`,
+    `Failed to unignore ${title || "this work"}.`
+  );
 };
 
 const markFicAsIgnored = async (
@@ -87,9 +99,9 @@ const markFicAsIgnored = async (
     reason,
   };
   const result = await StorageService.ignoredFics.put(fic);
-  showNotification(
-    result.success
-      ? `Fic ${data.id} is now being ignored.`
-      : `Failed: ${result.error}`
+  handleStorageResult(
+    result,
+    `You have successfully ignored ${data.title || "this work"}.`,
+    `Failed to ignore ${data.title || "this work"}.`
   );
 };

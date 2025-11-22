@@ -1,5 +1,7 @@
 import { CLASS_PREFIX } from "../constants/classes";
 import { MessageType } from "../constants/enums";
+import { StorageResult } from "../types/storage";
+import { reportExtensionFailure } from "./dialogs";
 import { el } from "./dom";
 
 /**
@@ -26,6 +28,40 @@ export function showFormMessage(
   });
 
   container.appendChild(msg);
+}
+
+/**
+ * Adds an AO3-style flash notice to the top of the main content area
+ */
+export function createFlashNotice(innerHTML: string): void {
+  const main = document.getElementById("main");
+  if (!main) return;
+
+  main.querySelector(".flash.notice")?.remove();
+
+  const notice = el("div", {
+    className: "flash notice",
+    innerHTML: innerHTML,
+    attrs: { role: "status" },
+  });
+  main.prepend(notice);
+}
+
+/**
+ * Handles the result of a storage operation by showing appropriate feedback.
+ * Shows a success flash notice or reports a failure.
+ */
+export function handleStorageResult(
+  result: StorageResult,
+  successMessage: string,
+  errorMessage: string,
+  successFn: (message: string) => void = createFlashNotice
+): void {
+  if (result.success) {
+    successFn(successMessage);
+  } else {
+    reportExtensionFailure(errorMessage, result.error);
+  }
 }
 
 /**

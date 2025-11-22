@@ -7,7 +7,10 @@ import {
 
 import { StorageService } from "../../services/storage";
 import { hijackAo3Page } from "../../utils/ao3";
-import { showNotification } from "../../utils/dialogs";
+import {
+  confirmDestructiveAction,
+  showNotification,
+} from "../../utils/dialogs";
 import { extractSectionValues, populateSection } from "../../utils/form";
 import { el } from "../../utils/dom";
 
@@ -18,13 +21,15 @@ import { buildIgnoreSection } from "./components/sections/ignore";
 import { buildGeneralSection } from "./components/sections/general";
 import { buildTopbar } from "./components/topBar";
 import { buildNav } from "./components/nav";
+import { getManifest } from "../../utils/manifest";
 
 export async function render(): Promise<void> {
-  const main = hijackAo3Page("Mark as Read - Settings", "settings-page");
+  const extensionName = getManifest().data?.name || "Mark as Read";
+  const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
   if (!main) return;
 
   const heading = document.createElement("h2");
-  heading.textContent = "⚙️ Mark as Read Settings";
+  heading.textContent = `⚙️ ${extensionName} Settings`;
 
   const { topbar, exportBtn, importBtn, clearBtn } = buildTopbar();
   const readSection = buildReadSection();
@@ -144,13 +149,28 @@ export function setupTopbarActions(
   importBtn: HTMLButtonElement,
   clearBtn: HTMLButtonElement
 ) {
-  exportBtn.addEventListener("click", () =>
-    showNotification("Exporting data...")
-  );
-  importBtn.addEventListener("click", () =>
-    showNotification("Importing data...")
-  );
-  clearBtn.addEventListener("click", () =>
-    showNotification("Clearing all data...")
-  );
+  exportBtn.addEventListener("click", () => {
+    // TODO: Implement data exporting logic
+    showNotification("Exporting data...");
+  });
+  importBtn.addEventListener("click", async () => {
+    const confirmed = await confirmDestructiveAction(
+      "Importing data will overwrite your existing data. Are you sure you want to proceed?",
+      "IMPORT DATA"
+    );
+    if (confirmed) {
+      // TODO: Implement data importing logic
+      showNotification("Importing data...");
+    } else showNotification("Data import action cancelled.");
+  });
+  clearBtn.addEventListener("click", async () => {
+    const confirmed = await confirmDestructiveAction(
+      "Are you sure you want to clear all stored data? This action cannot be undone.",
+      "DELETE MY DATA"
+    );
+    if (confirmed) {
+      showNotification("All stored data has been cleared.");
+      // TODO: Implement data clearing logic
+    } else showNotification("Data clear action cancelled.");
+  });
 }

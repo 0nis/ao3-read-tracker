@@ -4,6 +4,7 @@ import {
   getWorksListFromListing,
 } from "../../utils/ao3";
 import type { FicData } from "../../types/storage";
+import { createExtensionMsg } from "../../utils/manifest";
 
 export async function getFicStatusData(): Promise<{
   worksList: HTMLElement | null;
@@ -24,7 +25,7 @@ export async function getFicStatusData(): Promise<{
   const storedDataResult = await StorageService.getByIds(ficIds);
   if (!storedDataResult.success) {
     console.error(
-      "Failed to retrieve stored fic data:",
+      createExtensionMsg("Failed to retrieve stored fic data:"),
       storedDataResult.error
     );
     return { worksList, data: null };

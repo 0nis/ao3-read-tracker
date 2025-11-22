@@ -39,7 +39,7 @@ export function getManifest(): StorageResult<ExtensionManifest> {
     const msg = getCriticalManifestError(
       err instanceof Error ? err.message : String(err)
     );
-    console.error("Failed to access manifest:", err);
+    console.error(createExtensionMsg("Failed to access manifest:"), err);
     console.error(msg);
     return {
       error: msg,
@@ -72,6 +72,10 @@ export function replaceManifestPlaceholders(template: string): string {
     (result, [key, value]) => result.split(`%${key}%`).join(value),
     template
   );
+}
+
+export function createExtensionMsg(msg: string): string {
+  return `[${getManifest().data?.name ?? "Extension"}] ${msg}`;
 }
 
 function getCriticalManifestError(reason?: string): string {

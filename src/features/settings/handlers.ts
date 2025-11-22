@@ -1,6 +1,7 @@
 import { StorageService } from "../../services/storage";
 import { StorageResult } from "../../types/storage";
-import { showNotification } from "../../utils/dialogs";
+import { reportExtensionFailure, showNotification } from "../../utils/dialogs";
+import { handleStorageResult } from "../../utils/form";
 
 export async function getSettingsHandler<T>(
   service: () => Promise<StorageResult<T>>,
@@ -11,10 +12,9 @@ export async function getSettingsHandler<T>(
   if (result.success && result.data && result.data !== undefined) {
     return result.data as T;
   } else {
-    showNotification(
-      `Failed to retrieve ${label} settings${
-        result.error ? `: ${result.error}` : ""
-      }. Using default settings.`
+    reportExtensionFailure(
+      `Failed to retrieve ${label} settings. Using default settings.`,
+      result.error
     );
     return defaultSettings;
   }
@@ -26,9 +26,9 @@ export async function updateSettingsHandler<T extends { id: string }>(
   label: string
 ): Promise<void> {
   const result = await service(settings);
-  if (result.success) {
-    showNotification(`${label} settings updated successfully.`);
-  } else {
-    showNotification(`Failed to update ${label} settings: ${result.error}.`);
-  }
+  handleStorageResult(
+    result,
+    `${label} settings updated successfully.`,
+    `Failed to update ${label} settings.`
+  );
 }

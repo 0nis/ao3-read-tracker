@@ -1,6 +1,7 @@
 import { BaseData } from "../data/base";
 import { SettingsData } from "../data/settings";
 import { StorageResult } from "../types/storage";
+import { createExtensionMsg } from "./manifest";
 
 /**
  * Safely executes an async function and wraps the result in a StorageResult.
@@ -18,7 +19,7 @@ export async function safeExecute<T>(
     const data = await fn();
     return { success: true, data };
   } catch (error) {
-    console.error(`[AO3 Mark as Read] Error in ${context}:`, error);
+    console.error(createExtensionMsg(`Error in ${context}:`), error);
     return { success: false, error, data: undefined };
   }
 }

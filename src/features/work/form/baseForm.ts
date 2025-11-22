@@ -1,6 +1,7 @@
 import { Router } from "../../../app/router";
 import { IgnoredFic, ReadFic } from "../../../types/storage";
 import { el } from "../../../utils/dom";
+import { createExtensionMsg } from "../../../utils/manifest";
 
 export interface FicFormConfig<T> {
   /** Unique identifier for the form, not the fic ID! */
@@ -88,7 +89,7 @@ export function createFormContainer(id: string, title: string): HTMLDivElement {
 export function appendFormToFeedback(form: HTMLElement, id: string): void {
   const feedback = document.getElementById("feedback");
   if (!feedback) {
-    console.error("[AO3 Mark as Read] Could not find #feedback container");
+    console.error(createExtensionMsg("Could not find #feedback container"));
     return;
   }
   feedback.appendChild(form);

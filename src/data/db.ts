@@ -13,6 +13,8 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../constants/settings";
+import { showNotification } from "../utils/dialogs";
+import { createExtensionMsg, getManifest } from "../utils/manifest";
 
 export class Ao3MarkAsReadDb extends Dexie {
   readFics!: Table<ReadFic>;
@@ -36,6 +38,15 @@ export class Ao3MarkAsReadDb extends Dexie {
       await this.readSettings.put(DEFAULT_READ_SETTINGS);
       await this.ignoreSettings.put(DEFAULT_IGNORE_SETTINGS);
       await this.generalSettings.put(DEFAULT_GENERAL_SETTINGS);
+    });
+
+    this.on("blocked", () => {
+      showNotification(
+        createExtensionMsg(
+          "Database upgrading was blocked by another window. " +
+            "Please close down any other tabs or windows that has this page open"
+        )
+      );
     });
   }
 }
