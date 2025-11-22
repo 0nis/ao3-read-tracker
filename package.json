@@ -3,13 +3,21 @@
   "displayName": "AO3 Mark as Read",
   "version": "1.0.0",
   "description": "Never forget which AO3 works you've read - mark them as read or ignored",
+  "author": "0nis",
+  "license": "GPL-3.0",
   "main": "index.js",
   "type": "module",
+  "homepage": "https://github.com/0nis/ao3-mark-as-read/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0nis/ao3-mark-as-read.git"
+  },
+  "bugs": {
+    "url": "https://github.com/0nis/ao3-mark-as-read/issues"
+  },
   "scripts": {
     "build": "node build.js --browser=all"
   },
-  "author": "0nis",
-  "license": "GPL-3.0",
   "devDependencies": {
     "@types/chrome": "^0.1.24",
     "@types/firefox-webext-browser": "^143.0.0",

@@ -10,7 +10,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "ao3-word-replacer@0nis",
+      "id": "ao3-mark-as-read@0nis",
       "strict_min_version": "91.0"
     }
   }

@@ -14,7 +14,9 @@ const pkg = JSON.parse(
 const baseFields = {
   name: pkg.displayName || pkg.name,
   version: pkg.version,
+  author: pkg.author,
   description: pkg.description,
+  homepage_url: pkg.homepage,
 };
 
 function parseArgs() {
