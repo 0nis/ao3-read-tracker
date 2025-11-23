@@ -15,7 +15,8 @@ export interface ReadFic {
 
 export interface IgnoredFic {
   id: string;
-  timestamp: number;
+  createdAt: number;
+  modifiedAt: number;
   title?: string;
   reason?: string;
 }

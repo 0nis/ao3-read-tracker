@@ -70,7 +70,9 @@ function renderIgnoredInformation(
   indicatorList: HTMLElement,
   item: IgnoredFic
 ) {
-  indicatorList.appendChild(createIndicator(WorkState.IGNORED, item.timestamp));
+  indicatorList.appendChild(
+    createIndicator(WorkState.IGNORED, item.modifiedAt)
+  );
   if (item.reason)
     addNotesText(work, item.reason, `${CLASS_PREFIX}__notes--ignored`);
 }

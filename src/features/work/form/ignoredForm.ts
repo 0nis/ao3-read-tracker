@@ -107,7 +107,8 @@ const markFicAsIgnored = async (
   const payload: IgnoredFic = {
     id: data.id!,
     title: data.title!,
-    timestamp: Date.now(),
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
     reason: (
       form.querySelector(
         `#${CLASS_PREFIX}__ignored-form__reason`

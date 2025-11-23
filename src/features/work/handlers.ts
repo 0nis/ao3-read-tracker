@@ -1,11 +1,6 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import {
-  DEFAULT_GENERAL_SETTINGS,
-  DEFAULT_IGNORE_SETTINGS,
-  DEFAULT_READ_SETTINGS,
-} from "../../constants/settings";
 import { StorageService } from "../../services/storage";
-import { IgnoredFic, ReadFic, SettingsData } from "../../types/storage";
+import { IgnoredFic, ReadFic } from "../../types/storage";
 import { getTitleFromWorkPage } from "../../utils/ao3";
 import { showNotification } from "../../utils/ui/dialogs";
 import { Router } from "../../app/router";
@@ -33,7 +28,7 @@ export async function handleMarkFicAsRead(
   const result = await StorageService.readFics.put({
     ...data,
     id: data.id!,
-    createdAt: Date.now(),
+    createdAt: data.createdAt || Date.now(),
     modifiedAt: Date.now(),
     title: title,
   });
@@ -69,7 +64,8 @@ export async function handleIgnoreFic(
   const result = await StorageService.ignoredFics.put({
     ...data,
     id: data.id!,
-    timestamp: Date.now(),
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
     title: title,
   });
   if (result.success) showNotification(`Fic ${data.id} is now being ignored.`);
