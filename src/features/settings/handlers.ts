@@ -5,10 +5,8 @@ import {
   confirmDestructiveAction,
   showNotification,
 } from "../../utils/ui/dialogs";
-import {
-  handleStorageRead,
-  handleStorageWrite,
-} from "../../utils/storage/handlers";
+import { handleStorageWrite } from "../../utils/storage/handlers";
+import { handleGetAllSettings } from "../../utils/storage/settings";
 import { extractSectionValues, populateSection } from "../../utils/ui/form";
 
 import { StorageResult } from "../../types/storage";
@@ -19,19 +17,6 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../constants/settings";
-
-async function getSettingsHandler<T>(
-  op: Promise<StorageResult<T>>,
-  defaultSettings: T,
-  label: string
-): Promise<T> {
-  return await handleStorageRead<T>(
-    op,
-    defaultSettings,
-    `Failed to retrieve ${label} settings. Using default settings.`,
-    false
-  );
-}
 
 async function updateSettingsHandler(
   op: Promise<StorageResult<void>>,
@@ -54,26 +39,12 @@ export async function loadAllSections(
   ignoreSection: HTMLElement,
   generalSection: HTMLElement
 ) {
-  const read = await getSettingsHandler(
-    StorageService.readSettings.get(),
-    DEFAULT_READ_SETTINGS,
-    "Read"
-  );
-  populateSection(readSection, read!);
+  const { readSettings, ignoreSettings, generalSettings } =
+    await handleGetAllSettings();
 
-  const ignore = await getSettingsHandler(
-    StorageService.ignoreSettings.get(),
-    DEFAULT_IGNORE_SETTINGS,
-    "Ignore"
-  );
-  populateSection(ignoreSection, ignore!);
-
-  const general = await getSettingsHandler(
-    StorageService.generalSettings.get(),
-    DEFAULT_GENERAL_SETTINGS,
-    "General"
-  );
-  populateSection(generalSection, general!);
+  populateSection(readSection, readSettings);
+  populateSection(ignoreSection, ignoreSettings);
+  populateSection(generalSection, generalSettings);
 }
 
 export function setupSaveHandlers(
@@ -81,11 +52,12 @@ export function setupSaveHandlers(
   ignoreSection: HTMLElement,
   generalSection: HTMLElement
 ) {
-  const readSave = getElement(
-    readSection,
-    `.${PREFIX}__button`
-  ) as HTMLInputElement;
-  readSave.addEventListener("click", async () => {
+  function getSaveBtn(section: HTMLElement): HTMLInputElement | null {
+    return getElement(section, `.${PREFIX}__button`) as HTMLInputElement | null;
+  }
+
+  const readSave = getSaveBtn(readSection);
+  readSave?.addEventListener("click", async () => {
     await updateSettingsHandler(
       StorageService.readSettings.set({
         ...DEFAULT_READ_SETTINGS,
@@ -96,11 +68,8 @@ export function setupSaveHandlers(
     );
   });
 
-  const ignoreSave = getElement(
-    ignoreSection,
-    `.${PREFIX}__button`
-  ) as HTMLInputElement;
-  ignoreSave.addEventListener("click", async () => {
+  const ignoreSave = getSaveBtn(ignoreSection);
+  ignoreSave?.addEventListener("click", async () => {
     await updateSettingsHandler(
       StorageService.ignoreSettings.set({
         ...DEFAULT_IGNORE_SETTINGS,
@@ -111,11 +80,8 @@ export function setupSaveHandlers(
     );
   });
 
-  const generalSave = getElement(
-    generalSection,
-    `.${PREFIX}__button`
-  ) as HTMLInputElement;
-  generalSave.addEventListener("click", async () => {
+  const generalSave = getSaveBtn(generalSection);
+  generalSave?.addEventListener("click", async () => {
     await updateSettingsHandler(
       StorageService.generalSettings.set({
         ...DEFAULT_GENERAL_SETTINGS,

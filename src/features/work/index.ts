@@ -4,6 +4,7 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../constants/settings";
+import { handleGetAllSettings } from "../../utils/storage/settings";
 import { injectStyles } from "../../utils/ui/dom";
 import {
   modifyMarkForLaterButton,
@@ -11,7 +12,6 @@ import {
   setupReadButton,
 } from "./buttons";
 import { getFormStyles } from "./form/style";
-import { handleGetSettings } from "./handlers";
 
 export const Work = {
   async init() {
@@ -21,7 +21,7 @@ export const Work = {
     );
 
     const { readSettings, ignoreSettings, generalSettings } =
-      await handleGetSettings();
+      await handleGetAllSettings();
 
     if (generalSettings?.replaceMarkForLaterText) {
       modifyMarkForLaterButton(

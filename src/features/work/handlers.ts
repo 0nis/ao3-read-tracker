@@ -81,13 +81,3 @@ export async function handleUnignoreFic(id: string): Promise<void> {
   if (result.success) showNotification(`Fic ${id} is no longer being ignored.`);
   else showNotification(`Failed to unignore fic ${id}: ${result.error}`);
 }
-
-export async function handleGetSettings(): Promise<SettingsData> {
-  const { data } = await StorageService.getAllSettings();
-  const { readSettings, ignoreSettings, generalSettings } = data || {};
-  return {
-    readSettings: readSettings || DEFAULT_READ_SETTINGS,
-    ignoreSettings: ignoreSettings || DEFAULT_IGNORE_SETTINGS,
-    generalSettings: generalSettings || DEFAULT_GENERAL_SETTINGS,
-  };
-}
