@@ -2,13 +2,14 @@ import { CLASS_PREFIX } from "../../../constants/classes";
 import { CollapseMode } from "../../../constants/enums";
 import { getWorkById } from "../../../utils/ao3";
 import { el, getElement, injectStyles } from "../../../utils/ui/dom";
+import { getWork } from "../handlers";
 
 /**
  * Hides the details of a work in the listing to take up less space.
- * @param workOrId The work element or its ID
  * @param mode "gentle" or "aggressive": gentle leaves the header visible, aggressive hides everything except the indicator and toggle
+ * @param workOrId The work element or its ID
  */
-export function collapse(workOrId: HTMLElement | string, mode: CollapseMode) {
+export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
   const work = getWork(workOrId);
   if (!work) return;
   const isCollapsed = work.classList.contains(`${CLASS_PREFIX}__collapsed`);
@@ -61,11 +62,6 @@ export function unCollapse(workOrId: HTMLElement | string) {
   elementsToRemove.forEach((el) => el.remove());
   for (const el of work.children)
     el.classList.remove(`${CLASS_PREFIX}__hidden`);
-}
-
-function getWork(workOrId: HTMLElement | string): HTMLElement | null {
-  if (typeof workOrId === "string") return getWorkById(workOrId);
-  return workOrId;
 }
 
 function createCollapseToggle(

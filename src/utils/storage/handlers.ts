@@ -1,7 +1,6 @@
 import { CLASS_PREFIX } from "../../constants/classes";
 import { StorageResult } from "../../types/storage";
 import { reportExtensionFailure } from "../ui/dialogs";
-import { el } from "../ui/dom";
 import { createFlashNotice } from "../ui/form";
 
 /**
