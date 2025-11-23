@@ -1,7 +1,7 @@
 import { Router } from "../../app/router";
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SETTINGS_PAGE_URL } from "../../constants/settings";
-import { el, injectStyles } from "../../utils/dom";
+import { el, injectStyles } from "../../utils/ui/dom";
 import { render } from "./renderer";
 import { getStyles } from "./style";
 

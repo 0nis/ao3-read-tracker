@@ -1,4 +1,5 @@
-import { StorageResult } from "../types/storage";
+import { StorageResult } from "../../types/storage";
+import { createExtensionMsg } from "./console";
 
 interface ExtensionManifest {
   name: string;
@@ -72,10 +73,6 @@ export function replaceManifestPlaceholders(template: string): string {
     (result, [key, value]) => result.split(`%${key}%`).join(value),
     template
   );
-}
-
-export function createExtensionMsg(msg: string): string {
-  return `[${getManifest().data?.name ?? "Extension"}] ${msg}`;
 }
 
 function getCriticalManifestError(reason?: string): string {

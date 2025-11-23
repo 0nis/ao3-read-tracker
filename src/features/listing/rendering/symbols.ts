@@ -2,7 +2,12 @@ import { CLASS_PREFIX } from "../../../constants/classes";
 import { WorkState } from "../../../constants/enums";
 import { IgnoredFic, ReadFic } from "../../../types/storage";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
-import { el, ensureChild, getElement, injectStyles } from "../../../utils/dom";
+import {
+  el,
+  ensureChild,
+  getElement,
+  injectStyles,
+} from "../../../utils/ui/dom";
 
 /**
  * Adds symbols to a work element showing information like read/ignored status, reread worthiness, and read count.

@@ -4,7 +4,7 @@ import {
   getWorksListFromListing,
 } from "../../utils/ao3";
 import type { FicData } from "../../types/storage";
-import { createExtensionMsg } from "../../utils/manifest";
+import { createExtensionMsg } from "../../utils/extension/console";
 
 export async function getFicStatusData(): Promise<{
   worksList: HTMLElement | null;

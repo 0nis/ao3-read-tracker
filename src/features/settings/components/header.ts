@@ -1,5 +1,5 @@
 import { PREFIX } from "..";
-import { el } from "../../../utils/dom";
+import { el } from "../../../utils/ui/dom";
 
 export function buildHeader(extensionName: string) {
   const exportTxt = "Export your data for this extension to your files";

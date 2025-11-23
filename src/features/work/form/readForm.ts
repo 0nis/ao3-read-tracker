@@ -1,14 +1,10 @@
 import { ReadFic } from "../../../types/storage";
 import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-import {
-  reportExtensionFailure,
-  showNotification,
-} from "../../../utils/dialogs";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { getCurrentChapterFromWorkPage } from "../../../utils/ao3";
-import { createFlashNotice, handleStorageResult } from "../../../utils/form";
-import { createExtensionMsg } from "../../../utils/manifest";
+import { createExtensionMsg } from "../../../utils/extension/console";
+import { handleStorageWrite } from "../../../utils/storage/handlers";
 
 export async function showReadFicForm(
   exists: boolean,
@@ -28,7 +24,7 @@ export async function showReadFicForm(
     data,
     buildInnerHTML: (d, exists) => getReadFicFormMarkup(id, d, exists),
     onSubmit: async (form) => await markFicAsRead(form, data),
-    onDelete: async () => await markFicAsUnread(data.id!, data.title),
+    onDelete: async (form) => await markFicAsUnread(data.id!, form, data.title),
   });
 
   const isReadingCheckbox = form.querySelector(
@@ -147,13 +143,17 @@ const getReadFicFormMarkup = (
     </fieldset>
 `;
 
-const markFicAsUnread = async (id: string, title?: string) => {
-  const result = await StorageService.readFics.delete(id);
-
-  handleStorageResult(
-    result,
+const markFicAsUnread = async (
+  id: string,
+  form: HTMLFormElement,
+  title?: string
+) => {
+  await handleStorageWrite<void>(
+    StorageService.readFics.delete(id),
     `You have successfully marked ${title || "this work"} as unread.`,
-    `Failed to mark ${title || "this work"} as unread.`
+    `Failed to mark ${title || "this work"} as unread.`,
+    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    true
   );
 };
 
@@ -170,7 +170,7 @@ const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
     return parser(input);
   };
 
-  const fic: ReadFic = {
+  const payload: ReadFic = {
     id: data.id!,
     title: data.title!,
     createdAt: data.createdAt || Date.now(),
@@ -201,10 +201,12 @@ const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
       undefined
     ),
   };
-  const result = await StorageService.readFics.put(fic);
-  handleStorageResult(
-    result,
+
+  await handleStorageWrite<void>(
+    StorageService.readFics.put(payload),
     `You have successfully marked ${data.title || "this work"} as read.`,
-    `Failed to mark ${data.title || "this work"} as read.`
+    `Failed to mark ${data.title || "this work"} as read.`,
+    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    true
   );
 };

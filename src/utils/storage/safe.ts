@@ -1,7 +1,7 @@
-import { BaseData } from "../data/base";
-import { SettingsData } from "../data/settings";
-import { StorageResult } from "../types/storage";
-import { createExtensionMsg } from "./manifest";
+import { BaseData } from "../../data/base";
+import { SettingsData } from "../../data/settings";
+import { StorageResult } from "../../types/storage";
+import { createExtensionMsg } from "../extension/console";
 
 /**
  * Safely executes an async function and wraps the result in a StorageResult.

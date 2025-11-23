@@ -1,7 +1,7 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { CollapseMode } from "../../../constants/enums";
 import { getWorkById } from "../../../utils/ao3";
-import { el, getElement, injectStyles } from "../../../utils/dom";
+import { el, getElement, injectStyles } from "../../../utils/ui/dom";
 
 /**
  * Hides the details of a work in the listing to take up less space.

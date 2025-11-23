@@ -1,7 +1,5 @@
-import { CLASS_PREFIX } from "../constants/classes";
-import { MessageType } from "../constants/enums";
-import { StorageResult } from "../types/storage";
-import { reportExtensionFailure } from "./dialogs";
+import { CLASS_PREFIX } from "../../constants/classes";
+import { MessageType } from "../../constants/enums";
 import { el } from "./dom";
 
 /**
@@ -45,23 +43,6 @@ export function createFlashNotice(innerHTML: string): void {
     attrs: { role: "status" },
   });
   main.prepend(notice);
-}
-
-/**
- * Handles the result of a storage operation by showing appropriate feedback.
- * Shows a success flash notice or reports a failure.
- */
-export function handleStorageResult(
-  result: StorageResult,
-  successMessage: string,
-  errorMessage: string,
-  successFn: (message: string) => void = createFlashNotice
-): void {
-  if (result.success) {
-    successFn(successMessage);
-  } else {
-    reportExtensionFailure(errorMessage, result.error);
-  }
 }
 
 /**

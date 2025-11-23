@@ -13,8 +13,8 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../constants/settings";
-import { showNotification } from "../utils/dialogs";
-import { createExtensionMsg, getManifest } from "../utils/manifest";
+import { showNotification } from "../utils/ui/dialogs";
+import { createExtensionMsg } from "../utils/extension/console";
 
 export class Ao3MarkAsReadDb extends Dexie {
   readFics!: Table<ReadFic>;

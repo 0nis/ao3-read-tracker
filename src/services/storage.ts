@@ -8,7 +8,7 @@ import {
   IgnoreSettingsData,
   GeneralSettingsData,
 } from "../data/data";
-import { createSafeService, safeExecute } from "../utils/storage";
+import { createSafeService, safeExecute } from "../utils/storage/safe";
 
 export const StorageService = {
   readFics: createSafeService("StorageService.readFics", ReadFicsData),

@@ -1,7 +1,6 @@
 import { Router } from "../../../app/router";
-import { IgnoredFic, ReadFic } from "../../../types/storage";
-import { el } from "../../../utils/dom";
-import { createExtensionMsg } from "../../../utils/manifest";
+import { el } from "../../../utils/ui/dom";
+import { createExtensionMsg } from "../../../utils/extension/console";
 
 export interface FicFormConfig<T> {
   /** Unique identifier for the form, not the fic ID! */

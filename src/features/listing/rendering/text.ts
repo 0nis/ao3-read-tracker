@@ -3,7 +3,12 @@ import { WorkState } from "../../../constants/enums";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
-import { el, ensureChild, getElement, injectStyles } from "../../../utils/dom";
+import {
+  el,
+  ensureChild,
+  getElement,
+  injectStyles,
+} from "../../../utils/ui/dom";
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.

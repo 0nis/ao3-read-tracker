@@ -1,7 +1,7 @@
 import { PREFIX } from "../..";
 import { DisplayMode } from "../../../../constants/enums";
-import { el } from "../../../../utils/dom";
-import { buildSelectFromEnum } from "../../../../utils/form";
+import { el } from "../../../../utils/ui/dom";
+import { buildSelectFromEnum } from "../../../../utils/ui/form";
 import { createField, createSection } from "./base";
 
 export function buildIgnoreSection(): HTMLElement {

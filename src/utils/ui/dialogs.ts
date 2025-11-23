@@ -1,8 +1,8 @@
 import {
-  createExtensionMsg,
   getManifest,
   replaceManifestPlaceholders,
-} from "./manifest";
+} from "../extension/manifest";
+import { createExtensionMsg } from "../extension/console";
 
 /**
  * Displays a critical message that requires user attention.

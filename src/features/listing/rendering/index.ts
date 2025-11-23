@@ -4,7 +4,7 @@ import { addSymbols, removeSymbols } from "./symbols";
 
 import { getFicStatusData } from "../handlers";
 import { extractWorkIdFromListingId } from "../../../utils/ao3";
-import { ensureChild } from "../../../utils/dom";
+import { ensureChild } from "../../../utils/ui/dom";
 
 import {
   READ_CLASS,
@@ -16,7 +16,7 @@ import {
 import { CollapseMode, WorkState } from "../../../constants/enums";
 import type { ReadFic, IgnoredFic } from "../../../types/storage";
 import { unhide } from "./hide";
-import { getManifest } from "../../../utils/manifest";
+import { getManifest } from "../../../utils/extension/manifest";
 
 /**
  * Marks fics on the current listing page as read/ignored based on stored data, with their appropriate indicators.

@@ -1,10 +1,9 @@
 import { IgnoredFic } from "../../../types/storage";
 import { createFicForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
-import { showNotification } from "../../../utils/dialogs";
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { createExtensionMsg } from "../../../utils/manifest";
-import { handleStorageResult } from "../../../utils/form";
+import { createExtensionMsg } from "../../../utils/extension/console";
+import { handleStorageWrite } from "../../../utils/storage/handlers";
 
 export async function showIgnoredFicForm(
   exists: boolean,
@@ -24,7 +23,8 @@ export async function showIgnoredFicForm(
     data,
     buildInnerHTML: (d, exists) => getIgnoredFicFormMarkup(id, d, exists),
     onSubmit: async (form) => await markFicAsIgnored(form, data),
-    onDelete: async () => await markFicAsUnignored(data.id!, data.title),
+    onDelete: async (form) =>
+      await markFicAsUnignored(data.id!, form, data.title),
   });
 
   form.querySelector(`#${id}__close`)?.addEventListener("click", (e) => {
@@ -86,12 +86,17 @@ const getIgnoredFicFormMarkup = (
     </fieldset>
 `;
 
-const markFicAsUnignored = async (id: string, title?: string) => {
-  const result = await StorageService.ignoredFics.delete(id!);
-  handleStorageResult(
-    result,
+const markFicAsUnignored = async (
+  id: string,
+  form: HTMLElement,
+  title?: string
+) => {
+  await handleStorageWrite<void>(
+    StorageService.ignoredFics.delete(id),
     `${title || "This work"} will no longer be ignored.`,
-    `Failed to unignore ${title || "this work"}.`
+    `Failed to unignore ${title || "this work"}.`,
+    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    true
   );
 };
 
@@ -99,21 +104,22 @@ const markFicAsIgnored = async (
   form: HTMLFormElement,
   data: Partial<IgnoredFic>
 ) => {
-  const reason = (
-    form.querySelector(
-      `#${CLASS_PREFIX}__ignored-form__reason`
-    ) as HTMLTextAreaElement
-  ).value.trim();
-  const fic: IgnoredFic = {
+  const payload: IgnoredFic = {
     id: data.id!,
     title: data.title!,
     timestamp: Date.now(),
-    reason,
+    reason: (
+      form.querySelector(
+        `#${CLASS_PREFIX}__ignored-form__reason`
+      ) as HTMLTextAreaElement
+    ).value.trim(),
   };
-  const result = await StorageService.ignoredFics.put(fic);
-  handleStorageResult(
-    result,
+
+  await handleStorageWrite<void>(
+    StorageService.ignoredFics.put(payload),
     `You have successfully ignored ${data.title || "this work"}.`,
-    `Failed to ignore ${data.title || "this work"}.`
+    `Failed to ignore ${data.title || "this work"}.`,
+    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    true
   );
 };

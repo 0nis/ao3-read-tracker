@@ -13,7 +13,7 @@ import {
   handleMarkFicAsUnread,
   handleUnignoreFic,
 } from "./handlers";
-import { el } from "../../utils/dom";
+import { el } from "../../utils/ui/dom";
 
 interface BaseButtonConfig {
   type: WorkState;

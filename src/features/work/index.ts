@@ -4,7 +4,7 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../constants/settings";
-import { injectStyles } from "../../utils/dom";
+import { injectStyles } from "../../utils/ui/dom";
 import {
   modifyMarkForLaterButton,
   setupIgnoreButton,
