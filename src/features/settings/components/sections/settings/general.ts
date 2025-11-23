@@ -1,8 +1,8 @@
-import { PREFIX } from "../..";
-import { ButtonPlacement } from "../../../../constants/enums";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
-import { createField, createSection } from "./base";
+import { PREFIX } from "../../..";
+import { ButtonPlacement } from "../../../../../constants/enums";
+import { el } from "../../../../../utils/ui/dom";
+import { buildSelectFromEnum } from "../../../../../utils/ui/form";
+import { createField, createSettingsSection } from "./base";
 
 export function buildGeneralSection(): HTMLElement {
   const hideSymbolsField = createField({
@@ -44,7 +44,7 @@ export function buildGeneralSection(): HTMLElement {
       "The custom label to use for the 'Mark as Read' button if you have chosen to replace it.",
   });
 
-  return createSection({
+  return createSettingsSection({
     id: "general",
     title: "General Settings",
     fields: [

@@ -1,30 +1,15 @@
-import { PREFIX } from "../..";
-import { el } from "../../../../utils/ui/dom";
+import { PREFIX } from "../../..";
+import { el } from "../../../../../utils/ui/dom";
+import { createSection, SectionConfig } from "../helpers";
 
-export interface SectionConfig {
-  id: string;
-  title: string;
+export interface SettingsSectionConfig extends SectionConfig {
   fields: HTMLElement[];
 }
 
-export function createSection(config: SectionConfig): HTMLElement {
-  // prettier-ignore
-  const section = el(
-    "section",
-    {
-      className: `${PREFIX}__section`,
-      id: `section-${config.id}`,
-      attrs: { 
-        role: "region", 
-        "aria-labelledby": `section-${config.id}-title` 
-      },
-    },
-    [el("h3", { 
-      className: `${PREFIX}__section__title`, 
-      id: `section-${config.id}-title` 
-    }, [config.title])]
-  );
-
+export function createSettingsSection(
+  config: SettingsSectionConfig
+): HTMLElement {
+  const section = createSection(config);
   const fieldsWrapper = el("div", { className: `${PREFIX}__field__wrapper` });
   config.fields.forEach((f) => fieldsWrapper.appendChild(f));
   section.appendChild(fieldsWrapper);

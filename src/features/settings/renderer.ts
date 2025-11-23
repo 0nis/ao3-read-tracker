@@ -9,9 +9,9 @@ import {
   setupHeaderActions,
 } from "./handlers";
 
-import { buildReadSection } from "./components/sections/read";
-import { buildIgnoreSection } from "./components/sections/ignore";
-import { buildGeneralSection } from "./components/sections/general";
+import { buildReadSection } from "./components/sections/settings/read";
+import { buildIgnoreSection } from "./components/sections/settings/ignore";
+import { buildGeneralSection } from "./components/sections/settings/general";
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
 
@@ -26,16 +26,18 @@ export async function render(): Promise<void> {
   const generalSection = buildGeneralSection();
 
   const sections = {
-    read: readSection,
-    ignore: ignoreSection,
-    general: generalSection,
+    "read-settings": readSection,
+    "ignore-settings": ignoreSection,
+    "general-settings": generalSection,
   };
 
   const nav = buildNav(
     [
-      { id: "read", label: "Read Settings" },
-      { id: "ignore", label: "Ignore Settings" },
-      { id: "general", label: "General" },
+      { id: "read-settings", label: "Read Settings" },
+      { id: "ignore-settings", label: "Ignore Settings" },
+      { id: "general-settings", label: "General Settings" },
+      { id: "read-works", label: "Read Works List" },
+      { id: "ignored-works", label: "Ignored Works List" },
     ],
     (id) => showSection(id)
   );
@@ -61,8 +63,8 @@ export async function render(): Promise<void> {
     }
   }
 
-  showSection((window.location.hash || "#read").slice(1));
+  showSection((window.location.hash || "#read-settings").slice(1));
   window.addEventListener("hashchange", () =>
-    showSection((window.location.hash || "#read").slice(1))
+    showSection((window.location.hash || "#read-settings").slice(1))
   );
 }

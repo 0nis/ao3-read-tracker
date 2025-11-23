@@ -1,8 +1,8 @@
-import { PREFIX } from "../..";
-import { DisplayMode } from "../../../../constants/enums";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
-import { createField, createSection } from "./base";
+import { PREFIX } from "../../..";
+import { DisplayMode } from "../../../../../constants/enums";
+import { el } from "../../../../../utils/ui/dom";
+import { buildSelectFromEnum } from "../../../../../utils/ui/form";
+import { createField, createSettingsSection } from "./base";
 
 export function buildReadSection(): HTMLElement {
   const simpleField = createField({
@@ -41,7 +41,7 @@ export function buildReadSection(): HTMLElement {
       "What the work listing will look like when you've marked a work as reread worthy.",
   });
 
-  return createSection({
+  return createSettingsSection({
     id: "read",
     title: "Read Settings",
     fields: [

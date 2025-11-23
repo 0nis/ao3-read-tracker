@@ -1,8 +1,8 @@
-import { PREFIX } from "../..";
-import { DisplayMode } from "../../../../constants/enums";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
-import { createField, createSection } from "./base";
+import { PREFIX } from "../../..";
+import { DisplayMode } from "../../../../../constants/enums";
+import { el } from "../../../../../utils/ui/dom";
+import { buildSelectFromEnum } from "../../../../../utils/ui/form";
+import { createField, createSettingsSection } from "./base";
 
 export function buildIgnoreSection(): HTMLElement {
   const simpleField = createField({
@@ -23,7 +23,7 @@ export function buildIgnoreSection(): HTMLElement {
       "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",
   });
 
-  return createSection({
+  return createSettingsSection({
     id: "ignore",
     title: "Ignore Settings",
     fields: [simpleField, defaultDisplayField],
