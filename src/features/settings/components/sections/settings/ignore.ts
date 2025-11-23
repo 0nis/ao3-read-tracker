@@ -2,11 +2,12 @@ import { PREFIX } from "../../..";
 import { DisplayMode } from "../../../../../constants/enums";
 import { el } from "../../../../../utils/ui/dom";
 import { buildSelectFromEnum } from "../../../../../utils/ui/form";
+import { SectionId } from "../../../sections";
 import { createField, createSettingsSection } from "./base";
 
-export function buildIgnoreSection(): HTMLElement {
+export function buildIgnoreSettingsSection(): HTMLElement {
   const simpleField = createField({
-    section: "ignore",
+    section: SectionId.IGNORE_SETTINGS,
     label: "Enable Simple Mode",
     input: el("input", { type: "checkbox" }),
     dataField: "simpleModeEnabled",
@@ -15,7 +16,7 @@ export function buildIgnoreSection(): HTMLElement {
   });
 
   const defaultDisplayField = createField({
-    section: "ignore",
+    section: SectionId.IGNORE_SETTINGS,
     label: "Default Display Mode",
     input: buildSelectFromEnum(DisplayMode) as HTMLElement,
     dataField: "defaultDisplayMode",
@@ -24,7 +25,7 @@ export function buildIgnoreSection(): HTMLElement {
   });
 
   return createSettingsSection({
-    id: "ignore",
+    id: SectionId.IGNORE_SETTINGS,
     title: "Ignore Settings",
     fields: [simpleField, defaultDisplayField],
   });

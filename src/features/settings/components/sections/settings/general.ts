@@ -2,11 +2,12 @@ import { PREFIX } from "../../..";
 import { ButtonPlacement } from "../../../../../constants/enums";
 import { el } from "../../../../../utils/ui/dom";
 import { buildSelectFromEnum } from "../../../../../utils/ui/form";
+import { SectionId } from "../../../sections";
 import { createField, createSettingsSection } from "./base";
 
-export function buildGeneralSection(): HTMLElement {
+export function buildGeneralSettingsSection(): HTMLElement {
   const hideSymbolsField = createField({
-    section: "general",
+    section: SectionId.GENERAL_SETTINGS,
     label: "Hide symbols?",
     input: el("input", { type: "checkbox" }),
     dataField: "hideSymbols",
@@ -15,7 +16,7 @@ export function buildGeneralSection(): HTMLElement {
   });
 
   const buttonPlacementField = createField({
-    section: "general",
+    section: SectionId.GENERAL_SETTINGS,
     label: "Button placement",
     input: buildSelectFromEnum(ButtonPlacement) as HTMLElement,
     dataField: "buttonPlacement",
@@ -24,7 +25,7 @@ export function buildGeneralSection(): HTMLElement {
   });
 
   const replaceMarkForLaterField = createField({
-    section: "general",
+    section: SectionId.GENERAL_SETTINGS,
     label: "Replace 'Mark as Read' button text?",
     input: el("input", { type: "checkbox" }),
     dataField: "replaceMarkForLaterText",
@@ -33,7 +34,7 @@ export function buildGeneralSection(): HTMLElement {
   });
 
   const replacementLabelField = createField({
-    section: "general",
+    section: SectionId.GENERAL_SETTINGS,
     label: "Custom label for 'Mark as Read' button",
     input: el("input", {
       type: "text",
@@ -45,7 +46,7 @@ export function buildGeneralSection(): HTMLElement {
   });
 
   return createSettingsSection({
-    id: "general",
+    id: SectionId.GENERAL_SETTINGS,
     title: "General Settings",
     fields: [
       hideSymbolsField,

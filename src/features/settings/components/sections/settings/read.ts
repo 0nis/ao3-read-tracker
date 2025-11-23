@@ -2,11 +2,12 @@ import { PREFIX } from "../../..";
 import { DisplayMode } from "../../../../../constants/enums";
 import { el } from "../../../../../utils/ui/dom";
 import { buildSelectFromEnum } from "../../../../../utils/ui/form";
+import { SectionId } from "../../../sections";
 import { createField, createSettingsSection } from "./base";
 
-export function buildReadSection(): HTMLElement {
+export function buildReadSettingsSection(): HTMLElement {
   const simpleField = createField({
-    section: "read",
+    section: SectionId.READ_SETTINGS,
     label: "Enable Simple Mode",
     input: el("input", { type: "checkbox" }),
     dataField: "simpleModeEnabled",
@@ -15,7 +16,7 @@ export function buildReadSection(): HTMLElement {
   });
 
   const defaultDisplayField = createField({
-    section: "read",
+    section: SectionId.READ_SETTINGS,
     label: "Default Display Mode",
     input: buildSelectFromEnum(DisplayMode) as HTMLElement,
     dataField: "defaultDisplayMode",
@@ -24,7 +25,7 @@ export function buildReadSection(): HTMLElement {
   });
 
   const stillReadingDisplayField = createField({
-    section: "read",
+    section: SectionId.READ_SETTINGS,
     label: "Still reading Display Mode",
     input: buildSelectFromEnum(DisplayMode) as HTMLElement,
     dataField: "stillReadingDisplayMode",
@@ -33,7 +34,7 @@ export function buildReadSection(): HTMLElement {
   });
 
   const rereadDisplayField = createField({
-    section: "read",
+    section: SectionId.READ_SETTINGS,
     label: "Reread worthy Display Mode",
     input: buildSelectFromEnum(DisplayMode) as HTMLElement,
     dataField: "rereadWorthyDisplayMode",
@@ -42,7 +43,7 @@ export function buildReadSection(): HTMLElement {
   });
 
   return createSettingsSection({
-    id: "read",
+    id: SectionId.READ_SETTINGS,
     title: "Read Settings",
     fields: [
       simpleField,

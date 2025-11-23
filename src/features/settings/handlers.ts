@@ -1,5 +1,3 @@
-import { StorageService } from "../../services/storage";
-
 import { getElement } from "../../utils/ui/dom";
 import {
   confirmDestructiveAction,
@@ -12,11 +10,8 @@ import { extractSectionValues, populateSection } from "../../utils/ui/form";
 import { StorageResult } from "../../types/storage";
 
 import { PREFIX } from ".";
-import {
-  DEFAULT_GENERAL_SETTINGS,
-  DEFAULT_IGNORE_SETTINGS,
-  DEFAULT_READ_SETTINGS,
-} from "../../constants/settings";
+import { SectionId, SETTINGS_LOAD_MAP, SETTINGS_SAVE_MAP } from "./sections";
+import { SectionElements } from "./renderer";
 
 async function updateSettingsHandler(
   op: Promise<StorageResult<void>>,
@@ -34,63 +29,40 @@ async function updateSettingsHandler(
   );
 }
 
-export async function loadAllSections(
-  readSection: HTMLElement,
-  ignoreSection: HTMLElement,
-  generalSection: HTMLElement
-) {
-  const { readSettings, ignoreSettings, generalSettings } =
-    await handleGetAllSettings();
+export async function loadAllSettingsSections(sections: SectionElements) {
+  const all = await handleGetAllSettings();
 
-  populateSection(readSection, readSettings);
-  populateSection(ignoreSection, ignoreSettings);
-  populateSection(generalSection, generalSettings);
+  for (const id of Object.keys(sections) as SectionId[]) {
+    const section = sections[id];
+    const getData = SETTINGS_LOAD_MAP[id];
+    if (!getData) continue;
+
+    const data = getData(all);
+    if (data) {
+      populateSection(section.element, data);
+    }
+  }
 }
 
-export function setupSaveHandlers(
-  readSection: HTMLElement,
-  ignoreSection: HTMLElement,
-  generalSection: HTMLElement
-) {
-  function getSaveBtn(section: HTMLElement): HTMLInputElement | null {
-    return getElement(section, `.${PREFIX}__button`) as HTMLInputElement | null;
+export function setupSettingsSaveHandlers(sections: SectionElements) {
+  for (const [key, sectionConfig] of Object.entries(sections)) {
+    const saveBtn = getElement(sectionConfig.element, `.${PREFIX}__button`);
+    if (!saveBtn) continue;
+
+    const saveInfo = SETTINGS_SAVE_MAP[key as SectionId];
+    if (!saveInfo) continue;
+
+    saveBtn.addEventListener("click", async () => {
+      const payload = {
+        ...saveInfo.defaults,
+        ...extractSectionValues(sectionConfig.element),
+      };
+
+      const op = saveInfo.setter(payload);
+
+      await updateSettingsHandler(op, saveInfo.label, saveBtn);
+    });
   }
-
-  const readSave = getSaveBtn(readSection);
-  readSave?.addEventListener("click", async () => {
-    await updateSettingsHandler(
-      StorageService.readSettings.set({
-        ...DEFAULT_READ_SETTINGS,
-        ...extractSectionValues(readSection),
-      }),
-      "read",
-      readSave
-    );
-  });
-
-  const ignoreSave = getSaveBtn(ignoreSection);
-  ignoreSave?.addEventListener("click", async () => {
-    await updateSettingsHandler(
-      StorageService.ignoreSettings.set({
-        ...DEFAULT_IGNORE_SETTINGS,
-        ...extractSectionValues(ignoreSection),
-      }),
-      "ignore",
-      ignoreSave
-    );
-  });
-
-  const generalSave = getSaveBtn(generalSection);
-  generalSave?.addEventListener("click", async () => {
-    await updateSettingsHandler(
-      StorageService.generalSettings.set({
-        ...DEFAULT_GENERAL_SETTINGS,
-        ...extractSectionValues(generalSection),
-      }),
-      "general",
-      generalSave
-    );
-  });
 }
 
 export function setupHeaderActions(
