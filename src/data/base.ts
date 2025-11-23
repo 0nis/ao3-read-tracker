@@ -1,3 +1,4 @@
+import { PaginatedResult } from "../types/storage";
 import { db } from "./db";
 import { Table } from "dexie";
 
@@ -44,5 +45,35 @@ export class BaseData<T extends { id: string }> {
       await this.table.clear();
       await this.table.bulkPut(items);
     });
+  }
+
+  async paginate(
+    page: number,
+    pageSize: number,
+    options?: {
+      orderBy?: keyof T;
+      reverse?: boolean;
+    }
+  ): Promise<PaginatedResult<T>> {
+    const { orderBy = "modifiedAt", reverse = false } = options || {};
+
+    const totalItems = await this.table.count();
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const clampedPage = Math.min(Math.max(1, page), totalPages);
+    const offset = (clampedPage - 1) * pageSize;
+
+    let query = this.table.orderBy(orderBy as string);
+    if (reverse) query = query.reverse();
+    const items = await query.offset(offset).limit(pageSize).toArray();
+
+    return {
+      items,
+      page: clampedPage,
+      pageSize,
+      totalItems,
+      totalPages,
+      hasNext: clampedPage < totalPages,
+      hasPrev: clampedPage > 1,
+    };
   }
 }
