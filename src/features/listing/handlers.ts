@@ -27,9 +27,11 @@ export async function getFicStatusData(): Promise<{
   );
   if (items.length === 0) return { worksList, data: null };
 
-  const ficIds = items
-    .map((item) => extractWorkIdFromListingId(item.id))
-    .filter((id): id is string => typeof id === "string");
+  const ficIds: string[] = [];
+  for (const item of items) {
+    const id = extractWorkIdFromListingId(item.id);
+    if (id) ficIds.push(id);
+  }
 
   const storedDataResult = await StorageService.getByIds(ficIds);
   if (!storedDataResult.success) {

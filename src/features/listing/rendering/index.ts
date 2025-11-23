@@ -23,7 +23,7 @@ import {
   type IgnoredFic,
   SettingsData,
 } from "../../../types/storage";
-import { hide, unhide } from "./hide";
+import { unhide } from "./hide";
 import { getManifest } from "../../../utils/extension/manifest";
 import { handleGetAllSettings } from "../../../utils/storage/settings";
 
@@ -38,7 +38,7 @@ export async function markFicsOnPage(): Promise<void> {
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
     if (!id) continue;
-    await applyMarksToWork(item, readFics[id], ignoredFics[id], settings);
+    applyMarksToWork(item, readFics[id], ignoredFics[id], settings);
   }
 }
 
@@ -73,24 +73,22 @@ async function getDataAndItems(): Promise<
   | {
       readFics: Record<string, ReadFic>;
       ignoredFics: Record<string, IgnoredFic>;
-      items: HTMLElement[];
+      items: NodeListOf<HTMLElement>;
       settings: SettingsData;
     }
   | undefined
 > {
   const { worksList, data } = await getFicStatusData();
   if (!worksList || !data) return;
+  const { readFics, ignoredFics } = data;
 
   const settings = await handleGetAllSettings();
+  const items = worksList.querySelectorAll<HTMLLIElement>("li.work");
 
-  const items = Array.from(
-    worksList.querySelectorAll<HTMLLIElement>("li.work")
-  );
-  const { readFics, ignoredFics } = data;
   return { readFics, ignoredFics, items, settings };
 }
 
-async function applyMarksToWork(
+function applyMarksToWork(
   item: HTMLElement,
   readFic: ReadFic | undefined,
   ignoredFic: IgnoredFic | undefined,
@@ -138,11 +136,10 @@ function adjustWorkDisplay(
   displayFn(work);
 }
 
+const extensionName = getManifest().data?.name || "Mark as Read";
 function createOrModifyLandmarkHeading(work: HTMLElement) {
   ensureChild(work, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
     className: "landmark heading",
-    textContent: `${
-      getManifest().data?.name || "Mark as Read"
-    } Extension Information`,
+    textContent: `${extensionName} Extension Information`,
   });
 }
