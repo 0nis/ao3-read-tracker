@@ -25,11 +25,13 @@ export enum SectionType {
   LIST = "lists",
 }
 
+export type SectionBuilder = () => Promise<HTMLElement> | HTMLElement;
+
 export interface SectionConfigItem {
   id: SectionId;
   label: string;
   type: SectionType;
-  build: () => HTMLElement;
+  build: SectionBuilder;
 }
 
 export const SECTION_CONFIG: readonly SectionConfigItem[] = [

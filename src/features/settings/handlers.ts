@@ -1,17 +1,18 @@
+import { PREFIX } from ".";
+import { SectionId, SETTINGS_LOAD_MAP, SETTINGS_SAVE_MAP } from "./sections";
+import { SectionElements } from "./renderer";
+
+import { settingsCache } from "../../services/cache/settings";
+
 import { getElement } from "../../utils/ui/dom";
 import {
   confirmDestructiveAction,
   showNotification,
 } from "../../utils/ui/dialogs";
 import { handleStorageWrite } from "../../utils/storage/handlers";
-import { handleGetAllSettings } from "../../utils/storage/settings";
 import { extractSectionValues, populateSection } from "../../utils/ui/form";
 
 import { StorageResult } from "../../types/results";
-
-import { PREFIX } from ".";
-import { SectionId, SETTINGS_LOAD_MAP, SETTINGS_SAVE_MAP } from "./sections";
-import { SectionElements } from "./renderer";
 
 async function updateSettingsHandler(
   op: Promise<StorageResult<void>>,
@@ -27,10 +28,11 @@ async function updateSettingsHandler(
     saveBtn || undefined,
     false
   );
+  settingsCache.clear();
 }
 
 export async function loadAllSettingsSections(sections: SectionElements) {
-  const all = await handleGetAllSettings();
+  const all = await settingsCache.get();
 
   for (const id of Object.keys(sections) as SectionId[]) {
     const section = sections[id];

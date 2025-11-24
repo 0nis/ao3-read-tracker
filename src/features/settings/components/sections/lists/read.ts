@@ -36,7 +36,7 @@ function makeMockPaginator(total = 200) {
   };
 }
 
-export function buildReadListSection(): HTMLElement {
+export async function buildReadListSection(): Promise<HTMLElement> {
   const elements: ListSectionElements = createListSection({
     id: SectionId.READ_LIST,
     title: "Read Works List",
@@ -48,12 +48,12 @@ export function buildReadListSection(): HTMLElement {
   const paginator = makeMockPaginator(1000); // TODO: Replace with real paginator
   let currentPage = 0;
 
-  function renderPage() {
+  async function renderPage() {
     const result = paginator(currentPage, pageSize);
     const { items, page, totalPages } = result;
 
     elements.listContainer.innerHTML = "";
-    items.forEach((item) => {
+    items.forEach(async (item) => {
       const link = getWorkLinkFromId(item.id);
 
       const innerElement = el(
@@ -82,7 +82,7 @@ export function buildReadListSection(): HTMLElement {
       );
 
       elements.listContainer.appendChild(
-        createListRow({
+        await createListRow({
           id: item.id,
           innerElement,
           ariaLabel: item.title ?? "untitled",
@@ -108,17 +108,17 @@ export function buildReadListSection(): HTMLElement {
     elements.paginationControls.nextBtn.disabled = !result.hasNext;
   }
 
-  elements.paginationControls.prevBtn.addEventListener("click", () => {
+  elements.paginationControls.prevBtn.addEventListener("click", async () => {
     if (currentPage > 0) currentPage--;
-    renderPage();
+    await renderPage();
   });
 
-  elements.paginationControls.nextBtn.addEventListener("click", () => {
+  elements.paginationControls.nextBtn.addEventListener("click", async () => {
     currentPage++;
-    renderPage();
+    await renderPage();
   });
 
-  renderPage();
+  await renderPage();
 
   return elements.section;
 }

@@ -27,12 +27,13 @@ export async function render(): Promise<void> {
 
   const { header, exportBtn, importBtn, clearBtn } = buildHeader(extensionName);
 
-  const sections = Object.fromEntries(
-    SECTION_CONFIG.map(({ id, build, type }) => [
-      id,
-      { element: build(), type },
-    ])
-  ) as SectionElements;
+  const entries = await Promise.all(
+    SECTION_CONFIG.map(async ({ id, build, type }) => {
+      const element = await build();
+      return [id, { element, type }] as const;
+    })
+  );
+  const sections = Object.fromEntries(entries) as SectionElements;
 
   const nav = buildNav(
     SECTION_CONFIG.map(({ id, label }) => ({ id, label })),

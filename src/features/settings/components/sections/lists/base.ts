@@ -1,4 +1,6 @@
 import { PREFIX } from "../../..";
+import { SymbolId, SymbolType } from "../../../../../enums/symbols";
+import { symbolsCache } from "../../../../../services/cache/symbols";
 import { StorageResult } from "../../../../../types/results";
 import { handleStorageWrite } from "../../../../../utils/storage/handlers";
 import { showConfirm } from "../../../../../utils/ui/dialogs";
@@ -122,12 +124,12 @@ export interface ListRow {
   };
 }
 
-export function createListRow({
+export async function createListRow({
   id,
   innerElement,
   ariaLabel,
   actions,
-}: ListRow): HTMLElement {
+}: ListRow): Promise<HTMLElement> {
   const row = el(
     "li",
     {
@@ -140,29 +142,32 @@ export function createListRow({
     [innerElement]
   );
 
-  const actionEls: HTMLElement[] = [];
+  const buttonPromises: Promise<HTMLElement>[] = [];
 
   if (actions?.link) {
-    actionEls.push(createLinkBtn(actions.link.href));
+    buttonPromises.push(createLinkBtn(actions.link.href));
   }
 
   if (actions?.delete?.onDelete) {
-    const deleteBtn = createDeleteBtn(() => {
-      const confirmed = showConfirm(
-        actions!.delete!.confirmationText ||
-          "Are you sure you want to delete this item?"
-      );
-      if (!confirmed) return;
-      handleStorageWrite<void>(
-        actions!.delete!.onDelete!(),
-        actions!.delete!.successText || `Item has been deleted.`,
-        `Failed to delete item.`
-      ).then(() => {
-        row.remove();
-      });
-    });
-    actionEls.push(deleteBtn);
+    buttonPromises.push(
+      createDeleteBtn(() => {
+        const confirmed = showConfirm(
+          actions!.delete!.confirmationText ||
+            "Are you sure you want to delete this item?"
+        );
+        if (!confirmed) return;
+        handleStorageWrite<void>(
+          actions!.delete!.onDelete!(),
+          actions!.delete!.successText || `Item has been deleted.`,
+          `Failed to delete item.`
+        ).then(() => {
+          row.remove();
+        });
+      })
+    );
   }
+
+  const actionEls = await Promise.all(buttonPromises);
 
   row.appendChild(
     el("div", { className: `actions ${PREFIX}__list__row__actions` }, actionEls)
@@ -170,7 +175,10 @@ export function createListRow({
   return row;
 }
 
-function createDeleteBtn(onDelete: () => void): HTMLButtonElement {
+async function createDeleteBtn(
+  onDelete: () => void
+): Promise<HTMLButtonElement> {
+  let innerEl = await getSymbolElement(SymbolId.DELETE, "🗑︎");
   const deleteBtn = el(
     "button",
     {
@@ -178,13 +186,14 @@ function createDeleteBtn(onDelete: () => void): HTMLButtonElement {
       ariaLabel: "Delete this item",
       title: "Delete",
     },
-    ["🗑︎"]
+    [innerEl]
   ) as HTMLButtonElement;
   deleteBtn.addEventListener("click", onDelete);
   return deleteBtn;
 }
 
-function createLinkBtn(href: string): HTMLAnchorElement {
+async function createLinkBtn(href: string): Promise<HTMLAnchorElement> {
+  let innerEl = await getSymbolElement(SymbolId.LINK, "↗");
   const linkBtn = el(
     "a",
     {
@@ -195,7 +204,25 @@ function createLinkBtn(href: string): HTMLAnchorElement {
       target: "_blank",
       rel: "noopener noreferrer",
     },
-    ["↗"]
+    [innerEl]
   ) as HTMLAnchorElement;
   return linkBtn;
+}
+
+export async function getSymbolElement(
+  id: SymbolId,
+  fallback: string = "❔"
+): Promise<HTMLElement | string> {
+  const symbols = await symbolsCache.get();
+  const symbol = symbols[id];
+  if (!symbol) return fallback;
+
+  if (symbol.type === SymbolType.IMAGE && symbol.imgUrl) {
+    return el("img", {
+      className: `${PREFIX}__button__symbol`,
+      src: symbol.imgUrl,
+      alt: symbol.label,
+    });
+  }
+  return symbol.text || fallback;
 }

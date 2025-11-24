@@ -1,7 +1,9 @@
 import { addText, removeText } from "./text";
-import { unCollapse } from "./collapse";
 import { addSymbols, removeSymbols } from "./symbols";
+import { unCollapse } from "./collapse";
+import { unhide } from "./hide";
 
+import { settingsCache } from "../../../services/cache/settings";
 import {
   collectDisplayRules,
   getWorkStatusData,
@@ -9,6 +11,7 @@ import {
 } from "../handlers";
 import { extractWorkIdFromListingId } from "../../../utils/ao3";
 import { ensureChild } from "../../../utils/ui/dom";
+import { getManifest } from "../../../utils/extension/manifest";
 
 import {
   READ_CLASS,
@@ -17,12 +20,11 @@ import {
   CLASS_PREFIX,
   STILL_READING_CLASS,
 } from "../../../constants/classes";
+
 import { WorkState } from "../../../enums/works";
+
 import { SettingsData } from "../../../types/settings";
 import { ReadWork, IgnoredWork } from "../../../types/works";
-import { unhide } from "./hide";
-import { getManifest } from "../../../utils/extension/manifest";
-import { handleGetAllSettings } from "../../../utils/storage/settings";
 
 /**
  * Marks works on the current listing page as read/ignored based on stored data, with their appropriate indicators.
@@ -35,7 +37,7 @@ export async function markWorksOnPage(): Promise<void> {
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
     if (!id) continue;
-    applyMarksToWork(item, readWorks[id], ignoredWorks[id], settings);
+    await applyMarksToWork(item, readWorks[id], ignoredWorks[id], settings);
   }
 }
 
@@ -79,34 +81,38 @@ async function getDataAndItems(): Promise<
   if (!worksList || !data) return;
   const { readWorks, ignoredWorks } = data;
 
-  const settings = await handleGetAllSettings();
+  const settings = await settingsCache.get();
   const items = worksList.querySelectorAll<HTMLLIElement>("li.work");
 
   return { readWorks, ignoredWorks, items, settings };
 }
 
-function applyMarksToWork(
+async function applyMarksToWork(
   item: HTMLElement,
   readWork: ReadWork | undefined,
   ignoredWork: IgnoredWork | undefined,
   settings: SettingsData
 ) {
   createOrModifyLandmarkHeading(item);
-  if (readWork) markAsRead(item, readWork, settings);
-  if (ignoredWork) markAsIgnored(item, ignoredWork, settings);
+  if (readWork) await markAsRead(item, readWork, settings);
+  if (ignoredWork) await markAsIgnored(item, ignoredWork, settings);
   adjustWorkDisplay(item, settings, readWork, ignoredWork);
 }
 
-function markAsRead(work: HTMLElement, item: ReadWork, settings: SettingsData) {
+async function markAsRead(
+  work: HTMLElement,
+  item: ReadWork,
+  settings: SettingsData
+) {
   work.classList.add(READ_CLASS);
   if (item.rereadWorthy) work.classList.add(REREAD_WORTHY_CLASS);
   if (item.isReading) work.classList.add(STILL_READING_CLASS);
   addText(work, WorkState.READ, item);
   if (!settings.generalSettings.hideSymbols)
-    addSymbols(work, WorkState.READ, item);
+    await addSymbols(work, WorkState.READ, item);
 }
 
-function markAsIgnored(
+async function markAsIgnored(
   work: HTMLElement,
   item: IgnoredWork,
   settings: SettingsData
@@ -114,7 +120,7 @@ function markAsIgnored(
   work.classList.add(IGNORED_CLASS);
   addText(work, WorkState.IGNORED, item);
   if (!settings.generalSettings.hideSymbols)
-    addSymbols(work, WorkState.IGNORED, item);
+    await addSymbols(work, WorkState.IGNORED, item);
 }
 
 function adjustWorkDisplay(

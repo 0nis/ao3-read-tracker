@@ -1,5 +1,8 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
+import { SymbolId, SymbolType } from "../../../enums/symbols";
 import { WorkState } from "../../../enums/works";
+import { symbolsCache } from "../../../services/cache/symbols";
+import { SymbolData, SymbolRecord } from "../../../types/symbols";
 import { IgnoredWork, ReadWork } from "../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import {
@@ -15,11 +18,13 @@ import {
  * @param type What type of information the text is for, like a work marked as read or ignored
  * @param item The item data containing optional additional information
  */
-export function addSymbols(
+export async function addSymbols(
   work: HTMLElement,
   type: WorkState,
   item: ReadWork | IgnoredWork
 ) {
+  const symbols = await symbolsCache.get();
+
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-symbols`,
     getStyles(CLASS_PREFIX)
@@ -32,8 +37,19 @@ export function addSymbols(
   );
 
   if (type === WorkState.READ)
-    renderReadSymbol(work, symbolIndicatorList, item as ReadWork);
-  else renderIgnoredSymbol(symbolIndicatorList, item as IgnoredWork);
+    renderReadSymbol({
+      symbols,
+      work,
+      indicatorList: symbolIndicatorList,
+      item: item as ReadWork,
+    });
+  else
+    renderIgnoredSymbol({
+      symbols,
+      work,
+      indicatorList: symbolIndicatorList,
+      item: item as IgnoredWork,
+    });
 }
 
 /**
@@ -47,24 +63,37 @@ export function removeSymbols(work: HTMLElement) {
   elementsToRemove.forEach((el) => el.remove());
 }
 
-function renderReadSymbol(
-  work: HTMLElement,
-  indicatorList: HTMLElement,
-  item: ReadWork
-) {
+interface RenderParams {
+  symbols: SymbolData;
+  work: HTMLElement;
+  indicatorList: HTMLElement;
+}
+
+function renderReadSymbol({
+  symbols,
+  work,
+  indicatorList,
+  item,
+}: RenderParams & { item: ReadWork }) {
   if (item.isReading) {
-    addListItemToIndicator(indicatorList, "📖", "Still reading");
-  } else addListItemToIndicator(indicatorList, "✅", "Marked as read");
+    indicatorList.appendChild(createSymbolElement(symbols[SymbolId.READING]));
+  } else {
+    indicatorList.appendChild(createSymbolElement(symbols[SymbolId.READ]));
+  }
 
   if (item.rereadWorthy) {
-    addListItemToIndicator(indicatorList, "🔁", "Marked as re-read worthy");
+    indicatorList.appendChild(
+      createSymbolElement(symbols[SymbolId.REREAD_WORTHY])
+    );
   }
 
   if (item.count) {
-    addListItemToIndicator(
-      indicatorList,
-      `📚x${item.count}`,
-      `Read ${item.count} ${item.count === 1 ? "time" : "times"}`
+    indicatorList.appendChild(
+      createSymbolElement(
+        symbols[SymbolId.READ_COUNT],
+        `Read ${item.count} ${item.count === 1 ? "time" : "times"}`,
+        `x${item.count}`
+      )
     );
   }
 
@@ -73,39 +102,54 @@ function renderReadSymbol(
     item.lastReadChapter &&
     item.lastReadChapter < (getLatestChapterFromWorkListing(work) || 0)
   ) {
-    addListItemToIndicator(
-      indicatorList,
-      "‼️",
-      `New chapters available! (last read: chapter ${item.lastReadChapter})`
+    indicatorList.appendChild(
+      createSymbolElement(
+        symbols[SymbolId.NEW_CHAPTERS_AVAILABLE],
+        `New chapters available! (last read: chapter ${item.lastReadChapter})`
+      )
     );
   }
 }
 
-function renderIgnoredSymbol(indicatorList: HTMLElement, item: IgnoredWork) {
-  addListItemToIndicator(indicatorList, "🚫", "Marked as ignored");
+function renderIgnoredSymbol({
+  symbols,
+  indicatorList,
+}: RenderParams & { item: IgnoredWork }) {
+  indicatorList.appendChild(createSymbolElement(symbols[SymbolId.IGNORED]));
 }
 
-function addListItemToIndicator(
-  indicatorList: HTMLElement,
-  text: string,
-  label: string
-) {
-  const listItem = el(
+function createSymbolElement(
+  symbol: SymbolRecord,
+  customLabel?: string,
+  suffix?: string
+): HTMLElement {
+  const label = customLabel || symbol.label;
+
+  let contentEl: HTMLElement;
+
+  if (symbol.type === SymbolType.IMAGE && symbol.imgUrl) {
+    const children = suffix
+      ? [
+          el("img", { attrs: { src: symbol.imgUrl, "aria-hidden": "true" } }),
+          el("span", { textContent: suffix }),
+        ]
+      : [el("img", { attrs: { src: symbol.imgUrl, "aria-hidden": "true" } })];
+
+    contentEl = el("div", {}, children);
+  } else {
+    contentEl = el("span", {
+      textContent: (symbol.text || label) + (suffix ?? ""),
+      attrs: { "aria-hidden": "true", role: "img" },
+    });
+  }
+
+  return el(
     "li",
     {
-      attrs: {
-        "aria-label": label,
-        title: label,
-      },
+      attrs: { "aria-label": label, title: label },
     },
-    [
-      el("span", {
-        textContent: text,
-        attrs: { "aria-hidden": "true", role: "img" },
-      }),
-    ]
+    [contentEl]
   );
-  indicatorList.appendChild(listItem);
 }
 
 function getStyles(prefix: string): string {

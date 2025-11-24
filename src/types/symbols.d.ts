@@ -4,6 +4,8 @@ export interface SymbolRecord {
   id: string;
   type: SymbolType;
   label: string;
-  symbol?: string;
-  imageUrl?: string;
+  text?: string;
+  imgUrl?: string;
 }
+
+export type SymbolData = Record<SymbolId, SymbolRecord>;
