@@ -44,6 +44,7 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__content {
       flex: 1;
+      width: 100%;
     }
 
     .${prefix}__section {
@@ -54,14 +55,6 @@ export function getStyles(prefix: string): string {
     .${prefix}__section__title {
       margin-top: 0;
       margin-bottom: 12px;
-    }
-
-    .${prefix}__settings__actions {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin-top: 12px;
-      gap: 8px;
     }
 
     .${prefix}__header {
