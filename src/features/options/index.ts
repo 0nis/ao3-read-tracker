@@ -31,7 +31,7 @@ export async function addOptionsButtonToNav(url: string): Promise<void> {
   const button = el(
     "a",
     {
-      href: "#",
+      href: url,
     },
     [symbolElement, el("span", { textContent: ` ${extensionName} Options` })]
   );
