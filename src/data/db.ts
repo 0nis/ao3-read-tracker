@@ -5,15 +5,16 @@ import {
   GeneralSettings,
 } from "../types/settings";
 import { ReadWork, IgnoredWork } from "../types/works";
+import { DATABASE_NAME, DATABASE_VERSION } from "../constants/global";
 import {
-  DATABASE_NAME,
-  DATABASE_VERSION,
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../constants/settings";
 import { showNotification } from "../utils/ui/dialogs";
 import { createExtensionMsg } from "../utils/extension/console";
+import { SymbolRecord } from "../types/symbols";
+import { DEFAULT_SYMBOL_RECORDS } from "../constants/symbols";
 
 export class Ao3MarkAsReadDb extends Dexie {
   readWorks!: Table<ReadWork>;
@@ -21,6 +22,7 @@ export class Ao3MarkAsReadDb extends Dexie {
   readSettings!: Table<ReadSettings>;
   ignoreSettings!: Table<IgnoreSettings>;
   generalSettings!: Table<GeneralSettings>;
+  symbolRecords!: Table<SymbolRecord>;
 
   constructor() {
     super(DATABASE_NAME);
@@ -31,12 +33,14 @@ export class Ao3MarkAsReadDb extends Dexie {
       readSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",
+      symbolRecords: "id",
     });
 
     this.on("populate", async () => {
       await this.readSettings.put(DEFAULT_READ_SETTINGS);
       await this.ignoreSettings.put(DEFAULT_IGNORE_SETTINGS);
       await this.generalSettings.put(DEFAULT_GENERAL_SETTINGS);
+      await this.symbolRecords.bulkPut(DEFAULT_SYMBOL_RECORDS);
     });
 
     this.on("blocked", () => {
