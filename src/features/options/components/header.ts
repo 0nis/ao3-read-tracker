@@ -43,7 +43,7 @@ export function buildHeader(extensionName: string) {
     { className: `${PREFIX}__header`, attrs: { role: "banner" } },
     [
       el("h2", { className: `${PREFIX}__header__title` }, [
-        `${extensionName} Settings`,
+        `${extensionName} Extension Options`,
       ]),
       el("div", { className: `actions ${PREFIX}__header__actions` }, [
         exportBtn,

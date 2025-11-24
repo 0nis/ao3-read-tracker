@@ -1,11 +1,13 @@
 import { PREFIX } from "../../..";
-import { SymbolId, SymbolType } from "../../../../../enums/symbols";
-import { symbolsCache } from "../../../../../services/cache/symbols";
+import { SymbolId } from "../../../../../enums/symbols";
 import { StorageResult } from "../../../../../types/results";
 import { handleStorageWrite } from "../../../../../utils/storage/handlers";
 import { showConfirm } from "../../../../../utils/ui/dialogs";
-import { el, injectStyles } from "../../../../../utils/ui/dom";
-import { createFlashNotice } from "../../../../../utils/ui/form";
+import {
+  el,
+  getSymbolElement,
+  injectStyles,
+} from "../../../../../utils/ui/dom";
 import { createSection, SectionConfig } from "../helpers";
 import { getStyles } from "./style";
 
@@ -207,22 +209,4 @@ async function createLinkBtn(href: string): Promise<HTMLAnchorElement> {
     [innerEl]
   ) as HTMLAnchorElement;
   return linkBtn;
-}
-
-export async function getSymbolElement(
-  id: SymbolId,
-  fallback: string = "❔"
-): Promise<HTMLElement | string> {
-  const symbols = await symbolsCache.get();
-  const symbol = symbols[id];
-  if (!symbol) return fallback;
-
-  if (symbol.type === SymbolType.IMAGE && symbol.imgUrl) {
-    return el("img", {
-      className: `${PREFIX}__button__symbol`,
-      src: symbol.imgUrl,
-      alt: symbol.label,
-    });
-  }
-  return symbol.text || fallback;
 }

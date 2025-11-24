@@ -1,3 +1,7 @@
+import { SymbolId, SymbolType } from "../../enums/symbols";
+import { PREFIX } from "../../features/options";
+import { symbolsCache } from "../../services/cache/symbols";
+
 /**
  * Helper to create new elements quickly
  *
@@ -92,3 +96,23 @@ export const getElement = (
   parent: HTMLElement,
   selector: string
 ): HTMLElement | null => parent.querySelector(selector);
+
+/**
+ * Gets a symbol element (image or text) by its ID.
+ */
+export async function getSymbolElement(
+  id: SymbolId,
+  fallback: string = "❔"
+): Promise<HTMLElement> {
+  const symbols = await symbolsCache.get();
+  const symbol = symbols[id];
+  if (!symbol) return el("span", { textContent: fallback });
+
+  if (symbol.type === SymbolType.IMAGE && symbol.imgUrl) {
+    return el("img", {
+      src: symbol.imgUrl,
+      alt: symbol.label,
+    });
+  }
+  return el("span", { textContent: symbol.text || fallback });
+}

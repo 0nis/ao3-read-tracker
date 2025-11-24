@@ -1,20 +1,23 @@
-import { CLASS_PREFIX } from "../constants/classes";
-import { Listing } from "../features/listing";
-import { Settings } from "../features/settings";
-import { Work } from "../features/work";
-import { injectStyles } from "../utils/ui/dom";
 import { Router } from "./router";
 import { getGlobalStyles } from "./style";
 
+import { Listing } from "../features/listing";
+import { Options } from "../features/options";
+import { Work } from "../features/work";
+
+import { injectStyles } from "../utils/ui/dom";
+
+import { CLASS_PREFIX } from "../constants/classes";
+
 export const App = {
-  init() {
+  async init() {
     injectStyles(
       `${CLASS_PREFIX}__styles--global`,
       getGlobalStyles(CLASS_PREFIX)
     );
-    Settings.init();
+
+    await Promise.all([Options.init(), Listing.init(), Work.init()]);
+
     Router.setup();
-    Listing.init();
-    Work.init();
   },
 };

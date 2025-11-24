@@ -7,6 +7,7 @@ export enum SymbolId {
   NEW_CHAPTERS_AVAILABLE = "new_chapters_available",
   LINK = "link",
   DELETE = "delete",
+  EXTENSION = "extension",
 }
 
 export enum SymbolType {

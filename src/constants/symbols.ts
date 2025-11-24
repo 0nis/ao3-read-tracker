@@ -50,4 +50,10 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     label: "Delete",
     text: "🗑︎",
   },
+  {
+    id: SymbolId.EXTENSION,
+    type: SymbolType.TEXT,
+    label: "Extension",
+    text: "🧩",
+  },
 ];

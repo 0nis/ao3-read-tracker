@@ -139,7 +139,7 @@ function adjustWorkDisplay(
   displayFn(work);
 }
 
-const extensionName = getManifest().data?.name || "Mark as Read";
+const extensionName = getManifest().data?.name || "Read Tracker";
 function createOrModifyLandmarkHeading(work: HTMLElement) {
   ensureChild(work, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
     className: "landmark heading",

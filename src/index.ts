@@ -5,7 +5,7 @@ import { reportExtensionFailure } from "./utils/ui/dialogs";
 (async function main() {
   try {
     await db.open();
-    App.init();
+    await App.init();
   } catch (err) {
     reportExtensionFailure(
       "⚠️ Extension %name% (v%version%) failed to start! ⚠️",

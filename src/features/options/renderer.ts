@@ -21,7 +21,8 @@ export type SectionElements = {
 };
 
 export async function render(): Promise<void> {
-  const extensionName = getManifest().data?.name || "Mark as Read";
+  const extensionName =
+    getManifest().data?.name?.replace(/^AO3\s+/i, "") || "Read Tracker";
   const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
   if (!main) return;
 
