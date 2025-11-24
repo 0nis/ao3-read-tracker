@@ -6,6 +6,7 @@ import {
   ReadSettingsData,
   IgnoreSettingsData,
   GeneralSettingsData,
+  SymbolRecordsData,
 } from "../data/data";
 import { createSafeService, safeExecute } from "../utils/storage/safe";
 
@@ -26,6 +27,10 @@ export const StorageService = {
   generalSettings: createSafeService(
     "StorageService.generalSettings",
     GeneralSettingsData
+  ),
+  symbolRecords: createSafeService(
+    "StorageService.symbolRecords",
+    SymbolRecordsData
   ),
 
   async getByIds(ids: string[]): Promise<StorageResult<WorkData>> {

@@ -1,7 +1,7 @@
 import { SymbolId, SymbolType } from "../enums/symbols";
 
 export interface SymbolRecord {
-  id: SymbolId;
+  id: string;
   type: SymbolType;
   label: string;
   symbol?: string;

@@ -2,7 +2,7 @@ import { PaginatedResult } from "../types/results";
 import { db } from "./db";
 import { Table } from "dexie";
 
-export class BaseData<T extends { id: string }> {
+export class WorksData<T extends { id: string }> {
   constructor(private readonly table: Table<T, string>) {}
 
   async get(): Promise<Record<string, T>> {
