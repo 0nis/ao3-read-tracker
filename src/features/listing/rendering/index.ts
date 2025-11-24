@@ -17,7 +17,7 @@ import {
   CLASS_PREFIX,
   STILL_READING_CLASS,
 } from "../../../constants/classes";
-import { WorkState } from "../../../constants/enums";
+import { WorkState } from "../../../enums/works";
 import { SettingsData } from "../../../types/settings";
 import { ReadWork, IgnoredWork } from "../../../types/works";
 import { unhide } from "./hide";

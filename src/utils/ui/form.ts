@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import { MessageType } from "../../constants/enums";
+import { MessageType } from "../../enums/ui";
 import { el } from "./dom";
 
 /**

@@ -1,3 +1,5 @@
+import { ButtonPlacement, DisplayMode } from "../enums/settings";
+
 export interface ReadSettings {
   id: string;
   simpleModeEnabled: boolean;

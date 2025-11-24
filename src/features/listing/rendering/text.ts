@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { WorkState } from "../../../constants/enums";
+import { WorkState } from "../../../enums/works";
 import type { ReadWork, IgnoredWork } from "../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";

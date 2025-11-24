@@ -7,7 +7,8 @@ import {
 import type { SettingsData } from "../../types/settings";
 import { ReadWork, IgnoredWork, WorkData } from "../../types/works";
 import { createExtensionMsg } from "../../utils/extension/console";
-import { CollapseMode, DisplayMode } from "../../constants/enums";
+import { DisplayMode } from "../../enums/settings";
+import { CollapseMode } from "../../enums/ui";
 import { collapse } from "./rendering/collapse";
 import { hide } from "./rendering/hide";
 

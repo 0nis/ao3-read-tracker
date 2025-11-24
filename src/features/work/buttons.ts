@@ -1,10 +1,8 @@
 import { getIdFromUrl } from "../../utils/ao3";
 import { StorageService } from "../../services/storage";
-import {
-  ButtonAction,
-  ButtonPlacement,
-  WorkState,
-} from "../../constants/enums";
+import { ButtonPlacement } from "../../enums/settings";
+import { ButtonAction } from "../../enums/ui";
+import { WorkState } from "../../enums/works";
 import {
   handleEditIgnoredWorkInfo,
   handleEditReadWorkInfo,

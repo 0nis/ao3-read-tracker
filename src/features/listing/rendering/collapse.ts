@@ -1,6 +1,5 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { CollapseMode } from "../../../constants/enums";
-import { getWorkById } from "../../../utils/ao3";
+import { CollapseMode } from "../../../enums/ui";
 import { el, getElement, injectStyles } from "../../../utils/ui/dom";
 import { getWork } from "../handlers";
 

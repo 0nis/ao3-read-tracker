@@ -1,4 +1,5 @@
-import { ButtonPlacement, DisplayMode, SettingsType } from "./enums";
+import { ButtonPlacement, DisplayMode } from "../enums/settings";
+import { SettingsType } from "../enums/settings";
 import {
   GeneralSettings,
   IgnoreSettings,

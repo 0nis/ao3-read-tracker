@@ -1,5 +1,5 @@
 import { PREFIX } from "../../..";
-import { ButtonPlacement } from "../../../../../constants/enums";
+import { ButtonPlacement } from "../../../../../enums/settings";
 import { el } from "../../../../../utils/ui/dom";
 import { buildSelectFromEnum } from "../../../../../utils/ui/form";
 import { SectionId } from "../../../sections";

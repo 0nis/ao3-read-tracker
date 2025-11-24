@@ -1,5 +1,5 @@
 import { PREFIX } from "../../..";
-import { DisplayMode } from "../../../../../constants/enums";
+import { DisplayMode } from "../../../../../enums/settings";
 import { el } from "../../../../../utils/ui/dom";
 import { buildSelectFromEnum } from "../../../../../utils/ui/form";
 import { SectionId } from "../../../sections";

@@ -7,7 +7,7 @@ import {
 import { ReadWork, IgnoredWork } from "../types/works";
 import { BaseData } from "./base";
 import { SettingsData } from "./settings";
-import { SettingsType } from "../constants/enums";
+import { SettingsType } from "../enums/settings";
 
 export const ReadWorksData = new BaseData<ReadWork>(db.readWorks);
 export const IgnoredWorksData = new BaseData<IgnoredWork>(db.ignoredWorks);
