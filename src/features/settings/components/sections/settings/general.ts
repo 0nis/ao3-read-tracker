@@ -11,8 +11,7 @@ export function buildGeneralSettingsSection(): HTMLElement {
     label: "Hide symbols?",
     input: el("input", { type: "checkbox" }),
     dataField: "hideSymbols",
-    description:
-      "Toggles the emojis next to the title of the fics in the Works list.",
+    description: "Toggles the emojis next to the title of the works in lists.",
   });
 
   const buttonPlacementField = createField({
@@ -30,7 +29,7 @@ export function buildGeneralSettingsSection(): HTMLElement {
     input: el("input", { type: "checkbox" }),
     dataField: "replaceMarkForLaterText",
     description:
-      "Whether to replace AO3's default 'Mark as Read' button (the one that appears when you mark a fic for later) with custom text.",
+      "Whether to replace AO3's default 'Mark as Read' button (the one that appears when you mark a work for later) with custom text.",
   });
 
   const replacementLabelField = createField({

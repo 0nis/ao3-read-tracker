@@ -1,5 +1,5 @@
 import { PREFIX } from "../../..";
-import { StorageResult } from "../../../../../types/storage";
+import { StorageResult } from "../../../../../types/results";
 import { handleStorageWrite } from "../../../../../utils/storage/handlers";
 import { showConfirm } from "../../../../../utils/ui/dialogs";
 import { el, injectStyles } from "../../../../../utils/ui/dom";

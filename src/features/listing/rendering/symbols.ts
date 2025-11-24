@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { WorkState } from "../../../constants/enums";
-import { IgnoredFic, ReadFic } from "../../../types/storage";
+import { IgnoredWork, ReadWork } from "../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import {
   el,
@@ -11,14 +11,14 @@ import {
 
 /**
  * Adds symbols to a work element showing information like read/ignored status, reread worthiness, and read count.
- * @param work The fic to modify
- * @param type What type of information the text is for, like a fic marked as read or ignored
+ * @param work The work to modify
+ * @param type What type of information the text is for, like a work marked as read or ignored
  * @param item The item data containing optional additional information
  */
 export function addSymbols(
   work: HTMLElement,
   type: WorkState,
-  item: ReadFic | IgnoredFic
+  item: ReadWork | IgnoredWork
 ) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-symbols`,
@@ -32,13 +32,13 @@ export function addSymbols(
   );
 
   if (type === WorkState.READ)
-    renderReadSymbol(work, symbolIndicatorList, item as ReadFic);
-  else renderIgnoredSymbol(symbolIndicatorList, item as IgnoredFic);
+    renderReadSymbol(work, symbolIndicatorList, item as ReadWork);
+  else renderIgnoredSymbol(symbolIndicatorList, item as IgnoredWork);
 }
 
 /**
  * Removes any symbols added by this module from a work element.
- * @param work The fic to modify
+ * @param work The work to modify
  */
 export function removeSymbols(work: HTMLElement) {
   const elementsToRemove = [
@@ -50,7 +50,7 @@ export function removeSymbols(work: HTMLElement) {
 function renderReadSymbol(
   work: HTMLElement,
   indicatorList: HTMLElement,
-  item: ReadFic
+  item: ReadWork
 ) {
   if (item.isReading) {
     addListItemToIndicator(indicatorList, "📖", "Still reading");
@@ -81,7 +81,7 @@ function renderReadSymbol(
   }
 }
 
-function renderIgnoredSymbol(indicatorList: HTMLElement, item: IgnoredFic) {
+function renderIgnoredSymbol(indicatorList: HTMLElement, item: IgnoredWork) {
   addListItemToIndicator(indicatorList, "🚫", "Marked as ignored");
 }
 

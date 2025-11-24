@@ -1,6 +1,6 @@
 import { BaseData } from "../../data/base";
 import { SettingsData } from "../../data/settings";
-import { StorageResult } from "../../types/storage";
+import { StorageResult } from "../../types/results";
 import { createExtensionMsg } from "../extension/console";
 
 /**

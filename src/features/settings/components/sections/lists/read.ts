@@ -1,11 +1,8 @@
 import { SectionId } from "../../../sections";
 import { createListRow, createListSection, ListSectionElements } from "./base";
 import { listSectionRegistry } from "./registry";
-import {
-  ReadFic,
-  PaginatedResult,
-  StorageResult,
-} from "../../../../../types/storage";
+import { PaginatedResult, StorageResult } from "../../../../../types/results";
+import { ReadWork } from "../../../../../types/works";
 import { el } from "../../../../../utils/ui/dom";
 import { getWorkLinkFromId } from "../../../../../utils/ao3";
 import { PREFIX } from "../../..";
@@ -15,14 +12,14 @@ import { getFormattedDate } from "../../../../../utils/date";
  * TEMPORARY: Creates a mock paginator for testing without DB.
  */
 function makeMockPaginator(total = 200) {
-  const all: ReadFic[] = Array.from({ length: total }).map((_, i) => ({
-    id: `fic-${i + 1}`,
-    title: `Fic number ${i + 1}`,
+  const all: ReadWork[] = Array.from({ length: total }).map((_, i) => ({
+    id: `work-${i + 1}`,
+    title: `Work number ${i + 1}`,
     createdAt: Date.now() - i * 1000,
     modifiedAt: Date.now() - i * 1000,
   }));
 
-  return (page: number, pageSize: number): PaginatedResult<ReadFic> => {
+  return (page: number, pageSize: number): PaginatedResult<ReadWork> => {
     const start = page * pageSize;
     const items = all.slice(start, start + pageSize);
     const totalPages = Math.ceil(total / pageSize);

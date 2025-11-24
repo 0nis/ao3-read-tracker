@@ -1,26 +1,6 @@
 import { ButtonPlacement, DisplayMode } from "../constants/enums";
 import { CollapseMode } from "../constants/settings";
 
-export interface ReadFic {
-  id: string;
-  createdAt: number;
-  modifiedAt: number;
-  title?: string;
-  rereadWorthy?: boolean;
-  count?: number;
-  notes?: string;
-  isReading?: boolean;
-  lastReadChapter?: number;
-}
-
-export interface IgnoredFic {
-  id: string;
-  createdAt: number;
-  modifiedAt: number;
-  title?: string;
-  reason?: string;
-}
-
 export interface ReadSettings {
   id: string;
   simpleModeEnabled: boolean;
@@ -42,11 +22,6 @@ export interface GeneralSettings {
   replaceMarkForLaterText: boolean;
   markForLaterReplacementLabel: string;
 }
-
-export type FicData = {
-  readFics: Record<string, ReadFic>;
-  ignoredFics: Record<string, IgnoredFic>;
-};
 
 export type SettingsData = {
   readSettings: ReadSettings;

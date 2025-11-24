@@ -2,8 +2,8 @@ import { Router } from "../../../app/router";
 import { el } from "../../../utils/ui/dom";
 import { createExtensionMsg } from "../../../utils/extension/console";
 
-export interface FicFormConfig<T> {
-  /** Unique identifier for the form, not the fic ID! */
+export interface WorkFormConfig<T> {
+  /** Unique identifier for the form, not the work ID! */
   id: string;
   title: string;
   exists: boolean;
@@ -14,8 +14,8 @@ export interface FicFormConfig<T> {
   onClose?: () => void;
 }
 
-export async function createFicForm<T>(
-  config: FicFormConfig<T>
+export async function createWorkForm<T>(
+  config: WorkFormConfig<T>
 ): Promise<HTMLFormElement> {
   const {
     id,

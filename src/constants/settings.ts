@@ -3,7 +3,7 @@ import {
   GeneralSettings,
   IgnoreSettings,
   ReadSettings,
-} from "../types/storage";
+} from "../types/settings";
 
 export const VERSION: number = 1;
 

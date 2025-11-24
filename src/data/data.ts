@@ -1,17 +1,16 @@
 import { db } from "./db";
 import {
   GeneralSettings,
-  IgnoredFic,
   IgnoreSettings,
-  ReadFic,
   ReadSettings,
-} from "../types/storage";
+} from "../types/settings";
+import { ReadWork, IgnoredWork } from "../types/works";
 import { BaseData } from "./base";
 import { SettingsData } from "./settings";
 import { SettingsType } from "../constants/enums";
 
-export const ReadFicsData = new BaseData<ReadFic>(db.readFics);
-export const IgnoredFicsData = new BaseData<IgnoredFic>(db.ignoredFics);
+export const ReadWorksData = new BaseData<ReadWork>(db.readWorks);
+export const IgnoredWorksData = new BaseData<IgnoredWork>(db.ignoredWorks);
 
 export const ReadSettingsData = new SettingsData<ReadSettings>(
   db.readSettings,

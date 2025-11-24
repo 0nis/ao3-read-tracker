@@ -1,3 +1,8 @@
+type Route = {
+  path: string;
+  render: () => void;
+};
+
 export const Router = {
   routes: [] as Route[],
 

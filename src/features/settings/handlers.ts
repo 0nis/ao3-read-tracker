@@ -7,7 +7,7 @@ import { handleStorageWrite } from "../../utils/storage/handlers";
 import { handleGetAllSettings } from "../../utils/storage/settings";
 import { extractSectionValues, populateSection } from "../../utils/ui/form";
 
-import { StorageResult } from "../../types/storage";
+import { StorageResult } from "../../types/results";
 
 import { PREFIX } from ".";
 import { SectionId, SETTINGS_LOAD_MAP, SETTINGS_SAVE_MAP } from "./sections";

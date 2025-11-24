@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { WorkState } from "../../../constants/enums";
-import type { ReadFic, IgnoredFic } from "../../../types/storage";
+import type { ReadWork, IgnoredWork } from "../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
 import {
@@ -12,14 +12,14 @@ import {
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
- * @param work The fic to modify
- * @param type What type of information the text is for, like a fic marked as read or ignored
+ * @param work The work to modify
+ * @param type What type of information the text is for, like a work marked as read or ignored
  * @param item The item data containing optional additional information
  */
 export function addText(
   work: HTMLElement,
   type: WorkState,
-  item: ReadFic | IgnoredFic
+  item: ReadWork | IgnoredWork
 ) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
@@ -33,13 +33,13 @@ export function addText(
   );
 
   if (type === WorkState.READ)
-    renderReadInformation(work, indicatorList, item as ReadFic);
-  else renderIgnoredInformation(work, indicatorList, item as IgnoredFic);
+    renderReadInformation(work, indicatorList, item as ReadWork);
+  else renderIgnoredInformation(work, indicatorList, item as IgnoredWork);
 }
 
 /**
  * Removes any text added by this module from a work element.
- * @param work The fic to modify
+ * @param work The work to modify
  */
 export function removeText(work: HTMLElement) {
   const elementsToRemove = [
@@ -52,7 +52,7 @@ export function removeText(work: HTMLElement) {
 function renderReadInformation(
   work: HTMLElement,
   indicatorList: HTMLElement,
-  item: ReadFic
+  item: ReadWork
 ) {
   if (item.notes)
     addNotesText(work, item.notes, `${CLASS_PREFIX}__notes--read`);
@@ -68,7 +68,7 @@ function renderReadInformation(
 function renderIgnoredInformation(
   work: HTMLElement,
   indicatorList: HTMLElement,
-  item: IgnoredFic
+  item: IgnoredWork
 ) {
   indicatorList.appendChild(
     createIndicator(WorkState.IGNORED, item.modifiedAt)

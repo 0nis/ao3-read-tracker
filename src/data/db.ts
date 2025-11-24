@@ -1,11 +1,10 @@
 import Dexie, { Table } from "dexie";
 import {
-  ReadFic,
-  IgnoredFic,
   ReadSettings,
   IgnoreSettings,
   GeneralSettings,
-} from "../types/storage";
+} from "../types/settings";
+import { ReadWork, IgnoredWork } from "../types/works";
 import {
   DATABASE_NAME,
   DATABASE_VERSION,
@@ -17,8 +16,8 @@ import { showNotification } from "../utils/ui/dialogs";
 import { createExtensionMsg } from "../utils/extension/console";
 
 export class Ao3MarkAsReadDb extends Dexie {
-  readFics!: Table<ReadFic>;
-  ignoredFics!: Table<IgnoredFic>;
+  readWorks!: Table<ReadWork>;
+  ignoredWorks!: Table<IgnoredWork>;
   readSettings!: Table<ReadSettings>;
   ignoreSettings!: Table<IgnoreSettings>;
   generalSettings!: Table<GeneralSettings>;
@@ -27,8 +26,8 @@ export class Ao3MarkAsReadDb extends Dexie {
     super(DATABASE_NAME);
 
     this.version(DATABASE_VERSION).stores({
-      readFics: "id, modifiedAt",
-      ignoredFics: "id, modifiedAt",
+      readWorks: "id, modifiedAt",
+      ignoredWorks: "id, modifiedAt",
       readSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",

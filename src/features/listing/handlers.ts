@@ -4,20 +4,16 @@ import {
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import type {
-  FicData,
-  IgnoredFic,
-  ReadFic,
-  SettingsData,
-} from "../../types/storage";
+import type { SettingsData } from "../../types/settings";
+import { ReadWork, IgnoredWork, WorkData } from "../../types/works";
 import { createExtensionMsg } from "../../utils/extension/console";
 import { CollapseMode, DisplayMode } from "../../constants/enums";
 import { collapse } from "./rendering/collapse";
 import { hide } from "./rendering/hide";
 
-export async function getFicStatusData(): Promise<{
+export async function getWorkStatusData(): Promise<{
   worksList: HTMLElement | null;
-  data: FicData | undefined | null;
+  data: WorkData | undefined | null;
 }> {
   const worksList = getWorksListFromListing();
   if (!worksList) return { worksList: null, data: null };
@@ -27,16 +23,16 @@ export async function getFicStatusData(): Promise<{
   );
   if (items.length === 0) return { worksList, data: null };
 
-  const ficIds: string[] = [];
+  const workIds: string[] = [];
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
-    if (id) ficIds.push(id);
+    if (id) workIds.push(id);
   }
 
-  const storedDataResult = await StorageService.getByIds(ficIds);
+  const storedDataResult = await StorageService.getByIds(workIds);
   if (!storedDataResult.success) {
     console.error(
-      createExtensionMsg("Failed to retrieve stored fic data:"),
+      createExtensionMsg("Failed to retrieve stored work data:"),
       storedDataResult.error
     );
     return { worksList, data: null };
@@ -53,8 +49,8 @@ type DisplayRule = {
 
 export function collectDisplayRules(
   settings: SettingsData,
-  read?: ReadFic,
-  ignored?: IgnoredFic
+  read?: ReadWork,
+  ignored?: IgnoredWork
 ): DisplayRule[] {
   return [
     {
