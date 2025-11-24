@@ -60,3 +60,7 @@ export function getWorksListFromListing(): HTMLElement | null {
   if (!main?.classList.contains("works-index")) return null;
   return main.querySelector("ol.work.index.group");
 }
+
+export function getWorkLinkFromId(id: string): string {
+  return `https://archiveofourown.org/works/${id}`;
+}

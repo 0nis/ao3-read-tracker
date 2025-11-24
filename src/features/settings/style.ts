@@ -56,44 +56,7 @@ export function getStyles(prefix: string): string {
       margin-bottom: 12px;
     }
 
-    .${prefix}__field__wrapper {
-      margin: 1em 0;
-    }
-
-    .${prefix}__field {
-      padding: 8px 0;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #eee;
-    }
-
-    .${prefix}__field__label__wrapper {
-      max-width: 70%;
-    }
-
-    .${prefix}__field label {
-      font-weight: 600;
-    }
-
-    .${prefix}__field input, .${prefix}__field select, .${prefix}__field textarea {
-      width: auto !important;
-    }
-
-    .${prefix}__field select {
-      font: 100% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
-      border: 1px solid #bbb;
-      box-shadow: inset 0 1px 2px #ccc;
-    }
-
-    .${prefix}__field__description {
-      color: #666;
-      font-size: 0.95em;
-      margin-top: 6px;
-    }
-
-    .${prefix}__actions {
+    .${prefix}__settings__actions {
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -137,16 +100,6 @@ export function getStyles(prefix: string): string {
       }
 
       .${prefix}__header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0;
-      }
-
-      .${prefix}__field__label__wrapper {
-        max-width: 100%;
-      }
-
-      .${prefix}__field {
         flex-direction: column;
         align-items: flex-start;
         gap: 0;

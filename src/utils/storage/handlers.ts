@@ -73,8 +73,10 @@ export async function handleStorageWrite<T>(
 
     if (result.success) {
       onSuccess(successMsg);
+      return Promise.resolve();
     } else {
       reportExtensionFailure(errorMsg, result.error);
+      return Promise.reject();
     }
   } finally {
     if (loadingEl) {
