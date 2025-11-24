@@ -5,7 +5,7 @@ import {
   ReadSettings,
 } from "../types/settings";
 import { ReadWork, IgnoredWork } from "../types/works";
-import { BaseData } from "./base";
+import { BaseData } from "./works";
 import { SettingsData } from "./settings";
 import { SettingsType } from "../enums/settings";
 

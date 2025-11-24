@@ -1,4 +1,4 @@
-import { BaseData } from "../../data/base";
+import { BaseData } from "../../data/works";
 import { SettingsData } from "../../data/settings";
 import { StorageResult } from "../../types/results";
 import { createExtensionMsg } from "../extension/console";
