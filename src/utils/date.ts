@@ -17,3 +17,15 @@ export const getFormattedTime = (timestamp: number): string => {
   const date = new Date(timestamp);
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 };
+
+/**
+ * Formats a timestamp to a full localized date string (e.g., June 15, 2023)
+ */
+export const getFormattedDateAsFullText = (timestamp: number): string => {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};

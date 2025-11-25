@@ -70,6 +70,11 @@ export function getStyles(prefix: string): string {
       gap: 8px;
     }
 
+    .${prefix}__button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .${prefix}__button--danger {
       color: #900 !important;
       border-color: #900 !important;

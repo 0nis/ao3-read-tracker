@@ -1,12 +1,18 @@
 import { SectionId } from "../../../sections";
-import { createListRow, createListSection, ListSectionElements } from "./base";
-import { listSectionRegistry } from "./registry";
-import { PaginatedResult, StorageResult } from "../../../../../types/results";
+import { createListRow, createPaginatedListSection } from "./base";
+import {
+  PaginatedParams,
+  PaginatedResult,
+  StorageResult,
+} from "../../../../../types/results";
 import { ReadWork } from "../../../../../types/works";
 import { el } from "../../../../../utils/ui/dom";
 import { getWorkLinkFromId } from "../../../../../utils/ao3";
 import { PREFIX } from "../../..";
-import { getFormattedDate } from "../../../../../utils/date";
+import {
+  getFormattedDate,
+  getFormattedDateAsFullText,
+} from "../../../../../utils/date";
 
 /**
  * TEMPORARY: Creates a mock paginator for testing without DB.
@@ -19,106 +25,69 @@ function makeMockPaginator(total = 200) {
     modifiedAt: Date.now() - i * 1000,
   }));
 
-  return (page: number, pageSize: number): PaginatedResult<ReadWork> => {
-    const start = page * pageSize;
-    const items = all.slice(start, start + pageSize);
-    const totalPages = Math.ceil(total / pageSize);
+  return (params: PaginatedParams): PaginatedResult<ReadWork> => {
+    const start = params.page * params.pageSize;
+    const items = all.slice(start, start + params.pageSize);
+    const totalPages = Math.ceil(total / params.pageSize);
 
     return {
       items,
-      page,
-      pageSize,
+      page: params.page,
+      pageSize: params.pageSize,
       totalItems: total,
       totalPages,
-      hasPrev: page > 0,
-      hasNext: page < totalPages - 1,
+      hasPrev: params.page > 0,
+      hasNext: params.page < totalPages - 1,
     };
   };
 }
 
 export async function buildReadListSection(): Promise<HTMLElement> {
-  const elements: ListSectionElements = createListSection({
+  const renderItem = async (item: ReadWork): Promise<HTMLElement> => {
+    const link = getWorkLinkFromId(item.id);
+    const innerElement = el(
+      "div",
+      { className: `${PREFIX}__list__row__content` },
+      [
+        el(
+          "span",
+          { className: `${PREFIX}__list__row__date` },
+          getFormattedDate(item.modifiedAt)
+        ),
+        el(
+          "div",
+          { className: `${PREFIX}__list__row__title` },
+          item.title || "untitled"
+        ),
+      ]
+    );
+
+    return await createListRow({
+      id: item.id,
+      innerElement,
+      srAccessibleLabel: `${
+        item.title || "Untitled"
+      } - Red ${getFormattedDateAsFullText(item.modifiedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
+      srAccessibleContentSummary: `test summary`,
+      actions: {
+        link: { href: link },
+        delete: {
+          onDelete: (): Promise<StorageResult<void>> => {
+            console.log(`Delete item with id: ${item.id}`);
+            return Promise.resolve({ success: true });
+          },
+          confirmationText: `Are you sure you want to remove "${item.title}" from your read list?`,
+          successText: `"${item.title}" has been removed from your read list.`,
+        },
+      },
+    });
+  };
+
+  return createPaginatedListSection({
     id: SectionId.READ_LIST,
     title: "Read Works List",
+    paginator: makeMockPaginator(1000), // TODO: Replace with real paginator
+    renderItem,
+    pageSize: 10,
   });
-
-  listSectionRegistry.set(SectionId.READ_LIST, elements);
-
-  const pageSize = 25;
-  const paginator = makeMockPaginator(1000); // TODO: Replace with real paginator
-  let currentPage = 0;
-
-  async function renderPage() {
-    const result = paginator(currentPage, pageSize);
-    const { items, page, totalPages } = result;
-
-    elements.listContainer.innerHTML = "";
-    items.forEach(async (item) => {
-      const link = getWorkLinkFromId(item.id);
-
-      const innerElement = el(
-        "div",
-        { className: `${PREFIX}__list__row__content` },
-        [
-          el(
-            "span",
-            { className: `${PREFIX}__list__row__date` },
-            getFormattedDate(item.modifiedAt)
-          ),
-          el(
-            "div",
-            { className: `${PREFIX}__list__row__title` },
-            el(
-              "a",
-              {
-                href: link,
-                target: "_blank",
-                rel: "noopener noreferrer",
-              },
-              item.title ?? "(untitled)"
-            )
-          ),
-        ]
-      );
-
-      elements.listContainer.appendChild(
-        await createListRow({
-          id: item.id,
-          innerElement,
-          ariaLabel: item.title ?? "untitled",
-          actions: {
-            link: { href: link },
-            delete: {
-              onDelete: (): Promise<StorageResult<void>> => {
-                console.log(`Delete item with id: ${item.id}`);
-                return Promise.resolve({ success: true });
-              },
-              confirmationText: `Are you sure you want to remove "${item.title}" from your read list?`,
-              successText: `"${item.title}" has been removed from your read list.`,
-            },
-          },
-        })
-      );
-    });
-
-    elements.paginationControls.pageLabel.textContent = `Page ${
-      page + 1
-    } of ${totalPages}`;
-    elements.paginationControls.prevBtn.disabled = !result.hasPrev;
-    elements.paginationControls.nextBtn.disabled = !result.hasNext;
-  }
-
-  elements.paginationControls.prevBtn.addEventListener("click", async () => {
-    if (currentPage > 0) currentPage--;
-    await renderPage();
-  });
-
-  elements.paginationControls.nextBtn.addEventListener("click", async () => {
-    currentPage++;
-    await renderPage();
-  });
-
-  await renderPage();
-
-  return elements.section;
 }

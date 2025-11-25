@@ -1,36 +1,36 @@
 import { PREFIX } from "../../..";
-import { SymbolId } from "../../../../../enums/symbols";
-import { StorageResult } from "../../../../../types/results";
-import { handleStorageWrite } from "../../../../../utils/storage/handlers";
-import { showConfirm } from "../../../../../utils/ui/dialogs";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
 import {
-  el,
-  getSymbolElement,
-  injectStyles,
-} from "../../../../../utils/ui/dom";
+  PaginatedParams,
+  PaginatedResult,
+  StorageResult,
+} from "../../../../../types/results";
+import { el, injectStyles } from "../../../../../utils/ui/dom";
+import { reportSrLive } from "../../../../../utils/ui/srLive";
 import { createSection, SectionConfig } from "../helpers";
+import {
+  createPaginationControls,
+  setupPaginationEvents,
+} from "./helpers/pagination";
+import { attachExpandableBehavior, createActionButtons } from "./helpers/rows";
 import { getStyles } from "./style";
 
-export interface ListSectionConfig extends SectionConfig {}
-
-export interface ListSectionElements {
-  section: HTMLElement;
-  listContainer: HTMLElement;
-  paginationControls: {
-    wrapper: HTMLElement;
-    prevBtn: HTMLButtonElement;
-    nextBtn: HTMLButtonElement;
-    pageLabel: HTMLElement;
-  };
-  bulkActions: {
-    wrapper: HTMLElement;
-    deleteBtn: HTMLButtonElement;
-  };
+export interface PaginatedListSectionConfig<T> extends SectionConfig {
+  paginator: (params: PaginatedParams) => PaginatedResult<T>;
+  renderItem: (item: T) => Promise<HTMLElement>;
+  pageSize?: number;
 }
 
-export function createListSection(
-  config: ListSectionConfig
-): ListSectionElements {
+export type State = { currentPage: number; totalPages?: number };
+
+export function createPaginatedListSection<T>({
+  paginator,
+  renderItem,
+  pageSize = 10,
+  ...config
+}: PaginatedListSectionConfig<T>): HTMLElement {
+  const state: State = { currentPage: 0 };
+
   const section = createSection(config);
   injectStyles(`${PREFIX}__styles--list-section`, getStyles(PREFIX));
 
@@ -39,174 +39,132 @@ export function createListSection(
     role: "list",
   });
 
-  const prevBtn = el(
-    "button",
-    {
-      className: `${PREFIX}__button ${PREFIX}__button--prev`,
-      disabled: true,
-    },
-    ["Prev"]
-  ) as HTMLButtonElement;
+  const paginationControls = createPaginationControls();
 
-  const nextBtn = el(
-    "button",
-    {
-      className: `${PREFIX}__button ${PREFIX}__button--next`,
-      disabled: true,
-    },
-    ["Next"]
-  ) as HTMLButtonElement;
+  async function renderPage() {
+    const result = paginator({
+      page: state.currentPage,
+      pageSize,
+    });
+    const { items, page, totalPages, hasPrev, hasNext } = result;
+    state.totalPages = totalPages;
 
-  const pageLabel = el(
-    "span",
-    {
-      className: `${PREFIX}__pagination__label`,
-    },
-    ["Page 1"]
-  );
+    listContainer.innerHTML = "";
+    for (const item of items) {
+      listContainer.appendChild(await renderItem(item));
+    }
+
+    (paginationControls.pageLabel.children[1] as HTMLInputElement).value =
+      String(page + 1);
+    paginationControls.pageLabel.lastChild!.textContent = totalPages.toString();
+    paginationControls.prevBtn.disabled = !hasPrev;
+    paginationControls.nextBtn.disabled = !hasNext;
+
+    reportSrLive(`Page ${page + 1} of ${totalPages}`);
+  }
+
+  setupPaginationEvents(paginationControls, state, renderPage);
+
+  renderPage();
 
   const paginationWrapper = el(
-    "div",
+    "nav",
     {
-      className: `${PREFIX}__pagination`,
+      className: `${PREFIX}__pagination__controls`,
+      attrs: { "aria-label": "Pagination Controls" },
     },
-    [prevBtn, pageLabel, nextBtn]
-  );
-
-  const deleteBtn = el(
-    "button",
-    {
-      className: `${PREFIX}__button ${PREFIX}__button--delete`,
-      disabled: true,
-    },
-    ["Delete Selected"]
-  ) as HTMLButtonElement;
-
-  const bulkActionsWrapper = el(
-    "div",
-    {
-      className: `${PREFIX}__bulk__actions`,
-    },
-    [deleteBtn]
+    [
+      paginationControls.prevBtn,
+      paginationControls.pageLabel,
+      paginationControls.nextBtn,
+    ]
   );
 
   section.appendChild(listContainer);
   section.appendChild(paginationWrapper);
-  section.appendChild(bulkActionsWrapper);
 
-  return {
-    section,
-    listContainer,
-    paginationControls: {
-      wrapper: paginationWrapper,
-      prevBtn,
-      nextBtn,
-      pageLabel,
-    },
-    bulkActions: {
-      wrapper: bulkActionsWrapper,
-      deleteBtn,
-    },
-  };
+  return section;
 }
 
 export interface ListRow {
   id: string;
   innerElement: HTMLElement;
-  ariaLabel: string;
-  actions?: {
-    link?: {
-      href: string;
-    };
-    delete?: {
-      onDelete: () => Promise<StorageResult<void>>;
-      confirmationText: string;
-      successText: string;
-    };
+  srAccessibleLabel: string;
+  srAccessibleContentSummary: string;
+  actions?: ListRowActions;
+}
+
+export interface ListRowActions {
+  link?: {
+    href: string;
+  };
+  delete?: {
+    onDelete: () => Promise<StorageResult<void>>;
+    confirmationText: string;
+    successText: string;
   };
 }
 
 export async function createListRow({
   id,
   innerElement,
-  ariaLabel,
-  actions,
+  srAccessibleLabel,
+  srAccessibleContentSummary,
+  actions = {},
 }: ListRow): Promise<HTMLElement> {
+  innerElement.setAttribute("aria-hidden", "true");
+
+  const hiddenLabel = el(
+    "span",
+    {
+      id: `${id}-label`,
+      className: `${CLASS_PREFIX}__sr-only`,
+    },
+    [srAccessibleLabel]
+  );
+
+  const hint = el(
+    "span",
+    {
+      id: `${id}-hint`,
+      className: `${CLASS_PREFIX}__sr-only`,
+    },
+    ["Press Enter to show details and actions."]
+  );
+
   const row = el(
     "li",
     {
       id: id,
       className: `${PREFIX}__list__row`,
       tabIndex: 0,
-      ariaLabel: ariaLabel,
-      role: "listitem",
+      attrs: {
+        "aria-labelledby": `${id}-label`,
+        "aria-describedby": `${id}-label ${id}-hint`,
+        "aria-expanded": "false",
+      },
     },
-    [innerElement]
+    [hiddenLabel, hint, innerElement]
   );
 
-  const buttonPromises: Promise<HTMLElement>[] = [];
-
-  if (actions?.link) {
-    buttonPromises.push(createLinkBtn(actions.link.href));
-  }
-
-  if (actions?.delete?.onDelete) {
-    buttonPromises.push(
-      createDeleteBtn(() => {
-        const confirmed = showConfirm(
-          actions!.delete!.confirmationText ||
-            "Are you sure you want to delete this item?"
-        );
-        if (!confirmed) return;
-        handleStorageWrite<void>(
-          actions!.delete!.onDelete!(),
-          actions!.delete!.successText || `Item has been deleted.`,
-          `Failed to delete item.`
-        ).then(() => {
-          row.remove();
-        });
-      })
-    );
-  }
-
-  const actionEls = await Promise.all(buttonPromises);
-
-  row.appendChild(
-    el("div", { className: `actions ${PREFIX}__list__row__actions` }, actionEls)
+  const actionEls: HTMLElement[] = await createActionButtons(actions, row);
+  const actionsWrapper = el(
+    "div",
+    {
+      className: `actions ${PREFIX}__list__row__actions`,
+      attrs: { "aria-hidden": "true" },
+    },
+    actionEls
   );
+
+  attachExpandableBehavior(
+    row,
+    innerElement,
+    actionsWrapper,
+    actionEls,
+    srAccessibleContentSummary
+  );
+
+  row.appendChild(actionsWrapper);
   return row;
-}
-
-async function createDeleteBtn(
-  onDelete: () => void
-): Promise<HTMLButtonElement> {
-  let innerEl = await getSymbolElement(SymbolId.DELETE, "🗑︎");
-  const deleteBtn = el(
-    "button",
-    {
-      className: `${PREFIX}__button ${PREFIX}__button--row-delete`,
-      ariaLabel: "Delete this item",
-      title: "Delete",
-    },
-    [innerEl]
-  ) as HTMLButtonElement;
-  deleteBtn.addEventListener("click", onDelete);
-  return deleteBtn;
-}
-
-async function createLinkBtn(href: string): Promise<HTMLAnchorElement> {
-  let innerEl = await getSymbolElement(SymbolId.LINK, "↗");
-  const linkBtn = el(
-    "a",
-    {
-      className: `${PREFIX}__button ${PREFIX}__button--row-link`,
-      ariaLabel: "Open item in new tab",
-      title: "Open",
-      href: href,
-      target: "_blank",
-      rel: "noopener noreferrer",
-    },
-    [innerEl]
-  ) as HTMLAnchorElement;
-  return linkBtn;
 }
