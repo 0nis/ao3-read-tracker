@@ -36,9 +36,8 @@ export async function render(): Promise<void> {
   );
   const sections = Object.fromEntries(entries) as SectionElements;
 
-  const nav = buildNav(
-    SECTION_CONFIG.map(({ id, label }) => ({ id, label })),
-    showSection
+  const { nav, updateSelected } = buildNav(
+    SECTION_CONFIG.map(({ id, label }) => ({ id, label }))
   );
 
   const wrapper = el("div", { className: `${PREFIX}__wrapper` }, [
@@ -63,16 +62,16 @@ export async function render(): Promise<void> {
   setupSettingsSaveHandlers(settingsSections);
   setupHeaderActions(exportBtn, importBtn, clearBtn);
 
-  function showSection(id: string) {
+  const fallbackSection = `#${Object.keys(sections)[0]}`;
+
+  // Section navigation handler
+  window.addEventListener("hashchange", () => {
+    const id = (window.location.hash || fallbackSection).slice(1);
     for (const key of Object.keys(sections) as Array<keyof typeof sections>) {
       sections[key].element.style.display = key === id ? "" : "none";
     }
-  }
+    updateSelected(id);
+  });
 
-  showSection((window.location.hash || `#${SectionId.READ_SETTINGS}`).slice(1));
-  window.addEventListener("hashchange", () =>
-    showSection(
-      (window.location.hash || `#${SectionId.READ_SETTINGS}`).slice(1)
-    )
-  );
+  window.location.hash = fallbackSection;
 }
