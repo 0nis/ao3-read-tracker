@@ -14,7 +14,7 @@ export function createPaginationControls(): PaginationControls {
     "button",
     {
       disabled: true,
-      className: `${PREFIX}__button--prev`,
+      className: `${PREFIX}__button ${PREFIX}__button--prev`,
       attrs: { "aria-label": "Previous page" },
     },
     ["Prev"]
@@ -24,7 +24,7 @@ export function createPaginationControls(): PaginationControls {
     "button",
     {
       disabled: true,
-      className: `${PREFIX}__button--next`,
+      className: `${PREFIX}__button ${PREFIX}__button--next`,
       attrs: { "aria-label": "Next page" },
     },
     ["Next"]
