@@ -94,13 +94,19 @@ export function getStyles(prefix: string): string {
 
       .${prefix}__nav ul {
         flex-direction: row;
+        justify-content: space-between;
         gap: 1em;
+        overflow-x: auto;
       }
 
       .${prefix}__header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: 0;
+      }
+
+      .${prefix}__header__title {
+        text-align: center;
       }
     }
   `;
