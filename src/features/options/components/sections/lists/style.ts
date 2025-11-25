@@ -27,6 +27,7 @@ export function getStyles(prefix: string): string {
       display: flex;
       gap: 1em;
       align-items: center;
+      width: 100%;
     }
 
     .${prefix}__list__row__title a {
@@ -44,6 +45,26 @@ export function getStyles(prefix: string): string {
     .${prefix}__list__row__date {
       color: #666;
       font-size: 0.8em;
+    }
+
+    .${prefix}__list__row__main {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+    }
+
+    .${prefix}__list__row__symbols {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .${prefix}__list__row__symbols__item {
+      cursor: default;
+      margin: 0 !important;
     }
 
     .${prefix}__list__row__actions {
@@ -64,7 +85,16 @@ export function getStyles(prefix: string): string {
       width: 3em;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 600px) {
+      .${prefix}__list__row__main {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: max-content;
+        gap: 0;
+        align-items: flex-start;
+      }
+
       .${prefix}__pagination__controls {
         justify-content: space-between;
       }

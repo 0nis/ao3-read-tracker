@@ -1,6 +1,5 @@
 import { SymbolId } from "../../enums/symbols";
 import { ReadWork, IgnoredWork } from "../../types/works";
-import { getLatestChapterFromWorkListing } from "../../utils/ao3";
 
 export interface SymbolRule {
   id: SymbolId;
@@ -10,13 +9,19 @@ export interface SymbolRule {
   priority: number;
 }
 
-export function collectSymbolRules(
-  details: {
+export interface SymbolRuleParameters {
+  read?: ReadWork;
+  ignored?: IgnoredWork;
+  details?: {
     latestChapter?: number;
-  },
-  read?: ReadWork,
-  ignored?: IgnoredWork
-): SymbolRule[] {
+  };
+}
+
+export function collectSymbolRules({
+  read,
+  ignored,
+  details,
+}: SymbolRuleParameters): SymbolRule[] {
   return [
     {
       id: SymbolId.IGNORED,
@@ -49,26 +54,27 @@ export function collectSymbolRules(
     {
       id: SymbolId.NEW_CHAPTERS_AVAILABLE,
       shouldApply: () => {
-        if (!read?.isReading || !read.lastReadChapter) return false;
-        return read.lastReadChapter < (details.latestChapter || 0);
+        if (
+          !read?.isReading ||
+          !read?.lastReadChapter ||
+          !details?.latestChapter
+        )
+          return false;
+        return read.lastReadChapter < (details?.latestChapter || 0);
       },
       getCustomLabel: () =>
-        `New chapters available! (last read: chapter ${read!.lastReadChapter})`,
+        `New chapters available! (last read: chapter ${
+          read?.lastReadChapter || "?"
+        })`,
       priority: 50,
     },
   ];
 }
 
 export function getActiveSymbolRules(
-  work: HTMLElement,
-  read?: ReadWork,
-  ignored?: IgnoredWork
-) {
-  return collectSymbolRules(
-    { latestChapter: getLatestChapterFromWorkListing(work) || 0 },
-    read,
-    ignored
-  )
+  params: SymbolRuleParameters
+): SymbolRule[] {
+  return collectSymbolRules(params)
     .filter((rule) => rule.shouldApply())
     .sort((a, b) => b.priority - a.priority);
 }

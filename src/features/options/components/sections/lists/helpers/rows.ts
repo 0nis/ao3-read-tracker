@@ -99,7 +99,7 @@ export async function createDeleteBtn(
     "button",
     {
       className: `${PREFIX}__button ${PREFIX}__button--row-delete`,
-      title: "Delete",
+      title: "Delete this item",
       attrs: {
         "aria-label": "Delete this item",
       },
@@ -116,12 +116,12 @@ export async function createLinkBtn(href: string): Promise<HTMLAnchorElement> {
     "a",
     {
       className: `${PREFIX}__button ${PREFIX}__button--row-link`,
-      title: "Open",
+      title: "Open work in new tab",
       href: href,
       target: "_blank",
       rel: "noopener noreferrer",
       attrs: {
-        "aria-label": "Open link in new tab",
+        "aria-label": "Open work in new tab",
       },
     },
     [innerEl]

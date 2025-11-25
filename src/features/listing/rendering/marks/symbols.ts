@@ -4,6 +4,7 @@ import { symbolsCache } from "../../../../services/cache/symbols";
 import { getActiveSymbolRules } from "../../../../services/rules/symbols";
 import { SymbolRecord } from "../../../../types/symbols";
 import { IgnoredWork, ReadWork } from "../../../../types/works";
+import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   el,
   ensureChild,
@@ -64,7 +65,13 @@ async function renderSymbols(
 ) {
   const symbols = await symbolsCache.get();
 
-  const rules = getActiveSymbolRules(item, readWork, ignoredWork);
+  const rules = getActiveSymbolRules({
+    read: readWork,
+    ignored: ignoredWork,
+    details: {
+      latestChapter: getLatestChapterFromWorkListing(item) || undefined,
+    },
+  });
 
   for (const rule of rules) {
     const symbol = symbols[rule.id];
@@ -113,6 +120,10 @@ function getStyles(prefix: string): string {
       position: absolute;
       top: 20px;
       right: 0px;
+    }
+
+    .${prefix}__symbol-indicator__item {
+      cursor: default;
     }
       
     .${prefix}__symbol-indicator:focus,

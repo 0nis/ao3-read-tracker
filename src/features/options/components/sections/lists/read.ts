@@ -13,6 +13,14 @@ import {
   getFormattedDate,
   getFormattedDateAsFullText,
 } from "../../../../../utils/date";
+import { symbolsCache } from "../../../../../services/cache/symbols";
+import {
+  getActiveSymbolRules,
+  SymbolRule,
+} from "../../../../../services/rules/symbols";
+import { renderSymbolContent } from "../../../../../utils/ui/symbols";
+import { SymbolData } from "../../../../../types/symbols";
+import { StorageService } from "../../../../../services/storage";
 
 /**
  * TEMPORARY: Creates a mock paginator for testing without DB.
@@ -23,6 +31,10 @@ function makeMockPaginator(total = 200) {
     title: `Work number ${i + 1}`,
     createdAt: Date.now() - i * 1000,
     modifiedAt: Date.now() - i * 1000,
+    isReading: i % 3 === 0,
+    lastReadChapter: i % 5 === 0 ? (i % 10) + 1 : undefined,
+    rereadWorthy: i % 7 === 0,
+    count: i % 4 === 0 ? Math.floor(i / 4) + 1 : undefined,
   }));
 
   return (params: PaginatedParams): PaginatedResult<ReadWork> => {
@@ -52,23 +64,19 @@ export async function buildReadListSection(): Promise<HTMLElement> {
   });
 }
 
-const renderItem = async (item: ReadWork): Promise<HTMLElement> => {
+async function renderItem(item: ReadWork): Promise<HTMLElement> {
+  const ignoredWork = await StorageService.ignoredWorks.getById(item.id);
+
+  const symbols = await symbolsCache.get();
+  const rules = getActiveSymbolRules({
+    read: item,
+    ignored: ignoredWork?.data,
+  });
+
   const innerElement = el(
     "div",
     { className: `${PREFIX}__list__row__content` },
-    [
-      el(
-        "span",
-        { className: `${PREFIX}__list__row__date` },
-        getFormattedDate(item.modifiedAt)
-      ),
-      el(
-        "div",
-        { className: `${PREFIX}__list__row__title` },
-        item.title || "untitled"
-      ),
-      el("div", { className: `${PREFIX}__list__row__symbols` }, []),
-    ]
+    await createInnerElementChildren(item, symbols, rules)
   );
 
   return await createListRow({
@@ -77,7 +85,7 @@ const renderItem = async (item: ReadWork): Promise<HTMLElement> => {
     srAccessibleLabel: `${
       item.title || "Untitled"
     } - Red ${getFormattedDateAsFullText(item.modifiedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
-    srAccessibleContentSummary: `test summary`,
+    srAccessibleContentSummary: getSrAccessibleContentSummary(symbols, rules),
     actions: {
       link: { href: getWorkLinkFromId(item.id) },
       delete: {
@@ -90,4 +98,75 @@ const renderItem = async (item: ReadWork): Promise<HTMLElement> => {
       },
     },
   });
-};
+}
+
+async function createInnerElementChildren(
+  item: ReadWork,
+  symbols: SymbolData,
+  rules: SymbolRule[]
+): Promise<HTMLElement[]> {
+  const date = el(
+    "span",
+    { className: `${PREFIX}__list__row__date` },
+    getFormattedDate(item.modifiedAt)
+  );
+
+  const title = el(
+    "div",
+    { className: `${PREFIX}__list__row__title` },
+    item.title || "untitled"
+  );
+  const symbolsElement = await getSymbolElement(symbols, rules);
+
+  const main = el("div", { className: `${PREFIX}__list__row__main` }, [
+    title,
+    symbolsElement,
+  ]);
+
+  return [date, main];
+}
+
+async function getSymbolElement(
+  symbols: SymbolData,
+  rules: SymbolRule[]
+): Promise<HTMLElement> {
+  const symbolWrapper = el(
+    "ul",
+    { className: `${PREFIX}__list__row__symbols` },
+    []
+  );
+
+  for (const rule of rules) {
+    const symbol = symbols[rule.id];
+    if (!symbol) continue;
+
+    const label = rule.getCustomLabel?.() || symbol.label;
+    symbolWrapper.appendChild(
+      el(
+        "li",
+        {
+          className: `${PREFIX}__list__row__symbols__item`,
+          attrs: {
+            "aria-label": label,
+            title: label,
+          },
+        },
+        [renderSymbolContent(symbol, rule.getSuffix?.())]
+      )
+    );
+  }
+
+  return symbolWrapper;
+}
+
+function getSrAccessibleContentSummary(
+  symbols: SymbolData,
+  rules: SymbolRule[]
+): string {
+  const symbolsDescriptions: string[] = [];
+  for (const rule of rules) {
+    const label = rule.getCustomLabel?.() || symbols[rule.id]?.label;
+    if (label) symbolsDescriptions.push(label);
+  }
+  return symbolsDescriptions.length ? `${symbolsDescriptions.join(", ")}.` : "";
+}
