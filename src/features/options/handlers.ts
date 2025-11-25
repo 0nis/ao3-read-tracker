@@ -21,9 +21,7 @@ async function updateSettingsHandler(
 ) {
   await handleStorageWrite<void>(
     op,
-    `${
-      label.charAt(0).toUpperCase() + label.slice(1)
-    } settings updated successfully.`,
+    `${label.charAt(0).toUpperCase() + label.slice(1)} updated successfully.`,
     `Failed to update ${label} settings.`,
     saveBtn || undefined,
     false

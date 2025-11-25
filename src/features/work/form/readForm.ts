@@ -38,10 +38,10 @@ export async function showReadWorkForm(
   if (isReadingCheckbox && lastReadChapterInput) {
     isReadingCheckbox.addEventListener("change", () => {
       const chapter = getCurrentChapterFromWorkPage();
-      lastReadChapterInput.disabled = !isReadingCheckbox.checked;
       if (isReadingCheckbox.checked && chapter !== null)
         lastReadChapterInput.value = chapter.toString();
       else lastReadChapterInput.value = "";
+      lastReadChapterInput.disabled = !isReadingCheckbox.checked;
     });
   }
 
@@ -116,9 +116,8 @@ const getReadWorkFormMarkup = (
                 <dt><label for="${prefix}__lastReadChapter">Last read chapter</label></dt>
                 <dd><input type="number" id="${prefix}__lastReadChapter" min="0" value="${
                     exists && d.lastReadChapter ? d.lastReadChapter : null
-                }" disabled="${
-                    exists && d.isReading ? "disabled" : ""
-                }"/></dd>
+                }" ${exists && d.isReading ? "" : "disabled"}
+                /></dd>
               </div>
 
             </div>

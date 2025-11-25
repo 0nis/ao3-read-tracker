@@ -35,7 +35,10 @@ export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
     `${CLASS_PREFIX}__collapsed`,
     `${CLASS_PREFIX}__collapsed--${mode}`
   );
-  for (const el of elementsToHide) el.classList.add(`${CLASS_PREFIX}__hidden`);
+  for (const el of elementsToHide) {
+    el.classList.add(`${CLASS_PREFIX}__hidden`);
+    el.setAttribute("aria-hidden", "true");
+  }
 
   const toggle = createCollapseToggle(work, elementsToHide, true);
   work.appendChild(toggle);
@@ -59,8 +62,10 @@ export function unCollapse(workOrId: HTMLElement | string) {
     getElement(work, `.${CLASS_PREFIX}__collapsed__spacer`),
   ].filter((el): el is HTMLElement => el !== null);
   elementsToRemove.forEach((el) => el.remove());
-  for (const el of work.children)
+  for (const el of work.children) {
     el.classList.remove(`${CLASS_PREFIX}__hidden`);
+    el.removeAttribute("aria-hidden");
+  }
 }
 
 function createCollapseToggle(
@@ -82,8 +87,10 @@ function createCollapseToggle(
     ev.preventDefault();
     const isExpanding = work.classList.contains(`${CLASS_PREFIX}__collapsed`);
     console.log("Is collapsed? ", isCollapsed);
-    for (const el of elementsToToggle)
+    for (const el of elementsToToggle) {
       el.classList.toggle(`${CLASS_PREFIX}__hidden`, !isExpanding);
+      el.toggleAttribute("aria-hidden", !isExpanding);
+    }
 
     toggle.textContent = isExpanding ? "Hide details" : "Show details";
     toggle.setAttribute("aria-expanded", String(isExpanding));

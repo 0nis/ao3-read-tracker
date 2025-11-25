@@ -33,7 +33,13 @@ export async function addSymbols(
   const symbolIndicatorList = ensureChild(
     work.querySelector(".header.module")!,
     `${CLASS_PREFIX}__symbol-indicator`,
-    "ul"
+    "ul",
+    {
+      tabIndex: 0,
+      attrs: {
+        "aria-label": "Work status indicators",
+      },
+    }
   );
 
   if (type === WorkState.READ)
@@ -146,7 +152,14 @@ function createSymbolElement(
   return el(
     "li",
     {
-      attrs: { "aria-label": label, title: label },
+      className: `${CLASS_PREFIX}__symbol-indicator__item`,
+      // Making these tabbable is not best practice, but it allows keyboard users to discover the symbols more easily.
+      // And work listings are already quite heavy on tab stops anyway.
+      tabIndex: 0,
+      attrs: {
+        "aria-label": label,
+        title: label,
+      },
     },
     [contentEl]
   );
@@ -161,6 +174,11 @@ function getStyles(prefix: string): string {
       position: absolute;
       top: 20px;
       right: 0px;
+    }
+      
+    .${prefix}__symbol-indicator:focus,
+    .${prefix}__symbol-indicator__item:focus {
+      outline: 1px dotted;
     }
   `;
 }

@@ -35,7 +35,9 @@ export function confirmDestructiveAction(
   const userInput = prompt(
     `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
   );
-  return Promise.resolve(userInput === confirmPhrase);
+  return Promise.resolve(
+    userInput?.toUpperCase() === confirmPhrase.toUpperCase()
+  );
 }
 
 /**
