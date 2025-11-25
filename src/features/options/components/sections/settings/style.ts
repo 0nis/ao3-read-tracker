@@ -47,16 +47,16 @@ export function getStyles(prefix: string): string {
       gap: 8px;
     }
 
-    @media (max-width: 800px) {
-        .${prefix}__settings__field__label__wrapper {
-            max-width: 100%;
-        }
+    @media (max-width: 600px) {
+      .${prefix}__settings__field__label__wrapper {
+          max-width: 100%;
+      }
 
-        .${prefix}__settings__field {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0;
-        }
+      .${prefix}__settings__field {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+      }
     }
     `;
 }

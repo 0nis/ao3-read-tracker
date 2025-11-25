@@ -62,16 +62,21 @@ export async function render(): Promise<void> {
   setupSettingsSaveHandlers(settingsSections);
   setupHeaderActions(exportBtn, importBtn, clearBtn);
 
-  const fallbackSection = `#${Object.keys(sections)[0]}`;
+  function getCurrentSection() {
+    const hash = window.location.hash.slice(1);
+    return hash || `#${Object.keys(sections)[0]}`;
+  }
 
-  // Section navigation handler
-  window.addEventListener("hashchange", () => {
-    const id = (window.location.hash || fallbackSection).slice(1);
+  function showSection(id: string) {
     for (const key of Object.keys(sections) as Array<keyof typeof sections>) {
       sections[key].element.style.display = key === id ? "" : "none";
     }
     updateSelected(id);
+  }
+
+  window.addEventListener("hashchange", () => {
+    showSection(getCurrentSection());
   });
 
-  window.location.hash = fallbackSection;
+  showSection(getCurrentSection());
 }
