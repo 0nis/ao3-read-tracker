@@ -3,7 +3,8 @@ import { getStyles } from "./style";
 import { Router } from "../../app/router";
 
 import { getManifest } from "../../utils/extension/manifest";
-import { el, getSymbolElement, injectStyles } from "../../utils/ui/dom";
+import { el, injectStyles } from "../../utils/ui/dom";
+import { getSymbolElement } from "../../utils/ui/symbols";
 
 import { SymbolId } from "../../enums/symbols";
 

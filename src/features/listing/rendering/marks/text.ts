@@ -1,80 +1,82 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { WorkState } from "../../../enums/works";
-import type { ReadWork, IgnoredWork } from "../../../types/works";
-import { getLatestChapterFromWorkListing } from "../../../utils/ao3";
-import { getFormattedDate, getFormattedTime } from "../../../utils/date";
+import { ApplyMarksParams } from "..";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { WorkState } from "../../../../enums/works";
+import type { ReadWork, IgnoredWork } from "../../../../types/works";
+import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
+import { getFormattedDate, getFormattedTime } from "../../../../utils/date";
 import {
   el,
   ensureChild,
   getElement,
   injectStyles,
-} from "../../../utils/ui/dom";
+} from "../../../../utils/ui/dom";
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
  * @param work The work to modify
- * @param type What type of information the text is for, like a work marked as read or ignored
- * @param item The item data containing optional additional information
+ * @param readWork The read work data, if any
+ * @param ignoredWork The ignored work data, if any
  */
-export function addText(
-  work: HTMLElement,
-  type: WorkState,
-  item: ReadWork | IgnoredWork
-) {
+export function addText({ item, readWork, ignoredWork }: ApplyMarksParams) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
     getStyles(CLASS_PREFIX)
   );
 
   const indicatorList = ensureChild(
-    work,
+    item,
     `${CLASS_PREFIX}__text-indicator`,
     "ul"
   );
 
-  if (type === WorkState.READ)
-    renderReadInformation(work, indicatorList, item as ReadWork);
-  else renderIgnoredInformation(work, indicatorList, item as IgnoredWork);
+  if (readWork) renderReadInformation(item, indicatorList, readWork);
+  if (ignoredWork) renderIgnoredInformation(item, indicatorList, ignoredWork);
 }
 
 /**
  * Removes any text added by this module from a work element.
- * @param work The work to modify
+ * @param item The work to modify
  */
-export function removeText(work: HTMLElement) {
+export function removeText(item: HTMLElement) {
   const elementsToRemove = [
-    getElement(work, `.${CLASS_PREFIX}__text-indicator`),
-    getElement(work, `.${CLASS_PREFIX}__text-indicator__notes`),
+    getElement(item, `.${CLASS_PREFIX}__text-indicator`),
+    getElement(item, `.${CLASS_PREFIX}__text-indicator__notes`),
   ].filter((el): el is HTMLElement => el !== null);
   elementsToRemove.forEach((el) => el.remove());
 }
 
 function renderReadInformation(
-  work: HTMLElement,
+  item: HTMLElement,
   indicatorList: HTMLElement,
-  item: ReadWork
+  readWork: ReadWork
 ) {
-  if (item.notes)
-    addNotesText(work, item.notes, `${CLASS_PREFIX}__notes--read`);
-  if (item.isReading) {
+  if (readWork.notes)
+    addNotesText(item, readWork.notes, `${CLASS_PREFIX}__notes--read`);
+  if (readWork.isReading) {
     indicatorList.appendChild(
-      createStillReadingText(work, item.modifiedAt, item.lastReadChapter)
+      createStillReadingText(
+        item,
+        readWork.modifiedAt,
+        readWork.lastReadChapter
+      )
     );
   } else {
-    indicatorList.appendChild(createIndicator(WorkState.READ, item.modifiedAt));
+    indicatorList.appendChild(
+      createIndicator(WorkState.READ, readWork.modifiedAt)
+    );
   }
 }
 
 function renderIgnoredInformation(
-  work: HTMLElement,
+  item: HTMLElement,
   indicatorList: HTMLElement,
-  item: IgnoredWork
+  ignoredWork: IgnoredWork
 ) {
   indicatorList.appendChild(
-    createIndicator(WorkState.IGNORED, item.modifiedAt)
+    createIndicator(WorkState.IGNORED, ignoredWork.modifiedAt)
   );
-  if (item.reason)
-    addNotesText(work, item.reason, `${CLASS_PREFIX}__notes--ignored`);
+  if (ignoredWork.reason)
+    addNotesText(item, ignoredWork.reason, `${CLASS_PREFIX}__notes--ignored`);
 }
 
 function createIndicator(type: WorkState, timestamp: number): HTMLElement {
@@ -103,7 +105,7 @@ function createIndicatorText(
 }
 
 function createStillReadingText(
-  work: HTMLElement,
+  item: HTMLElement,
   timestamp: number,
   chapter: number | undefined
 ): HTMLLIElement {
@@ -119,7 +121,7 @@ function createStillReadingText(
         }),
         chapter
           ? ` (chapter ${chapter}/${
-              getLatestChapterFromWorkListing(work) || "?"
+              getLatestChapterFromWorkListing(item) || "?"
             })`
           : "",
       ]),
@@ -127,9 +129,9 @@ function createStillReadingText(
   );
 }
 
-function addNotesText(work: HTMLElement, notes: string, className?: string) {
+function addNotesText(item: HTMLElement, notes: string, className?: string) {
   const section = ensureChild(
-    work,
+    item,
     `${CLASS_PREFIX}__text-indicator__notes`,
     "blockquote"
   );

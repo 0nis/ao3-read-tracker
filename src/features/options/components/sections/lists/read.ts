@@ -43,46 +43,6 @@ function makeMockPaginator(total = 200) {
 }
 
 export async function buildReadListSection(): Promise<HTMLElement> {
-  const renderItem = async (item: ReadWork): Promise<HTMLElement> => {
-    const link = getWorkLinkFromId(item.id);
-    const innerElement = el(
-      "div",
-      { className: `${PREFIX}__list__row__content` },
-      [
-        el(
-          "span",
-          { className: `${PREFIX}__list__row__date` },
-          getFormattedDate(item.modifiedAt)
-        ),
-        el(
-          "div",
-          { className: `${PREFIX}__list__row__title` },
-          item.title || "untitled"
-        ),
-      ]
-    );
-
-    return await createListRow({
-      id: item.id,
-      innerElement,
-      srAccessibleLabel: `${
-        item.title || "Untitled"
-      } - Red ${getFormattedDateAsFullText(item.modifiedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
-      srAccessibleContentSummary: `test summary`,
-      actions: {
-        link: { href: link },
-        delete: {
-          onDelete: (): Promise<StorageResult<void>> => {
-            console.log(`Delete item with id: ${item.id}`);
-            return Promise.resolve({ success: true });
-          },
-          confirmationText: `Are you sure you want to remove "${item.title}" from your read list?`,
-          successText: `"${item.title}" has been removed from your read list.`,
-        },
-      },
-    });
-  };
-
   return createPaginatedListSection({
     id: SectionId.READ_LIST,
     title: "Read Works List",
@@ -91,3 +51,43 @@ export async function buildReadListSection(): Promise<HTMLElement> {
     pageSize: 10,
   });
 }
+
+const renderItem = async (item: ReadWork): Promise<HTMLElement> => {
+  const innerElement = el(
+    "div",
+    { className: `${PREFIX}__list__row__content` },
+    [
+      el(
+        "span",
+        { className: `${PREFIX}__list__row__date` },
+        getFormattedDate(item.modifiedAt)
+      ),
+      el(
+        "div",
+        { className: `${PREFIX}__list__row__title` },
+        item.title || "untitled"
+      ),
+      el("div", { className: `${PREFIX}__list__row__symbols` }, []),
+    ]
+  );
+
+  return await createListRow({
+    id: item.id,
+    innerElement,
+    srAccessibleLabel: `${
+      item.title || "Untitled"
+    } - Red ${getFormattedDateAsFullText(item.modifiedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
+    srAccessibleContentSummary: `test summary`,
+    actions: {
+      link: { href: getWorkLinkFromId(item.id) },
+      delete: {
+        onDelete: (): Promise<StorageResult<void>> => {
+          console.log(`Delete item with id: ${item.id}`);
+          return Promise.resolve({ success: true });
+        },
+        confirmationText: `Are you sure you want to remove "${item.title}" from your read list?`,
+        successText: `"${item.title}" has been removed from your read list.`,
+      },
+    },
+  });
+};

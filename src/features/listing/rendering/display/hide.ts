@@ -1,6 +1,5 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { getWorkById } from "../../../utils/ao3";
-import { getWork } from "../handlers";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { getWork } from "../../handlers";
 
 /**
  * Completely hides a work from the listing.

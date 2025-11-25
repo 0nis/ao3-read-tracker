@@ -1,7 +1,7 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { CollapseMode } from "../../../enums/ui";
-import { el, getElement, injectStyles } from "../../../utils/ui/dom";
-import { getWork } from "../handlers";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { CollapseMode } from "../../../../enums/ui";
+import { el, getElement, injectStyles } from "../../../../utils/ui/dom";
+import { getWork } from "../../handlers";
 
 /**
  * Hides the details of a work in the listing to take up less space.

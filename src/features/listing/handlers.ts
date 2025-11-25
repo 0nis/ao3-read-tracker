@@ -9,8 +9,8 @@ import { ReadWork, IgnoredWork, WorkData } from "../../types/works";
 import { createExtensionMsg } from "../../utils/extension/console";
 import { DisplayMode } from "../../enums/settings";
 import { CollapseMode } from "../../enums/ui";
-import { collapse } from "./rendering/collapse";
-import { hide } from "./rendering/hide";
+import { collapse } from "./rendering/display/collapse";
+import { hide } from "./rendering/display/hide";
 
 export async function getWorkStatusData(): Promise<{
   worksList: HTMLElement | null;
@@ -40,41 +40,6 @@ export async function getWorkStatusData(): Promise<{
   }
 
   return { worksList, data: storedDataResult.data };
-}
-
-type DisplayRule = {
-  name: string;
-  shouldApply: () => boolean;
-  getMode: () => DisplayMode;
-};
-
-export function collectDisplayRules(
-  settings: SettingsData,
-  read?: ReadWork,
-  ignored?: IgnoredWork
-): DisplayRule[] {
-  return [
-    {
-      name: "ignored",
-      shouldApply: () => !!ignored,
-      getMode: () => settings.ignoreSettings.defaultDisplayMode,
-    },
-    {
-      name: "still reading",
-      shouldApply: () => !!read?.isReading,
-      getMode: () => settings.readSettings.stillReadingDisplayMode,
-    },
-    {
-      name: "reread worthy",
-      shouldApply: () => !!read?.rereadWorthy,
-      getMode: () => settings.readSettings.rereadWorthyDisplayMode,
-    },
-    {
-      name: "read (default)",
-      shouldApply: () => !!read,
-      getMode: () => settings.readSettings.defaultDisplayMode,
-    },
-  ];
 }
 
 export function mapDisplayModeToFn(mode: DisplayMode) {
