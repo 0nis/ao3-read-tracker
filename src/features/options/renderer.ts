@@ -64,7 +64,7 @@ export async function render(): Promise<void> {
 
   function getCurrentSection() {
     const hash = window.location.hash.slice(1);
-    return hash || `#${Object.keys(sections)[0]}`;
+    return hash || Object.keys(sections)[0];
   }
 
   function showSection(id: string) {
