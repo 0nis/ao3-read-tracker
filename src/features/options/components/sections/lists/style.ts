@@ -3,6 +3,12 @@ export function getStyles(prefix: string): string {
     .${prefix}__list__container {
       max-height: 400px;
       overflow-y: scroll;
+      opacity: 1;
+      transition: opacity 120ms linear;
+    }
+
+    .${prefix}__list__container--loading {
+      opacity: 0;
     }
 
     .${prefix}__list__row {

@@ -42,6 +42,9 @@ export function createPaginatedListSection<T>({
   const paginationControls = createPaginationControls();
 
   async function renderPage() {
+    listContainer.classList.add(`${PREFIX}__list__container--loading`);
+
+    const fragment = document.createDocumentFragment();
     const result = paginator({
       page: state.currentPage,
       pageSize,
@@ -49,16 +52,19 @@ export function createPaginatedListSection<T>({
     const { items, page, totalPages, hasPrev, hasNext } = result;
     state.totalPages = totalPages;
 
-    listContainer.innerHTML = "";
-    for (const item of items) {
-      listContainer.appendChild(await renderItem(item));
-    }
+    const rendered = await Promise.all(items.map(renderItem));
+    rendered.forEach((el) => fragment.appendChild(el));
+    listContainer.replaceChildren(fragment);
 
     (paginationControls.pageLabel.children[1] as HTMLInputElement).value =
       String(page + 1);
     paginationControls.pageLabel.lastChild!.textContent = totalPages.toString();
     paginationControls.prevBtn.disabled = !hasPrev;
     paginationControls.nextBtn.disabled = !hasNext;
+
+    queueMicrotask(() =>
+      listContainer.classList.remove(`${PREFIX}__list__container--loading`)
+    );
 
     reportSrLive(`Page ${page + 1} of ${totalPages}`);
   }

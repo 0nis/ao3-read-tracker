@@ -54,6 +54,8 @@ export async function handleStorageWrite<T>(
   let promiseArray: Promise<any>[] = [];
 
   if (loadingEl) {
+    // TODO: Refactor to prevent innerHTML manipulation
+    // TODO: Refactor to prevent loading flash on fast operations
     originalContent = loadingEl.innerHTML;
     loadingEl.innerHTML = `
         <span 
