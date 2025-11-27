@@ -1,6 +1,7 @@
-import { ICache } from "./ICache";
-import { SettingsData } from "../../types/settings";
-import { handleGetAllSettings } from "../../utils/storage/settings";
+import { SettingsData } from "@types";
+import { handleGetAllSettings } from "@utils/storage";
+
+import { ICache } from "./cache.interface";
 
 export class SettingsCache implements ICache<SettingsData> {
   private cache: SettingsData | null = null;

@@ -1,4 +1,4 @@
-import { ReadWork } from "../../types/works";
+import { ReadWork } from "@types";
 
 export function generateReadWorks(count: number = 100): ReadWork[] {
   return Array.from({ length: count }, (_, i) => ({

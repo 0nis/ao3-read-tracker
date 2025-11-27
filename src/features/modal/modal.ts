@@ -1,4 +1,4 @@
-import { CLASS_PREFIX } from "../../constants/classes";
+import { CLASS_PREFIX } from "@constants";
 
 export interface ModalConfig {
   title: string;

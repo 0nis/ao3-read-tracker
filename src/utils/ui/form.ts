@@ -1,7 +1,8 @@
-import { CLASS_PREFIX } from "../../constants/classes";
-import { MessageType } from "../../enums/messages";
+import { CLASS_PREFIX } from "@constants";
+import { MessageType } from "@enums";
+
 import { el } from "./dom";
-import { reportSrLive } from "./srLive";
+import { reportSrLive } from "./sr-live";
 
 /**
  * Shows a message within a container element, replacing any existing message.

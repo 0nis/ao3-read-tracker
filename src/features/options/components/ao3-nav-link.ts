@@ -1,8 +1,7 @@
-import { Router } from "../../../app/router";
-import { SymbolId } from "../../../enums/symbols";
-import { getManifest } from "../../../utils/extension/manifest";
-import { el } from "../../../utils/ui/dom";
-import { getSymbolElement } from "../../../utils/ui/symbols";
+import { Router } from "@app/router";
+import { SymbolId } from "@enums";
+import { getManifest } from "@utils/extension";
+import { el, getSymbolElement } from "@utils/ui";
 
 export async function addOptionsLinkToAo3Nav(url: string): Promise<void> {
   const nav = document.querySelector("ul.primary.navigation.actions");

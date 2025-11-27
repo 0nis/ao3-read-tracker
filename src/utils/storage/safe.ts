@@ -1,10 +1,6 @@
-import { WorksData } from "../../data/works";
-import { SettingsData } from "../../data/settings";
-import { SymbolsData } from "../../data/symbols";
-
-import { StorageResult } from "../../types/results";
-
-import { createExtensionMsg } from "../extension/console";
+import { StorageResult } from "@types";
+import { createExtensionMsg } from "@utils/extension";
+import { WorksData, SettingsData, SymbolsData } from "@data/models";
 
 /**
  * Safely executes an async function and wraps the result in a StorageResult.

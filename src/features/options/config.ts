@@ -18,6 +18,13 @@ export enum SectionType {
   LIST = "lists",
 }
 
+export type SectionElements = {
+  [key in SectionId]: {
+    element: HTMLElement;
+    type: SectionType;
+  };
+};
+
 export type SectionBuilder = () => Promise<HTMLElement> | HTMLElement;
 
 export interface SectionConfigItem {

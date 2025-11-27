@@ -1,10 +1,11 @@
-import { ReadWork } from "../../../types/works";
+import { ReadWork } from "@types";
+import { CLASS_PREFIX } from "@constants";
+import { StorageService } from "@services/storage";
+import { getCurrentChapterFromWorkPage } from "@utils/ao3";
+import { createExtensionMsg } from "@utils/extension";
+import { handleStorageWrite } from "@utils/storage";
+
 import { createWorkForm } from "./baseForm";
-import { StorageService } from "../../../services/storage";
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { getCurrentChapterFromWorkPage } from "../../../utils/ao3";
-import { createExtensionMsg } from "../../../utils/extension/console";
-import { handleStorageWrite } from "../../../utils/storage/handlers";
 
 export async function showReadWorkForm(
   exists: boolean,

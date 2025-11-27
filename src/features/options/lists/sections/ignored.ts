@@ -1,15 +1,16 @@
+import { IgnoredWork } from "@types";
+import { getWorkLinkFromId } from "@utils/ao3";
+import { getFormattedDateAsFullText } from "@utils/date";
+import { handleStorageWrite } from "@utils/storage";
+import { StorageService } from "@services/storage";
+
 import { SectionId } from "../../config";
 import { createListRow, createPaginatedListSection } from "../base";
-import { IgnoredWork } from "../../../../types/works";
-import { getWorkLinkFromId } from "../../../../utils/ao3";
-import { getFormattedDateAsFullText } from "../../../../utils/date";
-import { StorageService } from "../../../../services/storage";
 import {
   createInnerElement,
   SupplementaryRowInformation,
 } from "../helpers/content";
 import { getSrAccessibleContentSummary } from "../helpers/accessibility";
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
 
 export async function buildIgnoreListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({

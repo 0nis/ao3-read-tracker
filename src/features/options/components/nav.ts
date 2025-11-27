@@ -1,5 +1,5 @@
 import { PREFIX } from "..";
-import { el } from "../../../utils/ui/dom";
+import { el } from "@utils/ui";
 
 export function buildNav(items: { id: string; label: string }[]): {
   nav: HTMLElement;

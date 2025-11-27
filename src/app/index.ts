@@ -1,14 +1,12 @@
+import { CLASS_PREFIX } from "@constants";
+import { injectStyles, initSrLive } from "@utils/ui";
+
 import { Router } from "./router";
 import { getGlobalStyles } from "./style";
 
 import { Listing } from "../features/listing";
 import { Options } from "../features/options";
 import { Work } from "../features/work";
-
-import { injectStyles } from "../utils/ui/dom";
-
-import { CLASS_PREFIX } from "../constants/classes";
-import { initSrLive } from "../utils/ui/srLive";
 
 export const App = {
   async init() {

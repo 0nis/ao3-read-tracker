@@ -1,10 +1,11 @@
-import { ApplyMarksParams } from "..";
 import {
   IGNORED_CLASS,
   READ_CLASS,
   REREAD_WORTHY_CLASS,
   STILL_READING_CLASS,
-} from "../../../../constants/classes";
+} from "@constants";
+
+import { ApplyMarksParams } from "..";
 
 export function addClasses({ item, readWork, ignoredWork }: ApplyMarksParams) {
   if (readWork) item.classList.add(READ_CLASS);

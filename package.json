@@ -20,11 +20,14 @@
     "build:dev": "node build.js --browser=all --dev"
   },
   "devDependencies": {
+    "@esbuild-plugins/tsconfig-paths": "^0.1.2",
     "@types/chrome": "^0.1.24",
     "@types/firefox-webext-browser": "^143.0.0",
     "esbuild": "^0.25.10",
+    "esbuild-plugin-alias": "^0.2.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
   },
   "dependencies": {
     "dexie": "^4.2.1",

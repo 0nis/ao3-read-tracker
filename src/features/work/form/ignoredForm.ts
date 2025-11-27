@@ -1,9 +1,10 @@
-import { IgnoredWork } from "../../../types/works";
+import { IgnoredWork } from "@types";
+import { CLASS_PREFIX } from "@constants";
+import { StorageService } from "@services/storage";
+import { createExtensionMsg } from "@utils/extension";
+import { handleStorageWrite } from "@utils/storage";
+
 import { createWorkForm } from "./baseForm";
-import { StorageService } from "../../../services/storage";
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { createExtensionMsg } from "../../../utils/extension/console";
-import { handleStorageWrite } from "../../../utils/storage/handlers";
 
 export async function showIgnoredWorkForm(
   exists: boolean,

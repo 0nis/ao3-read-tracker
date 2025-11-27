@@ -1,6 +1,7 @@
-import { SymbolId, SymbolType } from "../../enums/symbols";
-import { symbolsCache } from "../../services/cache/symbols";
-import { SymbolRecord } from "../../types/symbols";
+import { SymbolId, SymbolType } from "@enums";
+import { symbolsCache } from "@services/cache";
+import { SymbolRecord } from "@types";
+
 import { el } from "./dom";
 
 /**

@@ -1,8 +1,9 @@
-import { ICache } from "./ICache";
-import { SymbolData } from "../../types/symbols";
-import { handleStorageRead } from "../../utils/storage/handlers";
+import { SymbolData } from "@types";
+import { handleStorageRead } from "@utils/storage";
+import { DEFAULT_SYMBOL_RECORDS } from "@constants";
+
+import { ICache } from "./cache.interface";
 import { StorageService } from "../storage";
-import { DEFAULT_SYMBOL_RECORDS } from "../../constants/symbols";
 
 export class SymbolsCache implements ICache<SymbolData> {
   private cache: SymbolData | null = null;

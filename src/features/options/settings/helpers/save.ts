@@ -1,10 +1,9 @@
+import { settingsCache } from "@services/cache";
+import { handleStorageWrite } from "@utils/storage";
+import { getElement, extractSectionValues } from "@utils/ui";
+
 import { PREFIX } from "../..";
-import { settingsCache } from "../../../../services/cache/settings";
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
-import { getElement } from "../../../../utils/ui/dom";
-import { extractSectionValues } from "../../../../utils/ui/form";
-import { SectionElements } from "../../renderer";
-import { SectionId } from "../../config";
+import { SectionId, SectionElements } from "../../config";
 import { SETTINGS_SAVE_MAP } from "../config";
 
 export function setupSettingsSaveHandlers(sections: SectionElements) {

@@ -2,10 +2,10 @@ import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
-} from "../../../constants/settings";
-import { StorageService } from "../../../services/storage";
-import { StorageResult } from "../../../types/results";
-import { SettingsData } from "../../../types/settings";
+} from "@constants";
+import { StorageResult, SettingsData } from "@types";
+import { StorageService } from "@services/storage";
+
 import { SectionId } from "../config";
 
 export const SETTINGS_LOAD_MAP: Partial<

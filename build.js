@@ -1,16 +1,12 @@
-import esbuild from "esbuild";
+import { build as viteBuild } from "vite";
 import fs from "fs";
 import path from "path";
 import { VALID_BROWSERS } from "./constants.js";
 
 const __dirname = path.resolve();
-const outDir = path.resolve(__dirname, "build");
 const distDir = path.resolve(__dirname, "dist");
-const entry = path.resolve(__dirname, "src/index.js");
+const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
 
-const pkg = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "package.json"), "utf8")
-);
 const baseFields = {
   name: pkg.displayName || pkg.name,
   version: pkg.version,
@@ -23,103 +19,88 @@ function parseArgs() {
   const args = {};
   for (const arg of process.argv.slice(2)) {
     if (arg.startsWith("--")) {
-      const [key, value] = arg.replace(/^--/, "").split("=");
-      args[key] = value ?? true;
+      const [k, v] = arg.replace(/^--/, "").split("=");
+      args[k] = v ?? true;
     }
   }
   return args;
 }
 
-const args = parseArgs();
-const browser = args.browser || "all";
-
-if (!VALID_BROWSERS.includes(browser)) {
-  throw new Error(
-    `Invalid browser: ${browser}. Valid options are: ${VALID_BROWSERS.join(
-      ", "
-    )}`
-  );
-}
-
-function copyFileSync(src, dest) {
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(src, dest);
-}
-
 function mergeManifest(templatePath, destPath) {
   const template = JSON.parse(fs.readFileSync(templatePath, "utf8"));
-  const merged = {
-    ...template,
-    ...baseFields,
-  };
+  const merged = { ...template, ...baseFields };
   merged.manifest_version = template.manifest_version;
   fs.writeFileSync(destPath, JSON.stringify(merged, null, 2));
 }
 
-async function buildForBrowser(targetBrowser, isDev) {
-  console.log(`\nBuilding for ${targetBrowser}...`);
+async function buildForBrowser(browser, isDev) {
+  console.log(`\n📦 Building for ${browser}...`);
 
-  if (fs.existsSync(outDir)) {
-    fs.rmSync(outDir, { recursive: true, force: true });
-  }
-  fs.mkdirSync(outDir, { recursive: true });
-
-  await esbuild.build({
-    entryPoints: [entry],
-    outfile: path.join(outDir, "content.js"),
-    bundle: true,
-    format: "iife",
-    globalName: "AO3WordReplacer",
-    sourcemap: true,
-    minify: false,
-    target: ["es2018"],
-    define: {
-      __BROWSER__: JSON.stringify(targetBrowser),
-      "process.env.NODE_ENV": JSON.stringify(
-        isDev ? "development" : "production"
-      ),
+  // 1. Build with Vite
+  await viteBuild(
+    {
+      mode: isDev ? "development" : "production",
+      define: {
+        __BROWSER__: JSON.stringify(browser),
+        __DEV__: JSON.stringify(isDev),
+      },
+      envDir: ".",
+      // send the browser to vite.config.js
+      // (important!)
+      build: {
+        outDir: `build/${browser}`,
+      },
+      // pass to config via env
+      // Vite injects TARGET_BROWSER for us
+      // we don't need to manually override the config file
     },
-  });
-
-  const distPath = path.join(distDir, `${targetBrowser}`);
-
-  const manifestSrc = path.resolve(
-    __dirname,
-    `templates/manifest.${targetBrowser}.json`
+    {
+      env: { TARGET_BROWSER: browser },
+    }
   );
-  const manifestDest = path.join(distPath, "manifest.json");
 
-  if (!fs.existsSync(manifestSrc))
-    throw new Error(
-      `Manifest file for ${targetBrowser} not found: ${manifestSrc}`
-    );
+  // 2. Prepare dist folder
+  const buildPath = path.join(__dirname, "build", browser);
+  const distPath = path.join(distDir, browser);
 
   if (fs.existsSync(distPath))
     fs.rmSync(distPath, { recursive: true, force: true });
   fs.mkdirSync(distPath, { recursive: true });
 
-  copyFileSync(
-    path.join(outDir, "content.js"),
+  // 3. Copy content.js
+  fs.copyFileSync(
+    path.join(buildPath, "content.js"),
     path.join(distPath, "content.js")
   );
-  mergeManifest(manifestSrc, manifestDest);
 
-  console.log(`✅ Build complete for ${targetBrowser}. Output: ${distPath}`);
+  // 4. Merge manifest
+  const manifestSrc = path.resolve(`templates/manifest.${browser}.json`);
+  if (!fs.existsSync(manifestSrc))
+    throw new Error(`Missing manifest template for ${browser}`);
+
+  mergeManifest(manifestSrc, path.join(distPath, "manifest.json"));
+
+  console.log(`✅ Done → dist/${browser}`);
 }
 
-async function buildOnce() {
-  const isDev = args.dev || false;
-  console.log(`Starting build${isDev ? " in development mode" : ""}...`);
+async function main() {
+  const args = parseArgs();
+  const browser = args.browser || "all";
+  const isDev = Boolean(args.dev);
 
   if (browser === "all") {
-    await buildForBrowser("chrome", isDev);
-    await buildForBrowser("firefox", isDev);
+    for (const b of VALID_BROWSERS) {
+      await buildForBrowser(b, isDev);
+    }
   } else {
+    if (!VALID_BROWSERS.includes(browser))
+      throw new Error(`Invalid browser: ${browser}`);
+
     await buildForBrowser(browser, isDev);
   }
 }
 
-buildOnce().catch((err) => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });

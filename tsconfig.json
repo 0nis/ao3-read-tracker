@@ -9,7 +9,26 @@
     "outDir": "build",
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "paths": {
+      "@app": ["src/app/index.ts"],
+      "@app/router": ["src/app/router.ts"],
+      "@constants": ["src/constants/index.ts"],
+      "@data": ["src/data/index.ts"],
+      "@data/models": ["src/data/models/index.ts"],
+      "@enums": ["src/enums/index.ts"],
+      "@services/storage": ["src/services/storage.ts"],
+      "@services/cache": ["src/services/cache/index.ts"],
+      "@services/rules": ["src/services/rules/index.ts"],
+      "@types": ["src/types/index.ts"],
+      "@utils/ao3": ["src/utils/ao3.ts"],
+      "@utils/date": ["src/utils/date.ts"],
+      "@utils/ui": ["src/utils/ui/index.ts"],
+      "@utils/storage": ["src/utils/storage/index.ts"],
+      "@utils/extension": ["src/utils/extension/index.ts"]
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "build", "dist"]
 }

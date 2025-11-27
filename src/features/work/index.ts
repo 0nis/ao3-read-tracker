@@ -1,11 +1,12 @@
-import { CLASS_PREFIX } from "../../constants/classes";
 import {
+  CLASS_PREFIX,
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
-} from "../../constants/settings";
-import { settingsCache } from "../../services/cache/settings";
-import { injectStyles } from "../../utils/ui/dom";
+} from "@constants";
+import { settingsCache } from "@services/cache";
+import { injectStyles } from "@utils/ui";
+
 import {
   modifyMarkForLaterButton,
   setupIgnoreButton,

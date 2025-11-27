@@ -1,7 +1,4 @@
-import {
-  confirmDestructiveAction,
-  showNotification,
-} from "../../utils/ui/dialogs";
+import { confirmDestructiveAction, showNotification } from "@utils/ui";
 
 export function setupHeaderActions(
   exportBtn: HTMLButtonElement,

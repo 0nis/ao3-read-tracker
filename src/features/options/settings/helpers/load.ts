@@ -1,7 +1,7 @@
-import { settingsCache } from "../../../../services/cache/settings";
-import { populateSection } from "../../../../utils/ui/form";
-import { SectionElements } from "../../renderer";
-import { SectionId } from "../../config";
+import { settingsCache } from "@services/cache";
+import { populateSection } from "@utils/ui";
+
+import { SectionId, SectionElements } from "../../config";
 import { SETTINGS_LOAD_MAP } from "../config";
 
 export async function loadAllSettingsSections(sections: SectionElements) {

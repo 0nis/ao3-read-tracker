@@ -1,13 +1,9 @@
+import { CLASS_PREFIX } from "@constants";
+import { PaginatedParams, PaginatedResult, StorageResult } from "@types";
+import { handleStorageRead } from "@utils/storage";
+import { el, injectStyles, reportSrLive } from "@utils/ui";
+
 import { PREFIX } from "..";
-import { CLASS_PREFIX } from "../../../constants/classes";
-import {
-  PaginatedParams,
-  PaginatedResult,
-  StorageResult,
-} from "../../../types/results";
-import { handleStorageRead } from "../../../utils/storage/handlers";
-import { el, injectStyles } from "../../../utils/ui/dom";
-import { reportSrLive } from "../../../utils/ui/srLive";
 import { createSection, SectionConfig } from "../components/section";
 import { attachExpandableBehavior } from "./helpers/accessibility";
 import { createActionButtons } from "./helpers/actions";

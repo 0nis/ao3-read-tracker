@@ -1,4 +1,5 @@
-import { CLASS_PREFIX } from "../../constants/classes";
+import { CLASS_PREFIX } from "@constants";
+
 import { el } from "./dom";
 
 let srLive: HTMLElement | null = null;

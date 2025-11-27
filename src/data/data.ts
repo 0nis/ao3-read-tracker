@@ -1,18 +1,17 @@
 import { db } from "./db";
 
-import { WorksData } from "./works";
-import { SettingsData } from "./settings";
-import { SymbolsData } from "./symbols";
+import { WorksData, SettingsData, SymbolsData } from "./models";
 
-import { ReadWork, IgnoredWork } from "../types/works";
 import {
   GeneralSettings,
   IgnoreSettings,
   ReadSettings,
-} from "../types/settings";
-import { SymbolRecord } from "../types/symbols";
+  ReadWork,
+  IgnoredWork,
+  SymbolRecord,
+} from "@types";
 
-import { SettingsType } from "../enums/settings";
+import { SettingsType } from "@enums";
 
 export const ReadWorksData = new WorksData<ReadWork>(db.readWorks);
 export const IgnoredWorksData = new WorksData<IgnoredWork>(db.ignoredWorks);

@@ -1,10 +1,5 @@
-import { ButtonPlacement, DisplayMode } from "../enums/settings";
-import { SettingsType } from "../enums/settings";
-import {
-  GeneralSettings,
-  IgnoreSettings,
-  ReadSettings,
-} from "../types/settings";
+import { ButtonPlacement, DisplayMode, SettingsType } from "@enums";
+import { GeneralSettings, IgnoreSettings, ReadSettings } from "@types";
 
 export const DEFAULT_READ_SETTINGS: ReadSettings = {
   id: SettingsType.READ,

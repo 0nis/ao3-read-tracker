@@ -1,7 +1,6 @@
-import { PREFIX } from "../..";
-import { DisplayMode } from "../../../../enums/settings";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
+import { DisplayMode } from "@enums";
+import { el, buildSelectFromEnum } from "@utils/ui";
+
 import { SectionId } from "../../config";
 import { createField, createSettingsSection } from "../base";
 

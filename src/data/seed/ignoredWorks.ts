@@ -1,4 +1,4 @@
-import { IgnoredWork } from "../../types/works";
+import { IgnoredWork } from "@types";
 
 export function generateIgnoredWorks(count: number = 100): IgnoredWork[] {
   return Array.from({ length: count }, (_, i) => ({

@@ -1,5 +1,5 @@
-import { SymbolId, SymbolType } from "../enums/symbols";
-import { SymbolRecord } from "../types/symbols";
+import { SymbolId, SymbolType } from "@enums";
+import { SymbolRecord } from "@types";
 
 export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
   {

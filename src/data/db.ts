@@ -3,18 +3,21 @@ import {
   ReadSettings,
   IgnoreSettings,
   GeneralSettings,
-} from "../types/settings";
-import { ReadWork, IgnoredWork } from "../types/works";
-import { DATABASE_NAME, DATABASE_VERSION, IS_DEV } from "../constants/global";
+  ReadWork,
+  IgnoredWork,
+  SymbolRecord,
+} from "@types";
 import {
+  DATABASE_NAME,
+  DATABASE_VERSION,
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
-} from "../constants/settings";
-import { showNotification } from "../utils/ui/dialogs";
-import { createExtensionMsg } from "../utils/extension/console";
-import { SymbolRecord } from "../types/symbols";
-import { DEFAULT_SYMBOL_RECORDS } from "../constants/symbols";
+  DEFAULT_SYMBOL_RECORDS,
+} from "@constants";
+import { showNotification } from "@utils/ui";
+import { createExtensionMsg } from "@utils/extension";
+
 import { seedDatabase } from "./seed";
 
 export class Ao3MarkAsReadDb extends Dexie {
@@ -43,7 +46,7 @@ export class Ao3MarkAsReadDb extends Dexie {
       await this.generalSettings.put(DEFAULT_GENERAL_SETTINGS);
       await this.symbolRecords.bulkPut(DEFAULT_SYMBOL_RECORDS);
 
-      if (IS_DEV) await seedDatabase(); // test data for development
+      if (__DEV__) await seedDatabase(); // test data for development
     });
 
     this.on("blocked", () => {

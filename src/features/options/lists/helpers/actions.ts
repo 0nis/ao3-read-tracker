@@ -1,9 +1,7 @@
+import { SymbolId } from "@enums";
+import { showConfirm, el, getSymbolElement } from "@utils/ui";
+
 import { PREFIX } from "../..";
-import { SymbolId } from "../../../../enums/symbols";
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
-import { showConfirm } from "../../../../utils/ui/dialogs";
-import { el } from "../../../../utils/ui/dom";
-import { getSymbolElement } from "../../../../utils/ui/symbols";
 import { ListRowActions } from "../base";
 
 export async function createActionButtons(

@@ -1,4 +1,4 @@
-import { ButtonPlacement, DisplayMode } from "../enums/settings";
+import { ButtonPlacement, DisplayMode } from "@enums";
 
 export interface ReadSettings {
   id: string;

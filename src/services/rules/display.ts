@@ -1,6 +1,5 @@
-import { DisplayMode } from "../../enums/settings";
-import { SettingsData } from "../../types/settings";
-import { IgnoredWork, ReadWork } from "../../types/works";
+import { DisplayMode } from "@enums";
+import { SettingsData, IgnoredWork, ReadWork } from "@types";
 
 type DisplayRule = {
   name: string;

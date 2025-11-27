@@ -1,5 +1,4 @@
-import type { StorageResult } from "../types/results";
-import type { WorkData } from "../types/works";
+import type { StorageResult, WorkData } from "@types";
 import {
   IgnoredWorksData,
   ReadWorksData,
@@ -7,31 +6,34 @@ import {
   IgnoreSettingsData,
   GeneralSettingsData,
   SymbolRecordsData,
-} from "../data/data";
-import { createSafeService, safeExecute } from "../utils/storage/safe";
+} from "@data";
+import { createSafeService, safeExecute } from "@utils/storage";
 
 export const StorageService = {
-  readWorks: createSafeService("StorageService.readWorks", ReadWorksData),
-  ignoredWorks: createSafeService(
-    "StorageService.ignoredWorks",
-    IgnoredWorksData
-  ),
-  readSettings: createSafeService(
-    "StorageService.readSettings",
-    ReadSettingsData
-  ),
-  ignoreSettings: createSafeService(
-    "StorageService.ignoreSettings",
-    IgnoreSettingsData
-  ),
-  generalSettings: createSafeService(
-    "StorageService.generalSettings",
-    GeneralSettingsData
-  ),
-  symbolRecords: createSafeService(
-    "StorageService.symbolRecords",
-    SymbolRecordsData
-  ),
+  get readWorks() {
+    return createSafeService("StorageService.readWorks", ReadWorksData);
+  },
+  get ignoredWorks() {
+    return createSafeService("StorageService.ignoredWorks", IgnoredWorksData);
+  },
+  get readSettings() {
+    return createSafeService("StorageService.readSettings", ReadSettingsData);
+  },
+  get ignoreSettings() {
+    return createSafeService(
+      "StorageService.ignoreSettings",
+      IgnoreSettingsData
+    );
+  },
+  get generalSettings() {
+    return createSafeService(
+      "StorageService.generalSettings",
+      GeneralSettingsData
+    );
+  },
+  get symbolRecords() {
+    return createSafeService("StorageService.symbolRecords", SymbolRecordsData);
+  },
 
   async getByIds(ids: string[]): Promise<StorageResult<WorkData>> {
     return safeExecute(async () => {

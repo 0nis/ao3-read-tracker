@@ -1,7 +1,6 @@
-import { CLASS_PREFIX } from "../../constants/classes";
-import { StorageResult } from "../../types/results";
-import { reportExtensionFailure } from "../ui/dialogs";
-import { createFlashNotice } from "../ui/form";
+import { CLASS_PREFIX } from "@constants";
+import { StorageResult } from "@types";
+import { reportExtensionFailure, createFlashNotice } from "@utils/ui";
 
 /**
  * Executes a storage read operation and handles failures with a critical error.

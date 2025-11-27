@@ -1,5 +1,5 @@
 import { PREFIX } from "..";
-import { el } from "../../../utils/ui/dom";
+import { el } from "@utils/ui";
 
 export interface SectionConfig {
   id: string;

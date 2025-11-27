@@ -1,5 +1,5 @@
-import { SymbolId } from "../../enums/symbols";
-import { ReadWork, IgnoredWork } from "../../types/works";
+import { SymbolId } from "@enums";
+import { ReadWork, IgnoredWork } from "@types";
 
 export interface SymbolRule {
   id: SymbolId;

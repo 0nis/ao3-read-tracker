@@ -1,14 +1,13 @@
-import { StorageService } from "../../services/storage";
+import { WorkData } from "@types";
+import { DisplayMode, CollapseMode } from "@enums";
+import { StorageService } from "@services/storage";
 import {
   extractWorkIdFromListingId,
   getWorkById,
   getWorksListFromListing,
-} from "../../utils/ao3";
-import type { SettingsData } from "../../types/settings";
-import { ReadWork, IgnoredWork, WorkData } from "../../types/works";
-import { createExtensionMsg } from "../../utils/extension/console";
-import { DisplayMode } from "../../enums/settings";
-import { CollapseMode } from "../../enums/ui";
+} from "@utils/ao3";
+import { createExtensionMsg } from "@utils/extension";
+
 import { collapse } from "./rendering/display/collapse";
 import { hide } from "./rendering/display/hide";
 

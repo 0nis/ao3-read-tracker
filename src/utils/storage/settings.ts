@@ -2,11 +2,10 @@ import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
-} from "../../constants/settings";
-import { StorageResult } from "../../types/results";
-import { SettingsData } from "../../types/settings";
-import { StorageService } from "../../services/storage";
-import { reportExtensionFailure } from "../ui/dialogs";
+} from "@constants";
+import { StorageResult, SettingsData } from "@types";
+import { StorageService } from "@services/storage";
+import { reportExtensionFailure } from "@utils/ui";
 
 const SETTINGS_LOADERS: Record<
   keyof SettingsData,

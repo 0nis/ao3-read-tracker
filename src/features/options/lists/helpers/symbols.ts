@@ -1,8 +1,8 @@
+import { SymbolRule } from "@services/rules";
+import { SymbolData } from "@types";
+import { el, renderSymbolContent } from "@utils/ui";
+
 import { PREFIX } from "../..";
-import { SymbolRule } from "../../../../services/rules/symbols";
-import { SymbolData } from "../../../../types/symbols";
-import { el } from "../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../utils/ui/symbols";
 
 export async function createSymbolElement(
   symbols: SymbolData,

@@ -1,3 +1,11 @@
+import { CLASS_PREFIX } from "@constants";
+import { ReadWork, IgnoredWork, SettingsData } from "@types";
+import { extractWorkIdFromListingId } from "@utils/ao3";
+import { ensureChild } from "@utils/ui";
+import { getManifest } from "@utils/extension";
+import { settingsCache } from "@services/cache";
+import { collectDisplayRules } from "@services/rules";
+
 import { addText, removeText } from "./marks/text";
 import { addSymbols, removeSymbols } from "./marks/symbols";
 import { addClasses, removeClasses } from "./marks/classes";
@@ -5,19 +13,7 @@ import { addClasses, removeClasses } from "./marks/classes";
 import { unCollapse } from "./display/collapse";
 import { unhide } from "./display/hide";
 
-import { settingsCache } from "../../../services/cache/settings";
-import { collectDisplayRules } from "../../../services/rules/display";
-
 import { getWorkStatusData, mapDisplayModeToFn } from "../handlers";
-
-import { extractWorkIdFromListingId } from "../../../utils/ao3";
-import { ensureChild } from "../../../utils/ui/dom";
-import { getManifest } from "../../../utils/extension/manifest";
-
-import { CLASS_PREFIX } from "../../../constants/classes";
-
-import { SettingsData } from "../../../types/settings";
-import { ReadWork, IgnoredWork } from "../../../types/works";
 
 /**
  * Marks works on the current listing page as read/ignored based on stored data, with their appropriate indicators.

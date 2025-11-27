@@ -1,6 +1,6 @@
-import { PaginatedParams, PaginatedResult } from "../types/results";
-import { db } from "./db";
 import { Table } from "dexie";
+import { PaginatedParams, PaginatedResult } from "@types";
+import { db } from "../db";
 
 export class WorksData<T extends { id: string }> {
   constructor(private readonly table: Table<T, string>) {}

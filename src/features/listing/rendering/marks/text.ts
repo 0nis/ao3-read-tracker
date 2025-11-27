@@ -1,15 +1,11 @@
+import { CLASS_PREFIX } from "@constants";
+import { WorkState } from "@enums";
+import type { ReadWork, IgnoredWork } from "@types";
+import { getLatestChapterFromWorkListing } from "@utils/ao3";
+import { getFormattedDate, getFormattedTime } from "@utils/date";
+import { el, ensureChild, getElement, injectStyles } from "@utils/ui";
+
 import { ApplyMarksParams } from "..";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { WorkState } from "../../../../enums/works";
-import type { ReadWork, IgnoredWork } from "../../../../types/works";
-import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
-import { getFormattedDate, getFormattedTime } from "../../../../utils/date";
-import {
-  el,
-  ensureChild,
-  getElement,
-  injectStyles,
-} from "../../../../utils/ui/dom";
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.

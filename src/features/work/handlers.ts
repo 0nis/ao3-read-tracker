@@ -1,9 +1,10 @@
-import { CLASS_PREFIX } from "../../constants/classes";
-import { StorageService } from "../../services/storage";
-import { IgnoredWork, ReadWork } from "../../types/works";
-import { getTitleFromWorkPage } from "../../utils/ao3";
-import { showNotification } from "../../utils/ui/dialogs";
-import { Router } from "../../app/router";
+import { Router } from "@app/router";
+import { StorageService } from "@services/storage";
+import { CLASS_PREFIX } from "@constants";
+import { IgnoredWork, ReadWork } from "@types";
+import { getTitleFromWorkPage } from "@utils/ao3";
+import { showNotification } from "@utils/ui";
+
 import { showIgnoredWorkForm } from "./form/ignoredForm";
 import { showReadWorkForm } from "./form/readForm";
 

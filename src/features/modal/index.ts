@@ -1,7 +1,9 @@
 import { createFocusTrap, FocusTrap } from "focus-trap";
+
+import { CLASS_PREFIX } from "@constants";
+
 import { createModal, createOverlay, ModalConfig } from "./modal";
 import { addModalStyles } from "./styles";
-import { CLASS_PREFIX } from "../../constants/classes";
 
 let stylesInitialized = false;
 let overlay: HTMLDivElement | null = null;

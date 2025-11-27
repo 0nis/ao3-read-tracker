@@ -1,21 +1,18 @@
-import { PREFIX } from ".";
-import { hijackAo3Page } from "../../utils/ao3";
-import { el } from "../../utils/ui/dom";
-import { getManifest } from "../../utils/extension/manifest";
+import { hijackAo3Page } from "@utils/ao3";
+import { el } from "@utils/ui";
+import { getManifest } from "@utils/extension";
 
+import { PREFIX } from ".";
+import {
+  SECTION_CONFIG,
+  SectionElements,
+  SectionId,
+  SectionType,
+} from "./config";
 import { setupHeaderActions } from "./handlers";
 import { setupSettings } from "./settings";
-
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
-import { SECTION_CONFIG, SectionId, SectionType } from "./config";
-
-export type SectionElements = {
-  [key in SectionId]: {
-    element: HTMLElement;
-    type: SectionType;
-  };
-};
 
 export async function render(): Promise<void> {
   const extensionName =

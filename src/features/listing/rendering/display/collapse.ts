@@ -1,6 +1,7 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { CollapseMode } from "../../../../enums/ui";
-import { el, getElement, injectStyles } from "../../../../utils/ui/dom";
+import { CLASS_PREFIX } from "@constants";
+import { CollapseMode } from "@enums";
+import { el, getElement, injectStyles } from "@utils/ui";
+
 import { getWork } from "../../handlers";
 
 /**

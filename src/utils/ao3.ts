@@ -1,4 +1,4 @@
-import { CLASS_PREFIX } from "../constants/classes";
+import { CLASS_PREFIX } from "@constants";
 
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
