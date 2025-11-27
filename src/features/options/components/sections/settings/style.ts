@@ -34,7 +34,7 @@ export function getStyles(prefix: string): string {
     }
 
     .${prefix}__settings__field__description {
-      color: #666;
+      opacity: 0.8;
       font-size: 0.95em;
       margin-top: 6px;
     }
