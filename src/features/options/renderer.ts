@@ -3,15 +3,12 @@ import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
 import { getManifest } from "../../utils/extension/manifest";
 
-import {
-  loadAllSettingsSections,
-  setupSettingsSaveHandlers,
-  setupHeaderActions,
-} from "./handlers";
+import { setupHeaderActions } from "./handlers";
+import { setupSettings } from "./settings";
 
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
-import { SECTION_CONFIG, SectionId, SectionType } from "./sections";
+import { SECTION_CONFIG, SectionId, SectionType } from "./config";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -51,15 +48,7 @@ export async function render(): Promise<void> {
 
   main.append(header, wrapper);
 
-  const settingsSections = Object.keys(sections)
-    .filter((key) => sections[key as SectionId].type === SectionType.SETTINGS)
-    .reduce((obj, key) => {
-      obj[key as SectionId] = sections[key as SectionId];
-      return obj;
-    }, {} as SectionElements);
-
-  await loadAllSettingsSections(settingsSections);
-  setupSettingsSaveHandlers(settingsSections);
+  await setupSettings(sections);
   setupHeaderActions(exportBtn, importBtn, clearBtn);
 
   function getCurrentSection() {

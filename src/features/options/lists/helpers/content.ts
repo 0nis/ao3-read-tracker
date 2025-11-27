@@ -1,9 +1,9 @@
-import { PREFIX } from "../../../..";
-import { el } from "../../../../../../utils/ui/dom";
-import { IgnoredWork, ReadWork } from "../../../../../../types/works";
-import { SymbolData } from "../../../../../../types/symbols";
-import { SymbolRule } from "../../../../../../services/rules/symbols";
-import { getFormattedDate } from "../../../../../../utils/date";
+import { PREFIX } from "../..";
+import { el } from "../../../../utils/ui/dom";
+import { IgnoredWork, ReadWork } from "../../../../types/works";
+import { SymbolData } from "../../../../types/symbols";
+import { SymbolRule } from "../../../../services/rules/symbols";
+import { getFormattedDate } from "../../../../utils/date";
 import { createSymbolElement } from "./symbols";
 
 export interface SupplementaryRowInformation {

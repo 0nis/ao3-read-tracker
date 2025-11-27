@@ -1,6 +1,6 @@
-import { PREFIX } from "../../..";
-import { el, injectStyles } from "../../../../../utils/ui/dom";
-import { createSection, SectionConfig } from "../helpers";
+import { PREFIX } from "..";
+import { el, injectStyles } from "../../../utils/ui/dom";
+import { createSection, SectionConfig } from "../components/section";
 import { getStyles } from "./style";
 
 export interface SettingsSectionConfig extends SectionConfig {

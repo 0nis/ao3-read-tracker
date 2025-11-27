@@ -1,12 +1,9 @@
 import { render } from "./renderer";
 import { getStyles } from "./style";
+import { addOptionsLinkToAo3Nav } from "./components/ao3-nav-link";
+
 import { Router } from "../../app/router";
-
-import { getManifest } from "../../utils/extension/manifest";
-import { el, injectStyles } from "../../utils/ui/dom";
-import { getSymbolElement } from "../../utils/ui/symbols";
-
-import { SymbolId } from "../../enums/symbols";
+import { injectStyles } from "../../utils/ui/dom";
 
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SETTINGS_PAGE_URL } from "../../constants/global";
@@ -16,31 +13,7 @@ export const PREFIX = `${CLASS_PREFIX}__options`;
 export const Options = {
   async init() {
     injectStyles(PREFIX, getStyles(PREFIX));
-    await addOptionsButtonToNav(SETTINGS_PAGE_URL);
+    await addOptionsLinkToAo3Nav(SETTINGS_PAGE_URL);
     Router.register(SETTINGS_PAGE_URL, render);
   },
 };
-
-export async function addOptionsButtonToNav(url: string): Promise<void> {
-  const nav = document.querySelector("ul.primary.navigation.actions");
-  if (!nav) return;
-
-  const symbolElement = await getSymbolElement(SymbolId.EXTENSION, "🧩");
-  const extensionName =
-    getManifest()?.data?.name?.replace(/^AO3\s+/i, "") || "Extension";
-
-  const button = el(
-    "a",
-    {
-      href: url,
-    },
-    [symbolElement, el("span", { textContent: ` ${extensionName} Options` })]
-  );
-  button.addEventListener("click", (ev) => {
-    ev.preventDefault();
-    Router.navigate(url);
-  });
-
-  const li = el("li", {}, button);
-  nav.appendChild(li);
-}

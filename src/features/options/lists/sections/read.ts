@@ -1,18 +1,18 @@
-import { SectionId } from "../../../sections";
-import { createListRow, createPaginatedListSection } from "./base";
-import { ReadWork } from "../../../../../types/works";
-import { getWorkLinkFromId } from "../../../../../utils/ao3";
-import { getFormattedDateAsFullText } from "../../../../../utils/date";
-import { symbolsCache } from "../../../../../services/cache/symbols";
-import { getActiveSymbolRules } from "../../../../../services/rules/symbols";
-import { StorageService } from "../../../../../services/storage";
+import { SectionId } from "../../config";
+import { createListRow, createPaginatedListSection } from "../base";
+import { ReadWork } from "../../../../types/works";
+import { getWorkLinkFromId } from "../../../../utils/ao3";
+import { getFormattedDateAsFullText } from "../../../../utils/date";
+import { symbolsCache } from "../../../../services/cache/symbols";
+import { getActiveSymbolRules } from "../../../../services/rules/symbols";
+import { StorageService } from "../../../../services/storage";
 import {
   createInnerElement,
   SupplementaryRowInformation,
-} from "./helpers/content";
-import { getSrAccessibleContentSummary } from "./helpers/accessibility";
-import { SymbolId } from "../../../../../enums/symbols";
-import { handleStorageWrite } from "../../../../../utils/storage/handlers";
+} from "../helpers/content";
+import { getSrAccessibleContentSummary } from "../helpers/accessibility";
+import { SymbolId } from "../../../../enums/symbols";
+import { handleStorageWrite } from "../../../../utils/storage/handlers";
 
 export async function buildReadListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({

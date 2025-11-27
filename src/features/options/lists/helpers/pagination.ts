@@ -1,5 +1,5 @@
-import { PREFIX } from "../../../..";
-import { el } from "../../../../../../utils/ui/dom";
+import { PREFIX } from "../..";
+import { el } from "../../../../utils/ui/dom";
 import { State } from "../base";
 
 export interface PaginationControls {
