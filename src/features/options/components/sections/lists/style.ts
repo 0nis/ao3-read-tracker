@@ -1,7 +1,7 @@
 export function getStyles(prefix: string): string {
   return `
     .${prefix}__list__container {
-      max-height: 400px;
+      height: 400px;
       overflow-y: scroll;
       opacity: 1;
       transition: opacity 120ms linear;
@@ -18,6 +18,13 @@ export function getStyles(prefix: string): string {
       padding: 0.8em 0;
       margin: 0;
       border-bottom: 1px solid #eee;
+    }
+
+    .${prefix}__list__row--empty {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      padding: 2em 0;
     }
 
     .${prefix}__list__row:hover {

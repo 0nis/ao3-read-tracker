@@ -4,3 +4,5 @@ export const DATABASE_NAME = "Ao3MarkAsReadDB";
 export const DATABASE_VERSION = VERSION;
 
 export const SETTINGS_PAGE_URL = "/extensions/read-tracker";
+
+export const IS_DEV = process.env.NODE_ENV === "development";

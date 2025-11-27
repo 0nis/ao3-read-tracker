@@ -1,4 +1,4 @@
-import { PaginatedResult } from "../types/results";
+import { PaginatedParams, PaginatedResult } from "../types/results";
 import { db } from "./db";
 import { Table } from "dexie";
 
@@ -47,20 +47,17 @@ export class WorksData<T extends { id: string }> {
     });
   }
 
-  async paginate(
-    page: number,
-    pageSize: number,
-    options?: {
-      orderBy?: keyof T;
-      reverse?: boolean;
-    }
-  ): Promise<PaginatedResult<T>> {
+  async paginate({
+    page,
+    pageSize,
+    options,
+  }: PaginatedParams): Promise<PaginatedResult<T>> {
     const { orderBy = "modifiedAt", reverse = false } = options || {};
 
     const totalItems = await this.table.count();
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-    const clampedPage = Math.min(Math.max(1, page), totalPages);
-    const offset = (clampedPage - 1) * pageSize;
+    const clampedPage = Math.min(Math.max(0, page), totalPages - 1);
+    const offset = clampedPage * pageSize;
 
     let query = this.table.orderBy(orderBy as string);
     if (reverse) query = query.reverse();
@@ -72,8 +69,8 @@ export class WorksData<T extends { id: string }> {
       pageSize,
       totalItems,
       totalPages,
-      hasNext: clampedPage < totalPages,
-      hasPrev: clampedPage > 1,
+      hasNext: clampedPage < totalPages - 1,
+      hasPrev: clampedPage > 0,
     };
   }
 }

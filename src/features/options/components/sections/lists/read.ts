@@ -22,43 +22,11 @@ import { renderSymbolContent } from "../../../../../utils/ui/symbols";
 import { SymbolData } from "../../../../../types/symbols";
 import { StorageService } from "../../../../../services/storage";
 
-/**
- * TEMPORARY: Creates a mock paginator for testing without DB.
- */
-function makeMockPaginator(total = 200) {
-  const all: ReadWork[] = Array.from({ length: total }).map((_, i) => ({
-    id: `work-${i + 1}`,
-    title: `Work number ${i + 1}`,
-    createdAt: Date.now() - i * 1000,
-    modifiedAt: Date.now() - i * 1000,
-    isReading: i % 3 === 0,
-    lastReadChapter: i % 5 === 0 ? (i % 10) + 1 : undefined,
-    rereadWorthy: i % 7 === 0,
-    count: i % 4 === 0 ? Math.floor(i / 4) + 1 : undefined,
-  }));
-
-  return (params: PaginatedParams): PaginatedResult<ReadWork> => {
-    const start = params.page * params.pageSize;
-    const items = all.slice(start, start + params.pageSize);
-    const totalPages = Math.ceil(total / params.pageSize);
-
-    return {
-      items,
-      page: params.page,
-      pageSize: params.pageSize,
-      totalItems: total,
-      totalPages,
-      hasPrev: params.page > 0,
-      hasNext: params.page < totalPages - 1,
-    };
-  };
-}
-
 export async function buildReadListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({
     id: SectionId.READ_LIST,
     title: "Read Works List",
-    paginator: makeMockPaginator(1000), // TODO: Replace with real paginator
+    paginator: StorageService.readWorks.paginate,
     renderItem,
     pageSize: 10,
   });

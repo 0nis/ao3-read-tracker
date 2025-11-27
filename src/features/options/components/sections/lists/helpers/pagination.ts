@@ -69,6 +69,10 @@ export function setupPaginationEvents(
     await renderPage();
   });
 
+  paginationControls.pageInput.setAttribute(
+    "max",
+    String(state.totalPages || 1)
+  );
   paginationControls.pageInput.addEventListener("change", async () => {
     const inputPage = parseInt(
       (paginationControls.pageInput as HTMLInputElement).value,

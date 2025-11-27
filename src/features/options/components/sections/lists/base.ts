@@ -5,6 +5,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../../types/results";
+import { handleStorageRead } from "../../../../../utils/storage/handlers";
 import { el, injectStyles } from "../../../../../utils/ui/dom";
 import { reportSrLive } from "../../../../../utils/ui/srLive";
 import { createSection, SectionConfig } from "../helpers";
@@ -16,7 +17,9 @@ import { attachExpandableBehavior, createActionButtons } from "./helpers/rows";
 import { getStyles } from "./style";
 
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
-  paginator: (params: PaginatedParams) => PaginatedResult<T>;
+  paginator: (
+    params: PaginatedParams
+  ) => Promise<StorageResult<PaginatedResult<T>>>;
   renderItem: (item: T) => Promise<HTMLElement>;
   pageSize?: number;
 }
@@ -45,13 +48,32 @@ export function createPaginatedListSection<T>({
     listContainer.classList.add(`${PREFIX}__list__container--loading`);
 
     const fragment = document.createDocumentFragment();
-    const result = paginator({
-      page: state.currentPage,
-      pageSize,
-    });
+    const result = await handleStorageRead<PaginatedResult<T>>(
+      paginator({
+        page: state.currentPage,
+        pageSize,
+      }),
+      {
+        items: [],
+        page: 0,
+        pageSize,
+        totalItems: 0,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false,
+      },
+      "Failed to load list data.",
+      true
+    );
     const { items, page, totalPages, hasPrev, hasNext } = result;
     state.totalPages = totalPages;
 
+    if (items.length === 0) {
+      const emptyEl = el("li", { className: `${PREFIX}__list__row--empty` }, [
+        "No items to display :(",
+      ]);
+      fragment.appendChild(emptyEl);
+    }
     const rendered = await Promise.all(items.map(renderItem));
     rendered.forEach((el) => fragment.appendChild(el));
     listContainer.replaceChildren(fragment);

@@ -16,7 +16,8 @@
     "url": "https://github.com/0nis/ao3-read-tracker/issues"
   },
   "scripts": {
-    "build": "node build.js --browser=all"
+    "build": "node build.js --browser=all",
+    "build:dev": "node build.js --browser=all --dev"
   },
   "devDependencies": {
     "@types/chrome": "^0.1.24",
