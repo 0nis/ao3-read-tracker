@@ -22,7 +22,7 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__list__row--empty {
       text-align: center;
-      color: #666;
+      opacity: 0.8;
       font-style: italic;
       padding: 2em 0;
     }
@@ -43,20 +43,13 @@ export function getStyles(prefix: string): string {
       width: 100%;
     }
 
-    .${prefix}__list__row__title a {
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      border-bottom: 1px dotted #999;
-    }
-
-    .${prefix}__list__row__title a:hover {
-      color: #900;
-      border-bottom: 1px solid;
+    .${prefix}__list__row__title {
+      margin: 0;
+      min-width: 33%;
     }
 
     .${prefix}__list__row__date {
-      color: #666;
+      opacity: 0.6;
       font-size: 0.8em;
     }
 
@@ -73,6 +66,12 @@ export function getStyles(prefix: string): string {
       list-style: none;
       padding: 0;
       margin: 0;
+    }
+
+    .${prefix}__list__row__text {
+      margin: 0.4em 0 0 0;
+      font-style: italic;
+      opacity: 0.8;
     }
 
     .${prefix}__list__row__symbols__item {

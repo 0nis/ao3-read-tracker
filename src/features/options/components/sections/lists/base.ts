@@ -9,11 +9,12 @@ import { handleStorageRead } from "../../../../../utils/storage/handlers";
 import { el, injectStyles } from "../../../../../utils/ui/dom";
 import { reportSrLive } from "../../../../../utils/ui/srLive";
 import { createSection, SectionConfig } from "../helpers";
+import { attachExpandableBehavior } from "./helpers/accessibility";
+import { createActionButtons } from "./helpers/actions";
 import {
   createPaginationControls,
   setupPaginationEvents,
 } from "./helpers/pagination";
-import { attachExpandableBehavior, createActionButtons } from "./helpers/rows";
 import { getStyles } from "./style";
 
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
@@ -127,7 +128,7 @@ export interface ListRowActions {
     href: string;
   };
   delete?: {
-    onDelete: () => Promise<StorageResult<void>>;
+    onDelete: () => Promise<void>;
     confirmationText: string;
     successText: string;
   };

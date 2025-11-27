@@ -1,26 +1,18 @@
 import { SectionId } from "../../../sections";
 import { createListRow, createPaginatedListSection } from "./base";
-import {
-  PaginatedParams,
-  PaginatedResult,
-  StorageResult,
-} from "../../../../../types/results";
 import { ReadWork } from "../../../../../types/works";
-import { el } from "../../../../../utils/ui/dom";
 import { getWorkLinkFromId } from "../../../../../utils/ao3";
-import { PREFIX } from "../../..";
-import {
-  getFormattedDate,
-  getFormattedDateAsFullText,
-} from "../../../../../utils/date";
+import { getFormattedDateAsFullText } from "../../../../../utils/date";
 import { symbolsCache } from "../../../../../services/cache/symbols";
-import {
-  getActiveSymbolRules,
-  SymbolRule,
-} from "../../../../../services/rules/symbols";
-import { renderSymbolContent } from "../../../../../utils/ui/symbols";
-import { SymbolData } from "../../../../../types/symbols";
+import { getActiveSymbolRules } from "../../../../../services/rules/symbols";
 import { StorageService } from "../../../../../services/storage";
+import {
+  createInnerElement,
+  SupplementaryRowInformation,
+} from "./helpers/content";
+import { getSrAccessibleContentSummary } from "./helpers/accessibility";
+import { SymbolId } from "../../../../../enums/symbols";
+import { handleStorageWrite } from "../../../../../utils/storage/handlers";
 
 export async function buildReadListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({
@@ -33,19 +25,24 @@ export async function buildReadListSection(): Promise<HTMLElement> {
 }
 
 async function renderItem(item: ReadWork): Promise<HTMLElement> {
-  const ignoredWork = await StorageService.ignoredWorks.getById(item.id);
-
   const symbols = await symbolsCache.get();
   const rules = getActiveSymbolRules({
     read: item,
-    ignored: ignoredWork?.data,
+    ignored: (await StorageService.ignoredWorks.getById(item.id))?.data,
   });
 
-  const innerElement = el(
-    "div",
-    { className: `${PREFIX}__list__row__content` },
-    await createInnerElementChildren(item, symbols, rules)
-  );
+  const info: SupplementaryRowInformation = {
+    symbols: {
+      symbolData: symbols,
+      rules,
+      exclude: [SymbolId.READ], // Everything is read in this list, so exclude the "read" symbol
+    },
+  };
+
+  const innerElement = await createInnerElement({
+    item,
+    ...info,
+  });
 
   return await createListRow({
     id: item.id,
@@ -53,88 +50,20 @@ async function renderItem(item: ReadWork): Promise<HTMLElement> {
     srAccessibleLabel: `${
       item.title || "Untitled"
     } - Red ${getFormattedDateAsFullText(item.modifiedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
-    srAccessibleContentSummary: getSrAccessibleContentSummary(symbols, rules),
+    srAccessibleContentSummary: getSrAccessibleContentSummary(info),
     actions: {
       link: { href: getWorkLinkFromId(item.id) },
       delete: {
-        onDelete: (): Promise<StorageResult<void>> => {
-          console.log(`Delete item with id: ${item.id}`);
-          return Promise.resolve({ success: true });
+        onDelete: (): Promise<void> => {
+          return handleStorageWrite<void>(
+            StorageService.readWorks.delete(item.id),
+            `${item.title} has been removed from your read list.`,
+            `Failed to remove ${item.title} from your read list.`
+          );
         },
-        confirmationText: `Are you sure you want to remove "${item.title}" from your read list?`,
-        successText: `"${item.title}" has been removed from your read list.`,
+        confirmationText: `Are you sure you want to remove ${item.title} from your read list?`,
+        successText: `${item.title} has been removed from your read list.`,
       },
     },
   });
-}
-
-async function createInnerElementChildren(
-  item: ReadWork,
-  symbols: SymbolData,
-  rules: SymbolRule[]
-): Promise<HTMLElement[]> {
-  const date = el(
-    "span",
-    { className: `${PREFIX}__list__row__date` },
-    getFormattedDate(item.modifiedAt)
-  );
-
-  const title = el(
-    "div",
-    { className: `${PREFIX}__list__row__title` },
-    item.title || "untitled"
-  );
-  const symbolsElement = await getSymbolElement(symbols, rules);
-
-  const main = el("div", { className: `${PREFIX}__list__row__main` }, [
-    title,
-    symbolsElement,
-  ]);
-
-  return [date, main];
-}
-
-async function getSymbolElement(
-  symbols: SymbolData,
-  rules: SymbolRule[]
-): Promise<HTMLElement> {
-  const symbolWrapper = el(
-    "ul",
-    { className: `${PREFIX}__list__row__symbols` },
-    []
-  );
-
-  for (const rule of rules) {
-    const symbol = symbols[rule.id];
-    if (!symbol) continue;
-
-    const label = rule.getCustomLabel?.() || symbol.label;
-    symbolWrapper.appendChild(
-      el(
-        "li",
-        {
-          className: `${PREFIX}__list__row__symbols__item`,
-          attrs: {
-            "aria-label": label,
-            title: label,
-          },
-        },
-        [renderSymbolContent(symbol, rule.getSuffix?.())]
-      )
-    );
-  }
-
-  return symbolWrapper;
-}
-
-function getSrAccessibleContentSummary(
-  symbols: SymbolData,
-  rules: SymbolRule[]
-): string {
-  const symbolsDescriptions: string[] = [];
-  for (const rule of rules) {
-    const label = rule.getCustomLabel?.() || symbols[rule.id]?.label;
-    if (label) symbolsDescriptions.push(label);
-  }
-  return symbolsDescriptions.length ? `${symbolsDescriptions.join(", ")}.` : "";
 }
