@@ -69,7 +69,7 @@ export function getStyles(prefix: string): string {
     }
 
     .${prefix}__list__row__text {
-      margin: 0.4em 0 0 0;
+      margin: 0;
       font-style: italic;
       opacity: 0.8;
     }
