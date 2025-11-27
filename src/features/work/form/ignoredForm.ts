@@ -1,30 +1,30 @@
-import { IgnoredFic } from "../../../types/storage";
-import { createFicForm } from "./baseForm";
+import { IgnoredWork } from "../../../types/works";
+import { createWorkForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { createExtensionMsg } from "../../../utils/extension/console";
 import { handleStorageWrite } from "../../../utils/storage/handlers";
 
-export async function showIgnoredFicForm(
+export async function showIgnoredWorkForm(
   exists: boolean,
-  data: Partial<IgnoredFic>
+  data: Partial<IgnoredWork>
 ): Promise<void> {
   if (!data.id) {
     console.warn(
-      createExtensionMsg("Cannot show Ignored Fic form without an ID.")
+      createExtensionMsg("Cannot show Ignored Work form without an ID.")
     );
     return;
   }
   const id = `${CLASS_PREFIX}__ignored-form`;
-  const form = await createFicForm<IgnoredFic>({
+  const form = await createWorkForm<IgnoredWork>({
     id,
-    title: "Ignore Fic",
+    title: "Ignore Work",
     exists,
     data,
-    buildInnerHTML: (d, exists) => getIgnoredFicFormMarkup(id, d, exists),
-    onSubmit: async (form) => await markFicAsIgnored(form, data),
+    buildInnerHTML: (d, exists) => getIgnoredWorkFormMarkup(id, d, exists),
+    onSubmit: async (form) => await markWorkAsIgnored(form, data),
     onDelete: async (form) =>
-      await markFicAsUnignored(data.id!, form, data.title),
+      await markWorkAsUnignored(data.id!, form, data.title),
   });
 
   form.querySelector(`#${id}__close`)?.addEventListener("click", (e) => {
@@ -39,23 +39,23 @@ export async function showIgnoredFicForm(
 }
 
 // prettier-ignore
-const getIgnoredFicFormMarkup = (
+const getIgnoredWorkFormMarkup = (
   prefix: string,
-  d: Partial<IgnoredFic>,
+  d: Partial<IgnoredWork>,
   exists: boolean
 ) => `
     <fieldset>
-        <legend>Ignore Fic</legend>
+        <legend>Ignore Work</legend>
         <p class="close actions"><a aria-label="cancel" id="${prefix}__close">×</a></p>
         <h4 class="heading byline">${
-            exists ? "Edit ignored fic info" : "Ignore this fic"
+            exists ? "Edit ignored work info" : "Ignore this work"
         }</h4>
 
         <dl>
             <dt><label for="${prefix}__reason">Reason for ignoring</label></dt>
             <dd>
                 <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__reason__description">
-                    A private reason that will appear in the work summary block for this fic.
+                    A private reason that will appear in the work summary block for this work.
                 </p>
                 <textarea 
                   id="${prefix}__reason" 
@@ -86,13 +86,13 @@ const getIgnoredFicFormMarkup = (
     </fieldset>
 `;
 
-const markFicAsUnignored = async (
+const markWorkAsUnignored = async (
   id: string,
   form: HTMLElement,
   title?: string
 ) => {
   await handleStorageWrite<void>(
-    StorageService.ignoredFics.delete(id),
+    StorageService.ignoredWorks.delete(id),
     `${title || "This work"} will no longer be ignored.`,
     `Failed to unignore ${title || "this work"}.`,
     (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
@@ -100,14 +100,15 @@ const markFicAsUnignored = async (
   );
 };
 
-const markFicAsIgnored = async (
+const markWorkAsIgnored = async (
   form: HTMLFormElement,
-  data: Partial<IgnoredFic>
+  data: Partial<IgnoredWork>
 ) => {
-  const payload: IgnoredFic = {
+  const payload: IgnoredWork = {
     id: data.id!,
     title: data.title!,
-    timestamp: Date.now(),
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
     reason: (
       form.querySelector(
         `#${CLASS_PREFIX}__ignored-form__reason`
@@ -116,7 +117,7 @@ const markFicAsIgnored = async (
   };
 
   await handleStorageWrite<void>(
-    StorageService.ignoredFics.put(payload),
+    StorageService.ignoredWorks.put(payload),
     `You have successfully ignored ${data.title || "this work"}.`,
     `Failed to ignore ${data.title || "this work"}.`,
     (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,

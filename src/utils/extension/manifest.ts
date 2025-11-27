@@ -1,4 +1,4 @@
-import { StorageResult } from "../../types/storage";
+import { StorageResult } from "../../types/results";
 import { createExtensionMsg } from "./console";
 
 interface ExtensionManifest {

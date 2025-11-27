@@ -1,30 +1,31 @@
-import { ReadFic } from "../../../types/storage";
-import { createFicForm } from "./baseForm";
+import { ReadWork } from "../../../types/works";
+import { createWorkForm } from "./baseForm";
 import { StorageService } from "../../../services/storage";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { getCurrentChapterFromWorkPage } from "../../../utils/ao3";
 import { createExtensionMsg } from "../../../utils/extension/console";
 import { handleStorageWrite } from "../../../utils/storage/handlers";
 
-export async function showReadFicForm(
+export async function showReadWorkForm(
   exists: boolean,
-  data: Partial<ReadFic>
+  data: Partial<ReadWork>
 ): Promise<void> {
   if (!data.id) {
     console.warn(
-      createExtensionMsg("Cannot show Read Fic form without an ID.")
+      createExtensionMsg("Cannot show Read Work form without an ID.")
     );
     return;
   }
   const id = `${CLASS_PREFIX}__read-form`;
-  const form = await createFicForm<ReadFic>({
+  const form = await createWorkForm<ReadWork>({
     id,
-    title: "Mark Fic as Read",
+    title: "Mark Work as Read",
     exists,
     data,
-    buildInnerHTML: (d, exists) => getReadFicFormMarkup(id, d, exists),
-    onSubmit: async (form) => await markFicAsRead(form, data),
-    onDelete: async (form) => await markFicAsUnread(data.id!, form, data.title),
+    buildInnerHTML: (d, exists) => getReadWorkFormMarkup(id, d, exists),
+    onSubmit: async (form) => await markWorkAsRead(form, data),
+    onDelete: async (form) =>
+      await markWorkAsUnread(data.id!, form, data.title),
   });
 
   const isReadingCheckbox = form.querySelector(
@@ -37,10 +38,10 @@ export async function showReadFicForm(
   if (isReadingCheckbox && lastReadChapterInput) {
     isReadingCheckbox.addEventListener("change", () => {
       const chapter = getCurrentChapterFromWorkPage();
-      lastReadChapterInput.disabled = !isReadingCheckbox.checked;
       if (isReadingCheckbox.checked && chapter !== null)
         lastReadChapterInput.value = chapter.toString();
       else lastReadChapterInput.value = "";
+      lastReadChapterInput.disabled = !isReadingCheckbox.checked;
     });
   }
 
@@ -56,23 +57,23 @@ export async function showReadFicForm(
 }
 
 // prettier-ignore
-const getReadFicFormMarkup = (
+const getReadWorkFormMarkup = (
   prefix: string,
-  d: Partial<ReadFic>,
+  d: Partial<ReadWork>,
   exists: boolean
 ) => `
     <fieldset>
         <legend>Mark as Read</legend>
         <p class="close actions"><a aria-label="cancel" id="${prefix}__close">×</a></p>
         <h4 class="heading byline">${
-            exists ? "Edit read fic info!" : "Mark this fic as read!"
+            exists ? "Edit read work info!" : "Mark this work as read!"
         }</h4>
 
         <dl>
             <dt><label for="${prefix}__notes">Notes</label></dt>
             <dd>
               <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__notes__description">
-                  Private notes that will appear in the work summary block for this fic.
+                  Private notes that will appear in the work summary block for this work.
               </p>
               <textarea 
                 id="${prefix}__notes" 
@@ -83,7 +84,7 @@ const getReadFicFormMarkup = (
             <dt><label for="${prefix}__count">Times read</label></dt>
             <dd>
               <p class="${CLASS_PREFIX}__footnote footnote" id="${prefix}__count__description">
-                  The number of times you've read this fic.
+                  The number of times you've read this work.
               </p>
               <input 
                 type="number" 
@@ -115,9 +116,8 @@ const getReadFicFormMarkup = (
                 <dt><label for="${prefix}__lastReadChapter">Last read chapter</label></dt>
                 <dd><input type="number" id="${prefix}__lastReadChapter" min="0" value="${
                     exists && d.lastReadChapter ? d.lastReadChapter : null
-                }" disabled="${
-                    exists && d.isReading ? "disabled" : ""
-                }"/></dd>
+                }" ${exists && d.isReading ? "" : "disabled"}
+                /></dd>
               </div>
 
             </div>
@@ -143,13 +143,13 @@ const getReadFicFormMarkup = (
     </fieldset>
 `;
 
-const markFicAsUnread = async (
+const markWorkAsUnread = async (
   id: string,
   form: HTMLFormElement,
   title?: string
 ) => {
   await handleStorageWrite<void>(
-    StorageService.readFics.delete(id),
+    StorageService.readWorks.delete(id),
     `You have successfully marked ${title || "this work"} as unread.`,
     `Failed to mark ${title || "this work"} as unread.`,
     (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
@@ -157,7 +157,10 @@ const markFicAsUnread = async (
   );
 };
 
-const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
+const markWorkAsRead = async (
+  form: HTMLFormElement,
+  data: Partial<ReadWork>
+) => {
   const getInputValue = <T>(
     selector: string,
     parser: (val: HTMLInputElement | HTMLTextAreaElement) => T,
@@ -170,7 +173,7 @@ const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
     return parser(input);
   };
 
-  const payload: ReadFic = {
+  const payload: ReadWork = {
     id: data.id!,
     title: data.title!,
     createdAt: data.createdAt || Date.now(),
@@ -203,7 +206,7 @@ const markFicAsRead = async (form: HTMLFormElement, data: Partial<ReadFic>) => {
   };
 
   await handleStorageWrite<void>(
-    StorageService.readFics.put(payload),
+    StorageService.readWorks.put(payload),
     `You have successfully marked ${data.title || "this work"} as read.`,
     `Failed to mark ${data.title || "this work"} as read.`,
     (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,

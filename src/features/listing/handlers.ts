@@ -4,20 +4,17 @@ import {
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import type {
-  FicData,
-  IgnoredFic,
-  ReadFic,
-  SettingsData,
-} from "../../types/storage";
+import type { SettingsData } from "../../types/settings";
+import { ReadWork, IgnoredWork, WorkData } from "../../types/works";
 import { createExtensionMsg } from "../../utils/extension/console";
-import { CollapseMode, DisplayMode } from "../../constants/enums";
-import { collapse } from "./rendering/collapse";
-import { hide } from "./rendering/hide";
+import { DisplayMode } from "../../enums/settings";
+import { CollapseMode } from "../../enums/ui";
+import { collapse } from "./rendering/display/collapse";
+import { hide } from "./rendering/display/hide";
 
-export async function getFicStatusData(): Promise<{
+export async function getWorkStatusData(): Promise<{
   worksList: HTMLElement | null;
-  data: FicData | undefined | null;
+  data: WorkData | undefined | null;
 }> {
   const worksList = getWorksListFromListing();
   if (!worksList) return { worksList: null, data: null };
@@ -27,57 +24,22 @@ export async function getFicStatusData(): Promise<{
   );
   if (items.length === 0) return { worksList, data: null };
 
-  const ficIds: string[] = [];
+  const workIds: string[] = [];
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
-    if (id) ficIds.push(id);
+    if (id) workIds.push(id);
   }
 
-  const storedDataResult = await StorageService.getByIds(ficIds);
+  const storedDataResult = await StorageService.getByIds(workIds);
   if (!storedDataResult.success) {
     console.error(
-      createExtensionMsg("Failed to retrieve stored fic data:"),
+      createExtensionMsg("Failed to retrieve stored work data:"),
       storedDataResult.error
     );
     return { worksList, data: null };
   }
 
   return { worksList, data: storedDataResult.data };
-}
-
-type DisplayRule = {
-  name: string;
-  shouldApply: () => boolean;
-  getMode: () => DisplayMode;
-};
-
-export function collectDisplayRules(
-  settings: SettingsData,
-  read?: ReadFic,
-  ignored?: IgnoredFic
-): DisplayRule[] {
-  return [
-    {
-      name: "ignored",
-      shouldApply: () => !!ignored,
-      getMode: () => settings.ignoreSettings.defaultDisplayMode,
-    },
-    {
-      name: "still reading",
-      shouldApply: () => !!read?.isReading,
-      getMode: () => settings.readSettings.stillReadingDisplayMode,
-    },
-    {
-      name: "reread worthy",
-      shouldApply: () => !!read?.rereadWorthy,
-      getMode: () => settings.readSettings.rereadWorthyDisplayMode,
-    },
-    {
-      name: "read (default)",
-      shouldApply: () => !!read,
-      getMode: () => settings.readSettings.defaultDisplayMode,
-    },
-  ];
 }
 
 export function mapDisplayModeToFn(mode: DisplayMode) {

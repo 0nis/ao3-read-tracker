@@ -1,17 +1,15 @@
 import { getIdFromUrl } from "../../utils/ao3";
 import { StorageService } from "../../services/storage";
+import { ButtonPlacement } from "../../enums/settings";
+import { ButtonAction } from "../../enums/ui";
+import { WorkState } from "../../enums/works";
 import {
-  ButtonAction,
-  ButtonPlacement,
-  WorkState,
-} from "../../constants/enums";
-import {
-  handleEditIgnoredFicInfo,
-  handleEditReadFicInfo,
-  handleIgnoreFic,
-  handleMarkFicAsRead,
-  handleMarkFicAsUnread,
-  handleUnignoreFic,
+  handleEditIgnoredWorkInfo,
+  handleEditReadWorkInfo,
+  handleIgnoreWork,
+  handleMarkWorkAsRead,
+  handleMarkWorkAsUnread,
+  handleUnignoreWork,
 } from "./handlers";
 import { el } from "../../utils/ui/dom";
 
@@ -57,13 +55,13 @@ export async function addButton(config: ButtonConfig) {
 }
 
 async function createAndAppendButton(parent: Element, config: ButtonConfig) {
-  const ficId = getIdFromUrl();
-  if (!ficId) return;
+  const WorkId = getIdFromUrl();
+  if (!WorkId) return;
 
   const exists = (
     config.type === WorkState.READ
-      ? await StorageService.readFics.exists(ficId)
-      : await StorageService.ignoredFics.exists(ficId)
+      ? await StorageService.readWorks.exists(WorkId)
+      : await StorageService.ignoredWorks.exists(WorkId)
   ).data;
 
   const button = el("a", {
@@ -78,13 +76,13 @@ async function createAndAppendButton(parent: Element, config: ButtonConfig) {
       const isOn = button.textContent === config.labels.ON;
       if (isOn) {
         button.textContent = config.labels.OFF;
-        await config.onDeactivate(ficId);
+        await config.onDeactivate(WorkId);
       } else {
         button.textContent = config.labels.ON;
-        await config.onActivate(ficId);
+        await config.onActivate(WorkId);
       }
     } else {
-      await config.onClick(ficId);
+      await config.onClick(WorkId);
     }
   });
 
@@ -103,8 +101,8 @@ export async function setupReadButton(
       placement: buttonPlacement,
       labels: { ON: "Mark as Unread", OFF: "Mark as Read" },
       href: "#ext-mar__read-form",
-      onActivate: (id) => handleMarkFicAsRead({ id }),
-      onDeactivate: handleMarkFicAsUnread,
+      onActivate: (id) => handleMarkWorkAsRead({ id }),
+      onDeactivate: handleMarkWorkAsUnread,
     });
   } else {
     await addButton({
@@ -113,7 +111,7 @@ export async function setupReadButton(
       placement: buttonPlacement,
       labels: { ON: "Edit Read Info", OFF: "Mark as Read" },
       href: "#ext-mar__read-form",
-      onClick: (id) => handleEditReadFicInfo(id),
+      onClick: (id) => handleEditReadWorkInfo(id),
     });
   }
 }
@@ -129,8 +127,8 @@ export async function setupIgnoreButton(
       placement: buttonPlacement,
       labels: { ON: "Unignore", OFF: "Ignore" },
       href: "#ext-mar__ignored-form",
-      onActivate: (id) => handleIgnoreFic({ id }),
-      onDeactivate: handleUnignoreFic,
+      onActivate: (id) => handleIgnoreWork({ id }),
+      onDeactivate: handleUnignoreWork,
     });
   } else {
     await addButton({
@@ -139,7 +137,7 @@ export async function setupIgnoreButton(
       placement: buttonPlacement,
       labels: { ON: "Edit Ignore Info", OFF: "Ignore" },
       href: "#ext-mar__ignored-form",
-      onClick: (id) => handleEditIgnoredFicInfo(id),
+      onClick: (id) => handleEditIgnoredWorkInfo(id),
     });
   }
 }

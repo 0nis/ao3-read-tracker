@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import { StorageResult } from "../../types/storage";
+import { StorageResult } from "../../types/results";
 import { reportExtensionFailure } from "../ui/dialogs";
 import { createFlashNotice } from "../ui/form";
 
@@ -54,6 +54,8 @@ export async function handleStorageWrite<T>(
   let promiseArray: Promise<any>[] = [];
 
   if (loadingEl) {
+    // TODO: Refactor to prevent innerHTML manipulation
+    // TODO: Refactor to prevent loading flash on fast operations
     originalContent = loadingEl.innerHTML;
     loadingEl.innerHTML = `
         <span 
@@ -73,8 +75,10 @@ export async function handleStorageWrite<T>(
 
     if (result.success) {
       onSuccess(successMsg);
+      return Promise.resolve();
     } else {
       reportExtensionFailure(errorMsg, result.error);
+      return Promise.reject();
     }
   } finally {
     if (loadingEl) {

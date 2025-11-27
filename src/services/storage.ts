@@ -1,16 +1,21 @@
-import type { FicData, StorageResult } from "../types/storage";
+import type { StorageResult } from "../types/results";
+import type { WorkData } from "../types/works";
 import {
-  IgnoredFicsData,
-  ReadFicsData,
+  IgnoredWorksData,
+  ReadWorksData,
   ReadSettingsData,
   IgnoreSettingsData,
   GeneralSettingsData,
+  SymbolRecordsData,
 } from "../data/data";
 import { createSafeService, safeExecute } from "../utils/storage/safe";
 
 export const StorageService = {
-  readFics: createSafeService("StorageService.readFics", ReadFicsData),
-  ignoredFics: createSafeService("StorageService.ignoredFics", IgnoredFicsData),
+  readWorks: createSafeService("StorageService.readWorks", ReadWorksData),
+  ignoredWorks: createSafeService(
+    "StorageService.ignoredWorks",
+    IgnoredWorksData
+  ),
   readSettings: createSafeService(
     "StorageService.readSettings",
     ReadSettingsData
@@ -23,12 +28,16 @@ export const StorageService = {
     "StorageService.generalSettings",
     GeneralSettingsData
   ),
+  symbolRecords: createSafeService(
+    "StorageService.symbolRecords",
+    SymbolRecordsData
+  ),
 
-  async getByIds(ids: string[]): Promise<StorageResult<FicData>> {
+  async getByIds(ids: string[]): Promise<StorageResult<WorkData>> {
     return safeExecute(async () => {
       return {
-        readFics: await ReadFicsData.getByIds(ids),
-        ignoredFics: await IgnoredFicsData.getByIds(ids),
+        readWorks: await ReadWorksData.getByIds(ids),
+        ignoredWorks: await IgnoredWorksData.getByIds(ids),
       };
     }, "StorageService.getByIds");
   },
@@ -37,7 +46,7 @@ export const StorageService = {
     // TODO: Implement
   },
 
-  async import(file: File): Promise<StorageResult<FicData>> {
+  async import(file: File): Promise<StorageResult<WorkData>> {
     // TODO: Implement
     return {
       success: false,

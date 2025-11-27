@@ -3,7 +3,8 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../constants/settings";
-import { SettingsData, StorageResult } from "../../types/storage";
+import { StorageResult } from "../../types/results";
+import { SettingsData } from "../../types/settings";
 import { StorageService } from "../../services/storage";
 import { reportExtensionFailure } from "../ui/dialogs";
 

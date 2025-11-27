@@ -1,6 +1,7 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import { MessageType } from "../../constants/enums";
+import { MessageType } from "../../enums/messages";
 import { el } from "./dom";
+import { reportSrLive } from "./srLive";
 
 /**
  * Shows a message within a container element, replacing any existing message.
@@ -42,6 +43,9 @@ export function createFlashNotice(innerHTML: string): void {
     innerHTML: innerHTML,
     attrs: { role: "status" },
   });
+
+  reportSrLive(notice.textContent?.trim());
+
   main.prepend(notice);
 }
 

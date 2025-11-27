@@ -56,7 +56,7 @@ function mergeManifest(templatePath, destPath) {
   fs.writeFileSync(destPath, JSON.stringify(merged, null, 2));
 }
 
-async function buildForBrowser(targetBrowser) {
+async function buildForBrowser(targetBrowser, isDev) {
   console.log(`\nBuilding for ${targetBrowser}...`);
 
   if (fs.existsSync(outDir)) {
@@ -75,6 +75,9 @@ async function buildForBrowser(targetBrowser) {
     target: ["es2018"],
     define: {
       __BROWSER__: JSON.stringify(targetBrowser),
+      "process.env.NODE_ENV": JSON.stringify(
+        isDev ? "development" : "production"
+      ),
     },
   });
 
@@ -105,11 +108,14 @@ async function buildForBrowser(targetBrowser) {
 }
 
 async function buildOnce() {
+  const isDev = args.dev || false;
+  console.log(`Starting build${isDev ? " in development mode" : ""}...`);
+
   if (browser === "all") {
-    await buildForBrowser("chrome");
-    await buildForBrowser("firefox");
+    await buildForBrowser("chrome", isDev);
+    await buildForBrowser("firefox", isDev);
   } else {
-    await buildForBrowser(browser);
+    await buildForBrowser(browser, isDev);
   }
 }
 

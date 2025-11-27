@@ -1,83 +1,80 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import {
-  DEFAULT_GENERAL_SETTINGS,
-  DEFAULT_IGNORE_SETTINGS,
-  DEFAULT_READ_SETTINGS,
-} from "../../constants/settings";
 import { StorageService } from "../../services/storage";
-import { IgnoredFic, ReadFic, SettingsData } from "../../types/storage";
+import { IgnoredWork, ReadWork } from "../../types/works";
 import { getTitleFromWorkPage } from "../../utils/ao3";
 import { showNotification } from "../../utils/ui/dialogs";
 import { Router } from "../../app/router";
-import { showIgnoredFicForm } from "./form/ignoredForm";
-import { showReadFicForm } from "./form/readForm";
+import { showIgnoredWorkForm } from "./form/ignoredForm";
+import { showReadWorkForm } from "./form/readForm";
 
-export async function handleEditReadFicInfo(id: string): Promise<void> {
+export async function handleEditReadWorkInfo(id: string): Promise<void> {
   const form = document.getElementById(`${CLASS_PREFIX}__read-form`);
   if (form) {
     Router.addHash(form.id);
     return;
   }
-  const { data } = await StorageService.readFics.getById(id);
-  showReadFicForm(!!data, {
+  const { data } = await StorageService.readWorks.getById(id);
+  showReadWorkForm(!!data, {
     ...data,
     id,
     title: getTitleFromWorkPage() || "Untitled",
   });
 }
 
-export async function handleMarkFicAsRead(
-  data: Partial<ReadFic>
+export async function handleMarkWorkAsRead(
+  data: Partial<ReadWork>
 ): Promise<void> {
   const title = getTitleFromWorkPage() || "Untitled";
-  const result = await StorageService.readFics.put({
+  const result = await StorageService.readWorks.put({
     ...data,
     id: data.id!,
-    createdAt: Date.now(),
+    createdAt: data.createdAt || Date.now(),
     modifiedAt: Date.now(),
     title: title,
   });
-  if (result.success) showNotification(`Fic ${data.id} marked as read.`);
+  if (result.success) showNotification(`Work ${data.id} marked as read.`);
   else
-    showNotification(`Failed to mark fic ${data.id} as read: ${result.error}`);
+    showNotification(`Failed to mark work ${data.id} as read: ${result.error}`);
 }
 
-export async function handleMarkFicAsUnread(id: string): Promise<void> {
-  const result = await StorageService.readFics.delete(id);
-  if (result.success) showNotification(`Fic ${id} marked as unread.`);
-  else showNotification(`Failed to mark fic ${id} as unread: ${result.error}`);
+export async function handleMarkWorkAsUnread(id: string): Promise<void> {
+  const result = await StorageService.readWorks.delete(id);
+  if (result.success) showNotification(`Work ${id} marked as unread.`);
+  else showNotification(`Failed to mark work ${id} as unread: ${result.error}`);
 }
 
-export async function handleEditIgnoredFicInfo(id: string): Promise<void> {
+export async function handleEditIgnoredWorkInfo(id: string): Promise<void> {
   const form = document.getElementById(`${CLASS_PREFIX}__ignored-form`);
   if (form) {
     Router.addHash(form.id);
     return;
   }
-  const { data } = await StorageService.ignoredFics.getById(id);
-  showIgnoredFicForm(!!data, {
+  const { data } = await StorageService.ignoredWorks.getById(id);
+  showIgnoredWorkForm(!!data, {
     ...data,
     id,
     title: getTitleFromWorkPage() || "Untitled",
   });
 }
 
-export async function handleIgnoreFic(
-  data: Partial<IgnoredFic>
+export async function handleIgnoreWork(
+  data: Partial<IgnoredWork>
 ): Promise<void> {
   const title = getTitleFromWorkPage() || "Untitled";
-  const result = await StorageService.ignoredFics.put({
+  const result = await StorageService.ignoredWorks.put({
     ...data,
     id: data.id!,
-    timestamp: Date.now(),
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
     title: title,
   });
-  if (result.success) showNotification(`Fic ${data.id} is now being ignored.`);
-  else showNotification(`Failed to ignore fic ${data.id}: ${result.error}`);
+  if (result.success) showNotification(`Work ${data.id} is now being ignored.`);
+  else showNotification(`Failed to ignore work ${data.id}: ${result.error}`);
 }
 
-export async function handleUnignoreFic(id: string): Promise<void> {
-  const result = await StorageService.ignoredFics.delete(id);
-  if (result.success) showNotification(`Fic ${id} is no longer being ignored.`);
-  else showNotification(`Failed to unignore fic ${id}: ${result.error}`);
+export async function handleUnignoreWork(id: string): Promise<void> {
+  const result = await StorageService.ignoredWorks.delete(id);
+  if (result.success)
+    showNotification(`Work ${id} is no longer being ignored.`);
+  else showNotification(`Failed to unignore Work ${id}: ${result.error}`);
 }

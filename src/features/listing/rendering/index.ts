@@ -1,144 +1,124 @@
-import { addText, removeText } from "./text";
-import { unCollapse } from "./collapse";
-import { addSymbols, removeSymbols } from "./symbols";
+import { addText, removeText } from "./marks/text";
+import { addSymbols, removeSymbols } from "./marks/symbols";
+import { addClasses, removeClasses } from "./marks/classes";
 
-import {
-  collectDisplayRules,
-  getFicStatusData,
-  mapDisplayModeToFn,
-} from "../handlers";
+import { unCollapse } from "./display/collapse";
+import { unhide } from "./display/hide";
+
+import { settingsCache } from "../../../services/cache/settings";
+import { collectDisplayRules } from "../../../services/rules/display";
+
+import { getWorkStatusData, mapDisplayModeToFn } from "../handlers";
+
 import { extractWorkIdFromListingId } from "../../../utils/ao3";
 import { ensureChild } from "../../../utils/ui/dom";
-
-import {
-  READ_CLASS,
-  IGNORED_CLASS,
-  REREAD_WORTHY_CLASS,
-  CLASS_PREFIX,
-  STILL_READING_CLASS,
-} from "../../../constants/classes";
-import { WorkState } from "../../../constants/enums";
-import {
-  type ReadFic,
-  type IgnoredFic,
-  SettingsData,
-} from "../../../types/storage";
-import { unhide } from "./hide";
 import { getManifest } from "../../../utils/extension/manifest";
-import { handleGetAllSettings } from "../../../utils/storage/settings";
+
+import { CLASS_PREFIX } from "../../../constants/classes";
+
+import { SettingsData } from "../../../types/settings";
+import { ReadWork, IgnoredWork } from "../../../types/works";
 
 /**
- * Marks fics on the current listing page as read/ignored based on stored data, with their appropriate indicators.
+ * Marks works on the current listing page as read/ignored based on stored data, with their appropriate indicators.
  */
-export async function markFicsOnPage(): Promise<void> {
-  const { readFics, ignoredFics, items, settings } =
+export async function markWorksOnPage(): Promise<void> {
+  const { readWorks, ignoredWorks, items, settings } =
     (await getDataAndItems()) || {};
-  if (!readFics || !ignoredFics || !items || !settings) return;
+  if (!readWorks || !ignoredWorks || !items || !settings) return;
 
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
     if (!id) continue;
-    applyMarksToWork(item, readFics[id], ignoredFics[id], settings);
+    await applyMarksToWork({
+      item,
+      readWork: readWorks[id],
+      ignoredWork: ignoredWorks[id],
+      settings,
+    });
   }
 }
 
 /**
- * Updates fics on the current listing page to reflect any changes in their read/ignored status, adjusting indicators as needed.
+ * Updates works on the current listing page to reflect any changes in their read/ignored status, adjusting indicators as needed.
  */
-export async function updateFicsOnPage(): Promise<void> {
-  const { readFics, ignoredFics, items, settings } =
+export async function updateWorksOnPage(): Promise<void> {
+  const { readWorks, ignoredWorks, items, settings } =
     (await getDataAndItems()) || {};
-  if (!readFics || !ignoredFics || !items || !settings) return;
+  if (!readWorks || !ignoredWorks || !items || !settings) return;
 
   for (const item of items) {
     const id = extractWorkIdFromListingId(item.id);
     if (!id) continue;
 
-    item.classList.remove(
-      READ_CLASS,
-      IGNORED_CLASS,
-      REREAD_WORTHY_CLASS,
-      STILL_READING_CLASS
-    );
-
+    removeClasses(item);
     removeText(item);
     removeSymbols(item);
     unCollapse(item);
     unhide(item.id);
-    await applyMarksToWork(item, readFics[id], ignoredFics[id], settings);
+
+    await applyMarksToWork({
+      item,
+      readWork: readWorks[id],
+      ignoredWork: ignoredWorks[id],
+      settings,
+    });
   }
 }
 
 async function getDataAndItems(): Promise<
   | {
-      readFics: Record<string, ReadFic>;
-      ignoredFics: Record<string, IgnoredFic>;
+      readWorks: Record<string, ReadWork>;
+      ignoredWorks: Record<string, IgnoredWork>;
       items: NodeListOf<HTMLElement>;
       settings: SettingsData;
     }
   | undefined
 > {
-  const { worksList, data } = await getFicStatusData();
+  const { worksList, data } = await getWorkStatusData();
   if (!worksList || !data) return;
-  const { readFics, ignoredFics } = data;
+  const { readWorks, ignoredWorks } = data;
 
-  const settings = await handleGetAllSettings();
+  const settings = await settingsCache.get();
   const items = worksList.querySelectorAll<HTMLLIElement>("li.work");
 
-  return { readFics, ignoredFics, items, settings };
+  return { readWorks, ignoredWorks, items, settings };
 }
 
-function applyMarksToWork(
-  item: HTMLElement,
-  readFic: ReadFic | undefined,
-  ignoredFic: IgnoredFic | undefined,
-  settings: SettingsData
-) {
-  createOrModifyLandmarkHeading(item);
-  if (readFic) markAsRead(item, readFic, settings);
-  if (ignoredFic) markAsIgnored(item, ignoredFic, settings);
-  adjustWorkDisplay(item, settings, readFic, ignoredFic);
+export interface ApplyMarksParams {
+  item: HTMLElement;
+  readWork: ReadWork | undefined;
+  ignoredWork: IgnoredWork | undefined;
+  settings: SettingsData;
 }
 
-function markAsRead(work: HTMLElement, item: ReadFic, settings: SettingsData) {
-  work.classList.add(READ_CLASS);
-  if (item.rereadWorthy) work.classList.add(REREAD_WORTHY_CLASS);
-  if (item.isReading) work.classList.add(STILL_READING_CLASS);
-  addText(work, WorkState.READ, item);
-  if (!settings.generalSettings.hideSymbols)
-    addSymbols(work, WorkState.READ, item);
+async function applyMarksToWork(params: ApplyMarksParams) {
+  createOrModifyLandmarkHeading(params.item);
+  addClasses(params);
+  addText(params);
+  if (!params.settings.generalSettings.hideSymbols) await addSymbols(params);
+  adjustWorkDisplay(params);
 }
 
-function markAsIgnored(
-  work: HTMLElement,
-  item: IgnoredFic,
-  settings: SettingsData
-) {
-  work.classList.add(IGNORED_CLASS);
-  addText(work, WorkState.IGNORED, item);
-  if (!settings.generalSettings.hideSymbols)
-    addSymbols(work, WorkState.IGNORED, item);
-}
-
-function adjustWorkDisplay(
-  work: HTMLElement,
-  settings: SettingsData,
-  readFic?: ReadFic,
-  ignoredFic?: IgnoredFic
-) {
-  const rules = collectDisplayRules(settings, readFic, ignoredFic);
+function adjustWorkDisplay({
+  item,
+  readWork,
+  ignoredWork,
+  settings,
+}: ApplyMarksParams) {
+  const rules = collectDisplayRules(settings, readWork, ignoredWork);
 
   // TODO: Create setting deciding what order these go in (which take priority)
   const rule = rules.find((r) => r.shouldApply());
   if (!rule) return;
 
   const displayFn = mapDisplayModeToFn(rule.getMode());
-  displayFn(work);
+  displayFn(item);
 }
 
-const extensionName = getManifest().data?.name || "Mark as Read";
-function createOrModifyLandmarkHeading(work: HTMLElement) {
-  ensureChild(work, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
+const extensionName = getManifest().data?.name || "Read Tracker";
+function createOrModifyLandmarkHeading(item: HTMLElement) {
+  ensureChild(item, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
     className: "landmark heading",
     textContent: `${extensionName} Extension Information`,
   });

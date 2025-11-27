@@ -4,7 +4,7 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../constants/settings";
-import { handleGetAllSettings } from "../../utils/storage/settings";
+import { settingsCache } from "../../services/cache/settings";
 import { injectStyles } from "../../utils/ui/dom";
 import {
   modifyMarkForLaterButton,
@@ -21,7 +21,7 @@ export const Work = {
     );
 
     const { readSettings, ignoreSettings, generalSettings } =
-      await handleGetAllSettings();
+      await settingsCache.get();
 
     if (generalSettings?.replaceMarkForLaterText) {
       modifyMarkForLaterButton(

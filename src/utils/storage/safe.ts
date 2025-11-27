@@ -1,6 +1,9 @@
-import { BaseData } from "../../data/base";
+import { WorksData } from "../../data/works";
 import { SettingsData } from "../../data/settings";
-import { StorageResult } from "../../types/storage";
+import { SymbolsData } from "../../data/symbols";
+
+import { StorageResult } from "../../types/results";
+
 import { createExtensionMsg } from "../extension/console";
 
 /**
@@ -29,12 +32,12 @@ export async function safeExecute<T>(
  * Each method will return a StorageResult instead of throwing errors.
  *
  * @param name The name of the service (used for error logging context)
- * @param data The BaseData or SettingsData instance to wrap
+ * @param data The data instance to wrap
  * @returns A wrapped service where all methods return StorageResult
  */
 export function createSafeService<
   T extends { id: string },
-  D extends BaseData<T> | SettingsData<T>
+  D extends WorksData<T> | SettingsData<T> | SymbolsData<T>
 >(
   name: string,
   data: D

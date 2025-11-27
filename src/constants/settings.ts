@@ -1,16 +1,10 @@
-import { ButtonPlacement, DisplayMode, SettingsType } from "./enums";
+import { ButtonPlacement, DisplayMode } from "../enums/settings";
+import { SettingsType } from "../enums/settings";
 import {
   GeneralSettings,
   IgnoreSettings,
   ReadSettings,
-} from "../types/storage";
-
-export const VERSION: number = 1;
-
-export const DATABASE_NAME = "Ao3MarkAsReadDB";
-export const DATABASE_VERSION = VERSION;
-
-export const SETTINGS_PAGE_URL = "/settings/mark-as-read";
+} from "../types/settings";
 
 export const DEFAULT_READ_SETTINGS: ReadSettings = {
   id: SettingsType.READ,
