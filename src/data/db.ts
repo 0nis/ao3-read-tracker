@@ -1,21 +1,16 @@
 import Dexie, { Table } from "dexie";
+
+import { showNotification } from "../utils/ui/dialogs";
+import { createExtensionMsg } from "../utils/extension/console";
 import {
   ReadSettings,
   IgnoreSettings,
   GeneralSettings,
 } from "../types/settings";
 import { ReadWork, IgnoredWork } from "../types/works";
-import { DATABASE_NAME, DATABASE_VERSION, IS_DEV } from "../constants/global";
-import {
-  DEFAULT_GENERAL_SETTINGS,
-  DEFAULT_IGNORE_SETTINGS,
-  DEFAULT_READ_SETTINGS,
-} from "../constants/settings";
-import { showNotification } from "../utils/ui/dialogs";
-import { createExtensionMsg } from "../utils/extension/console";
 import { SymbolRecord } from "../types/symbols";
-import { DEFAULT_SYMBOL_RECORDS } from "../constants/symbols";
-import { seedDatabase } from "./seed";
+import { DATABASE_NAME } from "../constants/global";
+import { populateDb } from "./populate";
 
 export class Ao3MarkAsReadDb extends Dexie {
   readWorks!: Table<ReadWork>;
@@ -37,14 +32,7 @@ export class Ao3MarkAsReadDb extends Dexie {
       symbolRecords: "id",
     });
 
-    this.on("populate", async () => {
-      await this.readSettings.put(DEFAULT_READ_SETTINGS);
-      await this.ignoreSettings.put(DEFAULT_IGNORE_SETTINGS);
-      await this.generalSettings.put(DEFAULT_GENERAL_SETTINGS);
-      await this.symbolRecords.bulkPut(DEFAULT_SYMBOL_RECORDS);
-
-      if (IS_DEV) await seedDatabase(); // test data for development
-    });
+    this.on("populate", async () => await populateDb());
 
     this.on("blocked", () => {
       showNotification(
