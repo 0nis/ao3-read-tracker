@@ -3,7 +3,7 @@ import {
   confirmDestructiveAction,
   showConfirm,
 } from "../../../../utils/ui/dialogs";
-import { handleImport } from "../../handlers";
+import { handleImport } from "./handlers";
 import { createExistenceCache } from "../../../../data/cache/existence";
 
 const DEFAULT_IMPORT_OPTIONS: ImportOptions = {
