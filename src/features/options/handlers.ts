@@ -46,8 +46,11 @@ export async function handleImport(
   const res = await withLoadingState(
     controller,
     async (setProgress) => {
-      return IoService.import(file, fileInfo.databaseVersion ?? 0, {
+      return IoService.import(file, {
         ...options,
+        transform: IoService.getMigrationTransformFunc(
+          fileInfo.databaseVersion!
+        ),
         progressCallback: (progress: ImportProgress) => {
           totalRows ??= progress.totalRows;
           return handleProgress(setProgress, progress);
@@ -56,9 +59,9 @@ export async function handleImport(
     },
     { enforceMinDelay: true }
   );
-  if (res.success)
+  if (res.success) {
     createFlashNotice(successMsg.replace("%rows%", String(totalRows)));
-  else {
+  } else {
     const errorMsg =
       res.error instanceof Error ? res.error.message : String(res.error);
     showNotification(`Oh no, I couldn't import your data: ${errorMsg}`); // Manual to allow showing Dexie errors without reportExtensionFailure
@@ -115,6 +118,12 @@ function validateImportFile(info: DexieExportDbInfo): boolean {
   if (info.formatName !== "dexie" || info.databaseName !== DATABASE_NAME) {
     showNotification(
       "Whups, the selected file isn't an export from this extension. Please select a valid file! Only exports from this extension can be imported."
+    );
+    return false;
+  }
+  if (!info.databaseVersion) {
+    showNotification(
+      "The selected file seems to be corrupted or incomplete. Please select a valid export file."
     );
     return false;
   }
