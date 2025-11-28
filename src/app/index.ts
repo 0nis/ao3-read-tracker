@@ -8,7 +8,7 @@ import { Work } from "../features/work";
 import { injectStyles } from "../utils/ui/dom";
 
 import { CLASS_PREFIX } from "../constants/classes";
-import { initSrLive } from "../utils/ui/srLive";
+import { initSrLive } from "../utils/ui/sr-live";
 
 export const App = {
   async init() {

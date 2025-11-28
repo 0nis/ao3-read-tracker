@@ -1,4 +1,4 @@
-import { ICache } from "./ICache";
+import { ICache } from "./cache.interface";
 import { SymbolData } from "../../types/symbols";
 import { handleStorageRead } from "../../utils/storage/handlers";
 import { StorageService } from "../storage";
