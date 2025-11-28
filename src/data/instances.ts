@@ -11,25 +11,26 @@ import {
   ReadSettings,
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
-
 import { SettingsType } from "../enums/settings";
 
-export const ReadWorksData = new WorksData<ReadWork>(db.readWorks);
-export const IgnoredWorksData = new WorksData<IgnoredWork>(db.ignoredWorks);
+export const instances = {
+  readWorks: new WorksData<ReadWork>(db.readWorks),
+  ignoredWorks: new WorksData<IgnoredWork>(db.ignoredWorks),
 
-export const ReadSettingsData = new SettingsData<ReadSettings>(
-  db.readSettings,
-  SettingsType.READ
-);
-export const IgnoreSettingsData = new SettingsData<IgnoreSettings>(
-  db.ignoreSettings,
-  SettingsType.IGNORE
-);
-export const GeneralSettingsData = new SettingsData<GeneralSettings>(
-  db.generalSettings,
-  SettingsType.GENERAL
-);
+  readSettings: new SettingsData<ReadSettings>(
+    db.readSettings,
+    SettingsType.READ
+  ),
+  ignoreSettings: new SettingsData<IgnoreSettings>(
+    db.ignoreSettings,
+    SettingsType.IGNORE
+  ),
+  generalSettings: new SettingsData<GeneralSettings>(
+    db.generalSettings,
+    SettingsType.GENERAL
+  ),
 
-export const SymbolRecordsData = new SymbolsData<SymbolRecord>(
-  db.symbolRecords
-);
+  symbolRecords: new SymbolsData<SymbolRecord>(db.symbolRecords),
+};
+
+export type InstanceMap = typeof instances;

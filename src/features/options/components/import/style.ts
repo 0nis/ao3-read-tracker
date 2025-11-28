@@ -15,7 +15,7 @@ export function getStyles(prefix: string): string {
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        width: min-content;
+        width: 11em;
         box-sizing: border-box;
         position: absolute;
         top: 2.411em;
@@ -31,6 +31,8 @@ export function getStyles(prefix: string): string {
         height: min-content;
         box-sizing: border-box;
         margin: 0.2em 0;
+        padding: 0.25em;
+        white-space: normal;
     }
   `;
 }

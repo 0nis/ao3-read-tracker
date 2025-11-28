@@ -14,7 +14,7 @@ export function buildExportButton() {
     },
     ["Export"]
   );
-  btn.onclick = async (e) => handleExport(e);
+  btn.onclick = async () => await handleExport(btn);
 
   return el("li", { className: `${PREFIX}__export` }, [btn]);
 }

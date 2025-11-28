@@ -23,7 +23,7 @@ export async function render(): Promise<void> {
   const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
   if (!main) return;
 
-  const { header, exportBtn, importBtn, clearBtn } = buildHeader(extensionName);
+  const { header, clearBtn } = buildHeader(extensionName);
 
   const entries = await Promise.all(
     SECTION_CONFIG.map(async ({ id, build, type }) => {
@@ -49,7 +49,7 @@ export async function render(): Promise<void> {
   main.append(header, wrapper);
 
   await setupSettings(sections);
-  setupHeaderActions(exportBtn, importBtn, clearBtn);
+  setupHeaderActions(clearBtn);
 
   function getCurrentSection() {
     const hash = window.location.hash.slice(1);

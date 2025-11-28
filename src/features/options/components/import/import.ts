@@ -1,8 +1,9 @@
 import { PREFIX } from "../..";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { toLowerCaseAndReplaceSpaces } from "../../../../utils/string";
+import { showNotification } from "../../../../utils/ui/dialogs";
 import { el, injectStyles } from "../../../../utils/ui/dom";
-import { getExpandedImportButtons } from "./config";
+import { ExpandableItemParams, getExpandedImportButtons } from "./config";
 import { getStyles } from "./style";
 
 export function buildImportButton() {
@@ -10,12 +11,7 @@ export function buildImportButton() {
 
   const btnConfigs = getExpandedImportButtons(PREFIX);
   const items = btnConfigs.map((cfg) =>
-    createImportExpandableSecondaryItem(
-      cfg.label,
-      cfg.description,
-      cfg.className,
-      cfg.onClick
-    )
+    createImportExpandableSecondaryItem(cfg)
   );
 
   const importBtn = createImportExpandableButton();
@@ -53,7 +49,11 @@ function addExpandableBehavior(btn: HTMLElement, secondary: HTMLElement) {
 }
 
 function createImportExpandableButton(): HTMLElement {
-  return el("button", { className: `${PREFIX}__button collapsed` }, ["Import"]);
+  return el(
+    "button",
+    { className: `${PREFIX}__button ${PREFIX}__button--danger collapsed` },
+    ["Import"]
+  );
 }
 
 function createImportExpandableSecondary(
@@ -68,12 +68,13 @@ function createImportExpandableSecondary(
   );
 }
 
-function createImportExpandableSecondaryItem(
-  label: string,
-  description: string,
-  className?: string,
-  onClick?: (e: Event, file: Blob) => Promise<void>
-): HTMLElement {
+function createImportExpandableSecondaryItem({
+  label,
+  description,
+  className,
+  onClick,
+  onConfirm,
+}: ExpandableItemParams): HTMLElement {
   const btn = el(
     "button",
     {
@@ -96,12 +97,16 @@ function createImportExpandableSecondaryItem(
     attrs: { "aria-hidden": "true" },
   });
   if (onClick) {
-    btn.addEventListener("click", () => input.click());
+    btn.addEventListener("click", () => {
+      const confirmed = onConfirm?.();
+      if (!confirmed) showNotification("Data import action cancelled.");
+      else input.click();
+    });
     input.addEventListener("change", async (e) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
       if (!file) return;
-      await onClick(e, file);
+      await onClick(btn, file);
       target.value = "";
     });
   }

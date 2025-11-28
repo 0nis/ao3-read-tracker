@@ -12,6 +12,7 @@ import {
   handleUnignoreWork,
 } from "./handlers";
 import { el } from "../../utils/ui/dom";
+import { CLASS_PREFIX } from "../../constants/classes";
 
 interface BaseButtonConfig {
   type: WorkState;
@@ -100,7 +101,7 @@ export async function setupReadButton(
       type: WorkState.READ,
       placement: buttonPlacement,
       labels: { ON: "Mark as Unread", OFF: "Mark as Read" },
-      href: "#ext-mar__read-form",
+      href: `#${CLASS_PREFIX}__read-form`,
       onActivate: (id) => handleMarkWorkAsRead({ id }),
       onDeactivate: handleMarkWorkAsUnread,
     });
@@ -110,7 +111,7 @@ export async function setupReadButton(
       type: WorkState.READ,
       placement: buttonPlacement,
       labels: { ON: "Edit Read Info", OFF: "Mark as Read" },
-      href: "#ext-mar__read-form",
+      href: `#${CLASS_PREFIX}__read-form`,
       onClick: (id) => handleEditReadWorkInfo(id),
     });
   }
@@ -126,7 +127,7 @@ export async function setupIgnoreButton(
       type: WorkState.IGNORED,
       placement: buttonPlacement,
       labels: { ON: "Unignore", OFF: "Ignore" },
-      href: "#ext-mar__ignored-form",
+      href: `#${CLASS_PREFIX}__ignored-form`,
       onActivate: (id) => handleIgnoreWork({ id }),
       onDeactivate: handleUnignoreWork,
     });
@@ -136,7 +137,7 @@ export async function setupIgnoreButton(
       type: WorkState.IGNORED,
       placement: buttonPlacement,
       labels: { ON: "Edit Ignore Info", OFF: "Ignore" },
-      href: "#ext-mar__ignored-form",
+      href: `#${CLASS_PREFIX}__ignored-form`,
       onClick: (id) => handleEditIgnoredWorkInfo(id),
     });
   }

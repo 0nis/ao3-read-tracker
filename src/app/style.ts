@@ -34,7 +34,8 @@ export function getGlobalStyles(prefix: string): string {
     .${prefix}__progress {
       position: relative;
       display: inline-block;
-      width: 3em;
+      min-width: 3em;
+      width: 100%;
       height: 0.4em;
       background: rgba(0,0,0,0.15);
       border-radius: 2px;

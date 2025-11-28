@@ -16,8 +16,8 @@ export function showNotification(message: string): void {
  * Asks for user confirmation on an action.
  * Uses the native confirm dialog.
  */
-export function showConfirm(message: string): Promise<boolean> {
-  return Promise.resolve(confirm(message));
+export function showConfirm(message: string): boolean {
+  return confirm(message);
 }
 
 /**
@@ -31,13 +31,11 @@ export function showConfirm(message: string): Promise<boolean> {
 export function confirmDestructiveAction(
   message: string,
   confirmPhrase: string
-): Promise<boolean> {
+): boolean {
   const userInput = prompt(
     `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
   );
-  return Promise.resolve(
-    userInput?.toUpperCase() === confirmPhrase.toUpperCase()
-  );
+  return userInput?.toUpperCase() === confirmPhrase.toUpperCase();
 }
 
 /**
