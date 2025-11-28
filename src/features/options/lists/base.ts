@@ -7,7 +7,7 @@ import {
 } from "../../../types/results";
 import { handleStorageRead } from "../../../utils/storage/handlers";
 import { el, injectStyles } from "../../../utils/ui/dom";
-import { reportSrLive } from "../../../utils/ui/srLive";
+import { reportSrLive } from "../../../utils/ui/sr-live";
 import { createSection, SectionConfig } from "../components/section";
 import { attachExpandableBehavior } from "./helpers/accessibility";
 import { createActionButtons } from "./helpers/actions";
@@ -55,16 +55,18 @@ export function createPaginatedListSection<T>({
         pageSize,
       }),
       {
-        items: [],
-        page: 0,
-        pageSize,
-        totalItems: 0,
-        totalPages: 0,
-        hasNext: false,
-        hasPrev: false,
-      },
-      "Failed to load list data.",
-      true
+        errorMsg: "Failed to load list data.",
+        fallback: {
+          items: [],
+          page: 0,
+          pageSize,
+          totalItems: 0,
+          totalPages: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
+        allowUndefined: true,
+      }
     );
     const { items, page, totalPages, hasPrev, hasNext } = result;
     state.totalPages = totalPages;

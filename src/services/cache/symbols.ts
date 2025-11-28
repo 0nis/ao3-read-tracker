@@ -1,4 +1,4 @@
-import { ICache } from "./ICache";
+import { ICache } from "./cache.interface";
 import { SymbolData } from "../../types/symbols";
 import { handleStorageRead } from "../../utils/storage/handlers";
 import { StorageService } from "../storage";
@@ -14,11 +14,10 @@ export class SymbolsCache implements ICache<SymbolData> {
       DEFAULT_SYMBOL_RECORDS.map((r) => [r.id, r])
     );
 
-    this.cache = (await handleStorageRead(
-      StorageService.symbolRecords.get(),
-      defaultData,
-      "Failed to load symbol records"
-    )) as SymbolData;
+    this.cache = (await handleStorageRead(StorageService.symbolRecords.get(), {
+      errorMsg: "Failed to load symbol records",
+      fallback: defaultData,
+    })) as SymbolData;
 
     return this.cache;
   }

@@ -1,6 +1,6 @@
 export type StorageResult<T = void> = {
   data?: T;
-  error?: unknown;
+  error?: Error | string | unknown;
   success: boolean;
 };
 

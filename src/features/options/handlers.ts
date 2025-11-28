@@ -1,27 +1,25 @@
+import { ImportOptions, ImportProgress } from "dexie-export-import/dist/import";
+import { ExportProgress } from "dexie-export-import";
+
+import { IoService } from "../../services/io";
+
 import {
   confirmDestructiveAction,
+  reportExtensionFailure,
   showNotification,
 } from "../../utils/ui/dialogs";
+import { createFlashNotice } from "../../utils/ui/form";
+import {
+  DexieExportDbInfo,
+  downloadFile,
+  getDbInfoFromDexieExport,
+} from "../../utils/file";
+import { createButtonLoader, withLoadingState } from "../../utils/ui/loaders";
 
-export function setupHeaderActions(
-  exportBtn: HTMLButtonElement,
-  importBtn: HTMLButtonElement,
-  clearBtn: HTMLButtonElement
-) {
-  exportBtn.addEventListener("click", () => {
-    // TODO: Implement data exporting logic
-    showNotification("Exporting data...");
-  });
-  importBtn.addEventListener("click", async () => {
-    const confirmed = await confirmDestructiveAction(
-      "Importing data will overwrite your existing data. Are you sure you want to proceed?",
-      "IMPORT DATA"
-    );
-    if (confirmed) {
-      // TODO: Implement data importing logic
-      showNotification("Importing data...");
-    } else showNotification("Data import action cancelled.");
-  });
+import { LoaderType } from "../../enums/ui";
+import { DATABASE_NAME } from "../../constants/global";
+
+export function setupHeaderActions(clearBtn: HTMLButtonElement) {
   clearBtn.addEventListener("click", async () => {
     const confirmed = await confirmDestructiveAction(
       "Are you sure you want to clear all stored data? This action cannot be undone.",
@@ -32,4 +30,102 @@ export function setupHeaderActions(
       // TODO: Implement data clearing logic
     } else showNotification("Data clear action cancelled.");
   });
+}
+
+export async function handleImport(
+  btn: HTMLButtonElement,
+  file: Blob,
+  options: ImportOptions,
+  successMsg: string = "Yippee, successfully imported %rows% rows of data!"
+) {
+  const fileInfo = await getDbInfoFromDexieExport(file);
+  if (!validateImportFile(fileInfo)) return;
+
+  const controller = createButtonLoader(btn, LoaderType.PROGRESS);
+  let totalRows;
+  const res = await withLoadingState(
+    controller,
+    async (setProgress) => {
+      return IoService.import(file, {
+        ...options,
+        transform: IoService.getMigrationTransformFunc(
+          fileInfo.databaseVersion!
+        ),
+        progressCallback: (progress: ImportProgress) => {
+          totalRows ??= progress.totalRows;
+          return handleProgress(setProgress, progress);
+        },
+      });
+    },
+    { enforceMinDelay: true }
+  );
+  if (res.success) {
+    createFlashNotice(successMsg.replace("%rows%", String(totalRows)));
+  } else {
+    const errorMsg =
+      res.error instanceof Error ? res.error.message : String(res.error);
+    showNotification(`Oh no, I couldn't import your data: ${errorMsg}`); // Manual to allow showing Dexie errors without reportExtensionFailure
+  }
+}
+
+export async function handleExport(btn: HTMLButtonElement) {
+  const controller = createButtonLoader(btn, LoaderType.PROGRESS);
+  const res = await withLoadingState(
+    controller,
+    async (setProgress) => {
+      return IoService.export({
+        progressCallback: (progress: ExportProgress) => {
+          return handleProgress(setProgress, progress);
+        },
+      });
+    },
+    { enforceMinDelay: true }
+  );
+
+  if (res.success && res.data) {
+    try {
+      downloadFile(res.data, "export");
+    } catch (error) {
+      reportExtensionFailure("Oops, failed to download exported data!", error);
+      return;
+    }
+  } else {
+    const errorMsg =
+      res.error instanceof Error ? res.error.message : String(res.error);
+    showNotification(`Oops, failed to download exported data: ${errorMsg}`);
+  }
+}
+
+function handleProgress(
+  setProgress: ((v: number) => void) | undefined,
+  {
+    completedRows,
+    totalRows,
+    completedTables,
+    totalTables,
+  }: ImportProgress | ExportProgress
+) {
+  const percent =
+    totalRows !== undefined
+      ? Math.round((completedRows / totalRows) * 100)
+      : Math.round((completedTables / totalTables) * 100);
+
+  setProgress?.(percent);
+  return true;
+}
+
+function validateImportFile(info: DexieExportDbInfo): boolean {
+  if (info.formatName !== "dexie" || info.databaseName !== DATABASE_NAME) {
+    showNotification(
+      "Whups, the selected file isn't an export from this extension. Please select a valid file! Only exports from this extension can be imported."
+    );
+    return false;
+  }
+  if (!info.databaseVersion) {
+    showNotification(
+      "The selected file seems to be corrupted or incomplete. Please select a valid export file."
+    );
+    return false;
+  }
+  return true;
 }

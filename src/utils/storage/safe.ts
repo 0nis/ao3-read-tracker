@@ -1,6 +1,6 @@
-import { WorksData } from "../../data/works";
-import { SettingsData } from "../../data/settings";
-import { SymbolsData } from "../../data/symbols";
+import { WorksData } from "../../data/models/works";
+import { SettingsData } from "../../data/models/settings";
+import { SymbolsData } from "../../data/models/symbols";
 
 import { StorageResult } from "../../types/results";
 

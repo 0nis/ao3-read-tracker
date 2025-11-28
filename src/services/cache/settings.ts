@@ -1,4 +1,4 @@
-import { ICache } from "./ICache";
+import { ICache } from "./cache.interface";
 import { SettingsData } from "../../types/settings";
 import { handleGetAllSettings } from "../../utils/storage/settings";
 

@@ -1,4 +1,4 @@
-export const CLASS_PREFIX = "ext-mar";
+export const CLASS_PREFIX = "ext-rt";
 
 export const READ_CLASS = `${CLASS_PREFIX}__read`;
 export const IGNORED_CLASS = `${CLASS_PREFIX}__ignored`;

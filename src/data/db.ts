@@ -28,7 +28,7 @@ export class Ao3MarkAsReadDb extends Dexie {
   constructor() {
     super(DATABASE_NAME);
 
-    this.version(DATABASE_VERSION).stores({
+    this.version(1).stores({
       readWorks: "id, modifiedAt",
       ignoredWorks: "id, modifiedAt",
       readSettings: "id",
