@@ -1,7 +1,14 @@
-import { CLASS_PREFIX } from "../../constants/classes";
+import { LoaderType } from "../../enums/ui";
 import { StorageResult } from "../../types/results";
 import { reportExtensionFailure } from "../ui/dialogs";
 import { createFlashNotice } from "../ui/form";
+import { createButtonLoader, withLoadingState } from "../ui/loaders";
+
+export interface StorageReadOptions<T> {
+  errorMsg?: string;
+  fallback?: T;
+  allowUndefined?: boolean;
+}
 
 /**
  * Executes a storage read operation and handles failures with a critical error.
@@ -16,11 +23,14 @@ import { createFlashNotice } from "../ui/form";
  */
 export async function handleStorageRead<T>(
   op: Promise<StorageResult<T>>,
-  fallback: T,
-  errorMsg: string,
-  allowUndefined: boolean = false
+  options: StorageReadOptions<T>
 ): Promise<T> {
   const result = await op;
+  const {
+    errorMsg = "An error occurred while reading from storage.",
+    fallback,
+    allowUndefined = false,
+  } = options;
 
   if (result.success) {
     if (result.data !== undefined || allowUndefined) {
@@ -29,7 +39,15 @@ export async function handleStorageRead<T>(
   }
 
   reportExtensionFailure(errorMsg, result.error);
-  return fallback;
+  return fallback as T;
+}
+
+export interface StorageWriteOptions {
+  successMsg?: string;
+  errorMsg?: string;
+  loadingEl?: HTMLElement;
+  enforceMinDelay?: boolean;
+  onSuccess?: (message: string) => void;
 }
 
 /**
@@ -44,46 +62,30 @@ export async function handleStorageRead<T>(
  */
 export async function handleStorageWrite<T>(
   op: Promise<StorageResult<T>>,
-  successMsg: string,
-  errorMsg: string,
-  loadingEl?: HTMLElement,
-  enforceMinDelay: boolean = false,
-  onSuccess: (message: string) => void = createFlashNotice
+  options: StorageWriteOptions
 ): Promise<void> {
-  let originalContent: string | undefined;
-  let promiseArray: Promise<any>[] = [];
+  const {
+    successMsg = "Changes saved successfully.",
+    errorMsg = "An error occurred while saving changes.",
+    loadingEl,
+    enforceMinDelay = false,
+    onSuccess = createFlashNotice,
+  } = options;
 
-  if (loadingEl) {
-    // TODO: Refactor to prevent innerHTML manipulation
-    // TODO: Refactor to prevent loading flash on fast operations
-    originalContent = loadingEl.innerHTML;
-    loadingEl.innerHTML = `
-        <span 
-            class="${CLASS_PREFIX}__loader" 
-            role="status" 
-            aria-label="Loading"
-        />`;
-    if (loadingEl instanceof HTMLButtonElement) loadingEl.disabled = true;
-    if (enforceMinDelay) {
-      // Minimum delay to prevent sudden UI flashes on fast operations
-      promiseArray.push(new Promise((resolve) => setTimeout(resolve, 300)));
-    }
-  }
+  const controller = createButtonLoader(
+    loadingEl as HTMLButtonElement,
+    LoaderType.SPINNER
+  );
+  const result = await withLoadingState(controller, () => op, {
+    enforceMinDelay,
+    minDelayMs: 300,
+  });
 
-  try {
-    const result = await Promise.all([op, ...promiseArray]).then(([r]) => r);
-
-    if (result.success) {
-      onSuccess(successMsg);
-      return Promise.resolve();
-    } else {
-      reportExtensionFailure(errorMsg, result.error);
-      return Promise.reject();
-    }
-  } finally {
-    if (loadingEl) {
-      loadingEl.innerHTML = originalContent ?? "";
-      if (loadingEl instanceof HTMLButtonElement) loadingEl.disabled = false;
-    }
+  if (result.success) {
+    onSuccess(successMsg);
+    return Promise.resolve();
+  } else {
+    reportExtensionFailure(errorMsg, result.error);
+    return Promise.reject();
   }
 }

@@ -69,6 +69,10 @@ export function getStyles(prefix: string): string {
       display: flex;
       gap: 8px;
     }
+    
+    .${prefix}__button {
+      cursor: pointer;
+    }
 
     .${prefix}__button:disabled {
       opacity: 0.5;

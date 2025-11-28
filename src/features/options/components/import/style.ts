@@ -1,0 +1,36 @@
+export function getStyles(prefix: string): string {
+  return `
+    .${prefix}__header__actions li {
+        position: relative;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .${prefix}__header__actions li button {
+        margin: 0;
+    }
+
+    .${prefix}__import__expandable-secondary {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: min-content;
+        box-sizing: border-box;
+        position: absolute;
+        top: 2.411em;
+        left: 0;
+    }
+
+    .${prefix}__import__expandable-secondary li {
+        width: 100%;
+    }
+
+    .${prefix}__import__expandable-secondary li button {
+        width: 100%;
+        height: min-content;
+        box-sizing: border-box;
+        margin: 0.2em 0;
+    }
+  `;
+}

@@ -44,8 +44,10 @@ async function renderItem(item: IgnoredWork): Promise<HTMLElement> {
         onDelete: (): Promise<void> => {
           return handleStorageWrite<void>(
             StorageService.ignoredWorks.delete(item.id),
-            `${item.title} has been removed from your ignored list.`,
-            `Failed to remove ${item.title} from your ignored list.`
+            {
+              successMsg: `${item.title} has been removed from your ignored list.`,
+              errorMsg: `Failed to remove ${item.title} from your ignored list.`,
+            }
           );
         },
         confirmationText: `Are you sure you want to remove ${item.title} from your ignored list?`,

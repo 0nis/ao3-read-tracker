@@ -1,5 +1,5 @@
-import { PaginatedParams, PaginatedResult } from "../types/results";
-import { db } from "./db";
+import { PaginatedParams, PaginatedResult } from "../../types/results";
+import { db } from "../db";
 import { Table } from "dexie";
 
 export class WorksData<T extends { id: string }> {

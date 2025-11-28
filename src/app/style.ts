@@ -30,5 +30,24 @@ export function getGlobalStyles(prefix: string): string {
     @keyframes ${prefix}-spin {
       to { transform: rotate(360deg); }
     }
+
+    .${prefix}__progress {
+      position: relative;
+      display: inline-block;
+      width: 3em;
+      height: 0.4em;
+      background: rgba(0,0,0,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      vertical-align: middle;
+    }
+
+    .${prefix}__progress-bar {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: currentColor;
+      transition: width 0.15s linear;
+    }
   `;
 }

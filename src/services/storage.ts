@@ -1,5 +1,9 @@
+import { ExportOptions, ImportOptions } from "dexie-export-import";
+
 import type { StorageResult } from "../types/results";
 import type { WorkData } from "../types/works";
+import { createSafeService, safeExecute } from "../utils/storage/safe";
+
 import {
   IgnoredWorksData,
   ReadWorksData,
@@ -7,8 +11,8 @@ import {
   IgnoreSettingsData,
   GeneralSettingsData,
   SymbolRecordsData,
-} from "../data/data";
-import { createSafeService, safeExecute } from "../utils/storage/safe";
+} from "../data/instances";
+import { exportDb, importDb } from "../data/io";
 
 export const StorageService = {
   readWorks: createSafeService("StorageService.readWorks", ReadWorksData),
@@ -42,15 +46,18 @@ export const StorageService = {
     }, "StorageService.getByIds");
   },
 
-  async export(): Promise<void> {
-    // TODO: Implement
+  async export(options: ExportOptions): Promise<StorageResult<Blob>> {
+    return safeExecute(() => exportDb(options), "StorageService.export");
   },
 
-  async import(file: File): Promise<StorageResult<WorkData>> {
-    // TODO: Implement
-    return {
-      success: false,
-      error: "Import functionality is not implemented yet.",
-    };
+  async import(
+    blob: Blob,
+    dbVersionNr: number,
+    options?: ImportOptions
+  ): Promise<StorageResult<void>> {
+    return safeExecute(
+      () => importDb(blob, dbVersionNr, options),
+      "StorageService.import"
+    );
   },
 };

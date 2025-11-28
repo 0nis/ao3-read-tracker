@@ -91,13 +91,13 @@ const markWorkAsUnignored = async (
   form: HTMLElement,
   title?: string
 ) => {
-  await handleStorageWrite<void>(
-    StorageService.ignoredWorks.delete(id),
-    `${title || "This work"} will no longer be ignored.`,
-    `Failed to unignore ${title || "this work"}.`,
-    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
-    true
-  );
+  await handleStorageWrite<void>(StorageService.ignoredWorks.delete(id), {
+    successMsg: `${title || "This work"} will no longer be ignored.`,
+    errorMsg: `Failed to unignore ${title || "this work"}.`,
+    loadingEl:
+      (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    enforceMinDelay: true,
+  });
 };
 
 const markWorkAsIgnored = async (
@@ -116,11 +116,11 @@ const markWorkAsIgnored = async (
     ).value.trim(),
   };
 
-  await handleStorageWrite<void>(
-    StorageService.ignoredWorks.put(payload),
-    `You have successfully ignored ${data.title || "this work"}.`,
-    `Failed to ignore ${data.title || "this work"}.`,
-    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
-    true
-  );
+  await handleStorageWrite<void>(StorageService.ignoredWorks.put(payload), {
+    successMsg: `You have successfully ignored ${data.title || "this work"}.`,
+    errorMsg: `Failed to ignore ${data.title || "this work"}.`,
+    loadingEl:
+      (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    enforceMinDelay: true,
+  });
 };

@@ -148,13 +148,15 @@ const markWorkAsUnread = async (
   form: HTMLFormElement,
   title?: string
 ) => {
-  await handleStorageWrite<void>(
-    StorageService.readWorks.delete(id),
-    `You have successfully marked ${title || "this work"} as unread.`,
-    `Failed to mark ${title || "this work"} as unread.`,
-    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
-    true
-  );
+  await handleStorageWrite<void>(StorageService.readWorks.delete(id), {
+    successMsg: `You have successfully marked ${
+      title || "this work"
+    } as unread.`,
+    errorMsg: `Failed to mark ${title || "this work"} as unread.`,
+    loadingEl:
+      (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    enforceMinDelay: true,
+  });
 };
 
 const markWorkAsRead = async (
@@ -205,11 +207,13 @@ const markWorkAsRead = async (
     ),
   };
 
-  await handleStorageWrite<void>(
-    StorageService.readWorks.put(payload),
-    `You have successfully marked ${data.title || "this work"} as read.`,
-    `Failed to mark ${data.title || "this work"} as read.`,
-    (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
-    true
-  );
+  await handleStorageWrite<void>(StorageService.readWorks.put(payload), {
+    successMsg: `You have successfully marked ${
+      data.title || "this work"
+    } as read.`,
+    errorMsg: `Failed to mark ${data.title || "this work"} as read.`,
+    loadingEl:
+      (form.querySelector('button[type="submit"]') as HTMLElement) || undefined,
+    enforceMinDelay: true,
+  });
 };

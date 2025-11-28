@@ -57,8 +57,10 @@ async function renderItem(item: ReadWork): Promise<HTMLElement> {
         onDelete: (): Promise<void> => {
           return handleStorageWrite<void>(
             StorageService.readWorks.delete(item.id),
-            `${item.title} has been removed from your read list.`,
-            `Failed to remove ${item.title} from your read list.`
+            {
+              successMsg: `${item.title} has been removed from your read list.`,
+              errorMsg: `Failed to remove ${item.title} from your read list.`,
+            }
           );
         },
         confirmationText: `Are you sure you want to remove ${item.title} from your read list?`,

@@ -55,16 +55,18 @@ export function createPaginatedListSection<T>({
         pageSize,
       }),
       {
-        items: [],
-        page: 0,
-        pageSize,
-        totalItems: 0,
-        totalPages: 0,
-        hasNext: false,
-        hasPrev: false,
-      },
-      "Failed to load list data.",
-      true
+        errorMsg: "Failed to load list data.",
+        fallback: {
+          items: [],
+          page: 0,
+          pageSize,
+          totalItems: 0,
+          totalPages: 0,
+          hasNext: false,
+          hasPrev: false,
+        },
+        allowUndefined: true,
+      }
     );
     const { items, page, totalPages, hasPrev, hasNext } = result;
     state.totalPages = totalPages;

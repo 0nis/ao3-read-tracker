@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "dexie": "^4.2.1",
+    "dexie-export-import": "^4.1.4",
     "focus-trap": "^7.6.5"
   }
 }

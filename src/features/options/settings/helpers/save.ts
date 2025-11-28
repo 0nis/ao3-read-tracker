@@ -23,15 +23,14 @@ export function setupSettingsSaveHandlers(sections: SectionElements) {
 
       const op = saveInfo.setter(payload);
 
-      await handleStorageWrite<void>(
-        op,
-        `${
+      await handleStorageWrite<void>(op, {
+        successMsg: `${
           saveInfo.label.charAt(0).toUpperCase() + saveInfo.label.slice(1)
         } updated successfully.`,
-        `Failed to update ${saveInfo.label} settings.`,
-        saveBtn || undefined,
-        false
-      );
+        errorMsg: `Failed to update ${saveInfo.label} settings.`,
+        loadingEl: saveBtn || undefined,
+        enforceMinDelay: false,
+      });
       settingsCache.clear();
     });
   }

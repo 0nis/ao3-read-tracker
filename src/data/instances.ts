@@ -1,8 +1,8 @@
 import { db } from "./db";
 
-import { WorksData } from "./works";
-import { SettingsData } from "./settings";
-import { SymbolsData } from "./symbols";
+import { WorksData } from "./models/works";
+import { SettingsData } from "./models/settings";
+import { SymbolsData } from "./models/symbols";
 
 import { ReadWork, IgnoredWork } from "../types/works";
 import {
