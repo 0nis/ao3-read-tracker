@@ -18,6 +18,10 @@ export const IoService = {
     return safeExecute(() => io.import(blob, options), "StorageService.import");
   },
 
+  async clear(): Promise<StorageResult<void>> {
+    return safeExecute(() => io.clear(), "StorageService.clear");
+  },
+
   // TODO: Test
   // When I actually have migrations to test with...
   getMigrationTransformFunc(dbVersionNr: number): ImportOptions["transform"] {

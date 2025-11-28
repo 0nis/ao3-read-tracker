@@ -44,6 +44,7 @@ export function createButtonLoader(
 ): LoaderController {
   const originalDisabled = btn.disabled || false;
   const originalContent = Array.from(btn.childNodes);
+  const originalWidth = btn.style.width;
   let loaderElement: HTMLElement;
   let setProgressFn: ((v: number) => void) | undefined;
 
@@ -57,6 +58,8 @@ export function createButtonLoader(
 
   return {
     start() {
+      const computedWidth = btn.getBoundingClientRect().width;
+      btn.style.width = `${computedWidth}px`;
       originalContent.forEach((n) => btn.removeChild(n));
       btn.setAttribute("aria-busy", "true");
       btn.appendChild(loaderElement);
@@ -67,6 +70,7 @@ export function createButtonLoader(
       originalContent.forEach((n) => btn.appendChild(n));
       btn.removeAttribute("aria-busy");
       btn.disabled = originalDisabled;
+      btn.style.width = originalWidth;
     },
     setProgress: setProgressFn,
   };
