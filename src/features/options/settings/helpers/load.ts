@@ -1,5 +1,5 @@
 import { settingsCache } from "../../../../services/cache/settings";
-import { populateSection } from "../../../../utils/ui/form";
+import { populateForm } from "../../../../utils/ui/form";
 import { SectionElements } from "../../renderer";
 import { SectionId } from "../../config";
 import { SETTINGS_LOAD_MAP } from "../config";
@@ -14,7 +14,7 @@ export async function loadAllSettingsSections(sections: SectionElements) {
 
     const data = getData(all);
     if (data) {
-      populateSection(section.element, data);
+      populateForm(section.element, data);
     }
   }
 }

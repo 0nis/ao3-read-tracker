@@ -1,11 +1,13 @@
-import { CLASS_PREFIX } from "../../constants/classes";
-import { StorageService } from "../../services/storage";
-import { IgnoredWork, ReadWork } from "../../types/works";
-import { getTitleFromWorkPage } from "../../utils/ao3";
-import { showNotification } from "../../utils/ui/dialogs";
-import { Router } from "../../app/router";
-import { showIgnoredWorkForm } from "./form/ignoredForm";
-import { showReadWorkForm } from "./form/readForm";
+import { CLASS_PREFIX } from "../../../constants/classes";
+import { StorageService } from "../../../services/storage";
+import { IgnoredWork, ReadWork } from "../../../types/works";
+import { getTitleFromWorkPage } from "../../../utils/ao3";
+import { showNotification } from "../../../utils/ui/dialogs";
+import { Router } from "../../../app/router";
+// import { showIgnoredWorkForm } from "../forms/old/ignoredForm";
+// import { showReadWorkForm } from "../forms/old/readForm";
+import { createIgnoreWorkForm } from "../forms/implementations/ignore";
+import { createReadWorkForm } from "../forms/implementations/read";
 
 export async function handleEditReadWorkInfo(id: string): Promise<void> {
   const form = document.getElementById(`${CLASS_PREFIX}__read-form`);
@@ -14,11 +16,19 @@ export async function handleEditReadWorkInfo(id: string): Promise<void> {
     return;
   }
   const { data } = await StorageService.readWorks.getById(id);
-  showReadWorkForm(!!data, {
-    ...data,
-    id,
-    title: getTitleFromWorkPage() || "Untitled",
-  });
+  // showReadWorkForm(!!data, {
+  //   ...data,
+  //   id,
+  //   title: getTitleFromWorkPage() || "Untitled",
+  // });
+  createReadWorkForm(
+    {
+      ...data,
+      id,
+      title: getTitleFromWorkPage() || "Untitled",
+    },
+    !!data
+  );
 }
 
 export async function handleMarkWorkAsRead(
@@ -50,11 +60,19 @@ export async function handleEditIgnoredWorkInfo(id: string): Promise<void> {
     return;
   }
   const { data } = await StorageService.ignoredWorks.getById(id);
-  showIgnoredWorkForm(!!data, {
-    ...data,
-    id,
-    title: getTitleFromWorkPage() || "Untitled",
-  });
+  // showIgnoredWorkForm(!!data, {
+  //   ...data,
+  //   id,
+  //   title: getTitleFromWorkPage() || "Untitled",
+  // });
+  createIgnoreWorkForm(
+    {
+      ...data,
+      id,
+      title: getTitleFromWorkPage() || "Untitled",
+    },
+    !!data
+  );
 }
 
 export async function handleIgnoreWork(

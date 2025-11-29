@@ -79,15 +79,15 @@ export function buildSelectFromEnum<T extends Record<string, string>>(
  * Each input must have a data-field attribute matching a key in the data object.
  * Supports text inputs, checkboxes, and select elements.
  *
- * @param section The section containing inputs to populate
+ * @param form The form element containing inputs to populate
  * @param data The data object with values to populate
  */
-export function populateSection<T extends { [key: string]: any }>(
-  section: HTMLElement,
+export function populateForm<T extends { [key: string]: any }>(
+  form: HTMLElement,
   data: T
 ) {
   Object.entries(data).forEach(([key, value]) => {
-    const input = section.querySelector(`[data-field="${key}"]`) as
+    const input = form.querySelector(`[data-field="${key}"]`) as
       | HTMLInputElement
       | HTMLSelectElement
       | null;
@@ -107,12 +107,12 @@ export function populateSection<T extends { [key: string]: any }>(
  * Each input must have a data-field attribute to be included in the result.
  * Supports text inputs, checkboxes, and select elements.
  *
- * @param section The section containing inputs to extract from
+ * @param form The form element containing inputs to extract from
  * @returns An object with extracted key-value pairs
  */
-export function extractSectionValues<T>(section: HTMLElement): Partial<T> {
+export function extractFormValues<T>(form: HTMLElement): Partial<T> {
   const result: Partial<T> = {};
-  const inputs = section.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+  const inputs = form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
     "[data-field]"
   );
   inputs.forEach((input) => {

@@ -1,6 +1,6 @@
-import { Router } from "../../../app/router";
-import { el } from "../../../utils/ui/dom";
-import { createExtensionMsg } from "../../../utils/extension/console";
+import { Router } from "../../../../app/router";
+import { el } from "../../../../utils/ui/dom";
+import { createExtensionMsg } from "../../../../utils/extension/console";
 
 export interface WorkFormConfig<T> {
   /** Unique identifier for the form, not the work ID! */

@@ -1,8 +1,8 @@
-import { getIdFromUrl } from "../../utils/ao3";
-import { StorageService } from "../../services/storage";
-import { ButtonPlacement } from "../../enums/settings";
-import { ButtonAction } from "../../enums/ui";
-import { WorkState } from "../../enums/works";
+import { getIdFromUrl } from "../../../utils/ao3";
+import { StorageService } from "../../../services/storage";
+import { ButtonPlacement } from "../../../enums/settings";
+import { ButtonAction } from "../../../enums/ui";
+import { WorkState } from "../../../enums/works";
 import {
   handleEditIgnoredWorkInfo,
   handleEditReadWorkInfo,
@@ -11,8 +11,8 @@ import {
   handleMarkWorkAsUnread,
   handleUnignoreWork,
 } from "./handlers";
-import { el } from "../../utils/ui/dom";
-import { CLASS_PREFIX } from "../../constants/classes";
+import { el } from "../../../utils/ui/dom";
+import { CLASS_PREFIX } from "../../../constants/classes";
 
 interface BaseButtonConfig {
   type: WorkState;

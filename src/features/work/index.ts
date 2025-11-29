@@ -1,17 +1,8 @@
+import { setupWorkButtons } from "./buttons/setup";
+import { getFormStyles } from "./forms/style";
+
 import { CLASS_PREFIX } from "../../constants/classes";
-import {
-  DEFAULT_GENERAL_SETTINGS,
-  DEFAULT_IGNORE_SETTINGS,
-  DEFAULT_READ_SETTINGS,
-} from "../../constants/settings";
-import { settingsCache } from "../../services/cache/settings";
 import { injectStyles } from "../../utils/ui/dom";
-import {
-  modifyMarkForLaterButton,
-  setupIgnoreButton,
-  setupReadButton,
-} from "./buttons";
-import { getFormStyles } from "./form/style";
 
 export const Work = {
   async init() {
@@ -20,27 +11,6 @@ export const Work = {
       getFormStyles(CLASS_PREFIX)
     );
 
-    const { readSettings, ignoreSettings, generalSettings } =
-      await settingsCache.get();
-
-    if (generalSettings?.replaceMarkForLaterText) {
-      modifyMarkForLaterButton(
-        generalSettings?.markForLaterReplacementLabel ??
-          DEFAULT_GENERAL_SETTINGS.markForLaterReplacementLabel
-      );
-    }
-
-    setupReadButton(
-      readSettings?.simpleModeEnabled ??
-        DEFAULT_READ_SETTINGS.simpleModeEnabled,
-      generalSettings?.buttonPlacement ??
-        DEFAULT_GENERAL_SETTINGS.buttonPlacement
-    );
-    setupIgnoreButton(
-      ignoreSettings?.simpleModeEnabled ??
-        DEFAULT_IGNORE_SETTINGS.simpleModeEnabled,
-      generalSettings?.buttonPlacement ??
-        DEFAULT_GENERAL_SETTINGS.buttonPlacement
-    );
+    await setupWorkButtons();
   },
 };
