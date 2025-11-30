@@ -10,20 +10,11 @@ import {
 export function createFormContent<T>(items: WorkFormItem<T>[]): HTMLElement {
   const dl = el("dl", {}, []);
   items.forEach((item) => {
-    appendFormItem(dl, item);
+    const element = createWorkFormItem(item);
+    if (!element) return;
+    dl.appendChild(element);
   });
   return dl;
-}
-
-function appendFormItem(parent: HTMLElement, item: WorkFormItem<any>) {
-  const element = createWorkFormItem(item);
-  if (!element) return;
-  if ("dt" in element && "dd" in element) {
-    parent.appendChild(element.dt);
-    parent.appendChild(element.dd);
-  } else {
-    parent.appendChild(element);
-  }
 }
 
 function createWorkFormItem(item: WorkFormItem<any>) {
@@ -35,15 +26,14 @@ function createWorkFormItem(item: WorkFormItem<any>) {
 function createWorkFormGroup(group: WorkFormFieldGroup<any>) {
   const wrapper = el("div", { className: group.className || "" }, []);
   group.fields.forEach((item) => {
-    appendFormItem(wrapper, item);
+    const element = createWorkFormItem(item);
+    if (!element) return;
+    wrapper.appendChild(element);
   });
   return wrapper;
 }
 
-function createWorkFormField(field: WorkFormField<any>): {
-  dt: HTMLElement;
-  dd: HTMLElement;
-} {
+function createWorkFormField(field: WorkFormField<any>): HTMLElement {
   const dd: HTMLElement[] = [];
   if (field.description)
     dd.push(
@@ -67,8 +57,8 @@ function createWorkFormField(field: WorkFormField<any>): {
     );
   dd.push(input);
 
-  return {
-    dt: el("dt", {}, [
+  return el("div", {}, [
+    el("dt", {}, [
       el(
         "label",
         {
@@ -77,6 +67,6 @@ function createWorkFormField(field: WorkFormField<any>): {
         [field.label]
       ),
     ]),
-    dd: el("dd", {}, dd),
-  };
+    el("dd", {}, dd),
+  ]);
 }

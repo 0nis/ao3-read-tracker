@@ -56,7 +56,7 @@ export function createWorkForm<T>(cfg: WorkFormConfig<T>): HTMLElement {
   });
 
   appendItemsToFormContainer(form, [
-    ...createFormHeaderElements(elId, cfg.heading, cancelBtn),
+    ...createFormHeaderElements(cfg.landmark, cfg.heading, cancelBtn),
     createFormContent(cfg.items),
     createFormSubmitElement(elId, saveEl, deleteEl),
   ]);

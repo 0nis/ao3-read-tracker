@@ -8,9 +8,10 @@ import { Router } from "../../../app/router";
 // import { showReadWorkForm } from "../forms/old/readForm";
 import { createIgnoreWorkForm } from "../forms/implementations/ignore";
 import { createReadWorkForm } from "../forms/implementations/read";
+import { FormId } from "../forms/config";
 
 export async function handleEditReadWorkInfo(id: string): Promise<void> {
-  const form = document.getElementById(`${CLASS_PREFIX}__read-form`);
+  const form = document.getElementById(`${CLASS_PREFIX}__${FormId.READ_WORK}`);
   if (form) {
     Router.addHash(form.id);
     return;
@@ -54,7 +55,9 @@ export async function handleMarkWorkAsUnread(id: string): Promise<void> {
 }
 
 export async function handleEditIgnoredWorkInfo(id: string): Promise<void> {
-  const form = document.getElementById(`${CLASS_PREFIX}__ignored-form`);
+  const form = document.getElementById(
+    `${CLASS_PREFIX}__${FormId.IGNORE_WORK}`
+  );
   if (form) {
     Router.addHash(form.id);
     return;
