@@ -1,11 +1,11 @@
-import { FormId } from "./config";
+import { WorkAction } from "../config";
 
 export enum WorkFormFieldType {
   FIELD = "field",
   GROUP = "group",
 }
 
-export interface WorkFormFieldBase {
+interface WorkFormFieldBase {
   type: WorkFormFieldType;
 }
 
@@ -26,10 +26,11 @@ export interface WorkFormFieldGroup<T> extends WorkFormFieldBase {
 export type WorkFormItem<T> = WorkFormField<T> | WorkFormFieldGroup<T>;
 
 export interface WorkFormConfig<T> {
-  id: FormId;
+  id: WorkAction;
   landmark: string;
   heading: string;
   data: Partial<T>;
+  editing: boolean;
   items: WorkFormItem<T>[];
   submit: {
     save: {

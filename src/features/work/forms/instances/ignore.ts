@@ -1,5 +1,5 @@
 import { createWorkForm } from "../base";
-import { FormId } from "../config";
+import { WorkAction } from "../../config";
 import { textarea } from "../inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
@@ -18,13 +18,14 @@ const items: WorkFormItem<IgnoredWork>[] = [
 
 export function createIgnoreWorkForm(
   data: Partial<IgnoredWork>,
-  editing?: boolean
+  editing: boolean
 ): HTMLElement {
-  return createWorkForm<IgnoredWork>({
-    id: FormId.IGNORE_WORK,
+  return createWorkForm({
+    id: WorkAction.IGNORE,
     landmark: "Ignore Work",
     heading: editing ? "Edit ignore work info" : "Ignore this work",
     data,
+    editing,
     items,
     submit: {
       save: {
@@ -32,7 +33,7 @@ export function createIgnoreWorkForm(
         ariaLabel: `Save and ignore ${data.title || "this work"}`,
       },
       delete: {
-        isDeletable: false,
+        isDeletable: editing === true,
         label: "Unignore",
         ariaLabel: `Remove ${data.title || "this work"} from your ignored list`,
       },

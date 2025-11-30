@@ -1,101 +1,63 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { StorageService } from "../../../services/storage";
-import { IgnoredWork, ReadWork } from "../../../types/works";
+import { ACTION_HANDLER_MAP } from "./config";
+import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../config";
+import { getDefaultPayload, getWorkTitleForNotifications } from "../helpers";
+import { FormRegistry } from "../forms/registry";
+
 import { getTitleFromWorkPage } from "../../../utils/ao3";
-import { showNotification } from "../../../utils/ui/dialogs";
-import { Router } from "../../../app/router";
-// import { showIgnoredWorkForm } from "../forms/old/ignoredForm";
-// import { showReadWorkForm } from "../forms/old/readForm";
-import { createIgnoreWorkForm } from "../forms/implementations/ignore";
-import { createReadWorkForm } from "../forms/implementations/read";
-import { FormId } from "../forms/config";
+import { handleStorageWrite } from "../../../utils/storage/handlers";
 
-export async function handleEditReadWorkInfo(id: string): Promise<void> {
-  const form = document.getElementById(`${CLASS_PREFIX}__${FormId.READ_WORK}`);
-  if (form) {
-    Router.addHash(form.id);
+export async function handleEditWork<K extends keyof WorkActionTypeMap>(
+  id: string,
+  workAction: K
+) {
+  // TODO: FIX: Navigate doesn't work
+  if (FormRegistry.get(workAction)) {
+    FormRegistry.navigate(workAction);
     return;
   }
-  const { data } = await StorageService.readWorks.getById(id);
-  // showReadWorkForm(!!data, {
-  //   ...data,
-  //   id,
-  //   title: getTitleFromWorkPage() || "Untitled",
-  // });
-  createReadWorkForm(
+  const cfg = ACTION_HANDLER_MAP[workAction];
+  const { data } = await cfg.storage.getById(id);
+
+  cfg.createForm(
     {
-      ...data,
+      ...(data || {}),
       id,
       title: getTitleFromWorkPage() || "Untitled",
-    },
+    } as Partial<WorkActionTypeMap[K]>,
     !!data
   );
 }
 
-export async function handleMarkWorkAsRead(
-  data: Partial<ReadWork>
-): Promise<void> {
-  const title = getTitleFromWorkPage() || "Untitled";
-  const result = await StorageService.readWorks.put({
-    ...data,
-    id: data.id!,
-    createdAt: data.createdAt || Date.now(),
-    modifiedAt: Date.now(),
-    title: title,
+export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
+  id: string,
+  workAction: K
+) {
+  const cfg = ACTION_HANDLER_MAP[workAction];
+  const msgs = ACTION_MESSAGES_MAP[workAction];
+  const payload: WorkActionTypeMap[K] = {
+    ...getDefaultPayload<K>({ id } as Partial<WorkActionTypeMap[K]>),
+  };
+
+  const title = getWorkTitleForNotifications((payload as any).title);
+
+  return await handleStorageWrite(cfg.storage.put(payload), {
+    successMsg: msgs.success.save.replace("%title%", title),
+    errorMsg: msgs.error.save.replace("%title%", title),
   });
-  if (result.success) showNotification(`Work ${data.id} marked as read.`);
-  else
-    showNotification(`Failed to mark work ${data.id} as read: ${result.error}`);
 }
 
-export async function handleMarkWorkAsUnread(id: string): Promise<void> {
-  const result = await StorageService.readWorks.delete(id);
-  if (result.success) showNotification(`Work ${id} marked as unread.`);
-  else showNotification(`Failed to mark work ${id} as unread: ${result.error}`);
-}
-
-export async function handleEditIgnoredWorkInfo(id: string): Promise<void> {
-  const form = document.getElementById(
-    `${CLASS_PREFIX}__${FormId.IGNORE_WORK}`
+export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
+  id: string,
+  workAction: K
+) {
+  const cfg = ACTION_HANDLER_MAP[workAction];
+  const msgs = ACTION_MESSAGES_MAP[workAction];
+  const title = getWorkTitleForNotifications(
+    getTitleFromWorkPage() || undefined
   );
-  if (form) {
-    Router.addHash(form.id);
-    return;
-  }
-  const { data } = await StorageService.ignoredWorks.getById(id);
-  // showIgnoredWorkForm(!!data, {
-  //   ...data,
-  //   id,
-  //   title: getTitleFromWorkPage() || "Untitled",
-  // });
-  createIgnoreWorkForm(
-    {
-      ...data,
-      id,
-      title: getTitleFromWorkPage() || "Untitled",
-    },
-    !!data
-  );
-}
 
-export async function handleIgnoreWork(
-  data: Partial<IgnoredWork>
-): Promise<void> {
-  const title = getTitleFromWorkPage() || "Untitled";
-  const result = await StorageService.ignoredWorks.put({
-    ...data,
-    id: data.id!,
-    createdAt: data.createdAt || Date.now(),
-    modifiedAt: Date.now(),
-    title: title,
+  return await handleStorageWrite(cfg.storage.delete(id), {
+    successMsg: msgs.success.delete.replace("%title%", title),
+    errorMsg: msgs.error.delete.replace("%title%", title),
   });
-  if (result.success) showNotification(`Work ${data.id} is now being ignored.`);
-  else showNotification(`Failed to ignore work ${data.id}: ${result.error}`);
-}
-
-export async function handleUnignoreWork(id: string): Promise<void> {
-  const result = await StorageService.ignoredWorks.delete(id);
-  if (result.success)
-    showNotification(`Work ${id} is no longer being ignored.`);
-  else showNotification(`Failed to unignore Work ${id}: ${result.error}`);
 }

@@ -1,7 +1,10 @@
-import { Forms } from "./forms";
+import { setupForms } from "./forms/setup";
+import { setupButtons } from "./buttons/setup";
 
+// TODO: Test EVERYTHING here
 export const Work = {
   async init() {
-    await Forms.init();
+    await setupForms();
+    await setupButtons();
   },
 };

@@ -7,7 +7,7 @@ import {
   WorkFormItem,
 } from "../types";
 
-export function createFormContent<T>(items: WorkFormItem<T>[]): HTMLElement {
+export function createFormContent(items: WorkFormItem<any>[]): HTMLElement {
   const dl = el("dl", {}, []);
   items.forEach((item) => {
     const element = createWorkFormItem(item);

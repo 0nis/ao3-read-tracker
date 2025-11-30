@@ -1,5 +1,5 @@
 import { createWorkForm } from "../base";
-import { FormId } from "../config";
+import { WorkAction } from "../../config";
 import { getItemFromWorkFormItemArray } from "../helpers/items";
 import { checkbox, number, textarea } from "../inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
@@ -52,7 +52,7 @@ const items: WorkFormItem<ReadWork>[] = [
 
 export function createReadWorkForm(
   data: Partial<ReadWork>,
-  editing?: boolean
+  editing: boolean
 ): HTMLElement {
   wireIsReadingBehavior(
     getItemFromWorkFormItemArray("isReading", items)?.input as HTMLInputElement,
@@ -60,11 +60,12 @@ export function createReadWorkForm(
       ?.input as HTMLInputElement
   );
 
-  return createWorkForm<ReadWork>({
-    id: FormId.READ_WORK,
+  return createWorkForm({
+    id: WorkAction.READ,
     landmark: "Mark Work as Read",
     heading: editing ? "Edit read work info!" : "Mark this work as read!",
     data,
+    editing,
     items,
     submit: {
       save: {

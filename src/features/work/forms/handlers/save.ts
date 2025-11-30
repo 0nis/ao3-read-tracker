@@ -1,33 +1,52 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
 import { walkItems } from "../helpers/items";
+import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
+import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { getIdFromUrl, getTitleFromWorkPage } from "../../../../utils/ao3";
 
-export async function saveWorkFormData<T>(
-  cfg: WorkFormConfig<T>,
+export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
+  cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
   saveBtn: HTMLButtonElement
 ): Promise<void> {
-  const values = extractWorkFormValues(cfg);
-  const payload = { ...cfg.data, ...values };
-  const map = FORMS_SAVE_MAP[cfg.id];
-  if (!map) return Promise.reject();
+  try {
+    const values = extractWorkFormValues(cfg);
 
-  return await handleStorageWrite(map.putter(payload), {
-    successMsg: map.saveStr.replace(
-      "%title%",
-      String((payload as any).title) || "this work"
-    ),
-    errorMsg: map.errStr.replace(
-      "%title%",
-      String((payload as any).title) || "this work"
-    ),
-    loadingEl: saveBtn,
-  });
+    const payload: WorkActionTypeMap[K] = {
+      ...getDefaultPayload<K>(cfg.data),
+      ...values,
+    };
+
+    const saveMap = FORMS_SAVE_MAP[cfg.id];
+    const msgMap = ACTION_MESSAGES_MAP[cfg.id];
+    if (!payload.id) return Promise.reject(new Error("No id found for work"));
+    if (!saveMap || !msgMap)
+      return Promise.reject(
+        new Error(`No save map or message map for form id: ${cfg.id}`)
+      );
+
+    const { success, error } = cfg.editing
+      ? { success: msgMap.success.edit, error: msgMap.error.edit }
+      : { success: msgMap.success.save, error: msgMap.error.save };
+
+    const title = getWorkTitleForNotifications((payload as any).title);
+
+    return await handleStorageWrite(saveMap.putter(payload), {
+      successMsg: success.replace("%title%", title),
+      errorMsg: error.replace("%title%", title),
+      loadingEl: saveBtn,
+    });
+  } catch (err) {
+    return Promise.reject(err);
+  }
 }
 
-function extractWorkFormValues<T>(config: WorkFormConfig<T>): Partial<T> {
-  const result: Partial<T> = {};
+function extractWorkFormValues<K extends keyof WorkActionTypeMap>(
+  config: WorkFormConfig<WorkActionTypeMap[K]>
+): Partial<WorkActionTypeMap[K]> {
+  const result: Partial<WorkActionTypeMap[K]> = {};
 
   walkItems(config.items, (field) => {
     const key = field.dataField;

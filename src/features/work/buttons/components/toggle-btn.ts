@@ -1,0 +1,26 @@
+import { ToggleButtonConfig } from "../types";
+import { el } from "../../../../utils/ui/dom";
+
+export function createToggleButton(
+  id: string,
+  config: ToggleButtonConfig,
+  exists?: boolean
+): HTMLAnchorElement {
+  const button = el("a", {
+    href: "#",
+    textContent: exists ? config.labels.on : config.labels.off,
+  });
+
+  button.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    if (exists) {
+      await config.onDeactivate(id);
+      button.textContent = config.labels.off;
+    } else {
+      await config.onActivate(id);
+      button.textContent = config.labels.on;
+    }
+  });
+
+  return button;
+}

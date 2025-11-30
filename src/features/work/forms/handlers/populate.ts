@@ -1,7 +1,10 @@
 import { walkItems } from "../helpers/items";
 import { WorkFormConfig } from "../types";
+import { WorkActionTypeMap } from "../../config";
 
-export function populateWorkForm<T>(config: WorkFormConfig<T>) {
+export function populateWorkForm<K extends keyof WorkActionTypeMap>(
+  config: WorkFormConfig<WorkActionTypeMap[K]>
+) {
   const data = config.data;
 
   walkItems(config.items, (field) => {
