@@ -12,11 +12,13 @@ export const textarea = (
 
 export const number = (
   min: string,
+  defaultValue: string | undefined,
   disabled: boolean = false
 ): HTMLInputElement => {
   return el("input", {
     type: "number",
     min,
+    defaultValue,
     disabled,
   }) as HTMLInputElement;
 };

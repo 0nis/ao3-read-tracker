@@ -22,7 +22,7 @@ const items: WorkFormItem<ReadWork>[] = [
     dataField: "count",
     label: "Times read",
     description: "The number of times you've read this work.",
-    input: number("1"),
+    input: number("1", "1"),
   },
   {
     type: WorkFormFieldType.GROUP,
@@ -44,7 +44,7 @@ const items: WorkFormItem<ReadWork>[] = [
         type: WorkFormFieldType.FIELD,
         dataField: "lastReadChapter",
         label: "Last read chapter",
-        input: number("1"),
+        input: number("1", undefined),
       },
     ],
   },
@@ -72,7 +72,7 @@ export function createReadWorkForm(
         ariaLabel: `Save and mark ${data.title || "this work"} as read`,
       },
       delete: {
-        isDeletable: false,
+        isDeletable: editing === true,
         label: "Mark as Unread",
         ariaLabel: `Remove ${data.title || "this work"} from your read list`,
       },
@@ -93,6 +93,7 @@ function wireIsReadingBehavior(
       lastReadChapterInput.disabled = false;
     } else {
       lastReadChapterInput.value = "";
+      lastReadChapterInput.removeAttribute("value");
       lastReadChapterInput.disabled = true;
     }
   };

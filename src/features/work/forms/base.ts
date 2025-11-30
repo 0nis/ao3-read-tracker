@@ -21,38 +21,39 @@ import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { createExtensionMsg } from "../../../utils/extension/console";
 
-// TODO: This shit is not working yet lol fix it. I refactored this entire thing without testing even once good luck future me
-
 export function createWorkForm<T>(cfg: WorkFormConfig<T>): HTMLElement {
   const elId = `${CLASS_PREFIX}__${cfg.id}`;
   const prevScrollPos = window.scrollY || document.documentElement.scrollTop;
 
   const form = createFormContainer(elId, cfg.landmark);
 
-  form.addEventListener("remove", () => {
+  const remove = () => {
     form.remove();
     window.scrollTo(0, prevScrollPos);
     Router.back();
-  });
+  };
 
   const saveEl = createFormSaveElement(elId, cfg.submit.save);
   saveEl.addEventListener("click", async (ev) => {
     ev.preventDefault();
     await saveWorkFormData(cfg, saveEl);
-    form.dispatchEvent(new Event("remove"));
+    remove();
   });
 
-  const deleteEl = createFormDeleteElement(elId, cfg.submit.delete);
-  deleteEl.addEventListener("click", async (ev) => {
-    ev.preventDefault();
-    await deleteWorkFormData(cfg, deleteEl);
-    form.dispatchEvent(new Event("remove"));
-  });
+  let deleteEl: HTMLButtonElement | undefined;
+  if (cfg.submit.delete.isDeletable) {
+    deleteEl = createFormDeleteElement(elId, cfg.submit.delete);
+    deleteEl.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await deleteWorkFormData(cfg, deleteEl!);
+      remove();
+    });
+  }
 
   const cancelBtn = createFormCancelElement(elId);
   cancelBtn.addEventListener("click", (ev) => {
     ev.preventDefault();
-    form.dispatchEvent(new Event("remove"));
+    remove();
   });
 
   appendItemsToFormContainer(form, [

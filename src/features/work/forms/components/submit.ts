@@ -5,15 +5,15 @@ import { WorkFormConfig } from "../types";
 export function createFormSubmitElement(
   id: string,
   saveEl: HTMLButtonElement,
-  deleteEl: HTMLButtonElement
+  deleteEl?: HTMLButtonElement
 ): HTMLElement {
   return el(
     "p",
     {
       id: `${id}__submit`,
-      className: `submit actions`,
+      className: `submit actions ${CLASS_PREFIX}__form__submit`,
     },
-    [saveEl, deleteEl]
+    [deleteEl, saveEl].filter((el): el is HTMLButtonElement => el !== undefined)
   );
 }
 
@@ -25,7 +25,7 @@ export function createFormSaveElement(
     "button",
     {
       id: `${id}__save`,
-      className: `button ${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--save`,
+      type: "submit",
       attrs: { "aria-label": cfg.ariaLabel },
     },
     [cfg.label]
@@ -40,11 +40,8 @@ export function createFormDeleteElement(
     "button",
     {
       id: `${id}__delete`,
-      className: `button ${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--delete`,
-      attrs: {
-        "aria-label": cfg.ariaLabel,
-        disabled: String(!cfg.isDeletable),
-      },
+      type: "button",
+      attrs: { "aria-label": cfg.ariaLabel },
     },
     [cfg.label]
   );
