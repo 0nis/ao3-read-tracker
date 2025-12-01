@@ -1,5 +1,4 @@
 import { Router } from "../../../app/router";
-import { CLASS_PREFIX } from "../../../constants/classes";
 
 export type FormRegistryValue = {
   hash: string;

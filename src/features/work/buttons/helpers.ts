@@ -54,12 +54,9 @@ export function getButtonParents(
   const parents: HTMLElement[] = [];
   switch (placement) {
     case ButtonPlacement.BOTTOM || ButtonPlacement.BOTH:
-      const feedback = document.getElementById("feedback");
-      const bNav = feedback?.querySelector("ul.actions");
-      if (feedback && bNav) parents.push(bNav as HTMLElement);
+      if (nav.bottom) parents.push(nav.bottom as HTMLElement);
     default:
-      const tNav = document.querySelector("ul.work.navigation.actions");
-      if (tNav) parents.push(tNav as HTMLElement);
+      if (nav.top) parents.push(nav.top as HTMLElement);
   }
   return parents;
 }
