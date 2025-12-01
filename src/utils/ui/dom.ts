@@ -84,9 +84,11 @@ export function ensureChild<K extends keyof HTMLElementTagNameMap>({
  */
 export function injectStyles(id: string, css: string): void {
   if (document.getElementById(id)) return;
-  const style = document.createElement("style");
-  style.id = id;
-  style.textContent = css;
+  const style = el("style", {
+    id,
+    textContent: css,
+    attrs: { type: "text/css" },
+  });
   document.head.appendChild(style);
 }
 
