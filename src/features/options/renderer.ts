@@ -69,5 +69,7 @@ export async function render(): Promise<void> {
     showSection(getCurrentSection());
   });
 
-  showSection(getCurrentSection());
+  const hash = getCurrentSection();
+  location.replace(location.pathname + location.search + "#" + hash);
+  showSection(hash);
 }
