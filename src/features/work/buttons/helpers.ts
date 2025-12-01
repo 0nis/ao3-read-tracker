@@ -29,16 +29,16 @@ export function buildButtonConfig<K extends keyof typeof ACTION_BUTTON_CONFIG>(
 export async function createActionModeButton(
   config: ButtonConfig
 ): Promise<HTMLAnchorElement | undefined> {
-  const WorkId = getIdFromUrl();
-  if (!WorkId) return Promise.reject();
+  const workId = getIdFromUrl();
+  if (!workId) return;
 
   const map = ACTION_HANDLER_MAP[config.type];
-  const exists = map?.storage ? (await map.storage.exists(WorkId)).data : false;
+  const exists = map?.storage ? (await map.storage.exists(workId)).data : false;
 
   let button: HTMLAnchorElement;
   if (config.mode === ButtonAction.TOGGLE)
-    button = createToggleButton(WorkId, config, exists);
-  else button = createClickButton(WorkId, config, exists);
+    button = createToggleButton(workId, config, exists);
+  else button = createClickButton(workId, config, exists);
 
   return button;
 }

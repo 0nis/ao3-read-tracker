@@ -20,7 +20,7 @@ import { WorkActionState, WorkActionTypeMap } from "../config";
 
 import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { createExtensionMsg } from "../../../utils/extension/console";
+import { error } from "../../../utils/extension/console";
 import { FormRegistry } from "./registry";
 import { ABBREVIATION } from "../../../constants/global";
 
@@ -87,7 +87,7 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
 export function appendFormToFeedback(form: HTMLElement, id: string): void {
   const feedback = document.getElementById("feedback");
   if (!feedback) {
-    console.error(createExtensionMsg("Could not find #feedback container"));
+    error("Could not find #feedback container");
     return;
   }
   feedback.appendChild(form);

@@ -5,27 +5,24 @@ import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../utils/storage/handlers";
-import { getIdFromUrl, getTitleFromWorkPage } from "../../../../utils/ao3";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
   saveBtn: HTMLButtonElement
 ): Promise<void> {
   try {
-    const values = extractWorkFormValues(cfg);
-
-    const payload: WorkActionTypeMap[K] = {
-      ...getDefaultPayload<K>(cfg.data),
-      ...values,
-    };
-
     const saveMap = FORMS_SAVE_MAP[cfg.id];
     const msgMap = ACTION_MESSAGES_MAP[cfg.id];
-    if (!payload.id) return Promise.reject(new Error("No id found for work"));
     if (!saveMap || !msgMap)
       return Promise.reject(
         new Error(`No save map or message map for form id: ${cfg.id}`)
       );
+
+    const values = extractWorkFormValues(cfg);
+    const payload: WorkActionTypeMap[K] = {
+      ...getDefaultPayload<K>(cfg.data),
+      ...values,
+    };
 
     const { success, error } = cfg.editing
       ? { success: msgMap.success.edit, error: msgMap.error.edit }

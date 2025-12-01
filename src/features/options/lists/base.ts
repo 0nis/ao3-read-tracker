@@ -65,7 +65,6 @@ export function createPaginatedListSection<T>({
           hasNext: false,
           hasPrev: false,
         },
-        allowUndefined: true,
       }
     );
     const { items, page, totalPages, hasPrev, hasNext } = result;

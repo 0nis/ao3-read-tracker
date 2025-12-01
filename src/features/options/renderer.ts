@@ -8,6 +8,7 @@ import { setupSettings } from "./settings";
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
 import { SECTION_CONFIG, SectionId, SectionType } from "./config";
+import { error } from "../../utils/extension/console";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -20,7 +21,10 @@ export async function render(): Promise<void> {
   const extensionName =
     getManifest().data?.name?.replace(/^AO3\s+/i, "") || "Read Tracker";
   const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
-  if (!main) return;
+  if (!main) {
+    error("Failed to render options page: #main element not found");
+    return;
+  }
 
   const header = buildHeader(extensionName);
 

@@ -1,18 +1,30 @@
 import { CLASS_PREFIX } from "../constants/classes";
+import { warn } from "./extension/console";
 
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
-  return match ? match[1] : null;
+  if (!match) {
+    warn("Could not extract work ID from URL");
+    return null;
+  }
+  return match[1];
 }
 
 export function getTitleFromWorkPage(): string | null {
   const titleElement = document.querySelector("h2.title.heading");
-  return titleElement ? titleElement.textContent?.trim() || null : null;
+  if (!titleElement || !titleElement.textContent) {
+    warn("Could not find work title element");
+    return null;
+  }
+  return titleElement.textContent.trim();
 }
 
 export function getCurrentChapterFromWorkPage(): number | null {
   const titleElement = document.querySelector("h3.title");
-  if (!titleElement) return null;
+  if (!titleElement) {
+    warn("Could not find chapter title element");
+    return null;
+  }
   const chapterMatch = titleElement.textContent?.match(/Chapter (\d+)/);
   return chapterMatch ? parseInt(chapterMatch[1]) : null;
 }
@@ -25,9 +37,16 @@ export function getLatestChapterFromWorkListing(
   work: HTMLElement
 ): number | null {
   const chapterElement = work.querySelector("dd.chapters");
-  if (!chapterElement) return null;
-  const chapterMatch = chapterElement.textContent?.match(/(\d+)\/\d+/);
-  return chapterMatch ? parseInt(chapterMatch[1]) : null;
+  if (!chapterElement || !chapterElement.textContent) {
+    warn("Could not find chapters element in work listing");
+    return null;
+  }
+  const chapterMatch = chapterElement.textContent.match(/(\d+)\/\d+/);
+  if (!chapterMatch || chapterMatch.length <= 0) {
+    warn("Could not parse chapters from work listing");
+    return null;
+  }
+  return parseInt(chapterMatch[1]);
 }
 
 /**
@@ -58,7 +77,14 @@ export function extractWorkIdFromListingId(id: string): string | null {
 export function getWorksListFromListing(): HTMLElement | null {
   const main = document.getElementById("main");
   if (!main?.classList.contains("works-index")) return null;
-  return main.querySelector("ol.work.index.group");
+  const worksList = main.querySelector(
+    "ol.work.index.group"
+  ) as HTMLElement | null;
+  if (!worksList) {
+    warn("Could not find works list in listing page");
+    return null;
+  }
+  return worksList;
 }
 
 export function getWorkLinkFromId(id: string): string {

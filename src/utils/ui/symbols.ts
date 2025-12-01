@@ -3,9 +3,7 @@ import { symbolsCache } from "../../services/cache/symbols";
 import { SymbolRecord } from "../../types/symbols";
 import { el } from "./dom";
 
-/**
- * Gets a symbol element (image or text) by its ID.
- */
+/** Gets a symbol element (image or text) by its ID. */
 export async function getSymbolElement(
   id: SymbolId,
   fallback: string = "❔"

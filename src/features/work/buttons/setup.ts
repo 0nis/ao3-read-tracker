@@ -19,7 +19,7 @@ export async function setupButtons() {
     );
   }
 
-  setupAllActionButtons(settings);
+  await setupAllActionButtons(settings);
 }
 
 async function setupAllActionButtons(settings: SettingsData) {

@@ -85,9 +85,7 @@ export function injectStyles(id: string, css: string): void {
   document.head.appendChild(style);
 }
 
-/**
- * Gets an element by selector within a parent element.
- */
+/** Gets an element by selector within a parent element. */
 export const getElement = (
   parent: HTMLElement,
   selector: string

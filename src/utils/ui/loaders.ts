@@ -13,6 +13,15 @@ export interface LoadingOperationOptions {
   minDelayMs?: number;
 }
 
+/**
+ * Performs an async operation while managing a loading state on a given controller.
+ *
+ * @template T The return type of the async operation
+ * @param controller Get this element with @function createButtonLoader
+ * @param op The async operation to perform while showing the loading state
+ * @param options Optional settings for the loading operation
+ * @returns The result of the async operation
+ */
 export async function withLoadingState<T>(
   controller: LoaderController | null | undefined,
   op: (progress?: (value: number) => void) => Promise<T>,
@@ -38,6 +47,13 @@ export async function withLoadingState<T>(
   }
 }
 
+/**
+ * Creates a loader controller (object with start(), restore(), and setProgress() methods) for a button element.
+ *
+ * @param btn The button element to attach the loader to
+ * @param type The type of loader to create (spinner or progress bar)
+ * @returns A controller to manage the loader state to use in @function withLoadingState
+ */
 export function createButtonLoader(
   btn: HTMLButtonElement,
   type: LoaderType

@@ -5,11 +5,20 @@ import { reportExtensionFailure } from "./utils/ui/dialogs";
 (async function main() {
   try {
     await db.open();
-    await App.init();
   } catch (err) {
     reportExtensionFailure(
       "⚠️ Extension %name% (v%version%) failed to start! ⚠️",
       err
     );
+    return;
+  }
+  try {
+    await App.init();
+  } catch (err) {
+    reportExtensionFailure(
+      "⚠️ An unknown error occurred in extension %name% (v%version%)! The extension may not work as expected. ⚠️",
+      err
+    );
+    return;
   }
 })();
