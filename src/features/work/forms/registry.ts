@@ -1,7 +1,11 @@
 import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
 
-const registry = new Map<string, HTMLElement>();
+export type FormRegistryValue = {
+  hash: string;
+};
+
+const registry = new Map<string, FormRegistryValue>();
 
 export const FormRegistry = {
   get(id: string) {
@@ -9,11 +13,13 @@ export const FormRegistry = {
   },
 
   navigate(id: string) {
-    Router.addHash(`${CLASS_PREFIX}__${id}`);
+    const entry = registry.get(id);
+    if (!entry) return;
+    Router.addHash(entry.hash);
   },
 
-  register(id: string, instance: HTMLElement) {
-    registry.set(id, instance);
+  register(id: string, value: FormRegistryValue) {
+    registry.set(id, value);
   },
 
   unregister(id: string) {

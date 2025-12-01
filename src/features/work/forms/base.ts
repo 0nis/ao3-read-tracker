@@ -16,12 +16,12 @@ import { deleteWorkFormData } from "./handlers/delete";
 import { populateWorkForm } from "./handlers/populate";
 import { saveWorkFormData } from "./handlers/save";
 import { WorkFormConfig } from "./types";
+import { FormRegistry } from "./registry";
 import { WorkActionState, WorkActionTypeMap } from "../config";
 
 import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { error } from "../../../utils/extension/console";
-import { FormRegistry } from "./registry";
 import { ABBREVIATION } from "../../../constants/global";
 
 export function createWorkForm<K extends keyof WorkActionTypeMap>(
@@ -79,7 +79,9 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
   ]);
 
   populateWorkForm(cfg);
-  FormRegistry.register(cfg.id, form);
+  FormRegistry.register(cfg.id, {
+    hash: elId,
+  });
   appendFormToFeedback(form, elId);
   return form;
 }

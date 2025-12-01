@@ -28,7 +28,6 @@ export const Router = {
   },
 
   addHash(hash: string) {
-    window.location.hash = "";
-    window.location.hash = hash;
+    location.replace(location.pathname + location.search + "#" + hash);
   },
 };

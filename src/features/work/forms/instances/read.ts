@@ -1,7 +1,7 @@
 import { createWorkForm } from "../base";
 import { WorkAction } from "../../config";
 import { getItemFromWorkFormItemArray } from "../helpers/items";
-import { checkbox, number, textarea } from "../inputs";
+import { checkbox, number, textarea } from "../helpers/inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";

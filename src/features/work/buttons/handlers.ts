@@ -10,7 +10,6 @@ export async function handleEditWork<K extends keyof WorkActionTypeMap>(
   id: string,
   workAction: K
 ) {
-  // TODO: FIX: Navigate doesn't work
   if (FormRegistry.get(workAction)) {
     FormRegistry.navigate(workAction);
     return;

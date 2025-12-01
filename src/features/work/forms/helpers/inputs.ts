@@ -1,4 +1,4 @@
-import { el } from "../../../utils/ui/dom";
+import { el } from "../../../../utils/ui/dom";
 
 export const textarea = (
   rows: number,
