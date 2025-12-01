@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../constants/classes";
 import { MessageType } from "../../enums/messages";
-import { el } from "./dom";
+import { el, ensureChild } from "./dom";
 import { reportSrLive } from "./sr-live";
 
 /**
@@ -29,23 +29,41 @@ export function showFormMessage(
   container.appendChild(msg);
 }
 
-/**
- * Adds an AO3-style flash notice to the top of the main content area
- */
-export function createFlashNotice(innerHTML: string): void {
+/** Adds an AO3-style flash notice to the top of the main content area */
+export function createFlashNotice(msg: string): void {
   const main = document.getElementById("main");
   if (!main) return;
 
-  main.querySelector(".flash.notice")?.remove();
+  const existing = main.querySelector(
+    `#${CLASS_PREFIX}-flash-notice`
+  ) as HTMLElement | null;
+  if (existing && existing.childNodes[0]?.textContent?.trim() === msg) {
+    const count = ensureChild({
+      parent: existing,
+      tag: "span",
+      className: `${CLASS_PREFIX}__flash-notice__count`,
+    });
+    const currentCount = parseInt(
+      count.textContent?.replace(/\D/g, "") || "1",
+      10
+    );
+    count.textContent = ` (x${currentCount + 1})`;
+    reportSrLive(msg);
+    return;
+  }
+  if (!existing) main.querySelector(".flash.notice")?.remove();
 
-  const notice = el("div", {
-    className: "flash notice",
-    innerHTML: innerHTML,
-    attrs: { role: "status" },
-  });
+  const notice = el(
+    "div",
+    {
+      id: `${CLASS_PREFIX}-flash-notice`,
+      className: "flash notice",
+      attrs: { role: "status" },
+    },
+    msg
+  );
 
-  reportSrLive(notice.textContent?.trim());
-
+  reportSrLive(msg);
   main.prepend(notice);
 }
 

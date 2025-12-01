@@ -54,12 +54,17 @@ export function el<K extends keyof HTMLElementTagNameMap>(
  * @param createProps Optional properties to apply **only when creating** a new element.
  * @returns The existing or newly created child element.
  */
-export function ensureChild<K extends keyof HTMLElementTagNameMap>(
-  parent: HTMLElement,
-  className: string,
-  tag: K,
-  createProps?: Parameters<typeof el>[1]
-): HTMLElementTagNameMap[K] {
+export function ensureChild<K extends keyof HTMLElementTagNameMap>({
+  parent,
+  className,
+  tag,
+  createProps,
+}: {
+  parent: HTMLElement;
+  className: string;
+  tag: K;
+  createProps?: Parameters<typeof el>[1];
+}): HTMLElementTagNameMap[K] {
   const existing = parent.querySelector<HTMLElementTagNameMap[K]>(
     `.${className}`
   );

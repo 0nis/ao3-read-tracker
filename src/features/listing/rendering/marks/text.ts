@@ -27,11 +27,11 @@ export function addText({ item, readWork, ignoredWork }: ApplyMarksParams) {
     getStyles(CLASS_PREFIX)
   );
 
-  const indicatorList = ensureChild(
-    item,
-    `${CLASS_PREFIX}__text-indicator`,
-    "ul"
-  );
+  const indicatorList = ensureChild({
+    parent: item,
+    className: `${CLASS_PREFIX}__text-indicator`,
+    tag: "ul",
+  });
 
   if (readWork) renderReadInformation(item, indicatorList, readWork);
   if (ignoredWork) renderIgnoredInformation(item, indicatorList, ignoredWork);
@@ -120,11 +120,11 @@ function createIndicatorText(
 }
 
 function addNotesText(item: HTMLElement, notes: string, className?: string) {
-  const section = ensureChild(
-    item,
-    `${CLASS_PREFIX}__text-indicator__notes`,
-    "blockquote"
-  );
+  const section = ensureChild({
+    parent: item,
+    className: `${CLASS_PREFIX}__text-indicator__notes`,
+    tag: "blockquote",
+  });
   section.appendChild(el("p", { html: notes }));
   section.setAttribute("aria-label", "User notes");
   if (className) section.classList.add(className);

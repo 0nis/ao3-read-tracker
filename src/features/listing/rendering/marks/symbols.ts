@@ -31,17 +31,17 @@ export async function addSymbols({
     getStyles(CLASS_PREFIX)
   );
 
-  const symbolIndicatorList = ensureChild(
-    item.querySelector(".header.module")!,
-    `${CLASS_PREFIX}__symbol-indicator`,
-    "ul",
-    {
+  const symbolIndicatorList = ensureChild({
+    parent: item.querySelector(".header.module")!,
+    className: `${CLASS_PREFIX}__symbol-indicator`,
+    tag: "ul",
+    createProps: {
       tabIndex: 0,
       attrs: {
         "aria-label": "Work status indicators",
       },
-    }
-  );
+    },
+  });
 
   await renderSymbols(item, symbolIndicatorList, readWork, ignoredWork);
 }

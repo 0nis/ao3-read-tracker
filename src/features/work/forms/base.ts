@@ -36,7 +36,6 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
     FormRegistry.unregister(cfg.id);
     form.remove();
     window.scrollTo(0, prevScrollPos);
-    Router.back();
   };
 
   const updateState = (state: WorkActionState) => {
