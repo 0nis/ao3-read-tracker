@@ -7,6 +7,11 @@
       "matches": ["https://archiveofourown.org/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [],
+      "js": ["loader.js"],
+      "run_at": "document_start"
     }
   ]
 }
