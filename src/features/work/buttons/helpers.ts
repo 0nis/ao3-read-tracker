@@ -5,6 +5,7 @@ import { createClickButton } from "./components/click-btn";
 
 import { getIdFromUrl } from "../../../utils/ao3";
 import { ButtonPlacement } from "../../../enums/settings";
+import { warn } from "../../../utils/extension/console";
 
 export function buildButtonConfig<K extends keyof typeof ACTION_BUTTON_CONFIG>(
   key: K,
@@ -43,7 +44,13 @@ export async function createActionModeButton(
   return button;
 }
 
-export function getButtonParents(placement: ButtonPlacement): HTMLElement[] {
+export function getButtonParents(
+  placement: ButtonPlacement,
+  nav: {
+    top: HTMLElement | null;
+    bottom: HTMLElement | null;
+  }
+): HTMLElement[] {
   const parents: HTMLElement[] = [];
   switch (placement) {
     case ButtonPlacement.BOTTOM || ButtonPlacement.BOTH:
@@ -55,4 +62,19 @@ export function getButtonParents(placement: ButtonPlacement): HTMLElement[] {
       if (tNav) parents.push(tNav as HTMLElement);
   }
   return parents;
+}
+
+export function getWorkNavBars(): {
+  top: HTMLElement | null;
+  bottom: HTMLElement | null;
+} {
+  const feedback = document.getElementById("feedback");
+  const bNav = feedback?.querySelector("ul.actions");
+  const tNav = document.querySelector("ul.work.navigation.actions");
+  if (!tNav) warn("Top work navigation bar not found.");
+  if (!bNav) warn("Bottom work navigation bar not found.");
+  return {
+    top: tNav as HTMLElement | null,
+    bottom: bNav as HTMLElement | null,
+  };
 }

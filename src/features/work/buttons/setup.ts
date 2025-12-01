@@ -4,6 +4,7 @@ import {
   buildButtonConfig,
   createActionModeButton,
   getButtonParents,
+  getWorkNavBars,
 } from "./helpers";
 
 import { settingsCache } from "../../../services/cache/settings";
@@ -23,12 +24,17 @@ export async function setupButtons() {
 }
 
 async function setupAllActionButtons(settings: SettingsData) {
+  const navs = getWorkNavBars();
+  if (!navs.top && !navs.bottom) return;
   for (const a of Object.keys(ACTION_BUTTON_CONFIG) as WorkAction[]) {
     const s = ACTION_SETTINGS_MAP[a]?.(settings);
     const cfg = buildButtonConfig(a, s.simpleModeEnabled);
     const btn = await createActionModeButton(cfg);
     if (!btn) continue;
-    const parents = getButtonParents(settings.generalSettings.buttonPlacement);
+    const parents = getButtonParents(
+      settings.generalSettings.buttonPlacement,
+      navs
+    );
     for (const parent of parents) {
       parent.appendChild(el("li", {}, btn));
     }
