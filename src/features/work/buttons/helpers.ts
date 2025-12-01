@@ -6,6 +6,7 @@ import { createClickButton } from "./components/click-btn";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { ButtonPlacement } from "../../../enums/settings";
 import { warn } from "../../../utils/extension/console";
+import { el } from "../../../utils/ui/dom";
 
 export function buildButtonConfig<K extends keyof typeof ACTION_BUTTON_CONFIG>(
   key: K,
@@ -44,34 +45,63 @@ export async function createActionModeButton(
   return button;
 }
 
+type ButtonNavs = {
+  top: Parent | null;
+  bottom: Parent | null;
+};
+
+type Parent = {
+  el: HTMLElement;
+  placement: ButtonPlacement;
+};
+
 export function getButtonParents(
   placement: ButtonPlacement,
-  nav: {
-    top: HTMLElement | null;
-    bottom: HTMLElement | null;
-  }
-): HTMLElement[] {
-  const parents: HTMLElement[] = [];
+  nav: ButtonNavs
+): Parent[] {
+  const parents: Parent[] = [];
   switch (placement) {
-    case ButtonPlacement.BOTTOM || ButtonPlacement.BOTH:
-      if (nav.bottom) parents.push(nav.bottom as HTMLElement);
-    default:
-      if (nav.top) parents.push(nav.top as HTMLElement);
+    case ButtonPlacement.BOTH:
+      if (nav.top) parents.push(nav.top);
+      if (nav.bottom) parents.push(nav.bottom);
+      break;
+    case ButtonPlacement.TOP:
+      if (nav.top) parents.push(nav.top);
+      break;
+    case ButtonPlacement.BOTTOM:
+      if (nav.bottom) parents.push(nav.bottom);
+      break;
   }
   return parents;
 }
 
-export function getWorkNavBars(): {
-  top: HTMLElement | null;
-  bottom: HTMLElement | null;
-} {
+export function getWorkNavBars(): ButtonNavs {
   const feedback = document.getElementById("feedback");
   const bNav = feedback?.querySelector("ul.actions");
   const tNav = document.querySelector("ul.work.navigation.actions");
   if (!tNav) warn("Top work navigation bar not found.");
   if (!bNav) warn("Bottom work navigation bar not found.");
   return {
-    top: tNav as HTMLElement | null,
-    bottom: bNav as HTMLElement | null,
+    top: {
+      el: tNav as HTMLElement,
+      placement: ButtonPlacement.TOP,
+    },
+    bottom: {
+      el: bNav as HTMLElement,
+      placement: ButtonPlacement.BOTTOM,
+    },
   };
+}
+
+export function insertButtonIntoParent(
+  parent: Parent,
+  button: HTMLAnchorElement
+) {
+  const li = el("li", {}, button);
+  if (parent.placement === ButtonPlacement.TOP) parent.el.appendChild(li);
+  if (parent.placement === ButtonPlacement.BOTTOM) {
+    const beforeEl = parent.el.querySelector("li#show_comments_link");
+    if (beforeEl) parent.el.insertBefore(li, beforeEl);
+    else parent.el.appendChild(li);
+  }
 }
