@@ -9,6 +9,7 @@ import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
 import { SECTION_CONFIG, SectionId, SectionType } from "./config";
 import { error } from "../../utils/extension/console";
+import { addGlobalListener } from "../../utils/extension/listeners";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -65,9 +66,10 @@ export async function render(): Promise<void> {
     updateSelected(id);
   }
 
-  window.addEventListener("hashchange", () => {
+  const handleHashChange = () => {
     showSection(getCurrentSection());
-  });
+  };
+  addGlobalListener(window, "hashchange", handleHashChange);
 
   const hash = getCurrentSection();
   location.replace(location.pathname + location.search + "#" + hash);
