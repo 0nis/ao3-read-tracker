@@ -1,4 +1,4 @@
-import { ApplyMarksParams } from "..";
+import { ApplyMarksParams } from "../setup";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { symbolsCache } from "../../../../services/cache/symbols";
 import { getActiveSymbolRules } from "../../../../services/rules/symbols";
@@ -14,13 +14,11 @@ import {
 import { renderSymbolContent } from "../../../../utils/ui/symbols";
 
 /**
- * Adds symbols to a work element showing information like read/ignored status, reread worthiness, and read count.
- * @param work The work to modify
- * @param type What type of information the text is for, like a work marked as read or ignored
- * @param item The item data containing optional additional information
+ * Adds symbols to a work element showing information
+ * like read/ignored status, reread worthiness, and read count.
  */
 export async function addSymbols({
-  item,
+  element,
   readWork,
   ignoredWork,
 }: ApplyMarksParams) {
@@ -32,7 +30,7 @@ export async function addSymbols({
   );
 
   const symbolIndicatorList = ensureChild({
-    parent: item.querySelector(".header.module")!,
+    parent: element.querySelector(".header.module")!,
     className: `${CLASS_PREFIX}__symbol-indicator`,
     tag: "ul",
     createProps: {
@@ -43,22 +41,22 @@ export async function addSymbols({
     },
   });
 
-  await renderSymbols(item, symbolIndicatorList, readWork, ignoredWork);
+  await renderSymbols(element, symbolIndicatorList, readWork, ignoredWork);
 }
 
 /**
  * Removes any symbols added by this module from a work element.
- * @param item The work to modify
+ * @param element The work to modify
  */
-export function removeSymbols(item: HTMLElement) {
+export function removeSymbols(element: HTMLElement) {
   const elementsToRemove = [
-    getElement(item, `.${CLASS_PREFIX}__symbol-indicator`),
+    getElement(element, `.${CLASS_PREFIX}__symbol-indicator`),
   ].filter((el): el is HTMLElement => el !== null);
   elementsToRemove.forEach((el) => el.remove());
 }
 
 async function renderSymbols(
-  item: HTMLElement,
+  element: HTMLElement,
   symbolIndicatorList: HTMLElement,
   readWork: ReadWork | undefined,
   ignoredWork: IgnoredWork | undefined
@@ -69,7 +67,7 @@ async function renderSymbols(
     read: readWork,
     ignored: ignoredWork,
     details: {
-      latestChapter: getLatestChapterFromWorkListing(item) || undefined,
+      latestChapter: getLatestChapterFromWorkListing(element) || undefined,
     },
   });
 

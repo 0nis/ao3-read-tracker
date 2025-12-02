@@ -5,33 +5,33 @@ import { addClasses, removeClasses } from "./marks/classes";
 import { unCollapse } from "./display/collapse";
 import { unhide } from "./display/hide";
 
-import { settingsCache } from "../../../services/cache/settings";
-import { collectDisplayRules } from "../../../services/rules/display";
-
 import { getWorkStatusData, mapDisplayModeToFn } from "../handlers";
 
+import { settingsCache } from "../../../services/cache/settings";
+import { collectDisplayRules } from "../../../services/rules/display";
 import { extractWorkIdFromListingId } from "../../../utils/ao3";
 import { ensureChild } from "../../../utils/ui/dom";
 import { getManifest } from "../../../utils/extension/manifest";
-
 import { CLASS_PREFIX } from "../../../constants/classes";
-
 import { SettingsData } from "../../../types/settings";
 import { ReadWork, IgnoredWork } from "../../../types/works";
 
 /**
- * Marks works on the current listing page as read/ignored based on stored data, with their appropriate indicators.
+ * Marks works on the current listing page as read/ignored based on
+ * stored data, with their appropriate indicators.
  */
 export async function markWorksOnPage(): Promise<void> {
-  const { readWorks, ignoredWorks, items, settings } =
-    (await getDataAndItems()) || {};
-  if (!readWorks || !ignoredWorks || !items || !settings) return;
+  const data = await getWorkStatusData();
+  if (!data) return;
 
-  for (const item of items) {
-    const id = extractWorkIdFromListingId(item.id);
+  const { elements, readWorks, ignoredWorks } = data;
+  const settings = await settingsCache.get();
+
+  for (const el of elements) {
+    const id = extractWorkIdFromListingId(el.id);
     if (!id) continue;
     await applyMarksToWork({
-      item,
+      element: el,
       readWork: readWorks[id],
       ignoredWork: ignoredWorks[id],
       settings,
@@ -40,25 +40,28 @@ export async function markWorksOnPage(): Promise<void> {
 }
 
 /**
- * Updates works on the current listing page to reflect any changes in their read/ignored status, adjusting indicators as needed.
+ * Updates works on the current listing page to reflect any changes
+ * in their read/ignored status, adjusting indicators as needed.
  */
 export async function updateWorksOnPage(): Promise<void> {
-  const { readWorks, ignoredWorks, items, settings } =
-    (await getDataAndItems()) || {};
-  if (!readWorks || !ignoredWorks || !items || !settings) return;
+  const data = await getWorkStatusData();
+  if (!data) return;
 
-  for (const item of items) {
-    const id = extractWorkIdFromListingId(item.id);
+  const { elements, readWorks, ignoredWorks } = data;
+  const settings = await settingsCache.get();
+
+  for (const el of elements) {
+    const id = extractWorkIdFromListingId(el.id);
     if (!id) continue;
 
-    removeClasses(item);
-    removeText(item);
-    removeSymbols(item);
-    unCollapse(item);
-    unhide(item.id);
+    removeClasses(el);
+    removeText(el);
+    removeSymbols(el);
+    unCollapse(el);
+    unhide(el.id);
 
     await applyMarksToWork({
-      item,
+      element: el,
       readWork: readWorks[id],
       ignoredWork: ignoredWorks[id],
       settings,
@@ -66,34 +69,15 @@ export async function updateWorksOnPage(): Promise<void> {
   }
 }
 
-async function getDataAndItems(): Promise<
-  | {
-      readWorks: Record<string, ReadWork>;
-      ignoredWorks: Record<string, IgnoredWork>;
-      items: NodeListOf<HTMLElement>;
-      settings: SettingsData;
-    }
-  | undefined
-> {
-  const { worksList, data } = await getWorkStatusData();
-  if (!worksList || !data) return;
-  const { readWorks, ignoredWorks } = data;
-
-  const settings = await settingsCache.get();
-  const items = worksList.querySelectorAll<HTMLLIElement>("li.work");
-
-  return { readWorks, ignoredWorks, items, settings };
-}
-
 export interface ApplyMarksParams {
-  item: HTMLElement;
+  element: HTMLElement;
   readWork: ReadWork | undefined;
   ignoredWork: IgnoredWork | undefined;
   settings: SettingsData;
 }
 
 async function applyMarksToWork(params: ApplyMarksParams) {
-  createOrModifyLandmarkHeading(params.item);
+  ensureLandmarkHeadingPresent(params.element);
   addClasses(params);
   addText(params);
   if (!params.settings.generalSettings.hideSymbols) await addSymbols(params);
@@ -101,7 +85,7 @@ async function applyMarksToWork(params: ApplyMarksParams) {
 }
 
 function adjustWorkDisplay({
-  item,
+  element,
   readWork,
   ignoredWork,
   settings,
@@ -113,18 +97,25 @@ function adjustWorkDisplay({
   if (!rule) return;
 
   const displayFn = mapDisplayModeToFn(rule.getMode());
-  displayFn(item);
+  displayFn(element);
 }
 
-const extensionName = getManifest().data?.name || "Read Tracker";
-function createOrModifyLandmarkHeading(item: HTMLElement) {
+function ensureLandmarkHeadingPresent(element: HTMLElement) {
   ensureChild({
-    parent: item,
+    parent: element,
     className: `${CLASS_PREFIX}__text-indicator__landmark`,
     tag: "h6",
     createProps: {
       className: "landmark heading",
-      textContent: `${extensionName} Extension Information`,
+      textContent: `${
+        getManifest().data?.name || "Read Tracker"
+      } Extension Information`,
     },
   });
+}
+
+function countHiddenWorks(elements: NodeListOf<HTMLElement>): number {
+  return Array.from(elements).filter((element) =>
+    element.classList.contains(`${CLASS_PREFIX}__hidden`)
+  ).length;
 }
