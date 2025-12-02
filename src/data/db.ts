@@ -7,13 +7,14 @@ import {
   IgnoreSettings,
   GeneralSettings,
 } from "../types/settings";
-import { ReadWork, IgnoredWork } from "../types/works";
+import { ReadWork, IgnoredWork, InProgressWork } from "../types/works";
 import { SymbolRecord } from "../types/symbols";
 import { DATABASE_NAME } from "../constants/global";
 import { populateDb } from "./populate";
 
 export class Ao3MarkAsReadDb extends Dexie {
   readWorks!: Table<ReadWork>;
+  inProgressWorks!: Table<InProgressWork>;
   ignoredWorks!: Table<IgnoredWork>;
   readSettings!: Table<ReadSettings>;
   ignoreSettings!: Table<IgnoreSettings>;
@@ -25,6 +26,7 @@ export class Ao3MarkAsReadDb extends Dexie {
 
     this.version(1).stores({
       readWorks: "id, modifiedAt",
+      inProgressWorks: "id, lastReadAt",
       ignoredWorks: "id, modifiedAt",
       readSettings: "id",
       ignoreSettings: "id",

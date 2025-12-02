@@ -20,6 +20,7 @@ function buildStorageService(map: InstanceMap): SafeServices & {
     safeExecute(
       async () => ({
         readWorks: await map.readWorks.getByIds(ids),
+        inProgressWorks: await map.inProgressWorks.getByIds(ids),
         ignoredWorks: await map.ignoredWorks.getByIds(ids),
       }),
       "StorageService.getByIds"

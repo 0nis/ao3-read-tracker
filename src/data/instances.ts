@@ -4,7 +4,7 @@ import { WorksData } from "./models/works";
 import { SettingsData } from "./models/settings";
 import { SymbolsData } from "./models/symbols";
 
-import { ReadWork, IgnoredWork } from "../types/works";
+import { ReadWork, IgnoredWork, InProgressWork } from "../types/works";
 import {
   GeneralSettings,
   IgnoreSettings,
@@ -15,6 +15,7 @@ import { SettingsType } from "../enums/settings";
 
 export const instances = {
   readWorks: new WorksData<ReadWork>(db.readWorks),
+  inProgressWorks: new WorksData<InProgressWork>(db.inProgressWorks),
   ignoredWorks: new WorksData<IgnoredWork>(db.ignoredWorks),
 
   readSettings: new SettingsData<ReadSettings>(
