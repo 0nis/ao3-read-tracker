@@ -34,9 +34,12 @@ export function createFlashNotice(msg: string): void {
   const main = document.getElementById("main");
   if (!main) return;
 
+  console.log("checking for existing flash notice");
+
   const existing = main.querySelector(
-    `#${CLASS_PREFIX}-flash-notice`
+    `#${CLASS_PREFIX}__flash-notice`
   ) as HTMLElement | null;
+
   if (existing && existing.childNodes[0]?.textContent?.trim() === msg) {
     const count = ensureChild({
       parent: existing,
@@ -51,12 +54,15 @@ export function createFlashNotice(msg: string): void {
     reportSrLive(msg);
     return;
   }
-  if (!existing) main.querySelector(".flash.notice")?.remove();
+
+  // Remove both AO3 native notice and existing custom notice if any
+  main.querySelector(".flash.notice")?.remove();
+  existing?.remove();
 
   const notice = el(
     "div",
     {
-      id: `${CLASS_PREFIX}-flash-notice`,
+      id: `${CLASS_PREFIX}__flash-notice`,
       className: "flash notice",
       attrs: { role: "status" },
     },
