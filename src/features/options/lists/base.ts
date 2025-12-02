@@ -45,7 +45,7 @@ export function createPaginatedListSection<T>({
 
   const paginationControls = createPaginationControls();
 
-  async function renderPage() {
+  async function renderPage(init: boolean = false) {
     listContainer.classList.add(`${PREFIX}__list__container--loading`);
 
     const fragment = document.createDocumentFragment();
@@ -90,12 +90,12 @@ export function createPaginatedListSection<T>({
       listContainer.classList.remove(`${PREFIX}__list__container--loading`)
     );
 
-    reportSrLive(`Page ${page + 1} of ${totalPages}`);
+    if (!init) reportSrLive(`Page ${page + 1} of ${totalPages}`);
   }
 
   setupPaginationEvents(paginationControls, state, renderPage);
 
-  renderPage();
+  renderPage(true);
 
   const paginationWrapper = el(
     "nav",

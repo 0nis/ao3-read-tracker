@@ -1,2 +1,5 @@
 export const VALID_BROWSERS = ["chrome", "firefox", "all"];
-export const VALID_STORAGE = ["local", "localStorage"];
+
+export const LOADER_URLS = [
+  "https://archiveofourown.org/extensions/read-tracker",
+];

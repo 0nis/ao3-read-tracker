@@ -1,10 +1,10 @@
-import { PREFIX } from ".";
 import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
 import { getManifest } from "../../utils/extension/manifest";
+import { ABBREVIATION } from "../../constants/global";
 
+import { PREFIX } from ".";
 import { setupSettings } from "./settings";
-
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
 import { SECTION_CONFIG, SectionId, SectionType } from "./config";
@@ -74,4 +74,6 @@ export async function render(): Promise<void> {
   const hash = getCurrentSection();
   location.replace(location.pathname + location.search + "#" + hash);
   showSection(hash);
+
+  document.dispatchEvent(new CustomEvent(`${ABBREVIATION}:loaded`));
 }

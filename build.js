@@ -1,12 +1,13 @@
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
-import { VALID_BROWSERS } from "./constants.js";
+import { VALID_BROWSERS, LOADER_URLS } from "./constants.js";
 
 const __dirname = path.resolve();
 const outDir = path.resolve(__dirname, "build");
 const distDir = path.resolve(__dirname, "dist");
 const entry = path.resolve(__dirname, "src/index.js");
+const loaderEntry = path.resolve(__dirname, "src/loader.js");
 
 const pkg = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf8")
@@ -46,13 +47,25 @@ function copyFileSync(src, dest) {
   fs.copyFileSync(src, dest);
 }
 
-function mergeManifest(templatePath, destPath) {
+function injectLoaderUrlsIntoManifest(manifest) {
+  manifest.content_scripts = manifest.content_scripts.map((script) => {
+    if (script.js.includes("loader.js")) {
+      return {
+        ...script,
+        matches: LOADER_URLS,
+      };
+    }
+    return script;
+  });
+}
+
+function createManifest(templatePath, destPath) {
   const template = JSON.parse(fs.readFileSync(templatePath, "utf8"));
   const merged = {
     ...template,
     ...baseFields,
   };
-  merged.manifest_version = template.manifest_version;
+  injectLoaderUrlsIntoManifest(merged);
   fs.writeFileSync(destPath, JSON.stringify(merged, null, 2));
 }
 
@@ -64,12 +77,13 @@ async function buildForBrowser(targetBrowser, isDev) {
   }
   fs.mkdirSync(outDir, { recursive: true });
 
+  // main script on document_idle
   await esbuild.build({
     entryPoints: [entry],
     outfile: path.join(outDir, "content.js"),
     bundle: true,
     format: "iife",
-    globalName: "AO3WordReplacer",
+    globalName: "AO3ReadTracker",
     sourcemap: true,
     minify: false,
     target: ["es2018"],
@@ -79,6 +93,17 @@ async function buildForBrowser(targetBrowser, isDev) {
         isDev ? "development" : "production"
       ),
     },
+  });
+
+  // loader to start at document_start
+  await esbuild.build({
+    entryPoints: [loaderEntry],
+    outfile: path.join(outDir, "loader.js"),
+    bundle: true,
+    format: "iife",
+    sourcemap: true,
+    minify: false,
+    target: ["es2018"],
   });
 
   const distPath = path.join(distDir, `${targetBrowser}`);
@@ -102,7 +127,11 @@ async function buildForBrowser(targetBrowser, isDev) {
     path.join(outDir, "content.js"),
     path.join(distPath, "content.js")
   );
-  mergeManifest(manifestSrc, manifestDest);
+  copyFileSync(
+    path.join(outDir, "loader.js"),
+    path.join(distPath, "loader.js")
+  );
+  createManifest(manifestSrc, manifestDest);
 
   console.log(`✅ Build complete for ${targetBrowser}. Output: ${distPath}`);
 }
