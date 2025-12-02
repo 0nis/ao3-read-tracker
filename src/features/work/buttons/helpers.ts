@@ -97,11 +97,23 @@ export function insertButtonIntoParent(
   parent: Parent,
   button: HTMLAnchorElement
 ) {
-  const li = el("li", {}, button);
-  if (parent.placement === ButtonPlacement.TOP) parent.el.appendChild(li);
+  if (parent.placement === ButtonPlacement.TOP) {
+    button.setAttribute("data-origin", ButtonPlacement.TOP);
+    const li = el("li", {}, button);
+    parent.el.appendChild(li);
+  }
   if (parent.placement === ButtonPlacement.BOTTOM) {
+    button.setAttribute("data-origin", ButtonPlacement.BOTTOM);
+    const li = el("li", {}, button);
     const beforeEl = parent.el.querySelector("li#show_comments_link");
     if (beforeEl) parent.el.insertBefore(li, beforeEl);
     else parent.el.appendChild(li);
   }
+}
+
+export function getButtonOrigin(btn: HTMLElement | null): ButtonPlacement {
+  const origin = btn?.getAttribute("data-origin");
+  return origin === ButtonPlacement.BOTTOM
+    ? ButtonPlacement.BOTTOM
+    : ButtonPlacement.TOP;
 }

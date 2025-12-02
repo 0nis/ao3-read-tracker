@@ -1,5 +1,7 @@
 import { CLASS_PREFIX } from "../../constants/classes";
 import { MessageType } from "../../enums/messages";
+import { ButtonPlacement } from "../../enums/settings";
+import { warn } from "../extension/console";
 import { el, ensureChild } from "./dom";
 import { reportSrLive } from "./sr-live";
 
@@ -30,7 +32,10 @@ export function showFormMessage(
 }
 
 /** Adds an AO3-style flash notice to the top of the main content area */
-export function createFlashNotice(msg: string): void {
+export function createFlashNotice(
+  msg: string,
+  position: ButtonPlacement = ButtonPlacement.TOP
+): void {
   const main = document.getElementById("main");
   if (!main) return;
 
@@ -38,7 +43,11 @@ export function createFlashNotice(msg: string): void {
     `#${CLASS_PREFIX}__flash-notice`
   ) as HTMLElement | null;
 
-  if (existing && existing.childNodes[0]?.textContent?.trim() === msg) {
+  if (
+    existing &&
+    existing.childNodes[0]?.textContent?.trim() === msg &&
+    existing.getAttribute("position") === position
+  ) {
     const count = ensureChild({
       parent: existing,
       tag: "span",
@@ -62,12 +71,27 @@ export function createFlashNotice(msg: string): void {
     {
       id: `${CLASS_PREFIX}__flash-notice`,
       className: "flash notice",
-      attrs: { role: "status" },
+      attrs: {
+        role: "status",
+        position: position,
+      },
     },
     msg
   );
 
   reportSrLive(msg);
+
+  if (position === ButtonPlacement.BOTTOM) {
+    const el = main.querySelector("#feedback")?.querySelector("ul.actions");
+    if (el) el.after(notice);
+    else {
+      warn(
+        "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead."
+      );
+      main.prepend(notice);
+    }
+    return;
+  }
   main.prepend(notice);
 }
 

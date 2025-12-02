@@ -14,10 +14,10 @@ export function createToggleButton(
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
     if (button.textContent === config.labels.on) {
-      await config.onDeactivate(id);
+      await config.onDeactivate(id, button);
       button.textContent = config.labels.off;
     } else {
-      await config.onActivate(id);
+      await config.onActivate(id, button);
       button.textContent = config.labels.on;
     }
   });

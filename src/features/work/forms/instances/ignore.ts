@@ -4,6 +4,7 @@ import { textarea } from "../helpers/inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { IgnoredWork } from "../../../../types/works";
+import { ButtonPlacement } from "../../../../enums/settings";
 
 const items: WorkFormItem<IgnoredWork>[] = [
   {
@@ -18,7 +19,8 @@ const items: WorkFormItem<IgnoredWork>[] = [
 
 export function createIgnoreWorkForm(
   data: Partial<IgnoredWork>,
-  editing: boolean
+  editing: boolean,
+  origin?: ButtonPlacement
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.IGNORE,
@@ -38,5 +40,6 @@ export function createIgnoreWorkForm(
         ariaLabel: `Remove ${data.title || "this work"} from your ignored list`,
       },
     },
+    origin,
   });
 }

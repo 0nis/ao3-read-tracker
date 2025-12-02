@@ -5,10 +5,14 @@ import { FormRegistry } from "../forms/registry";
 
 import { getTitleFromWorkPage } from "../../../utils/ao3";
 import { handleStorageWrite } from "../../../utils/storage/handlers";
+import { createFlashNotice } from "../../../utils/ui/form";
+import { ButtonPlacement } from "../../../enums/settings";
+import { getButtonOrigin } from "./helpers";
 
 export async function handleEditWork<K extends keyof WorkActionTypeMap>(
   id: string,
-  workAction: K
+  workAction: K,
+  btn?: HTMLElement
 ) {
   if (FormRegistry.get(workAction)) {
     FormRegistry.navigate(workAction);
@@ -23,13 +27,15 @@ export async function handleEditWork<K extends keyof WorkActionTypeMap>(
       id,
       title: getTitleFromWorkPage() || "Untitled",
     } as Partial<WorkActionTypeMap[K]>,
-    !!data
+    !!data,
+    getBtnOrigin(btn)
   );
 }
 
 export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
   id: string,
-  workAction: K
+  workAction: K,
+  btn?: HTMLElement
 ) {
   const cfg = ACTION_HANDLER_MAP[workAction];
   const msgs = ACTION_MESSAGES_MAP[workAction];
@@ -42,12 +48,16 @@ export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
   return await handleStorageWrite(cfg.storage.put(payload), {
     successMsg: msgs.success.save.replace("%title%", title),
     errorMsg: msgs.error.save.replace("%title%", title),
+    onSuccess(message) {
+      createFlashNotice(message, getBtnOrigin(btn));
+    },
   });
 }
 
 export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
   id: string,
-  workAction: K
+  workAction: K,
+  btn?: HTMLElement
 ) {
   const cfg = ACTION_HANDLER_MAP[workAction];
   const msgs = ACTION_MESSAGES_MAP[workAction];
@@ -58,5 +68,12 @@ export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
   return await handleStorageWrite(cfg.storage.delete(id), {
     successMsg: msgs.success.delete.replace("%title%", title),
     errorMsg: msgs.error.delete.replace("%title%", title),
+    onSuccess(message) {
+      createFlashNotice(message, getBtnOrigin(btn));
+    },
   });
 }
+
+const getBtnOrigin = (btn: HTMLElement | null | undefined) => {
+  return btn ? getButtonOrigin(btn) : ButtonPlacement.TOP;
+};

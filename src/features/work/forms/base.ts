@@ -33,9 +33,9 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
   const form = createFormContainer(elId, cfg.landmark);
 
   const remove = () => {
+    window.scrollTo(0, prevScrollPos);
     FormRegistry.unregister(cfg.id);
     form.remove();
-    window.scrollTo(0, prevScrollPos);
   };
 
   const updateState = (state: WorkActionState) => {
@@ -49,7 +49,7 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
   const saveEl = createFormSaveElement(elId, cfg.submit.save);
   saveEl.addEventListener("click", async (ev) => {
     ev.preventDefault();
-    await saveWorkFormData(cfg, saveEl);
+    await saveWorkFormData(cfg, saveEl, cfg.origin);
     updateState(WorkActionState.MARKED);
     remove();
   });
@@ -59,7 +59,7 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
     deleteEl = createFormDeleteElement(elId, cfg.submit.delete);
     deleteEl.addEventListener("click", async (ev) => {
       ev.preventDefault();
-      await deleteWorkFormData(cfg, deleteEl!);
+      await deleteWorkFormData(cfg, deleteEl!, cfg.origin);
       updateState(WorkActionState.UNMARKED);
       remove();
     });

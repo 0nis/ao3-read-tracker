@@ -23,7 +23,7 @@ export function createClickButton(
 
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
-    await config.onClick(id);
+    await config.onClick(id, button);
   });
 
   return button;

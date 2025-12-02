@@ -7,6 +7,7 @@ import { WorkFormFieldType, WorkFormItem } from "../types";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { ReadWork } from "../../../../types/works";
 import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
+import { ButtonPlacement } from "../../../../enums/settings";
 
 const items: WorkFormItem<ReadWork>[] = [
   {
@@ -52,7 +53,8 @@ const items: WorkFormItem<ReadWork>[] = [
 
 export function createReadWorkForm(
   data: Partial<ReadWork>,
-  editing: boolean
+  editing: boolean,
+  origin?: ButtonPlacement
 ): HTMLElement {
   wireIsReadingBehavior(
     getItemFromWorkFormItemArray("isReading", items)?.input as HTMLInputElement,
@@ -78,6 +80,7 @@ export function createReadWorkForm(
         ariaLabel: `Remove ${data.title || "this work"} from your read list`,
       },
     },
+    origin,
   });
 }
 

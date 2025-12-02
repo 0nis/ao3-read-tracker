@@ -22,8 +22,10 @@ export const ACTION_BUTTON_CONFIG: {
         off: "Mark as Read",
         on: "Mark as Unread",
       },
-      onActivate: (id: string) => handleSaveWork(id, WorkAction.READ),
-      onDeactivate: (id: string) => handleDeleteWork(id, WorkAction.READ),
+      onActivate: (id: string, btn?: HTMLElement) =>
+        handleSaveWork(id, WorkAction.READ, btn),
+      onDeactivate: (id: string, btn?: HTMLElement) =>
+        handleDeleteWork(id, WorkAction.READ, btn),
     },
     advanced: {
       type: WorkAction.READ,
@@ -33,7 +35,8 @@ export const ACTION_BUTTON_CONFIG: {
         on: "Edit Read Info",
       },
       href: `#${CLASS_PREFIX}__${WorkAction.READ}-form`,
-      onClick: (id: string) => handleEditWork(id, WorkAction.READ),
+      onClick: (id: string, btn?: HTMLElement) =>
+        handleEditWork(id, WorkAction.READ, btn),
     },
   },
   [WorkAction.IGNORE]: {
@@ -44,8 +47,10 @@ export const ACTION_BUTTON_CONFIG: {
         off: "Ignore",
         on: "Unignore",
       },
-      onActivate: (id: string) => handleSaveWork(id, WorkAction.IGNORE),
-      onDeactivate: (id: string) => handleDeleteWork(id, WorkAction.IGNORE),
+      onActivate: (id: string, btn?: HTMLElement) =>
+        handleSaveWork(id, WorkAction.IGNORE, btn),
+      onDeactivate: (id: string, btn?: HTMLElement) =>
+        handleDeleteWork(id, WorkAction.IGNORE, btn),
     },
     advanced: {
       type: WorkAction.IGNORE,
@@ -55,7 +60,8 @@ export const ACTION_BUTTON_CONFIG: {
         on: "Edit Ignore Info",
       },
       href: `#${CLASS_PREFIX}__${WorkAction.IGNORE}-form`,
-      onClick: (id: string) => handleEditWork(id, WorkAction.IGNORE),
+      onClick: (id: string, btn?: HTMLElement) =>
+        handleEditWork(id, WorkAction.IGNORE, btn),
     },
   },
 };
@@ -65,12 +71,14 @@ export const ACTION_HANDLER_MAP: {
 } = {
   [WorkAction.READ]: {
     storage: StorageService.readWorks,
-    createForm: (data, editing) => createReadWorkForm(data, editing),
+    createForm: (data, editing, origin) =>
+      createReadWorkForm(data, editing, origin),
   },
 
   [WorkAction.IGNORE]: {
     storage: StorageService.ignoredWorks,
-    createForm: (data, editing) => createIgnoreWorkForm(data, editing),
+    createForm: (data, editing, origin) =>
+      createIgnoreWorkForm(data, editing, origin),
   },
 };
 

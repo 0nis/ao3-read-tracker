@@ -5,10 +5,13 @@ import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { ButtonPlacement } from "../../../../enums/settings";
+import { createFlashNotice } from "../../../../utils/ui/form";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
-  saveBtn: HTMLButtonElement
+  saveBtn: HTMLButtonElement,
+  origin?: ButtonPlacement
 ): Promise<void> {
   try {
     const saveMap = FORMS_SAVE_MAP[cfg.id];
@@ -34,6 +37,9 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
       successMsg: success.replace("%title%", title),
       errorMsg: error.replace("%title%", title),
       loadingEl: saveBtn,
+      onSuccess(message) {
+        createFlashNotice(message, origin);
+      },
     });
   } catch (err) {
     return Promise.reject(err);

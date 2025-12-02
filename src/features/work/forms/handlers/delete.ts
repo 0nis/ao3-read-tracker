@@ -4,10 +4,13 @@ import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { getWorkTitleForNotifications } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { ButtonPlacement } from "../../../../enums/settings";
+import { createFlashNotice } from "../../../../utils/ui/form";
 
 export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]>,
-  deleteBtn: HTMLButtonElement
+  deleteBtn: HTMLButtonElement,
+  origin?: ButtonPlacement
 ): Promise<void> {
   const saveMap = FORMS_SAVE_MAP[cfg.id];
   const msgMap = ACTION_MESSAGES_MAP[cfg.id];
@@ -25,5 +28,8 @@ export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
     successMsg: msgMap.success.delete.replace("%title%", title),
     errorMsg: msgMap.error.delete.replace("%title%", title),
     loadingEl: deleteBtn,
+    onSuccess(message) {
+      createFlashNotice(message, origin);
+    },
   });
 }

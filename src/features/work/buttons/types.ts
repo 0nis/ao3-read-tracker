@@ -13,14 +13,14 @@ interface BaseButtonConfig {
 
 export interface ToggleButtonConfig extends BaseButtonConfig {
   mode: ButtonAction.TOGGLE;
-  onActivate: (id: string) => Promise<void>;
-  onDeactivate: (id: string) => Promise<void>;
+  onActivate: (id: string, btn?: HTMLElement) => Promise<void>;
+  onDeactivate: (id: string, btn?: HTMLElement) => Promise<void>;
 }
 
 export interface ClickButtonConfig extends BaseButtonConfig {
   mode: ButtonAction.CLICK;
   href: string;
-  onClick: (id: string) => Promise<void>;
+  onClick: (id: string, btn?: HTMLElement) => Promise<void>;
 }
 
 export type ButtonConfig = ToggleButtonConfig | ClickButtonConfig;
@@ -37,5 +37,9 @@ export interface ActionHandlerEntry<T> {
     delete: (id: string) => Promise<any>;
     exists: (id: string) => Promise<{ data: boolean }>;
   };
-  createForm: (data: Partial<T>, editing: boolean) => void;
+  createForm: (
+    data: Partial<T>,
+    editing: boolean,
+    origin?: ButtonPlacement
+  ) => void;
 }

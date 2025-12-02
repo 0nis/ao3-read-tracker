@@ -1,3 +1,4 @@
+import { ButtonPlacement } from "../../../enums/settings";
 import { WorkAction } from "../config";
 
 export enum WorkFormFieldType {
@@ -45,4 +46,5 @@ export interface WorkFormConfig<T> {
       onDelete?: (form: HTMLFormElement) => Promise<void>;
     };
   };
+  origin?: ButtonPlacement;
 }
