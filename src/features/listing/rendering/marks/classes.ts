@@ -1,4 +1,4 @@
-import { ApplyMarksParams } from "..";
+import { ApplyMarksParams } from "../apply";
 import {
   IGNORED_CLASS,
   READ_CLASS,
@@ -6,15 +6,19 @@ import {
   STILL_READING_CLASS,
 } from "../../../../constants/classes";
 
-export function addClasses({ item, readWork, ignoredWork }: ApplyMarksParams) {
-  if (readWork) item.classList.add(READ_CLASS);
-  if (ignoredWork) item.classList.add(IGNORED_CLASS);
-  if (readWork?.isReading) item.classList.add(STILL_READING_CLASS);
-  if (readWork?.rereadWorthy) item.classList.add(REREAD_WORTHY_CLASS);
+export function addClasses({
+  element,
+  readWork,
+  ignoredWork,
+}: ApplyMarksParams) {
+  if (readWork) element.classList.add(READ_CLASS);
+  if (ignoredWork) element.classList.add(IGNORED_CLASS);
+  if (readWork?.isReading) element.classList.add(STILL_READING_CLASS);
+  if (readWork?.rereadWorthy) element.classList.add(REREAD_WORTHY_CLASS);
 }
 
-export function removeClasses(item: HTMLElement) {
-  item.classList.remove(
+export function removeClasses(element: HTMLElement) {
+  element.classList.remove(
     READ_CLASS,
     IGNORED_CLASS,
     REREAD_WORTHY_CLASS,

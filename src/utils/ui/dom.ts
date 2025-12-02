@@ -58,11 +58,13 @@ export function ensureChild<K extends keyof HTMLElementTagNameMap>({
   parent,
   className,
   tag,
+  prepend = false,
   createProps,
 }: {
   parent: HTMLElement;
   className: string;
   tag: K;
+  prepend?: boolean;
   createProps?: Parameters<typeof el>[1];
 }): HTMLElementTagNameMap[K] {
   const existing = parent.querySelector<HTMLElementTagNameMap[K]>(
@@ -71,7 +73,8 @@ export function ensureChild<K extends keyof HTMLElementTagNameMap>({
   if (existing) return existing;
 
   const node = el(tag, { className, ...createProps } as any);
-  parent.appendChild(node);
+  if (prepend) parent.prepend(node);
+  else parent.appendChild(node);
   return node;
 }
 

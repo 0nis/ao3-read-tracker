@@ -1,4 +1,4 @@
-import { ApplyMarksParams } from "..";
+import { ApplyMarksParams } from "../apply";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
 import type { ReadWork, IgnoredWork } from "../../../../types/works";
@@ -21,45 +21,46 @@ import {
  * @param readWork The read work data, if any
  * @param ignoredWork The ignored work data, if any
  */
-export function addText({ item, readWork, ignoredWork }: ApplyMarksParams) {
+export function addText({ element, readWork, ignoredWork }: ApplyMarksParams) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
     getStyles(CLASS_PREFIX)
   );
 
   const indicatorList = ensureChild({
-    parent: item,
+    parent: element,
     className: `${CLASS_PREFIX}__text-indicator`,
     tag: "ul",
   });
 
-  if (readWork) renderReadInformation(item, indicatorList, readWork);
-  if (ignoredWork) renderIgnoredInformation(item, indicatorList, ignoredWork);
+  if (readWork) renderReadInformation(element, indicatorList, readWork);
+  if (ignoredWork)
+    renderIgnoredInformation(element, indicatorList, ignoredWork);
 }
 
 /**
  * Removes any text added by this module from a work element.
- * @param item The work to modify
+ * @param element The work to modify
  */
-export function removeText(item: HTMLElement) {
+export function removeText(element: HTMLElement) {
   const elementsToRemove = [
-    getElement(item, `.${CLASS_PREFIX}__text-indicator`),
-    getElement(item, `.${CLASS_PREFIX}__text-indicator__notes`),
+    getElement(element, `.${CLASS_PREFIX}__text-indicator`),
+    getElement(element, `.${CLASS_PREFIX}__text-indicator__notes`),
   ].filter((el): el is HTMLElement => el !== null);
   elementsToRemove.forEach((el) => el.remove());
 }
 
 function renderReadInformation(
-  item: HTMLElement,
+  element: HTMLElement,
   indicatorList: HTMLElement,
   readWork: ReadWork
 ) {
   if (readWork.notes)
-    addNotesText(item, readWork.notes, `${CLASS_PREFIX}__notes--read`);
+    addNotesText(element, readWork.notes, `${CLASS_PREFIX}__notes--read`);
 
   const txt = readWork.isReading
     ? `Still reading as of %date% (chapter ${readWork.lastReadChapter || "?"}/${
-        getLatestChapterFromWorkListing(item) || "?"
+        getLatestChapterFromWorkListing(element) || "?"
       })`
     : "Marked as read on %date%";
 
@@ -69,7 +70,7 @@ function renderReadInformation(
 }
 
 function renderIgnoredInformation(
-  item: HTMLElement,
+  element: HTMLElement,
   indicatorList: HTMLElement,
   ignoredWork: IgnoredWork
 ) {
@@ -77,7 +78,11 @@ function renderIgnoredInformation(
     createIndicator(WorkState.IGNORED, ignoredWork.modifiedAt)
   );
   if (ignoredWork.reason)
-    addNotesText(item, ignoredWork.reason, `${CLASS_PREFIX}__notes--ignored`);
+    addNotesText(
+      element,
+      ignoredWork.reason,
+      `${CLASS_PREFIX}__notes--ignored`
+    );
 }
 
 function createIndicator(
@@ -119,9 +124,9 @@ function createIndicatorText(
   return el("p", {}, nodes);
 }
 
-function addNotesText(item: HTMLElement, notes: string, className?: string) {
+function addNotesText(element: HTMLElement, notes: string, className?: string) {
   const section = ensureChild({
-    parent: item,
+    parent: element,
     className: `${CLASS_PREFIX}__text-indicator__notes`,
     tag: "blockquote",
   });

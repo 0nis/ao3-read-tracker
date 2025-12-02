@@ -1,9 +1,9 @@
-const CLASS_PREFIX = "ext-rt__loader";
-const ABBREVIATION = "EXT-RT";
+const LOADER_CLASS_PREFIX = "ext-rt__loader";
+const LOADER_ABBREVIATION = "EXT-RT";
 
 const getLoaderStyles = () => {
   return `
-    .${CLASS_PREFIX}__overlay {
+    .${LOADER_CLASS_PREFIX}__overlay {
       position: fixed;
       inset: 0;
       width: 100vw;
@@ -17,26 +17,26 @@ const getLoaderStyles = () => {
       opacity: 1;
     }
 
-    .${CLASS_PREFIX}--fadeout {
+    .${LOADER_CLASS_PREFIX}--fadeout {
       opacity: 0;
       pointer-events: none;
     }
 
-    .${CLASS_PREFIX}__spinner {
+    .${LOADER_CLASS_PREFIX}__spinner {
       width: 48px;
       height: 48px;
       border-radius: 50%;
       border: 4px solid #ccc;
       border-top-color: #900;
-      animation: ${CLASS_PREFIX}-spin 0.8s linear infinite;
+      animation: ${LOADER_CLASS_PREFIX}-spin 0.8s linear infinite;
     }
 
-    @keyframes ${CLASS_PREFIX}-spin {
+    @keyframes ${LOADER_CLASS_PREFIX}-spin {
       to { transform: rotate(360deg); }
     }
 
     /* Screen-reader-only element */
-    .${CLASS_PREFIX}__sr {
+    .${LOADER_CLASS_PREFIX}__sr {
       border: 0 !important;
       clip: rect(1px, 1px, 1px, 1px) !important;
       clip-path: inset(50%) !important;
@@ -62,14 +62,14 @@ const Loader = {
 
     // Overlay
     const overlay = document.createElement("div");
-    overlay.className = `${CLASS_PREFIX}__overlay`;
+    overlay.className = `${LOADER_CLASS_PREFIX}__overlay`;
     overlay.setAttribute("aria-busy", "true");
     overlay.setAttribute("aria-live", "assertive");
     overlay.setAttribute("role", "alert");
 
     // Spinner
     const spinner = document.createElement("div");
-    spinner.className = `${CLASS_PREFIX}__spinner`;
+    spinner.className = `${LOADER_CLASS_PREFIX}__spinner`;
 
     overlay.appendChild(spinner);
     this.parent.appendChild(overlay);
@@ -77,7 +77,7 @@ const Loader = {
 
     // Live region for screen readers
     const live = document.createElement("div");
-    live.className = `${CLASS_PREFIX}__sr`;
+    live.className = `${LOADER_CLASS_PREFIX}__sr`;
     live.textContent = "The page is loading…";
     this.parent.appendChild(live);
     this.liveRegion = live;
@@ -86,10 +86,10 @@ const Loader = {
   injectStyles() {
     const styles = getLoaderStyles();
 
-    if (document.getElementById(`${CLASS_PREFIX}--styles`)) return;
+    if (document.getElementById(`${LOADER_CLASS_PREFIX}--styles`)) return;
 
     const style = document.createElement("style");
-    style.id = `${CLASS_PREFIX}--styles`;
+    style.id = `${LOADER_CLASS_PREFIX}--styles`;
     style.textContent = styles;
 
     this.parent.appendChild(style);
@@ -98,7 +98,7 @@ const Loader = {
 
   destroy() {
     if (this.el) {
-      this.el.classList.add(`${CLASS_PREFIX}--fadeout`);
+      this.el.classList.add(`${LOADER_CLASS_PREFIX}--fadeout`);
 
       setTimeout(() => {
         this.el?.remove();
@@ -119,7 +119,7 @@ const Loader = {
   Loader.create();
 
   document.addEventListener(
-    `${ABBREVIATION}:loaded`,
+    `${LOADER_ABBREVIATION}:loaded`,
     () => {
       Loader.destroy();
     },
