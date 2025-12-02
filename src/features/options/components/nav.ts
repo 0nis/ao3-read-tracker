@@ -1,5 +1,6 @@
 import { PREFIX } from "..";
 import { el } from "../../../utils/ui/dom";
+import { reportSrLive } from "../../../utils/ui/sr-live";
 
 export function buildNav(items: { id: string; label: string }[]): {
   nav: HTMLElement;
@@ -20,6 +21,7 @@ export function buildNav(items: { id: string; label: string }[]): {
         link.classList.remove("selected");
       });
       a.classList.add("selected");
+      reportSrLive(`Navigated to ${it.label} section`);
     });
     li.appendChild(a);
     ul.appendChild(li);
