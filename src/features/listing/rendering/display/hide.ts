@@ -10,7 +10,10 @@ export async function hide(workOrId: HTMLElement | string): Promise<void> {
   const work = getWork(workOrId);
   if (!work) return;
   if (!work.classList.contains(`${CLASS_PREFIX}__hidden`)) {
-    work.classList.add(`${CLASS_PREFIX}__hidden`);
+    work.classList.add(
+      `${CLASS_PREFIX}__hidden`,
+      `${CLASS_PREFIX}__hidden--work-listing`
+    );
     work.setAttribute("aria-hidden", "true");
   }
 }
@@ -23,7 +26,10 @@ export async function unhide(workOrId: HTMLElement | string): Promise<void> {
   const work = getWork(workOrId);
   if (!work) return;
   if (work.classList.contains(`${CLASS_PREFIX}__hidden`)) {
-    work.classList.remove(`${CLASS_PREFIX}__hidden`);
+    work.classList.remove(
+      `${CLASS_PREFIX}__hidden`,
+      `${CLASS_PREFIX}__hidden--work-listing`
+    );
     work.removeAttribute("aria-hidden");
   }
 }

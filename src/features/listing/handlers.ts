@@ -45,19 +45,6 @@ export async function getWorkStatusData(): Promise<
   };
 }
 
-export function mapDisplayModeToFn(mode: DisplayMode) {
-  switch (mode) {
-    case DisplayMode.COLLAPSE_GENTLE:
-      return collapse.bind(null, CollapseMode.GENTLE);
-    case DisplayMode.COLLAPSE_AGGRESSIVE:
-      return collapse.bind(null, CollapseMode.AGGRESSIVE);
-    case DisplayMode.HIDE:
-      return hide;
-    default:
-      return () => {};
-  }
-}
-
 export function getWork(workOrId: HTMLElement | string): HTMLElement | null {
   if (typeof workOrId === "string") return getWorkById(workOrId);
   return workOrId;

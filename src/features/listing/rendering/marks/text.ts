@@ -1,4 +1,4 @@
-import { ApplyMarksParams } from "../setup";
+import { ApplyMarksParams } from "../apply";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
 import type { ReadWork, IgnoredWork } from "../../../../types/works";

@@ -1,4 +1,4 @@
-import { ApplyMarksParams } from "../setup";
+import { ApplyMarksParams } from "../apply";
 import {
   IGNORED_CLASS,
   READ_CLASS,

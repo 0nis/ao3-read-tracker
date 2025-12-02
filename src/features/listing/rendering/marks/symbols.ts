@@ -1,4 +1,4 @@
-import { ApplyMarksParams } from "../setup";
+import { ApplyMarksParams } from "../apply";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { symbolsCache } from "../../../../services/cache/symbols";
 import { getActiveSymbolRules } from "../../../../services/rules/symbols";
