@@ -88,14 +88,20 @@ export async function handleStorageWrite<T>(
     onSuccess = createFlashNotice,
   } = options;
 
-  const controller = createButtonLoader(
-    loadingEl as HTMLButtonElement,
-    LoaderType.SPINNER
-  );
-  const result = await withLoadingState(controller, () => op, {
-    enforceMinDelay,
-    minDelayMs: 300,
-  });
+  let result: StorageResult<T>;
+
+  if (!loadingEl) {
+    result = await op;
+  } else {
+    const controller = createButtonLoader(
+      loadingEl as HTMLButtonElement,
+      LoaderType.SPINNER
+    );
+    result = await withLoadingState(controller, () => op, {
+      enforceMinDelay,
+      minDelayMs: 300,
+    });
+  }
 
   if (result.success) {
     onSuccess(successMsg);

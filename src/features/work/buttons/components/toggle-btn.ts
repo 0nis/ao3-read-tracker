@@ -13,7 +13,7 @@ export function createToggleButton(
 
   button.addEventListener("click", async (ev) => {
     ev.preventDefault();
-    if (exists) {
+    if (button.textContent === config.labels.on) {
       await config.onDeactivate(id);
       button.textContent = config.labels.off;
     } else {

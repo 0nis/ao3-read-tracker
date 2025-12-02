@@ -34,8 +34,6 @@ export function createFlashNotice(msg: string): void {
   const main = document.getElementById("main");
   if (!main) return;
 
-  console.log("checking for existing flash notice");
-
   const existing = main.querySelector(
     `#${CLASS_PREFIX}__flash-notice`
   ) as HTMLElement | null;
