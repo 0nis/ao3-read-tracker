@@ -3,6 +3,7 @@ export const getFormStyles = (prefix: string): string => {
     .${prefix}__footnote {
       padding-bottom: 0.643em !important;
     }
+
     .${prefix}__align-horizontally {
       display: inline-flex;
       flex-direction: row;
@@ -10,8 +11,14 @@ export const getFormStyles = (prefix: string): string => {
       align-items: center;
       width: 100%;
     }
+
     .${prefix}__align-horizontally div {
       width: min-content;
+    }
+
+    .${prefix}__form__submit {
+      display: flex;
+      gap: .5em;
     }
   `;
 };

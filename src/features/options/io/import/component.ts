@@ -1,6 +1,6 @@
 import { PREFIX } from "../..";
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { toLowerCaseAndReplaceSpaces } from "../../../../utils/string";
+import { toLowerCaseAndReplaceSpaces } from "../../../../utils/misc";
 import { showNotification } from "../../../../utils/ui/dialogs";
 import { el, injectStyles } from "../../../../utils/ui/dom";
 import { ExpandableItemParams, getExpandedImportButtons } from "./config";

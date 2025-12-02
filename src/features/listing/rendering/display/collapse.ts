@@ -86,7 +86,7 @@ function createCollapseToggle(
   toggle.addEventListener("click", (ev) => {
     ev.preventDefault();
     const isExpanding = work.classList.contains(`${CLASS_PREFIX}__collapsed`);
-    console.log("Is collapsed? ", isCollapsed);
+
     for (const el of elementsToToggle) {
       el.classList.toggle(`${CLASS_PREFIX}__hidden`, !isExpanding);
       el.toggleAttribute("aria-hidden", !isExpanding);

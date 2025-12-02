@@ -1,6 +1,6 @@
 import { getFormattedDateTimeForFilename } from "./date";
 import { getManifest } from "./extension/manifest";
-import { extractKey } from "./string";
+import { extractKey } from "./misc";
 import { el } from "./ui/dom";
 
 export function downloadFile(data: Blob, type: string): void {

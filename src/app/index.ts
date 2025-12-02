@@ -9,16 +9,26 @@ import { injectStyles } from "../utils/ui/dom";
 
 import { CLASS_PREFIX } from "../constants/classes";
 import { initSrLive } from "../utils/ui/sr-live";
+import { error } from "../utils/extension/console";
 
 export const App = {
   async init() {
+    const main = document.getElementById("main");
+    if (!main) {
+      error(
+        "Could not find #main element. The extension will not run on this page."
+      );
+
+      return;
+    }
+
     injectStyles(
       `${CLASS_PREFIX}__styles--global`,
       getGlobalStyles(CLASS_PREFIX)
     );
     initSrLive();
 
-    await Promise.all([Options.init(), Listing.init(), Work.init()]);
+    await Promise.all([Options.init(), Listing.init(main), Work.init(main)]);
 
     Router.setup();
   },

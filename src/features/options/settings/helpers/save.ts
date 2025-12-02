@@ -2,7 +2,7 @@ import { PREFIX } from "../..";
 import { settingsCache } from "../../../../services/cache/settings";
 import { handleStorageWrite } from "../../../../utils/storage/handlers";
 import { getElement } from "../../../../utils/ui/dom";
-import { extractSectionValues } from "../../../../utils/ui/form";
+import { extractFormValues } from "../../../../utils/ui/form";
 import { SectionElements } from "../../renderer";
 import { SectionId } from "../../config";
 import { SETTINGS_SAVE_MAP } from "../config";
@@ -18,7 +18,7 @@ export function setupSettingsSaveHandlers(sections: SectionElements) {
     saveBtn.addEventListener("click", async () => {
       const payload = {
         ...saveInfo.defaults,
-        ...extractSectionValues(sectionConfig.element),
+        ...extractFormValues(sectionConfig.element),
       };
 
       const op = saveInfo.setter(payload);

@@ -1,5 +1,6 @@
 import { LoaderType } from "../../enums/ui";
 import { StorageResult } from "../../types/results";
+import { isEmpty } from "../misc";
 import { reportExtensionFailure } from "../ui/dialogs";
 import { createFlashNotice } from "../ui/form";
 import { createButtonLoader, withLoadingState } from "../ui/loaders";
@@ -7,7 +8,8 @@ import { createButtonLoader, withLoadingState } from "../ui/loaders";
 export interface StorageReadOptions<T> {
   errorMsg?: string;
   fallback?: T;
-  allowUndefined?: boolean;
+  errorOnUndefined?: boolean;
+  errorOnEmpty?: boolean;
 }
 
 /**
@@ -18,28 +20,42 @@ export interface StorageReadOptions<T> {
  * @param op The storage operation returning a StorageResult<T>
  * @param fallback The value to return if the operation fails
  * @param errorMsg A descriptive error message for reporting failures
- * @param allowUndefined If true, allows undefined as a valid result without triggering a fallback
- * @returns The fetched data if successful, otherwise the fallback (or undefined if allowed)
+ * @param allowUndefined If true, allows undefined as a valid result without triggering the critical error
+ * @returns The fetched data if successful, otherwise the fallback value (defaults to undefined)
  */
 export async function handleStorageRead<T>(
   op: Promise<StorageResult<T>>,
-  options: StorageReadOptions<T>
-): Promise<T> {
+  options: StorageReadOptions<T> & { fallback: T }
+): Promise<T>;
+export async function handleStorageRead<T>(
+  op: Promise<StorageResult<T>>,
+  options?: StorageReadOptions<T>
+): Promise<T | undefined>;
+export async function handleStorageRead<T>(
+  op: Promise<StorageResult<T>>,
+  options?: StorageReadOptions<T>
+): Promise<T | undefined> {
   const result = await op;
   const {
     errorMsg = "An error occurred while reading from storage.",
-    fallback,
-    allowUndefined = false,
-  } = options;
+    fallback = undefined,
+    errorOnUndefined = true,
+    errorOnEmpty = false,
+  } = options ?? {};
+
+  const err = () => {
+    reportExtensionFailure(errorMsg, result.error);
+    return fallback;
+  };
+
+  if (errorOnEmpty && isEmpty(result.data)) return err();
 
   if (result.success) {
-    if (result.data !== undefined || allowUndefined) {
-      return result.data as T;
-    }
+    if (result.data !== undefined) return result.data;
+    if (!errorOnUndefined) return fallback;
   }
 
-  reportExtensionFailure(errorMsg, result.error);
-  return fallback as T;
+  return err();
 }
 
 export interface StorageWriteOptions {
@@ -72,20 +88,26 @@ export async function handleStorageWrite<T>(
     onSuccess = createFlashNotice,
   } = options;
 
-  const controller = createButtonLoader(
-    loadingEl as HTMLButtonElement,
-    LoaderType.SPINNER
-  );
-  const result = await withLoadingState(controller, () => op, {
-    enforceMinDelay,
-    minDelayMs: 300,
-  });
+  let result: StorageResult<T>;
+
+  if (!loadingEl) {
+    result = await op;
+  } else {
+    const controller = createButtonLoader(
+      loadingEl as HTMLButtonElement,
+      LoaderType.SPINNER
+    );
+    result = await withLoadingState(controller, () => op, {
+      enforceMinDelay,
+      minDelayMs: 300,
+    });
+  }
 
   if (result.success) {
     onSuccess(successMsg);
     return Promise.resolve();
   } else {
     reportExtensionFailure(errorMsg, result.error);
-    return Promise.reject();
+    return;
   }
 }

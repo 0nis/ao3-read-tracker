@@ -17,6 +17,8 @@ export class SymbolsCache implements ICache<SymbolData> {
     this.cache = (await handleStorageRead(StorageService.symbolRecords.get(), {
       errorMsg: "Failed to load symbol records",
       fallback: defaultData,
+      errorOnEmpty: true,
+      errorOnUndefined: true,
     })) as SymbolData;
 
     return this.cache;

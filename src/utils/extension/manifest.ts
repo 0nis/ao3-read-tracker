@@ -1,5 +1,5 @@
 import { StorageResult } from "../../types/results";
-import { createExtensionMsg } from "./console";
+import { error } from "./console";
 
 interface ExtensionManifest {
   name: string;
@@ -40,8 +40,9 @@ export function getManifest(): StorageResult<ExtensionManifest> {
     const msg = getCriticalManifestError(
       err instanceof Error ? err.message : String(err)
     );
-    console.error(createExtensionMsg("Failed to access manifest:"), err);
-    console.error(msg);
+    error(`Failed to access manifest: ${err}`);
+    error(msg);
+
     return {
       error: msg,
       success: false,

@@ -54,12 +54,17 @@ export function el<K extends keyof HTMLElementTagNameMap>(
  * @param createProps Optional properties to apply **only when creating** a new element.
  * @returns The existing or newly created child element.
  */
-export function ensureChild<K extends keyof HTMLElementTagNameMap>(
-  parent: HTMLElement,
-  className: string,
-  tag: K,
-  createProps?: Parameters<typeof el>[1]
-): HTMLElementTagNameMap[K] {
+export function ensureChild<K extends keyof HTMLElementTagNameMap>({
+  parent,
+  className,
+  tag,
+  createProps,
+}: {
+  parent: HTMLElement;
+  className: string;
+  tag: K;
+  createProps?: Parameters<typeof el>[1];
+}): HTMLElementTagNameMap[K] {
   const existing = parent.querySelector<HTMLElementTagNameMap[K]>(
     `.${className}`
   );
@@ -79,15 +84,15 @@ export function ensureChild<K extends keyof HTMLElementTagNameMap>(
  */
 export function injectStyles(id: string, css: string): void {
   if (document.getElementById(id)) return;
-  const style = document.createElement("style");
-  style.id = id;
-  style.textContent = css;
+  const style = el("style", {
+    id,
+    textContent: css,
+    attrs: { type: "text/css" },
+  });
   document.head.appendChild(style);
 }
 
-/**
- * Gets an element by selector within a parent element.
- */
+/** Gets an element by selector within a parent element. */
 export const getElement = (
   parent: HTMLElement,
   selector: string

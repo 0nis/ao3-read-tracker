@@ -1,4 +1,5 @@
 import { CLASS_PREFIX } from "../../constants/classes";
+import { warn } from "../extension/console";
 import { el } from "./dom";
 
 let srLive: HTMLElement | null = null;
@@ -19,7 +20,7 @@ export function initSrLive(): HTMLElement {
 
 export function reportSrLive(message: string): void {
   if (!srLive) {
-    console.warn("SR live region not initialized");
+    warn("SR live region not initialized");
     return;
   }
 

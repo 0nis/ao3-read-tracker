@@ -118,8 +118,13 @@ function adjustWorkDisplay({
 
 const extensionName = getManifest().data?.name || "Read Tracker";
 function createOrModifyLandmarkHeading(item: HTMLElement) {
-  ensureChild(item, `${CLASS_PREFIX}__text-indicator__landmark`, "h6", {
-    className: "landmark heading",
-    textContent: `${extensionName} Extension Information`,
+  ensureChild({
+    parent: item,
+    className: `${CLASS_PREFIX}__text-indicator__landmark`,
+    tag: "h6",
+    createProps: {
+      className: "landmark heading",
+      textContent: `${extensionName} Extension Information`,
+    },
   });
 }

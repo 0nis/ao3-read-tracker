@@ -4,7 +4,7 @@ import { SymbolsData } from "../../data/models/symbols";
 
 import { StorageResult } from "../../types/results";
 
-import { createExtensionMsg } from "../extension/console";
+import { error } from "../extension/console";
 
 /**
  * Safely executes an async function and wraps the result in a StorageResult.
@@ -21,9 +21,9 @@ export async function safeExecute<T>(
   try {
     const data = await fn();
     return { success: true, data };
-  } catch (error) {
-    console.error(createExtensionMsg(`Error in ${context}:`), error);
-    return { success: false, error, data: undefined };
+  } catch (err) {
+    error(`Error in ${context}: ${err}`);
+    return { success: false, error: err, data: undefined };
   }
 }
 
@@ -62,16 +62,4 @@ export function createSafeService<
   }
 
   return wrapped;
-}
-
-/**
- * @deprecated Switching to a different import/export method
- */
-export function readFileAsText(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (ev) => resolve(ev.target?.result as string);
-    reader.onerror = reject;
-    reader.readAsText(file);
-  });
 }

@@ -1,12 +1,16 @@
+import { addGlobalListener } from "../../utils/extension/listeners";
 import { markWorksOnPage, updateWorksOnPage } from "./rendering";
 
 export const Listing = {
-  async init() {
-    await markWorksOnPage();
-
+  async init(main: HTMLElement) {
     // Handles BFCache restoration (back/forward navigation)
-    window.addEventListener("pageshow", async (e) => {
-      if (e.persisted) await updateWorksOnPage();
-    });
+    const handlePageShow = async (e: Event) => {
+      if ((e as PageTransitionEvent).persisted) await updateWorksOnPage();
+    };
+    addGlobalListener(window, "pageshow", handlePageShow);
+
+    if (!main.classList.contains("works-index")) return;
+
+    await markWorksOnPage();
   },
 };

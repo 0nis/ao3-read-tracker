@@ -1,6 +1,8 @@
 import { CLASS_PREFIX } from "../../constants/classes";
 import { MessageType } from "../../enums/messages";
-import { el } from "./dom";
+import { ButtonPlacement } from "../../enums/settings";
+import { warn } from "../extension/console";
+import { el, ensureChild } from "./dom";
 import { reportSrLive } from "./sr-live";
 
 /**
@@ -29,23 +31,67 @@ export function showFormMessage(
   container.appendChild(msg);
 }
 
-/**
- * Adds an AO3-style flash notice to the top of the main content area
- */
-export function createFlashNotice(innerHTML: string): void {
+/** Adds an AO3-style flash notice to the top of the main content area */
+export function createFlashNotice(
+  msg: string,
+  position: ButtonPlacement = ButtonPlacement.TOP
+): void {
   const main = document.getElementById("main");
   if (!main) return;
 
+  const existing = main.querySelector(
+    `#${CLASS_PREFIX}__flash-notice`
+  ) as HTMLElement | null;
+
+  if (
+    existing &&
+    existing.childNodes[0]?.textContent?.trim() === msg &&
+    existing.getAttribute("position") === position
+  ) {
+    const count = ensureChild({
+      parent: existing,
+      tag: "span",
+      className: `${CLASS_PREFIX}__flash-notice__count`,
+    });
+    const currentCount = parseInt(
+      count.textContent?.replace(/\D/g, "") || "1",
+      10
+    );
+    count.textContent = ` (x${currentCount + 1})`;
+    reportSrLive(msg);
+    return;
+  }
+
+  // Remove both AO3 native notice and existing custom notice if any
   main.querySelector(".flash.notice")?.remove();
+  existing?.remove();
 
-  const notice = el("div", {
-    className: "flash notice",
-    innerHTML: innerHTML,
-    attrs: { role: "status" },
-  });
+  const notice = el(
+    "div",
+    {
+      id: `${CLASS_PREFIX}__flash-notice`,
+      className: "flash notice",
+      attrs: {
+        role: "status",
+        position: position,
+      },
+    },
+    msg
+  );
 
-  reportSrLive(notice.textContent?.trim());
+  reportSrLive(msg);
 
+  if (position === ButtonPlacement.BOTTOM) {
+    const el = main.querySelector("#feedback")?.querySelector("ul.actions");
+    if (el) el.after(notice);
+    else {
+      warn(
+        "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead."
+      );
+      main.prepend(notice);
+    }
+    return;
+  }
   main.prepend(notice);
 }
 
@@ -79,15 +125,15 @@ export function buildSelectFromEnum<T extends Record<string, string>>(
  * Each input must have a data-field attribute matching a key in the data object.
  * Supports text inputs, checkboxes, and select elements.
  *
- * @param section The section containing inputs to populate
+ * @param form The form element containing inputs to populate
  * @param data The data object with values to populate
  */
-export function populateSection<T extends { [key: string]: any }>(
-  section: HTMLElement,
+export function populateForm<T extends { [key: string]: any }>(
+  form: HTMLElement,
   data: T
 ) {
   Object.entries(data).forEach(([key, value]) => {
-    const input = section.querySelector(`[data-field="${key}"]`) as
+    const input = form.querySelector(`[data-field="${key}"]`) as
       | HTMLInputElement
       | HTMLSelectElement
       | null;
@@ -107,12 +153,12 @@ export function populateSection<T extends { [key: string]: any }>(
  * Each input must have a data-field attribute to be included in the result.
  * Supports text inputs, checkboxes, and select elements.
  *
- * @param section The section containing inputs to extract from
+ * @param form The form element containing inputs to extract from
  * @returns An object with extracted key-value pairs
  */
-export function extractSectionValues<T>(section: HTMLElement): Partial<T> {
+export function extractFormValues<T>(form: HTMLElement): Partial<T> {
   const result: Partial<T> = {};
-  const inputs = section.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+  const inputs = form.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
     "[data-field]"
   );
   inputs.forEach((input) => {

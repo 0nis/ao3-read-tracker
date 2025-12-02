@@ -2,7 +2,7 @@ import {
   getManifest,
   replaceManifestPlaceholders,
 } from "../extension/manifest";
-import { createExtensionMsg } from "../extension/console";
+import { error } from "../extension/console";
 
 /**
  * Displays a critical message that requires user attention.
@@ -49,8 +49,8 @@ export function reportExtensionFailure(msg: string, err: unknown): void {
   const message = replaceManifestPlaceholders(msg);
   const url = getManifest().data?.homepage_url || "[url unknown]";
 
-  console.error(createExtensionMsg(message), err);
-  console.error(`To help fix this, please report the issue at: ${url}`);
+  error(`${message}: ${err}`);
+  error(`To help fix this, please report the issue at: ${url}`);
 
   showNotification(
     `${message}\n\n` +

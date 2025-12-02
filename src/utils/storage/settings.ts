@@ -29,6 +29,7 @@ const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
   generalSettings: "general",
 };
 
+/** Retrieves all settings from storage, applying default values for any that fail to load. */
 export async function handleGetAllSettings(): Promise<SettingsData> {
   const finalSettings: SettingsData = { ...SETTINGS_DEFAULTS };
   let failures: Record<string, unknown>[] = [];

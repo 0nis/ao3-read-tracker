@@ -3,7 +3,11 @@ import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
 import type { ReadWork, IgnoredWork } from "../../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
-import { getFormattedDate, getFormattedTime } from "../../../../utils/date";
+import {
+  getFormattedDate,
+  getFormattedTime,
+  timestampToISOString,
+} from "../../../../utils/date";
 import {
   el,
   ensureChild,
@@ -23,11 +27,11 @@ export function addText({ item, readWork, ignoredWork }: ApplyMarksParams) {
     getStyles(CLASS_PREFIX)
   );
 
-  const indicatorList = ensureChild(
-    item,
-    `${CLASS_PREFIX}__text-indicator`,
-    "ul"
-  );
+  const indicatorList = ensureChild({
+    parent: item,
+    className: `${CLASS_PREFIX}__text-indicator`,
+    tag: "ul",
+  });
 
   if (readWork) renderReadInformation(item, indicatorList, readWork);
   if (ignoredWork) renderIgnoredInformation(item, indicatorList, ignoredWork);
@@ -52,19 +56,16 @@ function renderReadInformation(
 ) {
   if (readWork.notes)
     addNotesText(item, readWork.notes, `${CLASS_PREFIX}__notes--read`);
-  if (readWork.isReading) {
-    indicatorList.appendChild(
-      createStillReadingText(
-        item,
-        readWork.modifiedAt,
-        readWork.lastReadChapter
-      )
-    );
-  } else {
-    indicatorList.appendChild(
-      createIndicator(WorkState.READ, readWork.modifiedAt)
-    );
-  }
+
+  const txt = readWork.isReading
+    ? `Still reading as of %date% (chapter ${readWork.lastReadChapter || "?"}/${
+        getLatestChapterFromWorkListing(item) || "?"
+      })`
+    : "Marked as read on %date%";
+
+  indicatorList.appendChild(
+    createIndicator(WorkState.READ, readWork.modifiedAt, txt)
+  );
 }
 
 function renderIgnoredInformation(
@@ -79,62 +80,51 @@ function renderIgnoredInformation(
     addNotesText(item, ignoredWork.reason, `${CLASS_PREFIX}__notes--ignored`);
 }
 
-function createIndicator(type: WorkState, timestamp: number): HTMLElement {
+function createIndicator(
+  type: WorkState,
+  timestamp: number,
+  text: string = "Marked as %type% on %date%"
+): HTMLElement {
   return el(
     "li",
     {
       className: `${CLASS_PREFIX}__text-indicator--${type}`,
     },
-    [createIndicatorText(type, timestamp)]
+    [createIndicatorText(type, text, timestamp)]
   );
 }
 
 function createIndicatorText(
   type: WorkState,
+  text: string,
   timestamp: number
 ): HTMLParagraphElement {
-  return el("p", {}, [
-    `Marked as ${type} on `,
-    el("time", {
-      dateTime: new Date(timestamp).toISOString(),
-      textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
-        timestamp
-      )}`,
-    }),
-  ]);
-}
+  const timeEl = el("time", {
+    dateTime: timestampToISOString(timestamp),
+    textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
+      timestamp
+    )}`,
+  });
 
-function createStillReadingText(
-  item: HTMLElement,
-  timestamp: number,
-  chapter: number | undefined
-): HTMLLIElement {
-  return el(
-    "li",
-    { className: `${CLASS_PREFIX}__text-indicator--still-reading` },
-    [
-      el("p", {}, [
-        "Still reading as of ",
-        el("time", {
-          dateTime: new Date(timestamp).toISOString(),
-          textContent: getFormattedDate(timestamp),
-        }),
-        chapter
-          ? ` (chapter ${chapter}/${
-              getLatestChapterFromWorkListing(item) || "?"
-            })`
-          : "",
-      ]),
-    ]
-  );
+  const replaceType = (text: string, type: WorkState) =>
+    text.replace("%type%", type);
+
+  const [before, after] = text.split("%date%");
+  const nodes: (string | HTMLElement)[] = [];
+
+  if (before) nodes.push(replaceType(before, type));
+  nodes.push(timeEl);
+  if (after) nodes.push(replaceType(after, type));
+
+  return el("p", {}, nodes);
 }
 
 function addNotesText(item: HTMLElement, notes: string, className?: string) {
-  const section = ensureChild(
-    item,
-    `${CLASS_PREFIX}__text-indicator__notes`,
-    "blockquote"
-  );
+  const section = ensureChild({
+    parent: item,
+    className: `${CLASS_PREFIX}__text-indicator__notes`,
+    tag: "blockquote",
+  });
   section.appendChild(el("p", { html: notes }));
   section.setAttribute("aria-label", "User notes");
   if (className) section.classList.add(className);

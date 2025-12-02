@@ -4,13 +4,12 @@ import {
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import type { SettingsData } from "../../types/settings";
-import { ReadWork, IgnoredWork, WorkData } from "../../types/works";
-import { createExtensionMsg } from "../../utils/extension/console";
+import { WorkData } from "../../types/works";
 import { DisplayMode } from "../../enums/settings";
 import { CollapseMode } from "../../enums/ui";
 import { collapse } from "./rendering/display/collapse";
 import { hide } from "./rendering/display/hide";
+import { handleStorageRead } from "../../utils/storage/handlers";
 
 export async function getWorkStatusData(): Promise<{
   worksList: HTMLElement | null;
@@ -30,16 +29,11 @@ export async function getWorkStatusData(): Promise<{
     if (id) workIds.push(id);
   }
 
-  const storedDataResult = await StorageService.getByIds(workIds);
-  if (!storedDataResult.success) {
-    console.error(
-      createExtensionMsg("Failed to retrieve stored work data:"),
-      storedDataResult.error
-    );
-    return { worksList, data: null };
-  }
+  const data = await handleStorageRead(StorageService.getByIds(workIds), {
+    errorMsg: "Failed to retrieve stored work data.",
+  });
 
-  return { worksList, data: storedDataResult.data };
+  return { worksList, data: data };
 }
 
 export function mapDisplayModeToFn(mode: DisplayMode) {
