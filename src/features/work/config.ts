@@ -1,7 +1,8 @@
-import { IgnoredWork, ReadWork } from "../../types/works";
+import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
 
 export enum WorkAction {
   READ = `read`,
+  IN_PROGRESS = `in_progress`,
   IGNORE = `ignore`,
 }
 
@@ -12,6 +13,7 @@ export enum WorkActionState {
 
 export interface WorkActionTypeMap {
   [WorkAction.READ]: ReadWork;
+  [WorkAction.IN_PROGRESS]: InProgressWork;
   [WorkAction.IGNORE]: IgnoredWork;
 }
 
@@ -41,6 +43,19 @@ export const ACTION_MESSAGES_MAP: {
       save: "Something went wrong while marking %title% as read.",
       edit: "Something went wrong while updating read info for %title%.",
       delete: "Something went wrong while marking %title% as unread.",
+    },
+  },
+  [WorkAction.IN_PROGRESS]: {
+    success: {
+      save: "You have successfully started reading %title%.",
+      edit: "You have successfully updated in progress info for %title%.",
+      delete: "You have successfully stopped reading %title%.",
+    },
+    error: {
+      save: "Something went wrong while updating in progress status for %title%.",
+      edit: "Something went wrong while updating in progress status for %title%.",
+      delete:
+        "Something went wrong while updating in progress status for %title%.",
     },
   },
   [WorkAction.IGNORE]: {
