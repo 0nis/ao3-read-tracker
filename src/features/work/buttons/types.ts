@@ -1,4 +1,4 @@
-import { WorkAction, WorkActionTypeMap } from "../config";
+import { WorkAction } from "../config";
 import { ButtonPlacement } from "../../../enums/settings";
 
 export enum ButtonAction {
@@ -26,8 +26,13 @@ export interface ClickButtonConfig extends BaseButtonConfig {
 export type ButtonConfig = ToggleButtonConfig | ClickButtonConfig;
 
 export interface ActionButtonMeta {
-  simple: Partial<ToggleButtonConfig>;
-  advanced: Partial<ClickButtonConfig>;
+  simple: ToggleButtonConfig;
+  advanced: ClickButtonConfig;
+}
+
+export interface ActionLabelSet {
+  simple: { on: string; off: string };
+  advanced: { on: string; off: string };
 }
 
 export interface ActionHandlerEntry<T> {

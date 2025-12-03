@@ -1,5 +1,10 @@
-import { ACTION_BUTTON_CONFIG, ACTION_HANDLER_MAP } from "./config";
-import { ButtonConfig, ButtonAction } from "./types";
+import { ACTION_HANDLER_MAP, ACTION_LABELS } from "./config";
+import {
+  ButtonConfig,
+  ButtonAction,
+  ActionButtonMeta,
+  ActionLabelSet,
+} from "./types";
 import { createToggleButton } from "./components/toggle-btn";
 import { createClickButton } from "./components/click-btn";
 
@@ -7,25 +12,47 @@ import { getIdFromUrl } from "../../../utils/ao3";
 import { ButtonPlacement } from "../../../enums/settings";
 import { warn } from "../../../utils/extension/console";
 import { el } from "../../../utils/ui/dom";
+import { WorkAction } from "../config";
+import { CLASS_PREFIX } from "../../../constants/classes";
+import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
 
-export function buildButtonConfig<K extends keyof typeof ACTION_BUTTON_CONFIG>(
-  key: K,
-  simple: boolean
-): ButtonConfig {
-  const meta = ACTION_BUTTON_CONFIG[key];
-  const partial: Partial<ButtonConfig> = { type: key };
-  if (simple)
-    return {
-      ...partial,
-      ...meta.simple,
+let _cache: Record<WorkAction, ActionButtonMeta> | null = null;
+
+export function buildActionButtonConfig(): Record<
+  WorkAction,
+  ActionButtonMeta
+> {
+  if (_cache) return _cache;
+
+  _cache = Object.fromEntries(
+    Object.entries(ACTION_LABELS).map(([key, labels]) => [
+      key,
+      makeMeta(key as WorkAction, labels),
+    ])
+  ) as any;
+  return _cache as Record<WorkAction, ActionButtonMeta>;
+}
+
+function makeMeta(
+  action: WorkAction,
+  labels: ActionLabelSet
+): ActionButtonMeta {
+  return {
+    simple: {
+      type: action,
       mode: ButtonAction.TOGGLE,
-    } as ButtonConfig;
-  else
-    return {
-      ...partial,
-      ...meta.advanced,
+      labels: labels.simple,
+      onActivate: (id, btn) => handleSaveWork(id, action, btn),
+      onDeactivate: (id, btn) => handleDeleteWork(id, action, btn),
+    },
+    advanced: {
+      type: action,
       mode: ButtonAction.CLICK,
-    } as ButtonConfig;
+      labels: labels.advanced,
+      href: `#${CLASS_PREFIX}__${action}-form`,
+      onClick: (id, btn) => handleEditWork(id, action, btn),
+    },
+  };
 }
 
 export async function createActionModeButton(

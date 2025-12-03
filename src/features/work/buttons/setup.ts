@@ -1,7 +1,7 @@
 import { WorkAction } from "../config";
-import { ACTION_BUTTON_CONFIG, ACTION_SETTINGS_MAP } from "./config";
+import { ACTION_SETTINGS_MAP } from "./config";
 import {
-  buildButtonConfig,
+  buildActionButtonConfig,
   createActionModeButton,
   getButtonParents,
   getWorkNavBars,
@@ -9,7 +9,6 @@ import {
 } from "./helpers";
 
 import { settingsCache } from "../../../services/cache/settings";
-import { el } from "../../../utils/ui/dom";
 import { SettingsData } from "../../../types/settings";
 import { warn } from "../../../utils/extension/console";
 
@@ -28,8 +27,11 @@ export async function setupButtons() {
 async function setupAllActionButtons(settings: SettingsData) {
   const navs = getWorkNavBars();
   if (!navs.top && !navs.bottom) return;
+
+  const cfg = buildActionButtonConfig();
+
   const { generalSettings } = settings;
-  for (const a of Object.keys(ACTION_BUTTON_CONFIG) as WorkAction[]) {
+  for (const a of Object.keys(cfg) as WorkAction[]) {
     const s = ACTION_SETTINGS_MAP[a]?.(settings);
     if (!s) {
       warn(`No settings found for action button: ${a}`);
@@ -37,8 +39,9 @@ async function setupAllActionButtons(settings: SettingsData) {
     }
     const parents = getButtonParents(generalSettings.buttonPlacement, navs);
     for (const p of parents) {
-      const cfg = buildButtonConfig(a, s.simpleModeEnabled);
-      const btn = await createActionModeButton(cfg);
+      const btn = await createActionModeButton(
+        s.simpleModeEnabled ? cfg[a].simple : cfg[a].advanced
+      );
       if (!btn) continue;
       insertButtonIntoParent(p, btn);
     }
