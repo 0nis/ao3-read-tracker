@@ -1,4 +1,5 @@
 import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
+import { getCurrentChapterFromWorkPage } from "../../utils/ao3";
 
 export enum WorkAction {
   READ = `read`,
@@ -29,6 +30,8 @@ export const ACTION_DEFAULTS_MAP: {
   in_progress: (data) => ({
     startedAt: data.startedAt || Date.now(),
     lastReadAt: data.lastReadAt || Date.now(),
+    lastReadChapter:
+      data.lastReadChapter || getCurrentChapterFromWorkPage() || 1,
   }),
   ignore: (data) => ({
     createdAt: data.createdAt || Date.now(),
