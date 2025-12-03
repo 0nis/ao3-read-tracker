@@ -40,6 +40,7 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
       onSuccess(message) {
         createFlashNotice(message, origin);
       },
+      enforceMinDelay: true,
     });
   } catch (err) {
     return Promise.reject(err);

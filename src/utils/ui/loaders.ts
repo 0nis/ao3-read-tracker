@@ -74,8 +74,12 @@ export function createButtonLoader(
 
   return {
     start() {
-      const computedWidth = btn.getBoundingClientRect().width;
-      btn.style.width = `${computedWidth}px`;
+      const style = getComputedStyle(btn);
+      const contentWidth =
+        btn.clientWidth -
+        parseFloat(style.paddingLeft) -
+        parseFloat(style.paddingRight);
+      btn.style.width = `${contentWidth}px`;
       originalContent.forEach((n) => btn.removeChild(n));
       btn.setAttribute("aria-busy", "true");
       btn.appendChild(loaderElement);
