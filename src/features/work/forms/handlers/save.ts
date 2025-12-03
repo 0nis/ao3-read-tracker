@@ -23,7 +23,7 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
 
     const values = extractWorkFormValues(cfg);
     const payload: WorkActionTypeMap[K] = {
-      ...getDefaultPayload<K>(cfg.data),
+      ...getDefaultPayload<K>(cfg.id, cfg.data),
       ...values,
     };
 
@@ -40,6 +40,7 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
       onSuccess(message) {
         createFlashNotice(message, origin);
       },
+      enforceMinDelay: true,
     });
   } catch (err) {
     return Promise.reject(err);
@@ -57,22 +58,25 @@ function extractWorkFormValues<K extends keyof WorkActionTypeMap>(
 
     switch (input.constructor) {
       case HTMLInputElement:
-        switch ((input as HTMLInputElement).type) {
+        const inputEl = input as HTMLInputElement;
+        switch (inputEl.type) {
           case "checkbox":
-            result[key] = (input as HTMLInputElement).checked as any;
+            result[key] = inputEl.checked as any;
             break;
           case "number":
-            result[key] = parseInt(
-              (input as HTMLInputElement).value,
-              10
-            ) as any;
+            result[key] = parseInt(inputEl.value, 10) as any;
             break;
+          case "datetime-local":
+            result[key] = new Date(inputEl.value).getTime() as any;
+            break;
+
           default:
-            result[key] = (input as HTMLInputElement).value as any;
+            result[key] = inputEl.value as any;
         }
         break;
       case HTMLTextAreaElement:
-        result[key] = (input as HTMLTextAreaElement).value.trim() as any;
+        const textareaEl = input as HTMLTextAreaElement;
+        result[key] = textareaEl.value.trim() as any;
         break;
     }
   });

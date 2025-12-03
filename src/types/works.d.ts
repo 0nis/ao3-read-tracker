@@ -18,11 +18,11 @@ export interface ReadWork {
 
 export interface InProgressWork {
   id: string;
+  startedAt: number;
   lastReadAt: number;
-  startedAt?: number;
   title?: string;
   notes?: string;
-  lastChapterRead?: number;
+  lastReadChapter?: number;
   readingStatus?: ReadingStatus;
 }
 

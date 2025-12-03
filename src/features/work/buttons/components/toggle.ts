@@ -5,9 +5,8 @@ export function createToggleButton(
   id: string,
   config: ToggleButtonConfig,
   exists?: boolean
-): HTMLAnchorElement {
-  const button = el("a", {
-    href: "#",
+): HTMLButtonElement {
+  const button = el("button", {
     textContent: exists ? config.labels.on : config.labels.off,
   });
 

@@ -63,6 +63,7 @@ export interface StorageWriteOptions {
   errorMsg?: string;
   loadingEl?: HTMLElement;
   enforceMinDelay?: boolean;
+  minDelayMs?: number;
   onSuccess?: (message: string) => void;
 }
 
@@ -85,6 +86,7 @@ export async function handleStorageWrite<T>(
     errorMsg = "An error occurred while saving changes.",
     loadingEl,
     enforceMinDelay = false,
+    minDelayMs = 300,
     onSuccess = createFlashNotice,
   } = options;
 
@@ -99,7 +101,7 @@ export async function handleStorageWrite<T>(
     );
     result = await withLoadingState(controller, () => op, {
       enforceMinDelay,
-      minDelayMs: 300,
+      minDelayMs,
     });
   }
 

@@ -1,12 +1,12 @@
 import { WorkActionState } from "../../config";
-import { ClickButtonConfig } from "../types";
+import { OpenFormButtonConfig } from "../types";
 
 import { ABBREVIATION } from "../../../../constants/global";
 import { el } from "../../../../utils/ui/dom";
 
-export function createClickButton(
+export function createOpenFormButton(
   id: string,
-  config: ClickButtonConfig,
+  config: OpenFormButtonConfig,
   exists?: boolean
 ): HTMLAnchorElement {
   const button = el("a", {

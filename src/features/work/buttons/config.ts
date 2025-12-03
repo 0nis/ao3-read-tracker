@@ -1,70 +1,51 @@
-import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
-import { ActionButtonMeta, ActionHandlerEntry, ButtonAction } from "./types";
-
+import { ActionHandlerEntry, ActionLabelSet } from "./types";
 import { WorkAction, WorkActionTypeMap } from "../config";
+
 import { createIgnoreWorkForm } from "../forms/instances/ignore";
 import { createReadWorkForm } from "../forms/instances/read";
 
-import { CLASS_PREFIX } from "../../../constants/classes";
 import { StorageService } from "../../../services/storage";
 import {
   IgnoreSettings,
   ReadSettings,
   SettingsData,
 } from "../../../types/settings";
+import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
-export const ACTION_BUTTON_CONFIG: {
-  [K in keyof WorkActionTypeMap]: ActionButtonMeta;
+export const ACTION_LABELS: {
+  [K in keyof WorkActionTypeMap]: ActionLabelSet;
 } = {
   [WorkAction.READ]: {
     simple: {
-      labels: {
-        off: "Mark as Read",
-        on: "Mark as Unread",
-      },
-      onActivate: (id: string, btn?: HTMLElement) =>
-        handleSaveWork(id, WorkAction.READ, btn),
-      onDeactivate: (id: string, btn?: HTMLElement) =>
-        handleDeleteWork(id, WorkAction.READ, btn),
+      off: "Mark as Read",
+      on: "Mark as Unread",
     },
     advanced: {
-      type: WorkAction.READ,
-      mode: ButtonAction.CLICK,
-      labels: {
-        off: "Mark as Read",
-        on: "Edit Read Info",
-      },
-      href: `#${CLASS_PREFIX}__${WorkAction.READ}-form`,
-      onClick: (id: string, btn?: HTMLElement) =>
-        handleEditWork(id, WorkAction.READ, btn),
+      off: "Mark as Read",
+      on: "Edit Read Info",
+    },
+  },
+  [WorkAction.IN_PROGRESS]: {
+    simple: {
+      off: "Start Reading",
+      on: "Stop Reading",
+    },
+    advanced: {
+      off: "Start Reading",
+      on: "Edit Read Progress",
     },
   },
   [WorkAction.IGNORE]: {
     simple: {
-      type: WorkAction.IGNORE,
-      mode: ButtonAction.TOGGLE,
-      labels: {
-        off: "Ignore",
-        on: "Unignore",
-      },
-      onActivate: (id: string, btn?: HTMLElement) =>
-        handleSaveWork(id, WorkAction.IGNORE, btn),
-      onDeactivate: (id: string, btn?: HTMLElement) =>
-        handleDeleteWork(id, WorkAction.IGNORE, btn),
+      off: "Ignore",
+      on: "Unignore",
     },
     advanced: {
-      type: WorkAction.IGNORE,
-      mode: ButtonAction.CLICK,
-      labels: {
-        off: "Ignore",
-        on: "Edit Ignore Info",
-      },
-      href: `#${CLASS_PREFIX}__${WorkAction.IGNORE}-form`,
-      onClick: (id: string, btn?: HTMLElement) =>
-        handleEditWork(id, WorkAction.IGNORE, btn),
+      off: "Ignore",
+      on: "Edit Ignore Info",
     },
   },
-};
+} as const;
 
 export const ACTION_HANDLER_MAP: {
   [K in keyof WorkActionTypeMap]: ActionHandlerEntry<WorkActionTypeMap[K]>;
@@ -74,7 +55,11 @@ export const ACTION_HANDLER_MAP: {
     createForm: (data, editing, origin) =>
       createReadWorkForm(data, editing, origin),
   },
-
+  [WorkAction.IN_PROGRESS]: {
+    storage: StorageService.inProgressWorks,
+    createForm: (data, editing, origin) =>
+      createInProgressWorkForm(data, editing, origin),
+  },
   [WorkAction.IGNORE]: {
     storage: StorageService.ignoredWorks,
     createForm: (data, editing, origin) =>
@@ -84,6 +69,7 @@ export const ACTION_HANDLER_MAP: {
 
 export interface WorkActionSettingsMap {
   [WorkAction.READ]: ReadSettings;
+  [WorkAction.IN_PROGRESS]: ReadSettings; // TODO: Change to InProgressSettings when created
   [WorkAction.IGNORE]: IgnoreSettings;
 }
 
@@ -93,5 +79,6 @@ export const ACTION_SETTINGS_MAP: {
   ) => WorkActionSettingsMap[K];
 } = {
   [WorkAction.READ]: (s) => s.readSettings,
+  [WorkAction.IN_PROGRESS]: (s) => s.readSettings, // TODO: Change to inProgressSettings when created
   [WorkAction.IGNORE]: (s) => s.ignoreSettings,
 };

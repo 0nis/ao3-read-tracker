@@ -57,7 +57,7 @@ function createWorkFormField(field: WorkFormField<any>): HTMLElement {
     );
   dd.push(input);
 
-  return el("div", {}, [
+  return el("div", { className: `${CLASS_PREFIX}__form__field` }, [
     el("dt", {}, [
       el(
         "label",

@@ -14,6 +14,10 @@ export const FORMS_SAVE_MAP: {
     putter: StorageService.readWorks.put,
     deleter: StorageService.readWorks.delete,
   },
+  [WorkAction.IN_PROGRESS]: {
+    putter: StorageService.inProgressWorks.put,
+    deleter: StorageService.inProgressWorks.delete,
+  },
   [WorkAction.IGNORE]: {
     putter: StorageService.ignoredWorks.put,
     deleter: StorageService.ignoredWorks.delete,

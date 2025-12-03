@@ -4,18 +4,15 @@ import {
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import { DisplayMode } from "../../enums/settings";
-import { CollapseMode } from "../../enums/ui";
-import { collapse } from "./rendering/display/collapse";
-import { hide } from "./rendering/display/hide";
 import { handleStorageRead } from "../../utils/storage/handlers";
-import { IgnoredWork, ReadWork } from "../../types/works";
+import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<
   | {
       elements: NodeListOf<HTMLLIElement>;
       readWorks: Record<string, ReadWork>;
       ignoredWorks: Record<string, IgnoredWork>;
+      inProgressWorks: Record<string, InProgressWork>;
     }
   | undefined
 > {
@@ -31,16 +28,17 @@ export async function getWorkStatusData(): Promise<
     if (id) workIds.push(id);
   }
 
-  const { readWorks, ignoredWorks } =
+  const { readWorks, inProgressWorks, ignoredWorks } =
     (await handleStorageRead(StorageService.getByIds(workIds), {
       errorMsg: "Failed to retrieve stored work data.",
       errorOnUndefined: true,
-      fallback: { readWorks: {}, ignoredWorks: {} },
+      fallback: { readWorks: {}, inProgressWorks: {}, ignoredWorks: {} },
     })) || {};
 
   return {
     elements,
     readWorks,
+    inProgressWorks,
     ignoredWorks,
   };
 }

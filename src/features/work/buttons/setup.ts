@@ -1,17 +1,19 @@
 import { WorkAction } from "../config";
-import { ACTION_BUTTON_CONFIG, ACTION_SETTINGS_MAP } from "./config";
+import { ACTION_SETTINGS_MAP } from "./config";
 import {
-  buildButtonConfig,
+  buildActionButtonConfig,
   createActionModeButton,
   getButtonParents,
   getWorkNavBars,
   insertButtonIntoParent,
 } from "./helpers";
+import { createUpdateButton } from "./components/update";
 
 import { settingsCache } from "../../../services/cache/settings";
-import { el } from "../../../utils/ui/dom";
 import { SettingsData } from "../../../types/settings";
 import { warn } from "../../../utils/extension/console";
+import { handleUpdateInProgressInfo } from "./handlers";
+import { ButtonPlacement } from "../../../enums/settings";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
@@ -23,13 +25,17 @@ export async function setupButtons() {
   }
 
   await setupAllActionButtons(settings);
+  setupUpdateReadProgressButton(settings);
 }
 
 async function setupAllActionButtons(settings: SettingsData) {
   const navs = getWorkNavBars();
   if (!navs.top && !navs.bottom) return;
+
+  const cfg = buildActionButtonConfig();
+
   const { generalSettings } = settings;
-  for (const a of Object.keys(ACTION_BUTTON_CONFIG) as WorkAction[]) {
+  for (const a of Object.keys(cfg) as WorkAction[]) {
     const s = ACTION_SETTINGS_MAP[a]?.(settings);
     if (!s) {
       warn(`No settings found for action button: ${a}`);
@@ -37,12 +43,26 @@ async function setupAllActionButtons(settings: SettingsData) {
     }
     const parents = getButtonParents(generalSettings.buttonPlacement, navs);
     for (const p of parents) {
-      const cfg = buildButtonConfig(a, s.simpleModeEnabled);
-      const btn = await createActionModeButton(cfg);
+      const btn = await createActionModeButton(
+        s.simpleModeEnabled ? cfg[a].simple : cfg[a].advanced
+      );
       if (!btn) continue;
       insertButtonIntoParent(p, btn);
     }
   }
+}
+
+function setupUpdateReadProgressButton(settings: SettingsData) {
+  const navs = getWorkNavBars();
+  if (!navs.bottom) return;
+  // TODO: Make label configurable
+  const btn = createUpdateButton(
+    "Update Read Progress",
+    handleUpdateInProgressInfo
+  );
+  // TODO: Make placement configurable
+  btn.setAttribute("data-origin", ButtonPlacement.BOTTOM);
+  insertButtonIntoParent(navs.bottom, btn);
 }
 
 function modifyMarkForLaterButton(label: string) {

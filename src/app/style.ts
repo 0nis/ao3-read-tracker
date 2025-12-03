@@ -4,6 +4,12 @@ export function getGlobalStyles(prefix: string): string {
       display: none !important;
     }
 
+    .${prefix}__select {
+      font: 100% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
+      border: 1px solid #bbb;
+      box-shadow: inset 0 1px 2px #ccc;
+    }
+
     .${prefix}__sr-only {
       position: absolute !important;
       width: 1px !important;

@@ -7,7 +7,7 @@ export function generateInProgressWorks(count: number = 100): InProgressWork[] {
     title: `Test In Progress Work ${i + 1}`,
     lastReadAt: Date.now() - Math.random() * 60 * 24 * 60 * 60 * 1000,
     startedAt: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000,
-    lastChapterRead: Math.floor(Math.random() * 20),
+    lastReadChapter: Math.floor(Math.random() * 20),
     readingStatus:
       Math.random() > 0.5 ? ReadingStatus.ACTIVE : ReadingStatus.WAITING,
   }));

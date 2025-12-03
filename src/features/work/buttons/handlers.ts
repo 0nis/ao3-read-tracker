@@ -2,12 +2,20 @@ import { ACTION_HANDLER_MAP } from "./config";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../helpers";
 import { FormRegistry } from "../forms/registry";
+import { getButtonOrigin } from "./helpers";
 
-import { getTitleFromWorkPage } from "../../../utils/ao3";
-import { handleStorageWrite } from "../../../utils/storage/handlers";
+import {
+  getCurrentChapterFromWorkPage,
+  getTitleFromWorkPage,
+} from "../../../utils/ao3";
+import {
+  handleStorageRead,
+  handleStorageWrite,
+} from "../../../utils/storage/handlers";
 import { createFlashNotice } from "../../../utils/ui/form";
 import { ButtonPlacement } from "../../../enums/settings";
-import { getButtonOrigin } from "./helpers";
+import { InProgressWork } from "../../../types/works";
+import { getFormattedDate, getFormattedTime } from "../../../utils/date";
 
 export async function handleEditWork<K extends keyof WorkActionTypeMap>(
   id: string,
@@ -40,7 +48,9 @@ export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
   const cfg = ACTION_HANDLER_MAP[workAction];
   const msgs = ACTION_MESSAGES_MAP[workAction];
   const payload: WorkActionTypeMap[K] = {
-    ...getDefaultPayload<K>({ id } as Partial<WorkActionTypeMap[K]>),
+    ...getDefaultPayload<K>(workAction, { id } as Partial<
+      WorkActionTypeMap[K]
+    >),
   };
 
   const title = getWorkTitleForNotifications((payload as any).title);
@@ -77,3 +87,39 @@ export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
 const getBtnOrigin = (btn: HTMLElement | null | undefined) => {
   return btn ? getButtonOrigin(btn) : ButtonPlacement.TOP;
 };
+
+export async function handleUpdateInProgressInfo(
+  id: string,
+  btn?: HTMLElement
+) {
+  const chapter = getCurrentChapterFromWorkPage() || undefined;
+
+  const data = await handleStorageRead(
+    ACTION_HANDLER_MAP.in_progress.storage.getById(id)
+  );
+  if (!data) return;
+
+  const updateData: InProgressWork = {
+    ...data,
+    lastReadAt: Date.now(),
+    lastReadChapter: chapter || data.lastReadChapter,
+  };
+
+  await handleStorageWrite(
+    ACTION_HANDLER_MAP.in_progress.storage.put(updateData),
+    {
+      successMsg: `Your read progress for "${getWorkTitleForNotifications(
+        updateData.title
+      )}" was updated: Last read at ${getFormattedDate(
+        updateData.lastReadAt
+      )} ${getFormattedTime(updateData.lastReadAt)}, chapter ${
+        updateData.lastReadChapter || "unknown"
+      }.`,
+      errorMsg: "Failed to update read progress.",
+      loadingEl: btn,
+      onSuccess(message) {
+        createFlashNotice(message, getBtnOrigin(btn));
+      },
+    }
+  );
+}
