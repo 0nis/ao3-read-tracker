@@ -27,6 +27,7 @@ export const ACTION_DEFAULTS_MAP: {
     modifiedAt: Date.now(),
   }),
   in_progress: (data) => ({
+    startedAt: data.startedAt || Date.now(),
     lastReadAt: data.lastReadAt || Date.now(),
   }),
   ignore: (data) => ({

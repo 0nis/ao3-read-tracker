@@ -35,17 +35,6 @@ export const checkbox = (disabled: boolean = false): HTMLInputElement => {
   }) as HTMLInputElement;
 };
 
-export const date = (
-  defaultValue?: Date,
-  disabled: boolean = false
-): HTMLInputElement => {
-  return el("input", {
-    type: "date",
-    defaultValue: defaultValue ? getLocalDateString(defaultValue) : undefined,
-    disabled,
-  }) as HTMLInputElement;
-};
-
 export const datetime = (
   defaultValue?: Date,
   disabled: boolean = false

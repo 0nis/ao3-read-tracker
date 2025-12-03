@@ -1,6 +1,7 @@
 import { walkItems } from "../helpers/items";
 import { WorkFormConfig } from "../types";
 import { WorkActionTypeMap } from "../../config";
+import { getLocalDateTimeString } from "../../../../utils/date";
 
 export function populateWorkForm<K extends keyof WorkActionTypeMap>(
   config: WorkFormConfig<WorkActionTypeMap[K]>
@@ -16,22 +17,27 @@ export function populateWorkForm<K extends keyof WorkActionTypeMap>(
 
     switch (input.constructor) {
       case HTMLInputElement:
-        switch ((input as HTMLInputElement).type) {
+        const inputEl = input as HTMLInputElement;
+        switch (inputEl.type) {
           case "checkbox":
-            (input as HTMLInputElement).checked = Boolean(value);
+            inputEl.checked = Boolean(value);
             break;
           case "number":
-            (input as HTMLInputElement).value = value
-              ? String(value)
-              : (input as HTMLInputElement).defaultValue || "";
+            inputEl.value = value ? String(value) : inputEl.defaultValue || "";
+            break;
+          case "datetime-local":
+            inputEl.value = value
+              ? getLocalDateTimeString(new Date(value as number))
+              : inputEl.defaultValue || "";
             break;
           default:
-            (input as HTMLInputElement).value = value ? String(value) : "";
+            inputEl.value = value ? String(value) : "";
             break;
         }
         break;
       case HTMLTextAreaElement:
-        (input as HTMLTextAreaElement).value = value ? String(value) : "";
+        const textareaEl = input as HTMLTextAreaElement;
+        textareaEl.value = value ? String(value) : "";
         break;
     }
   });

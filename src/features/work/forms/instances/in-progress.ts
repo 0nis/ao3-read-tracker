@@ -1,6 +1,6 @@
 import { createWorkForm } from "../base";
 import { WorkAction } from "../../config";
-import { date, datetime, number, select, textarea } from "../helpers/inputs";
+import { datetime, number, select, textarea } from "../helpers/inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { InProgressWork } from "../../../../types/works";
@@ -23,28 +23,43 @@ const items: WorkFormItem<InProgressWork>[] = [
     className: `${CLASS_PREFIX}__form__group`,
     fields: [
       {
-        type: WorkFormFieldType.FIELD,
-        dataField: "readingStatus",
-        label: "Reading Status",
-        input: select(ReadingStatus, ReadingStatus.ACTIVE),
+        type: WorkFormFieldType.GROUP,
+        className: `${CLASS_PREFIX}__form__pair`,
+        fields: [
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "readingStatus",
+            label: "Reading Status",
+            input: select(ReadingStatus, ReadingStatus.ACTIVE),
+          },
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "lastReadChapter",
+            label: "Last Chapter Read",
+            input: number(
+              "1",
+              getCurrentChapterFromWorkPage()?.toString() || "1"
+            ),
+          },
+        ],
       },
       {
-        type: WorkFormFieldType.FIELD,
-        dataField: "lastReadChapter",
-        label: "Last Chapter Read",
-        input: number("1", getCurrentChapterFromWorkPage()?.toString() || "1"),
-      },
-      {
-        type: WorkFormFieldType.FIELD,
-        dataField: "startedAt",
-        label: "Started Reading On",
-        input: datetime(new Date()),
-      },
-      {
-        type: WorkFormFieldType.FIELD,
-        dataField: "lastReadAt",
-        label: "Last Read On",
-        input: datetime(new Date()),
+        type: WorkFormFieldType.GROUP,
+        className: `${CLASS_PREFIX}__form__pair`,
+        fields: [
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "startedAt",
+            label: "Started Reading On",
+            input: datetime(new Date()),
+          },
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "lastReadAt",
+            label: "Last Read On",
+            input: datetime(new Date()),
+          },
+        ],
       },
     ],
   },
