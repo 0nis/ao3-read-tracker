@@ -29,7 +29,7 @@ export function buildActionButtonConfig(): Record<
       key,
       makeMeta(key as WorkAction, labels),
     ])
-  ) as any;
+  ) as Record<WorkAction, ActionButtonMeta>;
   return _cache as Record<WorkAction, ActionButtonMeta>;
 }
 

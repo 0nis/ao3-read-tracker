@@ -17,6 +17,24 @@ export interface WorkActionTypeMap {
   [WorkAction.IGNORE]: IgnoredWork;
 }
 
+export const ACTION_DEFAULTS_MAP: {
+  [K in keyof WorkActionTypeMap]: (
+    data: Partial<WorkActionTypeMap[K]>
+  ) => Partial<WorkActionTypeMap[K]>;
+} = {
+  read: (data) => ({
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
+  }),
+  in_progress: (data) => ({
+    startedAt: data.startedAt || Date.now(),
+  }),
+  ignore: (data) => ({
+    createdAt: data.createdAt || Date.now(),
+    modifiedAt: Date.now(),
+  }),
+};
+
 export interface ActionMessagesEntry {
   success: {
     save: string;

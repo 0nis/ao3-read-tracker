@@ -40,7 +40,9 @@ export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
   const cfg = ACTION_HANDLER_MAP[workAction];
   const msgs = ACTION_MESSAGES_MAP[workAction];
   const payload: WorkActionTypeMap[K] = {
-    ...getDefaultPayload<K>({ id } as Partial<WorkActionTypeMap[K]>),
+    ...getDefaultPayload<K>(workAction, { id } as Partial<
+      WorkActionTypeMap[K]
+    >),
   };
 
   const title = getWorkTitleForNotifications((payload as any).title);
