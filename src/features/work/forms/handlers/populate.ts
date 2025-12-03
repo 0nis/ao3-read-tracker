@@ -8,6 +8,8 @@ export function populateWorkForm<K extends keyof WorkActionTypeMap>(
   const data = config.data;
 
   walkItems(config.items, (field) => {
+    if (field.ignorePopulate === true) return;
+
     const key = field.dataField;
     const value = data[key];
     const input = field.input;

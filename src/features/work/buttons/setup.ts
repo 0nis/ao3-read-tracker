@@ -7,10 +7,13 @@ import {
   getWorkNavBars,
   insertButtonIntoParent,
 } from "./helpers";
+import { createUpdateButton } from "./components/update";
 
 import { settingsCache } from "../../../services/cache/settings";
 import { SettingsData } from "../../../types/settings";
 import { warn } from "../../../utils/extension/console";
+import { handleUpdateInProgressInfo } from "./handlers";
+import { ButtonPlacement } from "../../../enums/settings";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
@@ -22,6 +25,7 @@ export async function setupButtons() {
   }
 
   await setupAllActionButtons(settings);
+  setupUpdateReadProgressButton(settings);
 }
 
 async function setupAllActionButtons(settings: SettingsData) {
@@ -46,6 +50,19 @@ async function setupAllActionButtons(settings: SettingsData) {
       insertButtonIntoParent(p, btn);
     }
   }
+}
+
+function setupUpdateReadProgressButton(settings: SettingsData) {
+  const navs = getWorkNavBars();
+  if (!navs.bottom) return;
+  // TODO: Make label configurable
+  const btn = createUpdateButton(
+    "Update Read Progress",
+    handleUpdateInProgressInfo
+  );
+  // TODO: Make placement configurable
+  btn.setAttribute("data-origin", ButtonPlacement.BOTTOM);
+  insertButtonIntoParent(navs.bottom, btn);
 }
 
 function modifyMarkForLaterButton(label: string) {

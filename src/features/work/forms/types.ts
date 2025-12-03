@@ -16,6 +16,7 @@ export interface WorkFormField<T> extends WorkFormFieldBase {
   label: string;
   input: HTMLElement;
   description?: string;
+  ignorePopulate?: boolean;
 }
 
 export interface WorkFormFieldGroup<T> extends WorkFormFieldBase {

@@ -27,12 +27,6 @@ export function getStyles(prefix: string): string {
       width: auto !important;
     }
 
-    .${prefix}__settings__field select {
-      font: 100% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
-      border: 1px solid #bbb;
-      box-shadow: inset 0 1px 2px #ccc;
-    }
-
     .${prefix}__settings__field__description {
       opacity: 0.8;
       font-size: 0.95em;

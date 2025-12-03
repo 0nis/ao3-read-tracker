@@ -27,7 +27,7 @@ export const ACTION_DEFAULTS_MAP: {
     modifiedAt: Date.now(),
   }),
   in_progress: (data) => ({
-    startedAt: data.startedAt || Date.now(),
+    lastReadAt: data.lastReadAt || Date.now(),
   }),
   ignore: (data) => ({
     createdAt: data.createdAt || Date.now(),
@@ -66,14 +66,14 @@ export const ACTION_MESSAGES_MAP: {
   [WorkAction.IN_PROGRESS]: {
     success: {
       save: "You have successfully started reading %title%.",
-      edit: "You have successfully updated in progress info for %title%.",
+      edit: "You've successfully updated your reading progress for %title%.",
       delete: "You have successfully stopped reading %title%.",
     },
     error: {
-      save: "Something went wrong while updating in progress status for %title%.",
-      edit: "Something went wrong while updating in progress status for %title%.",
+      save: "Something went wrong while marking %title% as in progress.",
+      edit: "Something went wrong while updating your reading progress for %title%.",
       delete:
-        "Something went wrong while updating in progress status for %title%.",
+        "Something went wrong while deleting %title% from your in progress list.",
     },
   },
   [WorkAction.IGNORE]: {

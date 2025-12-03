@@ -1,10 +1,13 @@
 import { createWorkForm } from "../base";
 import { WorkAction } from "../../config";
-import { textarea } from "../helpers/inputs";
+import { date, datetime, number, select, textarea } from "../helpers/inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { InProgressWork } from "../../../../types/works";
 import { ButtonPlacement } from "../../../../enums/settings";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { ReadingStatus } from "../../../../enums/works";
+import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
 
 const items: WorkFormItem<InProgressWork>[] = [
   {
@@ -15,9 +18,36 @@ const items: WorkFormItem<InProgressWork>[] = [
       "Private notes that will appear in the work summary block for this work.",
     input: textarea(3),
   },
-  // TODO: Add the rest of the fields
-  // Uses buildSelectFromEnum for the status field
-  // What to use for the date ??? idk yet
+  {
+    type: WorkFormFieldType.GROUP,
+    className: `${CLASS_PREFIX}__form__group`,
+    fields: [
+      {
+        type: WorkFormFieldType.FIELD,
+        dataField: "readingStatus",
+        label: "Reading Status",
+        input: select(ReadingStatus, ReadingStatus.ACTIVE),
+      },
+      {
+        type: WorkFormFieldType.FIELD,
+        dataField: "lastReadChapter",
+        label: "Last Chapter Read",
+        input: number("1", getCurrentChapterFromWorkPage()?.toString() || "1"),
+      },
+      {
+        type: WorkFormFieldType.FIELD,
+        dataField: "startedAt",
+        label: "Started Reading On",
+        input: datetime(new Date()),
+      },
+      {
+        type: WorkFormFieldType.FIELD,
+        dataField: "lastReadAt",
+        label: "Last Read On",
+        input: datetime(new Date()),
+      },
+    ],
+  },
 ];
 
 export function createInProgressWorkForm(
@@ -29,15 +59,17 @@ export function createInProgressWorkForm(
     id: WorkAction.IN_PROGRESS,
     landmark: "In Progress Work",
     heading: editing
-      ? "Edit in progress work info"
-      : "Mark this work as in progress",
+      ? "Edit Read Progress Info"
+      : "Mark this work as In Progress",
     data,
     editing,
     items,
     submit: {
       save: {
         label: "Save",
-        ariaLabel: `Save and mark as in progress ${data.title || "this work"}`,
+        ariaLabel: `Save and add ${
+          data.title || "this work"
+        } to your in progress list`,
       },
       delete: {
         isDeletable: editing === true,

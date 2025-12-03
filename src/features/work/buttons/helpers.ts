@@ -5,8 +5,9 @@ import {
   ActionButtonMeta,
   ActionLabelSet,
 } from "./types";
-import { createToggleButton } from "./components/toggle-btn";
-import { createClickButton } from "./components/click-btn";
+import { createToggleButton } from "./components/toggle";
+import { createOpenFormButton } from "./components/open-form";
+import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
 
 import { getIdFromUrl } from "../../../utils/ao3";
 import { ButtonPlacement } from "../../../enums/settings";
@@ -14,7 +15,6 @@ import { warn } from "../../../utils/extension/console";
 import { el } from "../../../utils/ui/dom";
 import { WorkAction } from "../config";
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
 
 let _cache: Record<WorkAction, ActionButtonMeta> | null = null;
 
@@ -57,17 +57,17 @@ function makeMeta(
 
 export async function createActionModeButton(
   config: ButtonConfig
-): Promise<HTMLAnchorElement | undefined> {
+): Promise<HTMLElement | undefined> {
   const workId = getIdFromUrl();
   if (!workId) return;
 
   const map = ACTION_HANDLER_MAP[config.type];
   const exists = map?.storage ? (await map.storage.exists(workId)).data : false;
 
-  let button: HTMLAnchorElement;
+  let button: HTMLElement;
   if (config.mode === ButtonAction.TOGGLE)
     button = createToggleButton(workId, config, exists);
-  else button = createClickButton(workId, config, exists);
+  else button = createOpenFormButton(workId, config, exists);
 
   return button;
 }
@@ -120,10 +120,7 @@ export function getWorkNavBars(): ButtonNavs {
   };
 }
 
-export function insertButtonIntoParent(
-  parent: Parent,
-  button: HTMLAnchorElement
-) {
+export function insertButtonIntoParent(parent: Parent, button: HTMLElement) {
   if (parent.placement === ButtonPlacement.TOP) {
     button.setAttribute("data-origin", ButtonPlacement.TOP);
     const li = el("li", {}, button);

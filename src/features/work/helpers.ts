@@ -17,8 +17,8 @@ export const getDefaultPayload = <K extends keyof WorkActionTypeMap>(
 
   const defaults = ACTION_DEFAULTS_MAP[action](data);
   return {
-    ...data,
     ...defaults,
+    ...data,
     id,
     title: title || data.title || "Untitled",
   } as WorkActionTypeMap[K];

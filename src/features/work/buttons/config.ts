@@ -32,7 +32,7 @@ export const ACTION_LABELS: {
     },
     advanced: {
       off: "Start Reading",
-      on: "Edit In Progress Info",
+      on: "Edit Read Progress",
     },
   },
   [WorkAction.IGNORE]: {

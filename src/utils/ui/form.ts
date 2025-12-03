@@ -108,7 +108,10 @@ export function buildSelectFromEnum<T extends Record<string, string>>(
   selected?: T[keyof T],
   attrs?: Record<string, string>
 ): HTMLSelectElement {
-  const select = el("select", { attrs }) as HTMLSelectElement;
+  const select = el("select", {
+    className: `${CLASS_PREFIX}__select`,
+    attrs,
+  }) as HTMLSelectElement;
   Object.values(enumObj).forEach((v) => {
     const option = el("option", {
       value: String(v),

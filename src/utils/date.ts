@@ -1,15 +1,7 @@
-// TODO: Allow modification of date format via settings
-/**
- * Converts a timestamp to a formatted date string (YYYY/MM/DD)
- * (I chose this date format to prevent confusion between MM/DD and DD/MM, forgive me)
- */
+/** Converts a timestamp to a formatted date string (YYYY-MM-DD) */
 export const getFormattedDate = (timestamp: number): string => {
   return formatDateSafely(timestamp, (ts: number) => {
-    const date = new Date(ts);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}/${month}/${day}`;
+    return getLocalDateString(new Date(ts));
   });
 };
 
@@ -48,6 +40,19 @@ export const timestampToISOString = (timestamp: number): string => {
     },
     ""
   );
+};
+
+export const getLocalDateString = (date: Date): string => {
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+    .map((part) => String(part).padStart(2, "0"))
+    .join("-");
+};
+
+export const getLocalDateTimeString = (date: Date): string => {
+  const datePart = getLocalDateString(date);
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${datePart}T${hours}:${minutes}`;
 };
 
 /** Formats a timestamp to a string suitable for filenames (YYYY-MM-DD_HH-MM)*/

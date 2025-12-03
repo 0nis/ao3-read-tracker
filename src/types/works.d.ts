@@ -22,7 +22,7 @@ export interface InProgressWork {
   startedAt?: number;
   title?: string;
   notes?: string;
-  lastChapterRead?: number;
+  lastReadChapter?: number;
   readingStatus?: ReadingStatus;
 }
 

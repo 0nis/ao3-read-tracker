@@ -27,7 +27,7 @@ const items: WorkFormItem<ReadWork>[] = [
   },
   {
     type: WorkFormFieldType.GROUP,
-    className: `${CLASS_PREFIX}__align-horizontally`,
+    className: `${CLASS_PREFIX}__form__group`,
     fields: [
       {
         type: WorkFormFieldType.FIELD,
