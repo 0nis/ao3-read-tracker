@@ -4,6 +4,11 @@ export enum SymbolId {
   IN_PROGRESS = "in_progress",
   REREAD_WORTHY = "reread_worthy",
   TIMES_READ = "times_read",
+  STATUS_COMPLETED = "status_completed",
+  STATUS_ABANDONED = "status_abandoned",
+  STATUS_READING_ACTIVE = "status_reading_active",
+  STATUS_READING_WAITING = "status_reading_waiting",
+  STATUS_READING_PAUSED = "status_reading_paused",
   NEW_CHAPTERS_AVAILABLE = "new_chapters_available",
   LINK = "link",
   DELETE = "delete",
@@ -13,4 +18,11 @@ export enum SymbolId {
 export enum SymbolType {
   TEXT = "text",
   IMAGE = "image",
+}
+
+export enum SymbolDisplayMode {
+  STATE_ONLY = "state_only",
+  STATUS_ONLY = "status_only",
+  BOTH = "both",
+  NONE = "none",
 }

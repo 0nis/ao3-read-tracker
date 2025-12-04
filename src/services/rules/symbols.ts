@@ -1,4 +1,5 @@
-import { SymbolId } from "../../enums/symbols";
+import { SymbolDisplayMode, SymbolId } from "../../enums/symbols";
+import { FinishedStatus, ReadingStatus } from "../../enums/works";
 import { ReadWork, IgnoredWork, InProgressWork } from "../../types/works";
 
 export interface SymbolRule {
@@ -16,6 +17,11 @@ export interface SymbolRuleParameters {
   details?: {
     latestChapter?: number;
   };
+  displayMode?: SymbolDisplayMode;
+  options?: {
+    showState?: boolean;
+    showStatus?: boolean;
+  };
 }
 
 export function collectSymbolRules({
@@ -23,7 +29,20 @@ export function collectSymbolRules({
   ignoredWork,
   inProgressWork,
   details,
+  displayMode,
+  options,
 }: SymbolRuleParameters): SymbolRule[] {
+  if (displayMode === SymbolDisplayMode.NONE) return [];
+
+  const showState =
+    options?.showState ??
+    (displayMode === SymbolDisplayMode.STATE_ONLY ||
+      displayMode === SymbolDisplayMode.BOTH);
+  const showStatus =
+    options?.showStatus ??
+    (displayMode === SymbolDisplayMode.STATUS_ONLY ||
+      displayMode === SymbolDisplayMode.BOTH);
+
   return [
     {
       id: SymbolId.IGNORED,
@@ -32,18 +51,48 @@ export function collectSymbolRules({
     },
     {
       id: SymbolId.IN_PROGRESS,
-      shouldApply: () => !!inProgressWork,
+      shouldApply: () => !!inProgressWork && showState,
       priority: 90,
     },
     {
       id: SymbolId.READ,
-      shouldApply: () => !!readWork,
+      shouldApply: () => !!readWork && showState,
       priority: 80,
     },
     {
       id: SymbolId.REREAD_WORTHY,
       shouldApply: () => !!readWork?.rereadWorthy,
       priority: 70,
+    },
+    {
+      id: SymbolId.STATUS_COMPLETED,
+      shouldApply: () =>
+        readWork?.finishedStatus === FinishedStatus.COMPLETED && showStatus,
+      priority: 40,
+    },
+    {
+      id: SymbolId.STATUS_ABANDONED,
+      shouldApply: () =>
+        readWork?.finishedStatus === FinishedStatus.ABANDONED && showStatus,
+      priority: 40,
+    },
+    {
+      id: SymbolId.STATUS_READING_ACTIVE,
+      shouldApply: () =>
+        inProgressWork?.readingStatus === ReadingStatus.ACTIVE && showStatus,
+      priority: 40,
+    },
+    {
+      id: SymbolId.STATUS_READING_WAITING,
+      shouldApply: () =>
+        inProgressWork?.readingStatus === ReadingStatus.WAITING && showStatus,
+      priority: 40,
+    },
+    {
+      id: SymbolId.STATUS_READING_PAUSED,
+      shouldApply: () =>
+        inProgressWork?.readingStatus === ReadingStatus.PAUSED && showStatus,
+      priority: 40,
     },
     {
       id: SymbolId.TIMES_READ,
@@ -53,7 +102,7 @@ export function collectSymbolRules({
           ? "Read 1 time"
           : `Read ${readWork!.timesRead} times`,
       getSuffix: () => `x${readWork!.timesRead}`,
-      priority: 60,
+      priority: 20,
     },
     {
       id: SymbolId.NEW_CHAPTERS_AVAILABLE,
@@ -70,7 +119,7 @@ export function collectSymbolRules({
         `New chapters available! (last read: chapter ${
           inProgressWork?.lastReadChapter || "?"
         })`,
-      priority: 50,
+      priority: 10,
     },
   ];
 }

@@ -6,13 +6,13 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     id: SymbolId.READ,
     type: SymbolType.TEXT,
     label: "Marked as read",
-    text: "✔️",
+    text: "📘",
   },
   {
     id: SymbolId.IN_PROGRESS,
     type: SymbolType.TEXT,
     label: "Marked as in progress",
-    text: "⏳",
+    text: "📖",
   },
   {
     id: SymbolId.IGNORED,
@@ -24,7 +24,7 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     id: SymbolId.REREAD_WORTHY,
     type: SymbolType.TEXT,
     label: "Marked as re-read worthy",
-    text: "🔁",
+    text: "⭐",
   },
   {
     id: SymbolId.TIMES_READ,
@@ -36,7 +36,37 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     id: SymbolId.NEW_CHAPTERS_AVAILABLE,
     type: SymbolType.TEXT,
     label: "New chapters available",
-    text: "‼️",
+    text: "🔔",
+  },
+  {
+    id: SymbolId.STATUS_COMPLETED,
+    type: SymbolType.TEXT,
+    label: "Status: Completed",
+    text: "🟢",
+  },
+  {
+    id: SymbolId.STATUS_ABANDONED,
+    type: SymbolType.TEXT,
+    label: "Status: Abandoned",
+    text: "🔴",
+  },
+  {
+    id: SymbolId.STATUS_READING_ACTIVE,
+    type: SymbolType.TEXT,
+    label: "Status: Actively Reading",
+    text: "▶️",
+  },
+  {
+    id: SymbolId.STATUS_READING_WAITING,
+    type: SymbolType.TEXT,
+    label: "Status: Waiting to Read",
+    text: "⏸️",
+  },
+  {
+    id: SymbolId.STATUS_READING_PAUSED,
+    type: SymbolType.TEXT,
+    label: "Status: Paused Reading",
+    text: "⏹️",
   },
   {
     id: SymbolId.LINK,

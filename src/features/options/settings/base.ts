@@ -1,7 +1,8 @@
-import { PREFIX } from "..";
-import { el, injectStyles } from "../../../utils/ui/dom";
-import { createSection, SectionConfig } from "../components/section";
 import { getStyles } from "./style";
+import { PREFIX } from "..";
+import { createSection, SectionConfig } from "../components/section";
+
+import { el, injectStyles } from "../../../utils/ui/dom";
 
 export interface SettingsSectionConfig extends SectionConfig {
   fields: HTMLElement[];
@@ -38,24 +39,24 @@ export function createSettingsSection(
   return section;
 }
 
-export interface FieldConfig {
+export interface FieldConfig<T> {
   section: string;
   label: string;
   input: HTMLElement;
-  dataField: string;
+  dataField: keyof T;
   description?: string;
 }
 
-export function createField({
+export function createField<T>({
   section,
   input,
   dataField,
   label,
   description,
-}: FieldConfig): HTMLElement {
-  const id = `${PREFIX}__${section}__${dataField}`;
+}: FieldConfig<T>): HTMLElement {
+  const id = `${PREFIX}__${section}__${String(dataField)}`;
   input.id = id;
-  input.setAttribute("data-field", dataField);
+  input.setAttribute("data-field", String(dataField));
   if (description) input.setAttribute("aria-describedby", `${id}-description`);
 
   const children = [

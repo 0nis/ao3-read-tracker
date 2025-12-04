@@ -28,7 +28,9 @@ export function buildSelectFromEnum<T extends Record<string, string>>(
   Object.values(enumObj).forEach((v) => {
     const option = el("option", {
       value: String(v),
-      textContent: String(v).replace(/_/g, " "),
+      textContent: String(v)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase()),
     });
     if (selected && selected === v) option.selected = true;
     select.appendChild(option);

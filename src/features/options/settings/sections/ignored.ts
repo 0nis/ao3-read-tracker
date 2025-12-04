@@ -4,9 +4,10 @@ import { SectionId } from "../../config";
 import { el } from "../../../../utils/ui/dom";
 import { buildSelectFromEnum } from "../../../../utils/ui/forms";
 import { DisplayMode } from "../../../../enums/settings";
+import { IgnoreSettings } from "../../../../types/settings";
 
 export function buildIgnoreSettingsSection(): HTMLElement {
-  const simpleField = createField({
+  const simpleField = createField<IgnoreSettings>({
     section: SectionId.IGNORE_SETTINGS,
     label: "Enable Simple Mode",
     input: el("input", { type: "checkbox" }),
@@ -15,7 +16,7 @@ export function buildIgnoreSettingsSection(): HTMLElement {
       "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",
   });
 
-  const defaultDisplayField = createField({
+  const defaultDisplayField = createField<IgnoreSettings>({
     section: SectionId.IGNORE_SETTINGS,
     label: "Default Display Mode",
     input: buildSelectFromEnum(DisplayMode) as HTMLElement,

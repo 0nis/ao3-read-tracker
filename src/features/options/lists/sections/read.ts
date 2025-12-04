@@ -7,9 +7,10 @@ import {
 } from "../helpers/content";
 import { getSrAccessibleContentSummary } from "../helpers/accessibility";
 
-import { symbolsCache } from "../../../../services/cache/symbols";
 import { getActiveSymbolRules } from "../../../../services/rules/symbols";
 import { StorageService } from "../../../../services/storage";
+import { settingsCache } from "../../../../services/cache/settings";
+import { symbolsCache } from "../../../../services/cache/symbols";
 
 import { handleStorageWrite } from "../../../../utils/storage";
 import { getWorkLinkFromId } from "../../../../utils/ao3";
@@ -34,11 +35,17 @@ export async function buildReadListSection(): Promise<HTMLElement> {
 
 async function renderItem(item: ReadWork): Promise<HTMLElement> {
   const symbols = await symbolsCache.get();
+  const { generalSettings } = await settingsCache.get();
   const rules = getActiveSymbolRules({
     readWork: item,
     inProgressWork: (await StorageService.inProgressWorks.getById(item.id))
       ?.data,
     ignoredWork: (await StorageService.ignoredWorks.getById(item.id))?.data,
+    displayMode: generalSettings.symbolDisplayMode,
+    options: {
+      showState: true,
+      showStatus: true,
+    },
   });
 
   const info: SupplementaryRowInformation = {

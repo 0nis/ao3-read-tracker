@@ -1,8 +1,8 @@
 export enum DisplayMode {
   DEFAULT = "default",
   HIDE = "hide",
-  COLLAPSE_GENTLE = "collapse_gentle",
-  COLLAPSE_AGGRESSIVE = "collapse_aggressive",
+  COLLAPSE_GENTLE = "gentle_collapse",
+  COLLAPSE_AGGRESSIVE = "aggressive_collapse",
 }
 
 export enum ButtonPlacement {

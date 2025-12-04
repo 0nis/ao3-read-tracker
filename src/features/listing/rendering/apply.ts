@@ -23,18 +23,23 @@ export async function applyMarksToWork(params: ApplyMarksParams) {
   ensureLandmarkHeadingPresent(params.element);
   addClasses(params);
   addText(params);
-  if (!params.settings.generalSettings.hideSymbols) await addSymbols(params);
+  await addSymbols(params);
   adjustWorkDisplay(params);
 }
 
 function adjustWorkDisplay({
   element,
   readWork,
+  inProgressWork,
   ignoredWork,
   settings,
 }: ApplyMarksParams) {
-  const rules = collectDisplayRules(settings, readWork, ignoredWork);
-
+  const rules = collectDisplayRules(
+    settings,
+    readWork,
+    inProgressWork,
+    ignoredWork
+  );
   // TODO: Create setting deciding what order these go in (which take priority)
   const rule = rules.find((r) => r.shouldApply());
   if (!rule) return;

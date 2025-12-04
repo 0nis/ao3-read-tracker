@@ -51,7 +51,13 @@ export function removeSymbols(element: HTMLElement) {
 }
 
 async function renderSymbols(
-  { element, readWork, inProgressWork, ignoredWork }: ApplyMarksParams,
+  {
+    element,
+    readWork,
+    inProgressWork,
+    ignoredWork,
+    settings,
+  }: ApplyMarksParams,
   symbolIndicatorList: HTMLElement
 ) {
   const symbols = await symbolsCache.get();
@@ -63,6 +69,7 @@ async function renderSymbols(
     details: {
       latestChapter: getLatestChapterFromWorkListing(element) || undefined,
     },
+    displayMode: settings.generalSettings.symbolDisplayMode,
   });
 
   for (const rule of rules) {
