@@ -81,3 +81,42 @@ export function createField<T>({
 
   return field;
 }
+
+export interface FieldGroupConfig {
+  id: string;
+  label: string;
+  fields: HTMLElement[];
+  description?: string;
+}
+
+export function createFieldGroup({
+  id,
+  label,
+  fields,
+  description,
+}: FieldGroupConfig): HTMLElement {
+  const children: HTMLElement[] = [];
+
+  children.push(
+    el("legend", { className: `${PREFIX}__settings__group__label` }, [label])
+  );
+
+  // prettier-ignore
+  if (description)
+    children.push(el("p", {
+      id: `${id}-description`,
+      className: `${PREFIX}__settings__field__description`,
+    }, [description]));
+
+  children.push(
+    el("div", { className: `${PREFIX}__settings__group__fields` }, fields)
+  );
+
+  const group = el(
+    "fieldset",
+    { id, className: `${PREFIX}__settings__group` },
+    [...children]
+  );
+
+  return group;
+}

@@ -1,4 +1,4 @@
-import { createField, createSettingsSection } from "../base";
+import { createField, createFieldGroup, createSettingsSection } from "../base";
 import { SectionId } from "../../config";
 
 import { checkbox, select } from "../../../../utils/ui/forms";
@@ -7,6 +7,7 @@ import { ReadSettings } from "../../../../types/settings";
 import { SymbolDisplayMode } from "../../../../enums/symbols";
 
 export function buildReadSettingsSection(): HTMLElement {
+  // TODO: Replace checkboxes with the new toggle switches
   const simpleField = createField<ReadSettings>({
     section: SectionId.READ_SETTINGS,
     label: "Enable Simple Mode",
@@ -16,41 +17,37 @@ export function buildReadSettingsSection(): HTMLElement {
       "If enabled, the read feature will not ask you for additional information like notes. It will simply mark the work as read immediately.",
   });
 
-  // TODO: Create setting "groups" for things like this
-  const defaultDisplayField = createField<ReadSettings>({
-    section: SectionId.READ_SETTINGS,
-    label: "Default Display Mode",
-    input: select(DisplayMode),
-    dataField: "defaultDisplayMode",
+  const displayModesGroup = createFieldGroup({
+    id: "displayModes",
+    label: "Display Modes",
     description:
-      "What the work listing will look like when you've marked a work as read. For example, 'collapse gentle' will hide everything but the header.",
-  });
-
-  const rereadDisplayField = createField<ReadSettings>({
-    section: SectionId.READ_SETTINGS,
-    label: "Reread worthy Display Mode",
-    input: select(DisplayMode),
-    dataField: "rereadWorthyDisplayMode",
-    description:
-      "What the work listing will look like when you've marked a work as reread worthy.",
-  });
-
-  const completedDisplayField = createField<ReadSettings>({
-    section: SectionId.READ_SETTINGS,
-    label: "Completed Display Mode",
-    input: select(DisplayMode),
-    dataField: "completedDisplayMode",
-    description:
-      "What the work listing will look like when you've marked a work as completed.",
-  });
-
-  const abandonedDisplayField = createField<ReadSettings>({
-    section: SectionId.READ_SETTINGS,
-    label: "Abandoned Display Mode",
-    input: select(DisplayMode),
-    dataField: "abandonedDisplayMode",
-    description:
-      "What the work listing will look like when you've marked a work as abandoned.",
+      "Settings related to how the work listings appear after marking them as read.",
+    fields: [
+      createField<ReadSettings>({
+        section: SectionId.READ_SETTINGS,
+        label: "Default",
+        input: select(DisplayMode),
+        dataField: "defaultDisplayMode",
+      }),
+      createField<ReadSettings>({
+        section: SectionId.READ_SETTINGS,
+        label: "Reread worthy",
+        input: select(DisplayMode),
+        dataField: "rereadWorthyDisplayMode",
+      }),
+      createField<ReadSettings>({
+        section: SectionId.READ_SETTINGS,
+        label: "Completed",
+        input: select(DisplayMode),
+        dataField: "completedDisplayMode",
+      }),
+      createField<ReadSettings>({
+        section: SectionId.READ_SETTINGS,
+        label: "Abandoned",
+        input: select(DisplayMode),
+        dataField: "abandonedDisplayMode",
+      }),
+    ],
   });
 
   const symbolDisplayModeField = createField<ReadSettings>({
@@ -65,13 +62,6 @@ export function buildReadSettingsSection(): HTMLElement {
   return createSettingsSection({
     id: SectionId.READ_SETTINGS,
     title: "Read Settings",
-    fields: [
-      simpleField,
-      defaultDisplayField,
-      rereadDisplayField,
-      completedDisplayField,
-      abandonedDisplayField,
-      symbolDisplayModeField,
-    ],
+    fields: [simpleField, displayModesGroup, symbolDisplayModeField],
   });
 }
