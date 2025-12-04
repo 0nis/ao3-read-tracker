@@ -2,7 +2,7 @@ import { db } from "../db";
 import { generateReadWorks } from "./readWorks";
 import { generateIgnoredWorks } from "./ignoredWorks";
 import { generateInProgressWorks } from "./inProgressWorks";
-import { info } from "../../utils/extension/console";
+import { info } from "../../utils/extension";
 
 export async function seedDatabase() {
   await db.readWorks.bulkPut(generateReadWorks(50));

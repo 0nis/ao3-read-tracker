@@ -2,7 +2,7 @@ import { LoaderType } from "../../enums/ui";
 import { StorageResult } from "../../types/results";
 import { isEmpty } from "../misc";
 import { reportExtensionFailure } from "../ui/dialogs";
-import { createFlashNotice } from "../ui/form";
+import { createFlashNotice } from "../ui/forms";
 import { createButtonLoader, withLoadingState } from "../ui/loaders";
 
 export interface StorageReadOptions<T> {

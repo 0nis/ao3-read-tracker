@@ -11,7 +11,7 @@ import { createUpdateButton } from "./components/update";
 
 import { settingsCache } from "../../../services/cache/settings";
 import { SettingsData } from "../../../types/settings";
-import { warn } from "../../../utils/extension/console";
+import { warn } from "../../../utils/extension";
 import { handleUpdateInProgressInfo } from "./handlers";
 import { ButtonPlacement } from "../../../enums/settings";
 

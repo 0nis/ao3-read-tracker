@@ -8,8 +8,8 @@ import { Work } from "../features/work";
 import { injectStyles } from "../utils/ui/dom";
 
 import { CLASS_PREFIX } from "../constants/classes";
-import { initSrLive } from "../utils/ui/sr-live";
-import { error } from "../utils/extension/console";
+import { initSrLive } from "../utils/ui/accessibility";
+import { error } from "../utils/extension";
 
 export const App = {
   async init() {

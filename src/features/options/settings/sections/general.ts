@@ -1,9 +1,9 @@
-import { PREFIX } from "../..";
-import { ButtonPlacement } from "../../../../enums/settings";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
-import { SectionId } from "../../config";
 import { createField, createSettingsSection } from "../base";
+import { SectionId } from "../../config";
+
+import { el } from "../../../../utils/ui/dom";
+import { buildSelectFromEnum } from "../../../../utils/ui/forms";
+import { ButtonPlacement } from "../../../../enums/settings";
 
 export function buildGeneralSettingsSection(): HTMLElement {
   const hideSymbolsField = createField({

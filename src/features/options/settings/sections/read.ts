@@ -1,9 +1,9 @@
-import { PREFIX } from "../..";
-import { DisplayMode } from "../../../../enums/settings";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
-import { SectionId } from "../../config";
 import { createField, createSettingsSection } from "../base";
+import { SectionId } from "../../config";
+
+import { el } from "../../../../utils/ui/dom";
+import { buildSelectFromEnum } from "../../../../utils/ui/forms";
+import { DisplayMode } from "../../../../enums/settings";
 
 export function buildReadSettingsSection(): HTMLElement {
   const simpleField = createField({

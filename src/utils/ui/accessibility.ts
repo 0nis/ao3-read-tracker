@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../constants/classes";
-import { warn } from "../extension/console";
+import { warn } from "../extension";
 import { el } from "./dom";
 
 let srLive: HTMLElement | null = null;

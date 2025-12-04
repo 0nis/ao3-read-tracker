@@ -4,9 +4,9 @@ import { walkItems } from "../helpers/items";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
 
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { handleStorageWrite } from "../../../../utils/storage";
 import { ButtonPlacement } from "../../../../enums/settings";
-import { createFlashNotice } from "../../../../utils/ui/form";
+import { createFlashNotice } from "../../../../utils/ui/forms";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },

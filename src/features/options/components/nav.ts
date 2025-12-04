@@ -1,6 +1,6 @@
 import { PREFIX } from "..";
 import { el } from "../../../utils/ui/dom";
-import { reportSrLive } from "../../../utils/ui/sr-live";
+import { reportSrLive } from "../../../utils/ui/accessibility";
 
 export function buildNav(items: { id: string; label: string }[]): {
   nav: HTMLElement;

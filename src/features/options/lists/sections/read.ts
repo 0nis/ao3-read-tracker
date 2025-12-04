@@ -11,7 +11,7 @@ import { symbolsCache } from "../../../../services/cache/symbols";
 import { getActiveSymbolRules } from "../../../../services/rules/symbols";
 import { StorageService } from "../../../../services/storage";
 
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { handleStorageWrite } from "../../../../utils/storage";
 import { getWorkLinkFromId } from "../../../../utils/ao3";
 import {
   getFormattedDate,

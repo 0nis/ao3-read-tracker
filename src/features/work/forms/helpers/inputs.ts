@@ -3,7 +3,7 @@ import {
   getLocalDateTimeString,
 } from "../../../../utils/date";
 import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
+import { buildSelectFromEnum } from "../../../../utils/ui/forms";
 
 export const textarea = (
   rows: number,

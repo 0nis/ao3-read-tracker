@@ -1,11 +1,12 @@
-import { PREFIX } from "../..";
-import { settingsCache } from "../../../../services/cache/settings";
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
-import { getElement } from "../../../../utils/ui/dom";
-import { extractFormValues } from "../../../../utils/ui/form";
-import { SectionElements } from "../../renderer";
-import { SectionId } from "../../config";
 import { SETTINGS_SAVE_MAP } from "../config";
+import { PREFIX } from "../..";
+import { SectionId } from "../../config";
+import { SectionElements } from "../../renderer";
+
+import { settingsCache } from "../../../../services/cache/settings";
+import { handleStorageWrite } from "../../../../utils/storage";
+import { getElement } from "../../../../utils/ui/dom";
+import { extractFormValues } from "../../../../utils/ui/forms";
 
 export function setupSettingsSaveHandlers(sections: SectionElements) {
   for (const [key, sectionConfig] of Object.entries(sections)) {

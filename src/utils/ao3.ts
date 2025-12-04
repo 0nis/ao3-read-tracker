@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../constants/classes";
-import { warn } from "./extension/console";
+import { warn } from "./extension";
 
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);

@@ -5,7 +5,7 @@ import {
   reportExtensionFailure,
   showNotification,
 } from "../../../../utils/ui/dialogs";
-import { createFlashNotice } from "../../../../utils/ui/form";
+import { createFlashNotice } from "../../../../utils/ui/forms";
 import {
   createButtonLoader,
   withLoadingState,

@@ -1,7 +1,7 @@
 import Dexie, { Table } from "dexie";
 
 import { showNotification } from "../utils/ui/dialogs";
-import { createExtensionMsg } from "../utils/extension/console";
+import { createExtensionMsg } from "../utils/extension";
 import {
   ReadSettings,
   IgnoreSettings,

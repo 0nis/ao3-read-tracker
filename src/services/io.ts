@@ -3,7 +3,7 @@ import { io } from "../data/io";
 import { migrations } from "../data/migrations";
 
 import { StorageResult } from "../types/results";
-import { safeExecute } from "../utils/storage/safe";
+import { safeExecute } from "../utils/storage";
 import { DATABASE_VERSION } from "../constants/global";
 
 export const IoService = {

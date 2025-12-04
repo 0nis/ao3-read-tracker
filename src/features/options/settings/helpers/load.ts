@@ -1,8 +1,9 @@
-import { settingsCache } from "../../../../services/cache/settings";
-import { populateForm } from "../../../../utils/ui/form";
-import { SectionElements } from "../../renderer";
-import { SectionId } from "../../config";
 import { SETTINGS_LOAD_MAP } from "../config";
+import { SectionId } from "../../config";
+import { SectionElements } from "../../renderer";
+
+import { settingsCache } from "../../../../services/cache/settings";
+import { populateForm } from "../../../../utils/ui/forms";
 
 export async function loadAllSettingsSections(sections: SectionElements) {
   const all = await settingsCache.get();

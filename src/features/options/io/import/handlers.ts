@@ -12,7 +12,7 @@ import {
   createButtonLoader,
   withLoadingState,
 } from "../../../../utils/ui/loaders";
-import { createFlashNotice } from "../../../../utils/ui/form";
+import { createFlashNotice } from "../../../../utils/ui/forms";
 import { showNotification } from "../../../../utils/ui/dialogs";
 import { LoaderType } from "../../../../enums/ui";
 import { DATABASE_NAME } from "../../../../constants/global";

@@ -8,7 +8,7 @@ import {
 import { getSrAccessibleContentSummary } from "../helpers/accessibility";
 
 import { StorageService } from "../../../../services/storage";
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { handleStorageWrite } from "../../../../utils/storage";
 import { getWorkLinkFromId } from "../../../../utils/ao3";
 import {
   getFormattedDate,

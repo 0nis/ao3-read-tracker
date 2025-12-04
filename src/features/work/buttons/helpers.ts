@@ -11,7 +11,7 @@ import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
 
 import { getIdFromUrl } from "../../../utils/ao3";
 import { ButtonPlacement } from "../../../enums/settings";
-import { warn } from "../../../utils/extension/console";
+import { warn } from "../../../utils/extension";
 import { el } from "../../../utils/ui/dom";
 import { WorkAction } from "../config";
 import { CLASS_PREFIX } from "../../../constants/classes";

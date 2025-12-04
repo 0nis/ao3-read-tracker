@@ -21,7 +21,7 @@ import { WorkActionState, WorkActionTypeMap } from "../config";
 
 import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { error } from "../../../utils/extension/console";
+import { error } from "../../../utils/extension";
 import { ABBREVIATION } from "../../../constants/global";
 
 export function createWorkForm<K extends keyof WorkActionTypeMap>(

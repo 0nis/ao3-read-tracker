@@ -1,5 +1,5 @@
 import { getFormattedDateTimeForFilename } from "./date";
-import { getManifest } from "./extension/manifest";
+import { getManifest } from "./extension";
 import { extractKey } from "./misc";
 import { el } from "./ui/dom";
 

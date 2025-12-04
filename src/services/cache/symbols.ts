@@ -1,6 +1,6 @@
 import { ICache } from "./cache.interface";
 import { SymbolData } from "../../types/symbols";
-import { handleStorageRead } from "../../utils/storage/handlers";
+import { handleStorageRead } from "../../utils/storage";
 import { StorageService } from "../storage";
 import { DEFAULT_SYMBOL_RECORDS } from "../../constants/symbols";
 

@@ -8,11 +8,8 @@ import {
   getCurrentChapterFromWorkPage,
   getTitleFromWorkPage,
 } from "../../../utils/ao3";
-import {
-  handleStorageRead,
-  handleStorageWrite,
-} from "../../../utils/storage/handlers";
-import { createFlashNotice } from "../../../utils/ui/form";
+import { handleStorageRead, handleStorageWrite } from "../../../utils/storage";
+import { createFlashNotice } from "../../../utils/ui/forms";
 import { ButtonPlacement } from "../../../enums/settings";
 import { InProgressWork } from "../../../types/works";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";

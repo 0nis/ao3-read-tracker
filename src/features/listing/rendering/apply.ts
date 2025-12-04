@@ -6,7 +6,7 @@ import { DISPLAY_MODE_MAP } from "../config";
 
 import { collectDisplayRules } from "../../../services/rules/display";
 import { ensureChild } from "../../../utils/ui/dom";
-import { getManifest } from "../../../utils/extension/manifest";
+import { getManifest } from "../../../utils/extension";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
 import { ReadWork, IgnoredWork, InProgressWork } from "../../../types/works";

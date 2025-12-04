@@ -1,15 +1,13 @@
-import { hijackAo3Page } from "../../utils/ao3";
-import { el } from "../../utils/ui/dom";
-import { getManifest } from "../../utils/extension/manifest";
-import { ABBREVIATION } from "../../constants/global";
-
 import { PREFIX } from ".";
+import { SECTION_CONFIG, SectionId, SectionType } from "./config";
 import { setupSettings } from "./settings";
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
-import { SECTION_CONFIG, SectionId, SectionType } from "./config";
-import { error } from "../../utils/extension/console";
-import { addGlobalListener } from "../../utils/extension/listeners";
+
+import { error, addGlobalListener, getManifest } from "../../utils/extension";
+import { hijackAo3Page } from "../../utils/ao3";
+import { el } from "../../utils/ui/dom";
+import { ABBREVIATION } from "../../constants/global";
 
 export type SectionElements = {
   [key in SectionId]: {

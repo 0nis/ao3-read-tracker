@@ -4,7 +4,7 @@ import {
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import { handleStorageRead } from "../../utils/storage/handlers";
+import { handleStorageRead } from "../../utils/storage";
 import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<

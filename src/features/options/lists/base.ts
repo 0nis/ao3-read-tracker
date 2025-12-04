@@ -5,9 +5,9 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../types/results";
-import { handleStorageRead } from "../../../utils/storage/handlers";
+import { handleStorageRead } from "../../../utils/storage";
 import { el, injectStyles } from "../../../utils/ui/dom";
-import { reportSrLive } from "../../../utils/ui/sr-live";
+import { reportSrLive } from "../../../utils/ui/accessibility";
 import { createSection, SectionConfig } from "../components/section";
 import { attachExpandableBehavior } from "./helpers/accessibility";
 import { createActionButtons } from "./helpers/actions";

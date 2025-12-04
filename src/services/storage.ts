@@ -1,4 +1,4 @@
-import { createSafeService, safeExecute } from "../utils/storage/safe";
+import { createSafeService, safeExecute } from "../utils/storage";
 import type { WorkData } from "../types/works";
 import type { StorageResult } from "../types/results";
 import { instances, type InstanceMap } from "../data/instances";

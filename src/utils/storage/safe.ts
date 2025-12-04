@@ -4,7 +4,7 @@ import { SymbolsData } from "../../data/models/symbols";
 
 import { StorageResult } from "../../types/results";
 
-import { error } from "../extension/console";
+import { error } from "../extension";
 
 /**
  * Safely executes an async function and wraps the result in a StorageResult.
