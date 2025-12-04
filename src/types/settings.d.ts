@@ -8,6 +8,7 @@ export interface ReadSettings {
   rereadWorthyDisplayMode: DisplayMode;
   completedDisplayMode: DisplayMode;
   abandonedDisplayMode: DisplayMode;
+  symbolDisplayMode: SymbolDisplayMode;
 }
 
 export interface IgnoreSettings {
@@ -18,7 +19,7 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
-  symbolDisplayMode: SymbolDisplayMode;
+  hideSymbols: boolean;
   buttonPlacement: ButtonPlacement;
   replaceMarkForLaterText: boolean;
   markForLaterReplacementLabel: string;

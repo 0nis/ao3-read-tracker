@@ -17,10 +17,14 @@ export interface SymbolRuleParameters {
   details?: {
     latestChapter?: number;
   };
-  displayMode?: SymbolDisplayMode;
+  displayMode?: {
+    read?: SymbolDisplayMode;
+    inProgress?: SymbolDisplayMode;
+  };
   options?: {
     showState?: boolean;
     showStatus?: boolean;
+    hideSymbols?: boolean;
   };
 }
 
@@ -32,16 +36,15 @@ export function collectSymbolRules({
   displayMode,
   options,
 }: SymbolRuleParameters): SymbolRule[] {
-  if (displayMode === SymbolDisplayMode.NONE) return [];
+  if (options?.hideSymbols) return [];
 
-  const showState =
+  const getShowState = (mode?: SymbolDisplayMode) =>
     options?.showState ??
-    (displayMode === SymbolDisplayMode.STATE_ONLY ||
-      displayMode === SymbolDisplayMode.BOTH);
-  const showStatus =
+    (mode === SymbolDisplayMode.STATE_ONLY || mode === SymbolDisplayMode.BOTH);
+
+  const getShowStatus = (mode?: SymbolDisplayMode) =>
     options?.showStatus ??
-    (displayMode === SymbolDisplayMode.STATUS_ONLY ||
-      displayMode === SymbolDisplayMode.BOTH);
+    (mode === SymbolDisplayMode.STATUS_ONLY || mode === SymbolDisplayMode.BOTH);
 
   return [
     {
@@ -51,12 +54,13 @@ export function collectSymbolRules({
     },
     {
       id: SymbolId.IN_PROGRESS,
-      shouldApply: () => !!inProgressWork && showState,
+      shouldApply: () =>
+        !!inProgressWork && getShowState(displayMode?.inProgress),
       priority: 90,
     },
     {
       id: SymbolId.READ,
-      shouldApply: () => !!readWork && showState,
+      shouldApply: () => !!readWork && getShowState(displayMode?.read),
       priority: 80,
     },
     {
@@ -67,31 +71,36 @@ export function collectSymbolRules({
     {
       id: SymbolId.STATUS_COMPLETED,
       shouldApply: () =>
-        readWork?.finishedStatus === FinishedStatus.COMPLETED && showStatus,
+        readWork?.finishedStatus === FinishedStatus.COMPLETED &&
+        getShowStatus(displayMode?.read),
       priority: 40,
     },
     {
       id: SymbolId.STATUS_ABANDONED,
       shouldApply: () =>
-        readWork?.finishedStatus === FinishedStatus.ABANDONED && showStatus,
+        readWork?.finishedStatus === FinishedStatus.ABANDONED &&
+        getShowStatus(displayMode?.read),
       priority: 40,
     },
     {
       id: SymbolId.STATUS_READING_ACTIVE,
       shouldApply: () =>
-        inProgressWork?.readingStatus === ReadingStatus.ACTIVE && showStatus,
+        inProgressWork?.readingStatus === ReadingStatus.ACTIVE &&
+        getShowStatus(displayMode?.inProgress),
       priority: 40,
     },
     {
       id: SymbolId.STATUS_READING_WAITING,
       shouldApply: () =>
-        inProgressWork?.readingStatus === ReadingStatus.WAITING && showStatus,
+        inProgressWork?.readingStatus === ReadingStatus.WAITING &&
+        getShowStatus(displayMode?.inProgress),
       priority: 40,
     },
     {
       id: SymbolId.STATUS_READING_PAUSED,
       shouldApply: () =>
-        inProgressWork?.readingStatus === ReadingStatus.PAUSED && showStatus,
+        inProgressWork?.readingStatus === ReadingStatus.PAUSED &&
+        getShowState(displayMode?.inProgress),
       priority: 40,
     },
     {

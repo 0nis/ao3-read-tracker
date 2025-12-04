@@ -1,6 +1,6 @@
 import { createWorkForm } from "../base";
 import { WorkAction } from "../../config";
-import { datetime, number, select, textarea } from "../helpers/inputs";
+import { datetime, number, select, textarea } from "../../../../utils/ui/forms";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { InProgressWork } from "../../../../types/works";

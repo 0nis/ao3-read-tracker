@@ -1,9 +1,17 @@
-import { getLocalDateTimeString } from "../../../../utils/date";
-import { el } from "../../../../utils/ui/dom";
-import {
-  buildSelectFromEnum,
-  buildToggleSwitch,
-} from "../../../../utils/ui/forms";
+import { getLocalDateTimeString } from "../../../date";
+import { el } from "../../dom";
+import { buildSelectFromEnum, buildToggleSwitch } from "..";
+
+export const text = (
+  placeholder: string = "",
+  disabled: boolean = false
+): HTMLInputElement => {
+  return el("input", {
+    type: "text",
+    placeholder,
+    disabled,
+  }) as HTMLInputElement;
+};
 
 export const textarea = (
   rows: number,

@@ -69,7 +69,14 @@ async function renderSymbols(
     details: {
       latestChapter: getLatestChapterFromWorkListing(element) || undefined,
     },
-    displayMode: settings.generalSettings.symbolDisplayMode,
+    displayMode: {
+      read: settings.readSettings.symbolDisplayMode,
+      // TODO: Uncomment once added
+      // inProgress: settings.generalSettings.symbolDisplayMode,
+    },
+    options: {
+      hideSymbols: settings.generalSettings.hideSymbols,
+    },
   });
 
   for (const rule of rules) {

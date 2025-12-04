@@ -1,6 +1,6 @@
 import { createWorkForm } from "../base";
 import { WorkAction } from "../../config";
-import { textarea } from "../helpers/inputs";
+import { textarea } from "../../../../utils/ui/forms";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { IgnoredWork } from "../../../../types/works";

@@ -1,8 +1,7 @@
 import { createField, createSettingsSection } from "../base";
 import { SectionId } from "../../config";
 
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/forms";
+import { checkbox, select } from "../../../../utils/ui/forms";
 import { DisplayMode } from "../../../../enums/settings";
 import { IgnoreSettings } from "../../../../types/settings";
 
@@ -10,7 +9,7 @@ export function buildIgnoreSettingsSection(): HTMLElement {
   const simpleField = createField<IgnoreSettings>({
     section: SectionId.IGNORE_SETTINGS,
     label: "Enable Simple Mode",
-    input: el("input", { type: "checkbox" }),
+    input: checkbox(),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",
@@ -19,7 +18,7 @@ export function buildIgnoreSettingsSection(): HTMLElement {
   const defaultDisplayField = createField<IgnoreSettings>({
     section: SectionId.IGNORE_SETTINGS,
     label: "Default Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    input: select(DisplayMode),
     dataField: "defaultDisplayMode",
     description:
       "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",

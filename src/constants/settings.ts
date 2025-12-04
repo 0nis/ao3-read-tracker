@@ -14,6 +14,7 @@ export const DEFAULT_READ_SETTINGS: ReadSettings = {
   rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   completedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   abandonedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
 };
 
 export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
@@ -24,7 +25,7 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
-  symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
+  hideSymbols: false,
   buttonPlacement: ButtonPlacement.TOP,
   replaceMarkForLaterText: true,
   markForLaterReplacementLabel: "Finished",

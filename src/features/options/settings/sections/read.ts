@@ -1,16 +1,16 @@
 import { createField, createSettingsSection } from "../base";
 import { SectionId } from "../../config";
 
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/forms";
+import { checkbox, select } from "../../../../utils/ui/forms";
 import { DisplayMode } from "../../../../enums/settings";
 import { ReadSettings } from "../../../../types/settings";
+import { SymbolDisplayMode } from "../../../../enums/symbols";
 
 export function buildReadSettingsSection(): HTMLElement {
   const simpleField = createField<ReadSettings>({
     section: SectionId.READ_SETTINGS,
     label: "Enable Simple Mode",
-    input: el("input", { type: "checkbox" }),
+    input: checkbox(),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the read feature will not ask you for additional information like notes. It will simply mark the work as read immediately.",
@@ -20,7 +20,7 @@ export function buildReadSettingsSection(): HTMLElement {
   const defaultDisplayField = createField<ReadSettings>({
     section: SectionId.READ_SETTINGS,
     label: "Default Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    input: select(DisplayMode),
     dataField: "defaultDisplayMode",
     description:
       "What the work listing will look like when you've marked a work as read. For example, 'collapse gentle' will hide everything but the header.",
@@ -29,7 +29,7 @@ export function buildReadSettingsSection(): HTMLElement {
   const rereadDisplayField = createField<ReadSettings>({
     section: SectionId.READ_SETTINGS,
     label: "Reread worthy Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    input: select(DisplayMode),
     dataField: "rereadWorthyDisplayMode",
     description:
       "What the work listing will look like when you've marked a work as reread worthy.",
@@ -38,7 +38,7 @@ export function buildReadSettingsSection(): HTMLElement {
   const completedDisplayField = createField<ReadSettings>({
     section: SectionId.READ_SETTINGS,
     label: "Completed Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    input: select(DisplayMode),
     dataField: "completedDisplayMode",
     description:
       "What the work listing will look like when you've marked a work as completed.",
@@ -47,10 +47,19 @@ export function buildReadSettingsSection(): HTMLElement {
   const abandonedDisplayField = createField<ReadSettings>({
     section: SectionId.READ_SETTINGS,
     label: "Abandoned Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
+    input: select(DisplayMode),
     dataField: "abandonedDisplayMode",
     description:
       "What the work listing will look like when you've marked a work as abandoned.",
+  });
+
+  const symbolDisplayModeField = createField<ReadSettings>({
+    section: SectionId.READ_SETTINGS,
+    label: "Symbol Display Mode",
+    input: select(SymbolDisplayMode),
+    dataField: "symbolDisplayMode",
+    description:
+      "Controls how symbols are displayed next to the title of the works in lists. 'State' means read or in progress, 'status' means finished, abandoned, paused, etc.",
   });
 
   return createSettingsSection({
@@ -62,6 +71,7 @@ export function buildReadSettingsSection(): HTMLElement {
       rereadDisplayField,
       completedDisplayField,
       abandonedDisplayField,
+      symbolDisplayModeField,
     ],
   });
 }

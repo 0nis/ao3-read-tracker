@@ -7,7 +7,7 @@ import {
   select,
   textarea,
   toggleSwitch,
-} from "../helpers/inputs";
+} from "../../../../utils/ui/forms";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
