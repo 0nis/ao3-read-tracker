@@ -27,6 +27,14 @@ export async function safeExecute<T>(
   }
 }
 
+/**
+ * Produces a "safe" version of a data service by wrapping all async methods.
+ *
+ * For each property in `D`:
+ *  - If it is an async method (`(...args) => Promise<R>`),
+ *    it becomes `(...args) => Promise<StorageResult<R>>`.
+ *  - Otherwise, the property is left unchanged.
+ */
 export type SafeServiceFor<D> = {
   [K in keyof D]: D[K] extends (...args: infer A) => Promise<infer R>
     ? (...args: A) => Promise<StorageResult<R>>
