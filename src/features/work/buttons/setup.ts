@@ -14,6 +14,9 @@ import { SettingsData } from "../../../types/settings";
 import { warn } from "../../../utils/extension";
 import { handleUpdateInProgressInfo } from "./handlers";
 import { ButtonPlacement } from "../../../enums/settings";
+import { handleStorageRead } from "../../../utils/storage";
+import { StorageService } from "../../../services/storage";
+import { getIdFromUrl } from "../../../utils/ao3";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
@@ -53,6 +56,12 @@ async function setupAllActionButtons(settings: SettingsData) {
 }
 
 function setupUpdateReadProgressButton(settings: SettingsData) {
+  const id = getIdFromUrl();
+  if (!id) return;
+  const exists = handleStorageRead(StorageService.inProgressWorks.getById(id), {
+    errorOnUndefined: false,
+  });
+  if (!exists) return;
   const navs = getWorkNavBars();
   if (!navs.bottom) return;
   // TODO: Make label configurable

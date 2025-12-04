@@ -35,13 +35,16 @@ export async function buildReadListSection(): Promise<HTMLElement> {
 
 async function renderItem(item: ReadWork): Promise<HTMLElement> {
   const symbols = await symbolsCache.get();
-  const { generalSettings } = await settingsCache.get();
+  const { readSettings } = await settingsCache.get();
   const rules = getActiveSymbolRules({
     readWork: item,
     inProgressWork: (await StorageService.inProgressWorks.getById(item.id))
       ?.data,
     ignoredWork: (await StorageService.ignoredWorks.getById(item.id))?.data,
-    displayMode: generalSettings.symbolDisplayMode,
+    displayMode: {
+      read: readSettings.symbolDisplayMode,
+      inProgress: readSettings.symbolDisplayMode, // TODO: Update when in-progress display mode is added
+    },
     options: {
       showState: true,
       showStatus: true,

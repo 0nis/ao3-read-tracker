@@ -1,19 +1,36 @@
-import { createSafeService, safeExecute } from "../utils/storage";
+import {
+  createSafeService,
+  safeExecute,
+  SafeServiceFor,
+} from "../utils/storage/safe";
 import type { WorkData } from "../types/works";
 import type { StorageResult } from "../types/results";
 import { instances, type InstanceMap } from "../data/instances";
 
 type SafeServices = {
-  [K in keyof InstanceMap]: ReturnType<typeof createSafeService>;
+  [K in keyof InstanceMap]: SafeServiceFor<InstanceMap[K]>;
 };
 
-function buildStorageService(map: InstanceMap): SafeServices & {
-  getByIds(ids: string[]): Promise<StorageResult<WorkData>>;
-} {
-  const result: any = {};
+function typedEntries<T extends object>(
+  obj: T
+): { [K in keyof T]: [K, T[K]] }[keyof T][] {
+  return Object.entries(obj) as any;
+}
 
-  for (const key of Object.keys(map) as Array<keyof InstanceMap>) {
-    result[key] = createSafeService(`StorageService.${key}`, map[key]);
+type StorageServiceResult = SafeServices & {
+  getByIds(ids: string[]): Promise<StorageResult<WorkData>>;
+};
+
+function buildStorageService<M extends InstanceMap>(
+  map: M
+): StorageServiceResult {
+  const result = {} as StorageServiceResult;
+
+  for (const [key, value] of typedEntries(map)) {
+    (result as any)[key] = createSafeService(
+      `StorageService.${String(key)}`,
+      value
+    );
   }
 
   result.getByIds = async (ids: string[]): Promise<StorageResult<WorkData>> =>
