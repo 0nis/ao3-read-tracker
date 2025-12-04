@@ -1,15 +1,20 @@
 import { SectionId } from "../../config";
 import { createListRow, createPaginatedListSection } from "../base";
-import { IgnoredWork } from "../../../../types/works";
-import { getWorkLinkFromId } from "../../../../utils/ao3";
-import { getFormattedDateAsFullText } from "../../../../utils/date";
-import { StorageService } from "../../../../services/storage";
+
 import {
   createInnerElement,
   SupplementaryRowInformation,
 } from "../helpers/content";
 import { getSrAccessibleContentSummary } from "../helpers/accessibility";
+
+import { StorageService } from "../../../../services/storage";
 import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { getWorkLinkFromId } from "../../../../utils/ao3";
+import {
+  getFormattedDate,
+  getFormattedDateAsFullText,
+} from "../../../../utils/date";
+import { IgnoredWork } from "../../../../types/works";
 
 export async function buildIgnoreListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({
@@ -18,11 +23,13 @@ export async function buildIgnoreListSection(): Promise<HTMLElement> {
     paginator: StorageService.ignoredWorks.paginate,
     renderItem,
     pageSize: 10,
+    orderBy: "ignoredAt",
   });
 }
 
 async function renderItem(item: IgnoredWork): Promise<HTMLElement> {
   const info: SupplementaryRowInformation = {
+    date: getFormattedDate(item.ignoredAt, "/"),
     text: item.reason,
   };
 
@@ -36,7 +43,7 @@ async function renderItem(item: IgnoredWork): Promise<HTMLElement> {
     innerElement,
     srAccessibleLabel: `${
       item.title || "Untitled"
-    } - Ignored ${getFormattedDateAsFullText(item.modifiedAt)}`,
+    } - Ignored ${getFormattedDateAsFullText(item.ignoredAt)}`,
     srAccessibleContentSummary: getSrAccessibleContentSummary(info),
     actions: {
       link: { href: getWorkLinkFromId(item.id) },

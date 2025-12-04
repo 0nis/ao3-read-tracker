@@ -38,7 +38,9 @@ const items: WorkFormItem<InProgressWork>[] = [
             label: "Last Chapter Read",
             input: number(
               "1",
-              getCurrentChapterFromWorkPage()?.toString() || "1"
+              getCurrentChapterFromWorkPage({
+                suppressWarnings: true,
+              })?.toString() || "1"
             ),
           },
         ],

@@ -7,8 +7,8 @@ export type StorageResult<T = void> = {
 export interface PaginatedParams {
   page: number;
   pageSize: number;
-  options?: {
-    orderBy?: keyof T;
+  options: {
+    orderBy: keyof T;
     reverse?: boolean;
   };
 }

@@ -3,7 +3,6 @@ import { CLASS_PREFIX } from "../../../../constants/classes";
 import { symbolsCache } from "../../../../services/cache/symbols";
 import { getActiveSymbolRules } from "../../../../services/rules/symbols";
 import { SymbolRecord } from "../../../../types/symbols";
-import { IgnoredWork, ReadWork } from "../../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   el,
@@ -17,12 +16,8 @@ import { renderSymbolContent } from "../../../../utils/ui/symbols";
  * Adds symbols to a work element showing information
  * like read/ignored status, reread worthiness, and read count.
  */
-export async function addSymbols({
-  element,
-  readWork,
-  ignoredWork,
-}: ApplyMarksParams) {
-  if (!readWork && !ignoredWork) return;
+export async function addSymbols(params: ApplyMarksParams) {
+  if (!params.readWork && !params.inProgressWork && !params.ignoredWork) return;
 
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-symbols`,
@@ -30,7 +25,7 @@ export async function addSymbols({
   );
 
   const symbolIndicatorList = ensureChild({
-    parent: element.querySelector(".header.module")!,
+    parent: params.element.querySelector(".header.module")!,
     className: `${CLASS_PREFIX}__symbol-indicator`,
     tag: "ul",
     createProps: {
@@ -41,7 +36,7 @@ export async function addSymbols({
     },
   });
 
-  await renderSymbols(element, symbolIndicatorList, readWork, ignoredWork);
+  await renderSymbols(params, symbolIndicatorList);
 }
 
 /**
@@ -56,16 +51,15 @@ export function removeSymbols(element: HTMLElement) {
 }
 
 async function renderSymbols(
-  element: HTMLElement,
-  symbolIndicatorList: HTMLElement,
-  readWork: ReadWork | undefined,
-  ignoredWork: IgnoredWork | undefined
+  { element, readWork, inProgressWork, ignoredWork }: ApplyMarksParams,
+  symbolIndicatorList: HTMLElement
 ) {
   const symbols = await symbolsCache.get();
 
   const rules = getActiveSymbolRules({
-    read: readWork,
-    ignored: ignoredWork,
+    readWork: readWork,
+    inProgressWork: inProgressWork,
+    ignoredWork: ignoredWork,
     details: {
       latestChapter: getLatestChapterFromWorkListing(element) || undefined,
     },

@@ -1,7 +1,11 @@
 import { ApplyMarksParams } from "../apply";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
-import type { ReadWork, IgnoredWork } from "../../../../types/works";
+import type {
+  ReadWork,
+  IgnoredWork,
+  InProgressWork,
+} from "../../../../types/works";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   getFormattedDate,
@@ -21,7 +25,12 @@ import {
  * @param readWork The read work data, if any
  * @param ignoredWork The ignored work data, if any
  */
-export function addText({ element, readWork, ignoredWork }: ApplyMarksParams) {
+export function addText({
+  element,
+  readWork,
+  inProgressWork,
+  ignoredWork,
+}: ApplyMarksParams) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
     getStyles(CLASS_PREFIX)
@@ -34,6 +43,8 @@ export function addText({ element, readWork, ignoredWork }: ApplyMarksParams) {
   });
 
   if (readWork) renderReadInformation(element, indicatorList, readWork);
+  if (inProgressWork)
+    renderInProgressInformation(element, indicatorList, inProgressWork);
   if (ignoredWork)
     renderIgnoredInformation(element, indicatorList, ignoredWork);
 }
@@ -58,14 +69,24 @@ function renderReadInformation(
   if (readWork.notes)
     addNotesText(element, readWork.notes, `${CLASS_PREFIX}__notes--read`);
 
-  const txt = readWork.isReading
-    ? `Still reading as of %date% (chapter ${readWork.lastReadChapter || "?"}/${
-        getLatestChapterFromWorkListing(element) || "?"
-      })`
-    : "Marked as read on %date%";
-
   indicatorList.appendChild(
-    createIndicator(WorkState.READ, readWork.modifiedAt, txt)
+    createIndicator(WorkState.READ, readWork.finishedAt)
+  );
+}
+
+function renderInProgressInformation(
+  element: HTMLElement,
+  indicatorList: HTMLElement,
+  inProgressWork: InProgressWork
+) {
+  indicatorList.appendChild(
+    createIndicator(
+      WorkState.IN_PROGRESS,
+      inProgressWork.startedAt,
+      `Still reading as of %date% (chapter ${
+        inProgressWork.lastReadChapter || "?"
+      }/${getLatestChapterFromWorkListing(element) || "?"})`
+    )
   );
 }
 
@@ -75,7 +96,7 @@ function renderIgnoredInformation(
   ignoredWork: IgnoredWork
 ) {
   indicatorList.appendChild(
-    createIndicator(WorkState.IGNORED, ignoredWork.modifiedAt)
+    createIndicator(WorkState.IGNORED, ignoredWork.ignoredAt)
   );
   if (ignoredWork.reason)
     addNotesText(

@@ -1,7 +1,10 @@
 /** Converts a timestamp to a formatted date string (YYYY-MM-DD) */
-export const getFormattedDate = (timestamp: number): string => {
+export const getFormattedDate = (
+  timestamp: number,
+  separator: string = "-"
+): string => {
   return formatDateSafely(timestamp, (ts: number) => {
-    return getLocalDateString(new Date(ts));
+    return getLocalDateString(new Date(ts)).replace(/-/g, separator);
   });
 };
 

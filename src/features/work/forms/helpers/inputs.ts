@@ -28,9 +28,13 @@ export const number = (
   }) as HTMLInputElement;
 };
 
-export const checkbox = (disabled: boolean = false): HTMLInputElement => {
+export const checkbox = (
+  checked: boolean = false,
+  disabled: boolean = false
+): HTMLInputElement => {
   return el("input", {
     type: "checkbox",
+    checked,
     disabled,
   }) as HTMLInputElement;
 };

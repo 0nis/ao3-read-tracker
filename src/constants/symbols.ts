@@ -9,16 +9,16 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     text: "✔️",
   },
   {
+    id: SymbolId.IN_PROGRESS,
+    type: SymbolType.TEXT,
+    label: "Marked as in progress",
+    text: "⏳",
+  },
+  {
     id: SymbolId.IGNORED,
     type: SymbolType.TEXT,
     label: "Marked as ignored",
     text: "🚫",
-  },
-  {
-    id: SymbolId.READING,
-    type: SymbolType.TEXT,
-    label: "Still reading",
-    text: "📖",
   },
   {
     id: SymbolId.REREAD_WORTHY,
@@ -27,9 +27,9 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     text: "🔁",
   },
   {
-    id: SymbolId.READ_COUNT,
+    id: SymbolId.TIMES_READ,
     type: SymbolType.TEXT,
-    label: "Read count",
+    label: "Times read",
     text: "📚",
   },
   {

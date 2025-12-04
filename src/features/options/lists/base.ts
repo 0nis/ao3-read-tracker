@@ -22,7 +22,9 @@ export interface PaginatedListSectionConfig<T> extends SectionConfig {
     params: PaginatedParams
   ) => Promise<StorageResult<PaginatedResult<T>>>;
   renderItem: (item: T) => Promise<HTMLElement>;
+  orderBy: keyof T;
   pageSize?: number;
+  reverse?: boolean;
 }
 
 export type State = { currentPage: number; totalPages?: number };
@@ -30,7 +32,9 @@ export type State = { currentPage: number; totalPages?: number };
 export function createPaginatedListSection<T>({
   paginator,
   renderItem,
+  orderBy,
   pageSize = 10,
+  reverse = false,
   ...config
 }: PaginatedListSectionConfig<T>): HTMLElement {
   const state: State = { currentPage: 0 };
@@ -53,6 +57,10 @@ export function createPaginatedListSection<T>({
       paginator({
         page: state.currentPage,
         pageSize,
+        options: {
+          orderBy: orderBy,
+          reverse: reverse,
+        },
       }),
       {
         errorMsg: "Failed to load list data.",

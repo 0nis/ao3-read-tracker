@@ -1,5 +1,5 @@
 import { SymbolId } from "../../enums/symbols";
-import { ReadWork, IgnoredWork } from "../../types/works";
+import { ReadWork, IgnoredWork, InProgressWork } from "../../types/works";
 
 export interface SymbolRule {
   id: SymbolId;
@@ -10,61 +10,65 @@ export interface SymbolRule {
 }
 
 export interface SymbolRuleParameters {
-  read?: ReadWork;
-  ignored?: IgnoredWork;
+  readWork?: ReadWork;
+  ignoredWork?: IgnoredWork;
+  inProgressWork?: InProgressWork;
   details?: {
     latestChapter?: number;
   };
 }
 
 export function collectSymbolRules({
-  read,
-  ignored,
+  readWork,
+  ignoredWork,
+  inProgressWork,
   details,
 }: SymbolRuleParameters): SymbolRule[] {
   return [
     {
       id: SymbolId.IGNORED,
-      shouldApply: () => !!ignored,
+      shouldApply: () => !!ignoredWork,
       priority: 100,
     },
     {
-      id: SymbolId.READING,
-      shouldApply: () => !!read?.isReading,
+      id: SymbolId.IN_PROGRESS,
+      shouldApply: () => !!inProgressWork,
       priority: 90,
     },
     {
       id: SymbolId.READ,
-      shouldApply: () => !!read && !read.isReading,
+      shouldApply: () => !!readWork,
       priority: 80,
     },
     {
       id: SymbolId.REREAD_WORTHY,
-      shouldApply: () => !!read?.rereadWorthy,
+      shouldApply: () => !!readWork?.rereadWorthy,
       priority: 70,
     },
     {
-      id: SymbolId.READ_COUNT,
-      shouldApply: () => !!read?.count,
+      id: SymbolId.TIMES_READ,
+      shouldApply: () => !!readWork?.timesRead && readWork.timesRead > 1,
       getCustomLabel: () =>
-        read!.count === 1 ? "Read 1 time" : `Read ${read!.count} times`,
-      getSuffix: () => `x${read!.count}`,
+        readWork!.timesRead === 1
+          ? "Read 1 time"
+          : `Read ${readWork!.timesRead} times`,
+      getSuffix: () => `x${readWork!.timesRead}`,
       priority: 60,
     },
     {
       id: SymbolId.NEW_CHAPTERS_AVAILABLE,
       shouldApply: () => {
         if (
-          !read?.isReading ||
-          !read?.lastReadChapter ||
+          !inProgressWork ||
+          !inProgressWork?.lastReadChapter ||
           !details?.latestChapter
         )
           return false;
-        return read.lastReadChapter < (details?.latestChapter || 0);
+        return inProgressWork.lastReadChapter < (details?.latestChapter || 0);
       },
       getCustomLabel: () =>
         `New chapters available! (last read: chapter ${
-          read?.lastReadChapter || "?"
+          inProgressWork?.lastReadChapter || "?"
         })`,
       priority: 50,
     },

@@ -9,11 +9,12 @@ import { ensureChild } from "../../../utils/ui/dom";
 import { getManifest } from "../../../utils/extension/manifest";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
-import { ReadWork, IgnoredWork } from "../../../types/works";
+import { ReadWork, IgnoredWork, InProgressWork } from "../../../types/works";
 
 export interface ApplyMarksParams {
   element: HTMLElement;
   readWork: ReadWork | undefined;
+  inProgressWork: InProgressWork | undefined;
   ignoredWork: IgnoredWork | undefined;
   settings: SettingsData;
 }

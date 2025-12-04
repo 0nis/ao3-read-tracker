@@ -1,13 +1,18 @@
 import { createWorkForm } from "../base";
 import { WorkAction } from "../../config";
-import { getItemFromWorkFormItemArray } from "../helpers/items";
-import { checkbox, number, textarea } from "../helpers/inputs";
+import {
+  checkbox,
+  datetime,
+  number,
+  select,
+  textarea,
+} from "../helpers/inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { ReadWork } from "../../../../types/works";
-import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
 import { ButtonPlacement } from "../../../../enums/settings";
+import { FinishedStatus } from "../../../../enums/works";
 
 const items: WorkFormItem<ReadWork>[] = [
   {
@@ -19,33 +24,44 @@ const items: WorkFormItem<ReadWork>[] = [
     input: textarea(3),
   },
   {
-    type: WorkFormFieldType.FIELD,
-    dataField: "count",
-    label: "Times read",
-    description: "The number of times you've read this work.",
-    input: number("1", "1"),
-  },
-  {
     type: WorkFormFieldType.GROUP,
     className: `${CLASS_PREFIX}__form__group`,
     fields: [
       {
-        type: WorkFormFieldType.FIELD,
-        dataField: "rereadWorthy",
-        label: "Re-read worthy?",
-        input: checkbox(),
+        type: WorkFormFieldType.GROUP,
+        className: `${CLASS_PREFIX}__form__pair`,
+        fields: [
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "finishedAt",
+            label: "Finished at",
+            input: datetime(new Date()),
+          },
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "finishedStatus",
+            label: "Status",
+            input: select(FinishedStatus, FinishedStatus.COMPLETED),
+          },
+        ],
       },
       {
-        type: WorkFormFieldType.FIELD,
-        dataField: "isReading",
-        label: "Still reading?",
-        input: checkbox(),
-      },
-      {
-        type: WorkFormFieldType.FIELD,
-        dataField: "lastReadChapter",
-        label: "Last read chapter",
-        input: number("1", undefined),
+        type: WorkFormFieldType.GROUP,
+        className: `${CLASS_PREFIX}__form__pair`,
+        fields: [
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "timesRead",
+            label: "Times read",
+            input: number("1", "1"),
+          },
+          {
+            type: WorkFormFieldType.FIELD,
+            dataField: "rereadWorthy",
+            label: "Re-read worthy?",
+            input: checkbox(),
+          },
+        ],
       },
     ],
   },
@@ -56,12 +72,6 @@ export function createReadWorkForm(
   editing: boolean,
   origin?: ButtonPlacement
 ): HTMLElement {
-  wireIsReadingBehavior(
-    getItemFromWorkFormItemArray("isReading", items)?.input as HTMLInputElement,
-    getItemFromWorkFormItemArray("lastReadChapter", items)
-      ?.input as HTMLInputElement
-  );
-
   return createWorkForm({
     id: WorkAction.READ,
     landmark: "Mark Work as Read",
@@ -82,26 +92,4 @@ export function createReadWorkForm(
     },
     origin,
   });
-}
-
-function wireIsReadingBehavior(
-  isReadingInput: HTMLInputElement,
-  lastReadChapterInput: HTMLInputElement
-) {
-  if (!isReadingInput || !lastReadChapterInput) return;
-
-  const handleChange = () => {
-    if (isReadingInput.checked) {
-      const ch = getCurrentChapterFromWorkPage();
-      if (ch !== null) lastReadChapterInput.value = ch.toString();
-      lastReadChapterInput.disabled = false;
-    } else {
-      lastReadChapterInput.value = "";
-      lastReadChapterInput.removeAttribute("value");
-      lastReadChapterInput.disabled = true;
-    }
-  };
-
-  isReadingInput.addEventListener("change", handleChange);
-  handleChange();
 }
