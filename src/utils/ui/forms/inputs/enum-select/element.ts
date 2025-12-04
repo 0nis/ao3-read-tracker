@@ -1,5 +1,8 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { el } from "../dom";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { el, injectStyles } from "../../../dom";
+import { getStyles } from "./style";
+
+const className = `${CLASS_PREFIX}__enum-select`;
 
 /**
  * Builds a select element from an enum or enum-like object.
@@ -14,9 +17,13 @@ export function buildSelectFromEnum<T extends Record<string, string>>(
   selected?: T[keyof T],
   attrs?: Record<string, string>
 ): HTMLSelectElement {
+  injectStyles(`${className}--styles`, getStyles(className));
   const select = el("select", {
-    className: `${CLASS_PREFIX}__select`,
-    attrs,
+    className: className,
+    attrs: {
+      ...attrs,
+      "default-value": selected ? String(selected) : "",
+    },
   }) as HTMLSelectElement;
   Object.values(enumObj).forEach((v) => {
     const option = el("option", {

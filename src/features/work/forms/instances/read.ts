@@ -6,6 +6,7 @@ import {
   number,
   select,
   textarea,
+  toggleSwitch,
 } from "../helpers/inputs";
 import { WorkFormFieldType, WorkFormItem } from "../types";
 
@@ -59,7 +60,7 @@ const items: WorkFormItem<ReadWork>[] = [
             type: WorkFormFieldType.FIELD,
             dataField: "rereadWorthy",
             label: "Re-read worthy?",
-            input: checkbox(),
+            input: toggleSwitch("reread-worthy-toggle"),
           },
         ],
       },

@@ -2,6 +2,7 @@ import { walkItems } from "../helpers/items";
 import { WorkFormConfig } from "../types";
 import { WorkActionTypeMap } from "../../config";
 import { getLocalDateTimeString } from "../../../../utils/date";
+import { ABBREVIATION } from "../../../../constants/global";
 
 export function populateWorkForm<K extends keyof WorkActionTypeMap>(
   config: WorkFormConfig<WorkActionTypeMap[K]>
@@ -38,6 +39,22 @@ export function populateWorkForm<K extends keyof WorkActionTypeMap>(
       case HTMLTextAreaElement:
         const textareaEl = input as HTMLTextAreaElement;
         textareaEl.value = value ? String(value) : "";
+        break;
+      case HTMLSelectElement:
+        const selectEl = input as HTMLSelectElement;
+        selectEl.value = value
+          ? String(value)
+          : selectEl.getAttribute("default-value") || "";
+        break;
+      case HTMLDivElement:
+        switch (field.input.getAttribute("input-type")) {
+          case `${ABBREVIATION}-toggle-switch`:
+            const toggleInput = input.querySelector(
+              "input[type='checkbox']"
+            ) as HTMLInputElement;
+            if (toggleInput) toggleInput.checked = Boolean(value);
+            break;
+        }
         break;
     }
   });

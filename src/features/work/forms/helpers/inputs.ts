@@ -1,9 +1,9 @@
-import {
-  getLocalDateString,
-  getLocalDateTimeString,
-} from "../../../../utils/date";
+import { getLocalDateTimeString } from "../../../../utils/date";
 import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/forms";
+import {
+  buildSelectFromEnum,
+  buildToggleSwitch,
+} from "../../../../utils/ui/forms";
 
 export const textarea = (
   rows: number,
@@ -57,4 +57,13 @@ export const select = <T extends Record<string, string>>(
   defaultValue?: T[keyof T]
 ): HTMLSelectElement => {
   return buildSelectFromEnum(enumObj, defaultValue);
+};
+
+export const toggleSwitch = (
+  id: string,
+  checked: boolean = false
+): HTMLLabelElement => {
+  return buildToggleSwitch(id, {
+    checked,
+  }) as HTMLLabelElement;
 };

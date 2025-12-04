@@ -7,6 +7,7 @@ import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
 import { handleStorageWrite } from "../../../../utils/storage";
 import { ButtonPlacement } from "../../../../enums/settings";
 import { createFlashNotice } from "../../../../utils/ui/forms";
+import { ABBREVIATION } from "../../../../constants/global";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
@@ -77,6 +78,20 @@ function extractWorkFormValues<K extends keyof WorkActionTypeMap>(
       case HTMLTextAreaElement:
         const textareaEl = input as HTMLTextAreaElement;
         result[key] = textareaEl.value.trim() as any;
+        break;
+      case HTMLSelectElement:
+        const selectEl = input as HTMLSelectElement;
+        result[key] = selectEl.value as any;
+        break;
+      case HTMLDivElement:
+        switch (field.input.getAttribute("input-type")) {
+          case `${ABBREVIATION}-toggle-switch`:
+            const toggleInput = input.querySelector(
+              "input[type='checkbox']"
+            ) as HTMLInputElement;
+            if (toggleInput) result[key] = toggleInput.checked as any;
+            break;
+        }
         break;
     }
   });

@@ -4,12 +4,6 @@ export function getGlobalStyles(prefix: string): string {
       display: none !important;
     }
 
-    .${prefix}__select {
-      font: 100% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
-      border: 1px solid #bbb;
-      box-shadow: inset 0 1px 2px #ccc;
-    }
-
     .${prefix}__sr-only {
       position: absolute !important;
       width: 1px !important;
@@ -21,40 +15,6 @@ export function getGlobalStyles(prefix: string): string {
       clip-path: inset(50%) !important;
       clip: rect(0 0 0 0) !important;
       overflow: hidden !important;
-    }
-      
-    .${prefix}__loader {
-      display: inline-block;
-      width: 1em;
-      height: 1em;
-      border: 2px solid rgba(0, 0, 0, 0.1);
-      border-left-color: currentColor;
-      border-radius: 50%;
-      animation: ${prefix}-spin 0.6s linear infinite;
-    }
-    
-    @keyframes ${prefix}-spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .${prefix}__progress {
-      position: relative;
-      display: inline-block;
-      min-width: 3em;
-      width: 100%;
-      height: 0.4em;
-      background: rgba(0,0,0,0.15);
-      border-radius: 2px;
-      overflow: hidden;
-      vertical-align: middle;
-    }
-
-    .${prefix}__progress-bar {
-      display: block;
-      height: 100%;
-      width: 0%;
-      background: currentColor;
-      transition: width 0.15s linear;
     }
   `;
 }
