@@ -7,8 +7,8 @@ import type { WorkData } from "../types/works";
 import type { StorageResult } from "../types/results";
 import { instances, type InstanceMap } from "../data/instances";
 
-type SafeServices = {
-  [K in keyof InstanceMap]: SafeServiceFor<InstanceMap[K]>;
+type BaseSafeServices<M extends InstanceMap> = {
+  [K in keyof M]: SafeServiceFor<M[K]>;
 };
 
 function typedEntries<T extends object>(
@@ -17,14 +17,10 @@ function typedEntries<T extends object>(
   return Object.entries(obj) as any;
 }
 
-type StorageServiceResult = SafeServices & {
-  getByIds(ids: string[]): Promise<StorageResult<WorkData>>;
-};
-
-function buildStorageService<M extends InstanceMap>(
-  map: M
-): StorageServiceResult {
-  const result = {} as StorageServiceResult;
+function buildStorageService<M extends InstanceMap>(map: M) {
+  const result = {} as BaseSafeServices<M> & {
+    getByIds: (ids: string[]) => Promise<StorageResult<WorkData>>;
+  };
 
   for (const [key, value] of typedEntries(map)) {
     (result as any)[key] = createSafeService(
