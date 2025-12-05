@@ -1,6 +1,5 @@
 import { PREFIX } from ".";
 import { SECTION_CONFIG, SectionId, SectionType } from "./config";
-import { setupSettings } from "./settings";
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
 
@@ -49,8 +48,6 @@ export async function render(): Promise<void> {
   ]);
 
   main.append(header, wrapper);
-
-  await setupSettings(sections);
 
   function getCurrentSection() {
     const hash = window.location.hash.slice(1);

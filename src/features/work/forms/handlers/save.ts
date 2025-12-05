@@ -1,13 +1,14 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
-import { walkItems } from "../helpers/items";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
 
+import {
+  createFlashNotice,
+  extractFormValues,
+} from "../../../../utils/ui/forms";
 import { handleStorageWrite } from "../../../../utils/storage";
 import { ButtonPlacement } from "../../../../enums/settings";
-import { createFlashNotice } from "../../../../utils/ui/forms";
-import { ABBREVIATION } from "../../../../constants/global";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
@@ -22,7 +23,7 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
         new Error(`No save map or message map for form id: ${cfg.id}`)
       );
 
-    const values = extractWorkFormValues(cfg);
+    const values = extractFormValues(cfg.items);
     const payload: WorkActionTypeMap[K] = {
       ...getDefaultPayload<K>(cfg.id, cfg.data),
       ...values,
@@ -46,55 +47,4 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   } catch (err) {
     return Promise.reject(err);
   }
-}
-
-function extractWorkFormValues<K extends keyof WorkActionTypeMap>(
-  config: WorkFormConfig<WorkActionTypeMap[K]>
-): Partial<WorkActionTypeMap[K]> {
-  const result: Partial<WorkActionTypeMap[K]> = {};
-
-  walkItems(config.items, (field) => {
-    const key = field.dataField;
-    const input = field.input;
-
-    switch (input.constructor) {
-      case HTMLInputElement:
-        const inputEl = input as HTMLInputElement;
-        switch (inputEl.type) {
-          case "checkbox":
-            result[key] = inputEl.checked as any;
-            break;
-          case "number":
-            result[key] = parseInt(inputEl.value, 10) as any;
-            break;
-          case "datetime-local":
-            result[key] = new Date(inputEl.value).getTime() as any;
-            break;
-
-          default:
-            result[key] = inputEl.value as any;
-        }
-        break;
-      case HTMLTextAreaElement:
-        const textareaEl = input as HTMLTextAreaElement;
-        result[key] = textareaEl.value.trim() as any;
-        break;
-      case HTMLSelectElement:
-        const selectEl = input as HTMLSelectElement;
-        result[key] = selectEl.value as any;
-        break;
-      case HTMLDivElement:
-        switch (field.input.getAttribute("input-type")) {
-          case `${ABBREVIATION}-toggle-switch`:
-            const toggleInput = input.querySelector(
-              "input[type='checkbox']"
-            ) as HTMLInputElement;
-            if (toggleInput) result[key] = toggleInput.checked as any;
-            break;
-        }
-        break;
-    }
-  });
-
-  return result;
 }

@@ -1,12 +1,23 @@
+import { SectionId } from "../config";
+import { StorageService } from "../../../services/storage";
 import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_READ_SETTINGS,
 } from "../../../constants/settings";
-import { StorageService } from "../../../services/storage";
-import { StorageResult } from "../../../types/results";
-import { SettingsData } from "../../../types/settings";
-import { SectionId } from "../config";
+import type { StorageResult } from "../../../types/results";
+import type {
+  GeneralSettings,
+  IgnoreSettings,
+  ReadSettings,
+  SettingsData,
+} from "../../../types/settings";
+
+export interface SettingsSectionTypeMap {
+  [SectionId.READ_SETTINGS]: ReadSettings;
+  [SectionId.IGNORE_SETTINGS]: IgnoreSettings;
+  [SectionId.GENERAL_SETTINGS]: GeneralSettings;
+}
 
 export const SETTINGS_LOAD_MAP: Partial<
   Record<SectionId, (s: SettingsData) => any>
@@ -16,16 +27,15 @@ export const SETTINGS_LOAD_MAP: Partial<
   [SectionId.GENERAL_SETTINGS]: (s) => s.generalSettings,
 };
 
-export const SETTINGS_SAVE_MAP: Partial<
-  Record<
-    SectionId,
-    {
-      defaults: object;
-      setter: (v: any) => Promise<StorageResult<void>>;
-      label: string;
-    }
-  >
-> = {
+export interface SaveMapEntry<T> {
+  defaults: T;
+  setter: (v: T) => Promise<StorageResult<void>>;
+  label: string;
+}
+
+export const SETTINGS_SAVE_MAP: {
+  [K in keyof SettingsSectionTypeMap]: SaveMapEntry<SettingsSectionTypeMap[K]>;
+} = {
   [SectionId.READ_SETTINGS]: {
     defaults: DEFAULT_READ_SETTINGS,
     setter: StorageService.readSettings.set,

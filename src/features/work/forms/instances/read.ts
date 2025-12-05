@@ -1,23 +1,23 @@
 import { createWorkForm } from "../base";
+import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
+
 import {
-  checkbox,
   datetime,
   number,
   select,
   textarea,
   toggleSwitch,
 } from "../../../../utils/ui/forms";
-import { WorkFormFieldType, WorkFormItem } from "../types";
-
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { ReadWork } from "../../../../types/works";
 import { ButtonPlacement } from "../../../../enums/settings";
 import { FinishedStatus } from "../../../../enums/works";
+import { FormItemType } from "../../../../enums/forms";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { ReadWork } from "../../../../types/works";
 
 const items: WorkFormItem<ReadWork>[] = [
   {
-    type: WorkFormFieldType.FIELD,
+    type: FormItemType.FIELD,
     dataField: "notes",
     label: "Notes",
     description:
@@ -25,21 +25,21 @@ const items: WorkFormItem<ReadWork>[] = [
     input: textarea(3),
   },
   {
-    type: WorkFormFieldType.GROUP,
+    type: FormItemType.GROUP,
     className: `${CLASS_PREFIX}__form__group`,
     fields: [
       {
-        type: WorkFormFieldType.GROUP,
+        type: FormItemType.GROUP,
         className: `${CLASS_PREFIX}__form__pair`,
         fields: [
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "finishedAt",
             label: "Finished at",
             input: datetime(new Date()),
           },
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "finishedStatus",
             label: "Status",
             input: select(FinishedStatus, FinishedStatus.COMPLETED),
@@ -47,17 +47,17 @@ const items: WorkFormItem<ReadWork>[] = [
         ],
       },
       {
-        type: WorkFormFieldType.GROUP,
+        type: FormItemType.GROUP,
         className: `${CLASS_PREFIX}__form__pair`,
         fields: [
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "timesRead",
             label: "Times read",
             input: number("1", "1"),
           },
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "rereadWorthy",
             label: "Re-read worthy?",
             input: toggleSwitch("reread-worthy-toggle"),

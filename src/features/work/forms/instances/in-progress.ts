@@ -1,17 +1,18 @@
 import { createWorkForm } from "../base";
+import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
-import { datetime, number, select, textarea } from "../../../../utils/ui/forms";
-import { WorkFormFieldType, WorkFormItem } from "../types";
 
-import { InProgressWork } from "../../../../types/works";
-import { ButtonPlacement } from "../../../../enums/settings";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { ReadingStatus } from "../../../../enums/works";
+import { datetime, number, select, textarea } from "../../../../utils/ui/forms";
 import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
+import { ButtonPlacement } from "../../../../enums/settings";
+import { ReadingStatus } from "../../../../enums/works";
+import { FormItemType } from "../../../../enums/forms";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { InProgressWork } from "../../../../types/works";
 
 const items: WorkFormItem<InProgressWork>[] = [
   {
-    type: WorkFormFieldType.FIELD,
+    type: FormItemType.FIELD,
     dataField: "notes",
     label: "Notes",
     description:
@@ -19,21 +20,21 @@ const items: WorkFormItem<InProgressWork>[] = [
     input: textarea(3),
   },
   {
-    type: WorkFormFieldType.GROUP,
+    type: FormItemType.GROUP,
     className: `${CLASS_PREFIX}__form__group`,
     fields: [
       {
-        type: WorkFormFieldType.GROUP,
+        type: FormItemType.GROUP,
         className: `${CLASS_PREFIX}__form__pair`,
         fields: [
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "readingStatus",
             label: "Reading Status",
             input: select(ReadingStatus, ReadingStatus.ACTIVE),
           },
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "lastReadChapter",
             label: "Last Chapter Read",
             input: number(
@@ -46,17 +47,17 @@ const items: WorkFormItem<InProgressWork>[] = [
         ],
       },
       {
-        type: WorkFormFieldType.GROUP,
+        type: FormItemType.GROUP,
         className: `${CLASS_PREFIX}__form__pair`,
         fields: [
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "startedAt",
             label: "Started Reading On",
             input: datetime(new Date()),
           },
           {
-            type: WorkFormFieldType.FIELD,
+            type: FormItemType.FIELD,
             dataField: "lastReadAt",
             label: "Last Read On",
             input: datetime(new Date()),

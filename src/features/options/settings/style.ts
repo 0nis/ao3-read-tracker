@@ -41,6 +41,10 @@ export function getStyles(prefix: string): string {
       box-shadow: none;
     }
 
+    .${prefix}__settings__group .${prefix}__settings__field__description {
+      margin-top: 0;
+    }
+
     .${prefix}__settings__group__label {
       height: auto;
       width: auto;

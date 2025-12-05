@@ -1,39 +1,31 @@
-import { ButtonPlacement } from "../../../enums/settings";
-import { WorkAction } from "../config";
+import type { WorkAction } from "../config";
+import type { ButtonPlacement } from "../../../enums/settings";
+import type {
+  FormConfig,
+  FormField,
+  FormGroup,
+  FormItem,
+} from "../../../types/forms";
 
-export enum WorkFormFieldType {
-  FIELD = "field",
-  GROUP = "group",
-}
+export interface WorkFormField<T> extends FormField<T> {}
 
-interface WorkFormFieldBase {
-  type: WorkFormFieldType;
-}
-
-export interface WorkFormField<T> extends WorkFormFieldBase {
-  type: WorkFormFieldType.FIELD;
-  dataField: keyof T;
-  label: string;
-  input: HTMLElement;
-  description?: string;
-  ignorePopulate?: boolean;
-}
-
-export interface WorkFormFieldGroup<T> extends WorkFormFieldBase {
-  type: WorkFormFieldType.GROUP;
+export interface WorkFormFieldGroup<T>
+  extends FormGroup<T, WorkFormField<T>, WorkFormFieldGroup<T>> {
   className?: string;
-  fields: Array<WorkFormField<T> | WorkFormFieldGroup<T>>;
 }
 
-export type WorkFormItem<T> = WorkFormField<T> | WorkFormFieldGroup<T>;
+export type WorkFormItem<T> = FormItem<
+  T,
+  WorkFormField<T>,
+  WorkFormFieldGroup<T>
+>;
 
-export interface WorkFormConfig<T> {
+export interface WorkFormConfig<T>
+  extends FormConfig<T, WorkFormField<T>, WorkFormFieldGroup<T>> {
   id: WorkAction;
   landmark: string;
   heading: string;
-  data: Partial<T>;
   editing: boolean;
-  items: WorkFormItem<T>[];
   submit: {
     save: {
       label: string;

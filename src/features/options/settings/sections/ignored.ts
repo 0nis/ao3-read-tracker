@@ -1,32 +1,40 @@
-import { createField, createSettingsSection } from "../base";
+import { createSettingsSection } from "../base";
+import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
 
-import { checkbox, select } from "../../../../utils/ui/forms";
+import { settingsCache } from "../../../../services/cache";
+import { select, toggleSwitch } from "../../../../utils/ui/forms";
+import { FormItemType } from "../../../../enums/forms";
 import { DisplayMode } from "../../../../enums/settings";
 import { IgnoreSettings } from "../../../../types/settings";
 
-export function buildIgnoreSettingsSection(): HTMLElement {
-  const simpleField = createField<IgnoreSettings>({
-    section: SectionId.IGNORE_SETTINGS,
+const items: SettingsSectionItem<IgnoreSettings>[] = [
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.IGNORE_SETTINGS,
     label: "Enable Simple Mode",
-    input: checkbox(),
+    input: toggleSwitch("ignore-simple-mode-enabled-toggle"),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",
-  });
-
-  const defaultDisplayField = createField<IgnoreSettings>({
-    section: SectionId.IGNORE_SETTINGS,
+  },
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.IGNORE_SETTINGS,
     label: "Default Display Mode",
     input: select(DisplayMode),
     dataField: "defaultDisplayMode",
     description:
       "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",
-  });
+  },
+];
 
+export async function buildIgnoreSettingsSection(): Promise<HTMLElement> {
+  const { ignoreSettings } = await settingsCache.get();
   return createSettingsSection({
     id: SectionId.IGNORE_SETTINGS,
     title: "Ignore Settings",
-    fields: [simpleField, defaultDisplayField],
+    data: ignoreSettings,
+    items,
   });
 }

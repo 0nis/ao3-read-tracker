@@ -56,9 +56,6 @@ async function setupAllActionButtons(settings: SettingsData) {
   }
 }
 
-// TODO: Set this up always, even if exists, just ensure it's hidden
-// then when a fic is marked as in progress, show it again
-// when it's marked as not in progress anymore, hide it
 async function setupUpdateReadProgressButton(
   workId: string | null,
   settings: SettingsData

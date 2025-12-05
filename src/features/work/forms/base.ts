@@ -13,7 +13,6 @@ import {
   createFormSubmitElement,
 } from "./components/submit";
 import { deleteWorkFormData } from "./handlers/delete";
-import { populateWorkForm } from "./handlers/populate";
 import { saveWorkFormData } from "./handlers/save";
 import { WorkFormConfig } from "./types";
 import { FormRegistry } from "./registry";
@@ -23,6 +22,7 @@ import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { error } from "../../../utils/extension";
 import { ABBREVIATION } from "../../../constants/global";
+import { populateFormValues } from "../../../utils/ui/forms";
 
 export function createWorkForm<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K }
@@ -81,7 +81,8 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
     createFormSubmitElement(elId, saveEl, deleteEl),
   ]);
 
-  populateWorkForm(cfg);
+  // populateWorkForm(cfg);
+  populateFormValues(cfg.items, cfg.data);
   FormRegistry.register(cfg.id, {
     hash: elId,
   });
