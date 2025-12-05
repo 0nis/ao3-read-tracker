@@ -1,6 +1,11 @@
 import { SymbolDisplayMode, SymbolId } from "../../enums/symbols";
 import { FinishedStatus, ReadingStatus } from "../../enums/works";
-import { ReadWork, IgnoredWork, InProgressWork } from "../../types/works";
+import {
+  ReadWork,
+  IgnoredWork,
+  InProgressWork,
+  WorkStateData,
+} from "../../types/works";
 
 export interface SymbolRule {
   id: SymbolId;
@@ -10,10 +15,7 @@ export interface SymbolRule {
   priority: number;
 }
 
-export interface SymbolRuleParameters {
-  readWork?: ReadWork;
-  ignoredWork?: IgnoredWork;
-  inProgressWork?: InProgressWork;
+export interface SymbolRuleParameters extends WorkStateData {
   details?: {
     latestChapter?: number;
   };

@@ -5,15 +5,12 @@ import {
   getWorksListFromListing,
 } from "../../utils/ao3";
 import { handleStorageRead } from "../../utils/storage";
-import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
+import { WorkData } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<
-  | {
+  | ({
       elements: NodeListOf<HTMLLIElement>;
-      readWorks: Record<string, ReadWork>;
-      ignoredWorks: Record<string, IgnoredWork>;
-      inProgressWorks: Record<string, InProgressWork>;
-    }
+    } & WorkData)
   | undefined
 > {
   const worksList = getWorksListFromListing();

@@ -9,13 +9,10 @@ import { ensureChild } from "../../../utils/ui/dom";
 import { getManifest } from "../../../utils/extension";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
-import { ReadWork, IgnoredWork, InProgressWork } from "../../../types/works";
+import { WorkStateData } from "../../../types/works";
 
-export interface ApplyMarksParams {
+export interface ApplyMarksParams extends WorkStateData {
   element: HTMLElement;
-  readWork: ReadWork | undefined;
-  inProgressWork: InProgressWork | undefined;
-  ignoredWork: IgnoredWork | undefined;
   settings: SettingsData;
 }
 
@@ -34,12 +31,12 @@ function adjustWorkDisplay({
   ignoredWork,
   settings,
 }: ApplyMarksParams) {
-  const rules = collectDisplayRules(
+  const rules = collectDisplayRules({
     settings,
     readWork,
     inProgressWork,
-    ignoredWork
-  );
+    ignoredWork,
+  });
   // TODO: Create setting deciding what order these go in (which take priority)
   const rule = rules.find((r) => r.shouldApply());
   if (!rule) return;

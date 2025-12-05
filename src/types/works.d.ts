@@ -34,3 +34,9 @@ export type WorkData = {
   inProgressWorks: Record<string, InProgressWork>;
   ignoredWorks: Record<string, IgnoredWork>;
 };
+
+export interface WorkStateData {
+  readWork?: ReadWork;
+  inProgressWork?: InProgressWork;
+  ignoredWork?: IgnoredWork;
+}

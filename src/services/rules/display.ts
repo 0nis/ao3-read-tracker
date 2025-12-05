@@ -1,7 +1,12 @@
 import { DisplayMode } from "../../enums/settings";
 import { FinishedStatus } from "../../enums/works";
 import { SettingsData } from "../../types/settings";
-import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
+import {
+  IgnoredWork,
+  InProgressWork,
+  ReadWork,
+  WorkStateData,
+} from "../../types/works";
 
 type DisplayRule = {
   name: string;
@@ -9,12 +14,16 @@ type DisplayRule = {
   getMode: () => DisplayMode;
 };
 
-export function collectDisplayRules(
-  settings: SettingsData,
-  readWork?: ReadWork,
-  inProgressWork?: InProgressWork,
-  ignoredWork?: IgnoredWork
-): DisplayRule[] {
+export interface DisplayRuleParameters extends WorkStateData {
+  settings: SettingsData;
+}
+
+export function collectDisplayRules({
+  settings,
+  readWork,
+  inProgressWork,
+  ignoredWork,
+}: DisplayRuleParameters): DisplayRule[] {
   return [
     {
       name: "ignored",
