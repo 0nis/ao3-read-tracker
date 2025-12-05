@@ -8,7 +8,7 @@ import {
 } from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
-  getFormattedDate,
+  getFormattedDateAsFullText,
   getFormattedTime,
   timestampToISOString,
 } from "../../../../utils/date";
@@ -95,7 +95,7 @@ function addIndicatorText(
   const nodes: (string | HTMLElement)[] = [];
 
   if (before) nodes.push(replace(before));
-  nodes.push(createTimeElement(timestamp));
+  nodes.push(createTimestampElement(timestamp));
   if (after) nodes.push(replace(after));
 
   return el(
@@ -118,14 +118,15 @@ function addNotesText(element: HTMLElement, notes: string, className?: string) {
   if (className) section.classList.add(className);
 }
 
-function createTimeElement(
+function createTimestampElement(
   timestamp: number | undefined
 ): HTMLElement | string {
   return el("time", {
     dateTime: timestampToISOString(timestamp),
-    textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
-      timestamp
-    )}`,
+    textContent: `${getFormattedDateAsFullText(
+      timestamp,
+      "short"
+    )} at ${getFormattedTime(timestamp)}`,
   });
 }
 

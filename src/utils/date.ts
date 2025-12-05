@@ -1,10 +1,31 @@
-/** Converts a timestamp to a formatted date string (YYYY-MM-DD) */
+/**
+ * Converts a timestamp to a formatted date string (YYYY-MM-DD)
+ * Uses {@link getLocalDateString}, but is separated to make potential future refactors easier.
+ */
 export const getFormattedDate = (
   timestamp: number | undefined,
   separator: string = "-"
 ): string => {
   return formatDateSafely(timestamp, (ts: number) => {
-    return getLocalDateString(new Date(ts)).replace(/-/g, separator);
+    return getLocalDateString(new Date(ts), separator);
+  });
+};
+
+/**
+ * Formats a timestamp to a full localized date string (e.g., June 15, 2023)
+ * Used for display where the date is central to the information being shown
+ */
+export const getFormattedDateAsFullText = (
+  timestamp: number | undefined,
+  monthTextLength: "long" | "short" = "long"
+): string => {
+  return formatDateSafely(timestamp, (ts: number) => {
+    const date = new Date(ts);
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: monthTextLength,
+      day: "numeric",
+    });
   });
 };
 
@@ -23,18 +44,10 @@ export const getFormattedTime = (timestamp: number | undefined): string => {
   );
 };
 
-/** Formats a timestamp to a full localized date string (e.g., June 15, 2023) */
-export const getFormattedDateAsFullText = (timestamp: number): string => {
-  return formatDateSafely(timestamp, (ts: number) => {
-    const date = new Date(ts);
-    return date.toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  });
-};
-
+/**
+ * Safely converts a timestamp to an ISO 8601 string
+ * Used for the dateTime attribute in <time> elements
+ */
 export const timestampToISOString = (timestamp: number | undefined): string => {
   return formatDateSafely(
     timestamp,
@@ -45,12 +58,23 @@ export const timestampToISOString = (timestamp: number | undefined): string => {
   );
 };
 
-export const getLocalDateString = (date: Date): string => {
+/**
+ * Converts a Date object to a local date string (YYYY-MM-DD)
+ * Used for date input fields & short date display
+ */
+export const getLocalDateString = (
+  date: Date,
+  separator: string = "-"
+): string => {
   return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
     .map((part) => String(part).padStart(2, "0"))
-    .join("-");
+    .join(separator);
 };
 
+/**
+ * Converts a Date object to a local date-time string (YYYY-MM-DDTHH:MM)
+ * Used for datetime-local input fields
+ */
 export const getLocalDateTimeString = (date: Date): string => {
   const datePart = getLocalDateString(date);
   const hours = String(date.getHours()).padStart(2, "0");
@@ -58,7 +82,10 @@ export const getLocalDateTimeString = (date: Date): string => {
   return `${datePart}T${hours}:${minutes}`;
 };
 
-/** Formats a timestamp to a string suitable for filenames (YYYY-MM-DD_HH-MM)*/
+/**
+ * Formats a timestamp to a local YYYY-MM-DD_HH-MM
+ * Used for filenames
+ */
 export const getFormattedDateTimeForFilename = (timestamp: number): string => {
   return formatDateSafely(
     timestamp,
