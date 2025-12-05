@@ -1,55 +1,79 @@
-import { PREFIX } from "../..";
-import { DisplayMode } from "../../../../enums/settings";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
+import { createSettingsSection } from "../base";
+import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
-import { createField, createSettingsSection } from "../base";
 
-export function buildReadSettingsSection(): HTMLElement {
-  const simpleField = createField({
-    section: SectionId.READ_SETTINGS,
+import { settingsCache } from "../../../../services/cache";
+import { select, toggleSwitch } from "../../../../utils/ui/forms";
+import { DisplayMode } from "../../../../enums/settings";
+import { SymbolDisplayMode } from "../../../../enums/symbols";
+import { FormItemType } from "../../../../enums/forms";
+import { ReadSettings } from "../../../../types/settings";
+
+const items: SettingsSectionItem<ReadSettings>[] = [
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.READ_SETTINGS,
     label: "Enable Simple Mode",
-    input: el("input", { type: "checkbox" }),
+    input: toggleSwitch("read-simple-mode-enabled-toggle"),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the read feature will not ask you for additional information like notes. It will simply mark the work as read immediately.",
-  });
-
-  const defaultDisplayField = createField({
-    section: SectionId.READ_SETTINGS,
-    label: "Default Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
-    dataField: "defaultDisplayMode",
+  },
+  {
+    type: FormItemType.GROUP,
+    id: "displayModes",
+    sectionId: SectionId.READ_SETTINGS,
+    label: "Display Modes",
     description:
-      "What the work listing will look like when you've marked a work as read. For example, 'collapse gentle' will hide everything but the header.",
-  });
-
-  const stillReadingDisplayField = createField({
-    section: SectionId.READ_SETTINGS,
-    label: "Still reading Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
-    dataField: "stillReadingDisplayMode",
+      "Settings related to how the work listings appear after marking them as read.",
+    fields: [
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.READ_SETTINGS,
+        label: "Default",
+        input: select(DisplayMode),
+        dataField: "defaultDisplayMode",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.READ_SETTINGS,
+        label: "Reread worthy",
+        input: select(DisplayMode),
+        dataField: "rereadWorthyDisplayMode",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.READ_SETTINGS,
+        label: "Completed",
+        input: select(DisplayMode),
+        dataField: "completedDisplayMode",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.READ_SETTINGS,
+        label: "Abandoned",
+        input: select(DisplayMode),
+        dataField: "abandonedDisplayMode",
+      },
+    ],
+  },
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.READ_SETTINGS,
+    label: "Symbol Display Mode",
+    input: select(SymbolDisplayMode),
+    dataField: "symbolDisplayMode",
     description:
-      "What the work listing will look like when you've marked a work as still reading.",
-  });
+      "Controls how symbols are displayed next to the title of the works in lists. 'State' means read or in progress, 'status' means finished, abandoned, paused, etc.",
+  },
+];
 
-  const rereadDisplayField = createField({
-    section: SectionId.READ_SETTINGS,
-    label: "Reread worthy Display Mode",
-    input: buildSelectFromEnum(DisplayMode) as HTMLElement,
-    dataField: "rereadWorthyDisplayMode",
-    description:
-      "What the work listing will look like when you've marked a work as reread worthy.",
-  });
-
+export async function buildReadSettingsSection(): Promise<HTMLElement> {
+  const { readSettings } = await settingsCache.get();
   return createSettingsSection({
     id: SectionId.READ_SETTINGS,
     title: "Read Settings",
-    fields: [
-      simpleField,
-      defaultDisplayField,
-      stillReadingDisplayField,
-      rereadDisplayField,
-    ],
+    data: readSettings,
+    items,
   });
 }

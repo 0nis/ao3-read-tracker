@@ -1,14 +1,15 @@
 import { createWorkForm } from "../base";
+import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
-import { textarea } from "../helpers/inputs";
-import { WorkFormFieldType, WorkFormItem } from "../types";
 
-import { IgnoredWork } from "../../../../types/works";
+import { textarea } from "../../../../utils/ui/forms";
 import { ButtonPlacement } from "../../../../enums/settings";
+import { FormItemType } from "../../../../enums/forms";
+import { IgnoredWork } from "../../../../types/works";
 
 const items: WorkFormItem<IgnoredWork>[] = [
   {
-    type: WorkFormFieldType.FIELD,
+    type: FormItemType.FIELD,
     dataField: "reason",
     label: "Reason for ignoring",
     description:

@@ -11,9 +11,9 @@ import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
 
 import { getIdFromUrl } from "../../../utils/ao3";
 import { ButtonPlacement } from "../../../enums/settings";
-import { warn } from "../../../utils/extension/console";
+import { warn } from "../../../utils/extension";
 import { el } from "../../../utils/ui/dom";
-import { WorkAction } from "../config";
+import { WorkAction, WorkActionEvent } from "../config";
 import { CLASS_PREFIX } from "../../../constants/classes";
 
 let _cache: Record<WorkAction, ActionButtonMeta> | null = null;
@@ -140,4 +140,20 @@ export function getButtonOrigin(btn: HTMLElement | null): ButtonPlacement {
   return origin === ButtonPlacement.BOTTOM
     ? ButtonPlacement.BOTTOM
     : ButtonPlacement.TOP;
+}
+
+export async function handleOnUpdateReadProgress(
+  button: HTMLElement,
+  workAction: WorkAction,
+  workActionEvent: WorkActionEvent
+) {
+  if (workAction === WorkAction.IN_PROGRESS) {
+    if (workActionEvent === WorkActionEvent.DELETE) {
+      button.classList.add(`${CLASS_PREFIX}__hidden`);
+      button.setAttribute("aria-hidden", "true");
+    } else if (workActionEvent === WorkActionEvent.SAVE) {
+      button.classList.remove(`${CLASS_PREFIX}__hidden`);
+      button.removeAttribute("aria-hidden");
+    }
+  }
 }

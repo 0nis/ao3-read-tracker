@@ -1,6 +1,6 @@
 import { Router } from "../../../app/router";
 import { SymbolId } from "../../../enums/symbols";
-import { getManifest } from "../../../utils/extension/manifest";
+import { getManifest } from "../../../utils/extension";
 import { el } from "../../../utils/ui/dom";
 import { getSymbolElement } from "../../../utils/ui/symbols";
 

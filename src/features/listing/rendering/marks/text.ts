@@ -1,10 +1,14 @@
 import { ApplyMarksParams } from "../apply";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { WorkState } from "../../../../enums/works";
-import type { ReadWork, IgnoredWork } from "../../../../types/works";
+
+import {
+  getActiveTextIndicatorRules,
+  getActiveTextNotesRules,
+  type collectTextIndicatorRules,
+  type collectNotesTextRules,
+} from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
-  getFormattedDate,
+  getFormattedDateAsFullText,
   getFormattedTime,
   timestampToISOString,
 } from "../../../../utils/date";
@@ -14,34 +18,33 @@ import {
   getElement,
   injectStyles,
 } from "../../../../utils/ui/dom";
+import { replacePlaceholders } from "../../../../utils/misc";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { WorkState } from "../../../../enums/works";
 
 /**
- * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
- * @param work The work to modify
- * @param readWork The read work data, if any
- * @param ignoredWork The ignored work data, if any
+ * Adds text to a work element within a listing, showing when
+ * it was marked as read/ignored/in-progress, along with any notes.
+ *
+ * Text is modified in {@link collectTextIndicatorRules} and {@link collectNotesTextRules}
  */
-export function addText({ element, readWork, ignoredWork }: ApplyMarksParams) {
+export function addText(params: ApplyMarksParams) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
     getStyles(CLASS_PREFIX)
   );
 
   const indicatorList = ensureChild({
-    parent: element,
+    parent: params.element,
     className: `${CLASS_PREFIX}__text-indicator`,
     tag: "ul",
   });
 
-  if (readWork) renderReadInformation(element, indicatorList, readWork);
-  if (ignoredWork)
-    renderIgnoredInformation(element, indicatorList, ignoredWork);
+  createIndicators({ ...params }, indicatorList);
+  createNotes(params);
 }
 
-/**
- * Removes any text added by this module from a work element.
- * @param element The work to modify
- */
+/** Removes any text added by this module from a work element. */
 export function removeText(element: HTMLElement) {
   const elementsToRemove = [
     getElement(element, `.${CLASS_PREFIX}__text-indicator`),
@@ -50,78 +53,58 @@ export function removeText(element: HTMLElement) {
   elementsToRemove.forEach((el) => el.remove());
 }
 
-function renderReadInformation(
-  element: HTMLElement,
-  indicatorList: HTMLElement,
-  readWork: ReadWork
+/** Edit indicators in {@link collectTextIndicatorRules} */
+function createIndicators(
+  params: ApplyMarksParams,
+  indicatorList: HTMLElement
 ) {
-  if (readWork.notes)
-    addNotesText(element, readWork.notes, `${CLASS_PREFIX}__notes--read`);
-
-  const txt = readWork.isReading
-    ? `Still reading as of %date% (chapter ${readWork.lastReadChapter || "?"}/${
-        getLatestChapterFromWorkListing(element) || "?"
-      })`
-    : "Marked as read on %date%";
-
-  indicatorList.appendChild(
-    createIndicator(WorkState.READ, readWork.modifiedAt, txt)
-  );
-}
-
-function renderIgnoredInformation(
-  element: HTMLElement,
-  indicatorList: HTMLElement,
-  ignoredWork: IgnoredWork
-) {
-  indicatorList.appendChild(
-    createIndicator(WorkState.IGNORED, ignoredWork.modifiedAt)
-  );
-  if (ignoredWork.reason)
-    addNotesText(
-      element,
-      ignoredWork.reason,
-      `${CLASS_PREFIX}__notes--ignored`
+  for (const rule of getActiveTextIndicatorRules(params)) {
+    indicatorList.appendChild(
+      addIndicatorText(
+        rule.workState,
+        rule.getTimeStamp(),
+        rule.getText(),
+        params.element
+      )
     );
+  }
 }
 
-function createIndicator(
+/** Edit notes in {@link collectNotesTextRules} */
+function createNotes(params: ApplyMarksParams) {
+  for (const rule of getActiveTextNotesRules(params)) {
+    addNotesText(params.element, rule.getText(), rule.className);
+  }
+}
+
+function addIndicatorText(
   type: WorkState,
-  timestamp: number,
-  text: string = "Marked as %type% on %date%"
+  timestamp: number | undefined,
+  text: string,
+  element: HTMLElement
 ): HTMLElement {
+  const replace = (str: string) => {
+    return replacePlaceholders(str, {
+      type: type,
+      latest_chapter:
+        getLatestChapterFromWorkListing(element)?.toString() || "?",
+    });
+  };
+
+  const [before, after] = text.split("%date%");
+  const nodes: (string | HTMLElement)[] = [];
+
+  if (before) nodes.push(replace(before));
+  nodes.push(createTimestampElement(timestamp));
+  if (after) nodes.push(replace(after));
+
   return el(
     "li",
     {
       className: `${CLASS_PREFIX}__text-indicator--${type}`,
     },
-    [createIndicatorText(type, text, timestamp)]
+    [el("p", {}, nodes)]
   );
-}
-
-function createIndicatorText(
-  type: WorkState,
-  text: string,
-  timestamp: number
-): HTMLParagraphElement {
-  const timeEl = el("time", {
-    dateTime: timestampToISOString(timestamp),
-    textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
-      timestamp
-    )}`,
-  });
-
-  const replaceType = (text: string, type: WorkState) =>
-    text.replace("%type%", type);
-
-  const [before, after] = text.split("%date%");
-  const nodes: (string | HTMLElement)[] = [];
-
-  if (before) nodes.push(replaceType(before, type));
-  nodes.push(timeEl);
-  if (after) nodes.push(replaceType(after, type));
-
-  return el("p", {}, nodes);
 }
 
 function addNotesText(element: HTMLElement, notes: string, className?: string) {
@@ -133,6 +116,18 @@ function addNotesText(element: HTMLElement, notes: string, className?: string) {
   section.appendChild(el("p", { html: notes }));
   section.setAttribute("aria-label", "User notes");
   if (className) section.classList.add(className);
+}
+
+function createTimestampElement(
+  timestamp: number | undefined
+): HTMLElement | string {
+  return el("time", {
+    dateTime: timestampToISOString(timestamp),
+    textContent: `${getFormattedDateAsFullText(
+      timestamp,
+      "short"
+    )} at ${getFormattedTime(timestamp)}`,
+  });
 }
 
 function getStyles(prefix: string): string {

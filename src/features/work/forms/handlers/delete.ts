@@ -3,9 +3,9 @@ import { WorkFormConfig } from "../types";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { getWorkTitleForNotifications } from "../../helpers";
 
-import { handleStorageWrite } from "../../../../utils/storage/handlers";
+import { handleStorageWrite } from "../../../../utils/storage";
 import { ButtonPlacement } from "../../../../enums/settings";
-import { createFlashNotice } from "../../../../utils/ui/form";
+import { createFlashNotice } from "../../../../utils/ui/forms";
 
 export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]>,

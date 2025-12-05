@@ -4,7 +4,6 @@ import { getWork } from "../../handlers";
 /**
  * Completely hides a work from the listing.
  * Warning: This won't update the amount of works shown on the page! May result in empty pages.
- * @param workOrId The work element or its ID
  */
 export async function hide(workOrId: HTMLElement | string): Promise<void> {
   const work = getWork(workOrId);
@@ -18,10 +17,7 @@ export async function hide(workOrId: HTMLElement | string): Promise<void> {
   }
 }
 
-/**
- * Unhides a work in the listing, making it visible again.
- * @param workOrId The work element or its ID
- */
+/** Unhides a work in the listing, making it visible again. */
 export async function unhide(workOrId: HTMLElement | string): Promise<void> {
   const work = getWork(workOrId);
   if (!work) return;

@@ -1,17 +1,23 @@
 import { createWorkForm } from "../base";
+import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
-import { getItemFromWorkFormItemArray } from "../helpers/items";
-import { checkbox, number, textarea } from "../helpers/inputs";
-import { WorkFormFieldType, WorkFormItem } from "../types";
 
+import {
+  datetime,
+  number,
+  select,
+  textarea,
+  toggleSwitch,
+} from "../../../../utils/ui/forms";
+import { ButtonPlacement } from "../../../../enums/settings";
+import { FinishedStatus } from "../../../../enums/works";
+import { FormItemType } from "../../../../enums/forms";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { ReadWork } from "../../../../types/works";
-import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
-import { ButtonPlacement } from "../../../../enums/settings";
 
 const items: WorkFormItem<ReadWork>[] = [
   {
-    type: WorkFormFieldType.FIELD,
+    type: FormItemType.FIELD,
     dataField: "notes",
     label: "Notes",
     description:
@@ -19,33 +25,44 @@ const items: WorkFormItem<ReadWork>[] = [
     input: textarea(3),
   },
   {
-    type: WorkFormFieldType.FIELD,
-    dataField: "count",
-    label: "Times read",
-    description: "The number of times you've read this work.",
-    input: number("1", "1"),
-  },
-  {
-    type: WorkFormFieldType.GROUP,
+    type: FormItemType.GROUP,
     className: `${CLASS_PREFIX}__form__group`,
     fields: [
       {
-        type: WorkFormFieldType.FIELD,
-        dataField: "rereadWorthy",
-        label: "Re-read worthy?",
-        input: checkbox(),
+        type: FormItemType.GROUP,
+        className: `${CLASS_PREFIX}__form__pair`,
+        fields: [
+          {
+            type: FormItemType.FIELD,
+            dataField: "finishedAt",
+            label: "Finished at",
+            input: datetime(new Date()),
+          },
+          {
+            type: FormItemType.FIELD,
+            dataField: "finishedStatus",
+            label: "Status",
+            input: select(FinishedStatus, FinishedStatus.COMPLETED),
+          },
+        ],
       },
       {
-        type: WorkFormFieldType.FIELD,
-        dataField: "isReading",
-        label: "Still reading?",
-        input: checkbox(),
-      },
-      {
-        type: WorkFormFieldType.FIELD,
-        dataField: "lastReadChapter",
-        label: "Last read chapter",
-        input: number("1", undefined),
+        type: FormItemType.GROUP,
+        className: `${CLASS_PREFIX}__form__pair`,
+        fields: [
+          {
+            type: FormItemType.FIELD,
+            dataField: "timesRead",
+            label: "Times read",
+            input: number("1", "1"),
+          },
+          {
+            type: FormItemType.FIELD,
+            dataField: "rereadWorthy",
+            label: "Re-read worthy?",
+            input: toggleSwitch("reread-worthy-toggle"),
+          },
+        ],
       },
     ],
   },
@@ -56,12 +73,6 @@ export function createReadWorkForm(
   editing: boolean,
   origin?: ButtonPlacement
 ): HTMLElement {
-  wireIsReadingBehavior(
-    getItemFromWorkFormItemArray("isReading", items)?.input as HTMLInputElement,
-    getItemFromWorkFormItemArray("lastReadChapter", items)
-      ?.input as HTMLInputElement
-  );
-
   return createWorkForm({
     id: WorkAction.READ,
     landmark: "Mark Work as Read",
@@ -82,26 +93,4 @@ export function createReadWorkForm(
     },
     origin,
   });
-}
-
-function wireIsReadingBehavior(
-  isReadingInput: HTMLInputElement,
-  lastReadChapterInput: HTMLInputElement
-) {
-  if (!isReadingInput || !lastReadChapterInput) return;
-
-  const handleChange = () => {
-    if (isReadingInput.checked) {
-      const ch = getCurrentChapterFromWorkPage();
-      if (ch !== null) lastReadChapterInput.value = ch.toString();
-      lastReadChapterInput.disabled = false;
-    } else {
-      lastReadChapterInput.value = "";
-      lastReadChapterInput.removeAttribute("value");
-      lastReadChapterInput.disabled = true;
-    }
-  };
-
-  isReadingInput.addEventListener("change", handleChange);
-  handleChange();
 }

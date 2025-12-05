@@ -51,6 +51,7 @@ export function getStyles(prefix: string): string {
     .${prefix}__list__row__date {
       opacity: 0.6;
       font-size: 0.8em;
+      white-space: nowrap;
     }
 
     .${prefix}__list__row__main {

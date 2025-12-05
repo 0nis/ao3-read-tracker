@@ -15,10 +15,12 @@ export function createOpenFormButton(
   });
 
   document.addEventListener(`${ABBREVIATION}:updated`, (ev: Event) => {
-    const state = (ev as CustomEvent).detail?.state;
-    if (!state) return;
+    const detail = (ev as CustomEvent).detail;
+    if (detail.workAction !== config.type || !detail.state) return;
     button.textContent =
-      state === WorkActionState.MARKED ? config.labels.on : config.labels.off;
+      detail.state === WorkActionState.MARKED
+        ? config.labels.on
+        : config.labels.off;
   });
 
   button.addEventListener("click", async (ev) => {

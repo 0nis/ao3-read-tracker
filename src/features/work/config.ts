@@ -12,6 +12,12 @@ export enum WorkActionState {
   UNMARKED = "unmarked",
 }
 
+export enum WorkActionEvent {
+  SAVE = "save",
+  EDIT = "edit",
+  DELETE = "delete",
+}
+
 export interface WorkActionTypeMap {
   [WorkAction.READ]: ReadWork;
   [WorkAction.IN_PROGRESS]: InProgressWork;
@@ -24,8 +30,7 @@ export const ACTION_DEFAULTS_MAP: {
   ) => Partial<WorkActionTypeMap[K]>;
 } = {
   read: (data) => ({
-    createdAt: data.createdAt || Date.now(),
-    modifiedAt: Date.now(),
+    finishedAt: data.finishedAt || Date.now(),
   }),
   in_progress: (data) => ({
     startedAt: data.startedAt || Date.now(),
@@ -34,8 +39,7 @@ export const ACTION_DEFAULTS_MAP: {
       data.lastReadChapter || getCurrentChapterFromWorkPage() || 1,
   }),
   ignore: (data) => ({
-    createdAt: data.createdAt || Date.now(),
-    modifiedAt: Date.now(),
+    ignoredAt: data.ignoredAt || Date.now(),
   }),
 };
 

@@ -1,27 +1,20 @@
 import { ApplyMarksParams } from "../apply";
-import {
-  IGNORED_CLASS,
-  READ_CLASS,
-  REREAD_WORTHY_CLASS,
-  STILL_READING_CLASS,
-} from "../../../../constants/classes";
+import { collectClassRules } from "../../../../services/rules";
+import type * as Classes from "../../../../constants/classes";
 
-export function addClasses({
-  element,
-  readWork,
-  ignoredWork,
-}: ApplyMarksParams) {
-  if (readWork) element.classList.add(READ_CLASS);
-  if (ignoredWork) element.classList.add(IGNORED_CLASS);
-  if (readWork?.isReading) element.classList.add(STILL_READING_CLASS);
-  if (readWork?.rereadWorthy) element.classList.add(REREAD_WORTHY_CLASS);
+/**
+ * Adds classes to a work element based on its read/ignored/in-progress status.
+ *
+ * Classes are modified in {@link collectClassRules} and {@link Classes}
+ */
+export function addClasses(params: ApplyMarksParams) {
+  for (const rule of collectClassRules(params)) {
+    if (rule.shouldApply()) params.element.classList.add(rule.className);
+  }
 }
 
+/** Removes any classes added by this module from a work element. */
 export function removeClasses(element: HTMLElement) {
-  element.classList.remove(
-    READ_CLASS,
-    IGNORED_CLASS,
-    REREAD_WORTHY_CLASS,
-    STILL_READING_CLASS
-  );
+  for (const rule of collectClassRules({}))
+    element.classList.remove(rule.className);
 }

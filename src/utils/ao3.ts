@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../constants/classes";
-import { warn } from "./extension/console";
+import { warn } from "./extension";
 
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
@@ -19,10 +19,13 @@ export function getTitleFromWorkPage(): string | null {
   return titleElement.textContent.trim();
 }
 
-export function getCurrentChapterFromWorkPage(): number | null {
+export function getCurrentChapterFromWorkPage(options?: {
+  suppressWarnings?: boolean;
+}): number | null {
   const titleElement = document.querySelector("h3.title");
   if (!titleElement) {
-    warn("Could not find chapter title element");
+    if (!options?.suppressWarnings)
+      warn("Could not find chapter title element");
     return null;
   }
   const chapterMatch = titleElement.textContent?.match(/Chapter (\d+)/);

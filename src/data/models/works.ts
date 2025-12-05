@@ -52,7 +52,7 @@ export class WorksData<T extends { id: string }> {
     pageSize,
     options,
   }: PaginatedParams): Promise<PaginatedResult<T>> {
-    const { orderBy = "modifiedAt", reverse = false } = options || {};
+    const { orderBy, reverse = false } = options || {};
 
     const totalItems = await this.table.count();
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));

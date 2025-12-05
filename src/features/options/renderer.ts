@@ -1,15 +1,12 @@
-import { hijackAo3Page } from "../../utils/ao3";
-import { el } from "../../utils/ui/dom";
-import { getManifest } from "../../utils/extension/manifest";
-import { ABBREVIATION } from "../../constants/global";
-
 import { PREFIX } from ".";
-import { setupSettings } from "./settings";
+import { SECTION_CONFIG, SectionId, SectionType } from "./config";
 import { buildHeader } from "./components/header";
 import { buildNav } from "./components/nav";
-import { SECTION_CONFIG, SectionId, SectionType } from "./config";
-import { error } from "../../utils/extension/console";
-import { addGlobalListener } from "../../utils/extension/listeners";
+
+import { error, addGlobalListener, getManifest } from "../../utils/extension";
+import { hijackAo3Page } from "../../utils/ao3";
+import { el } from "../../utils/ui/dom";
+import { ABBREVIATION } from "../../constants/global";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -51,8 +48,6 @@ export async function render(): Promise<void> {
   ]);
 
   main.append(header, wrapper);
-
-  await setupSettings(sections);
 
   function getCurrentSection() {
     const hash = window.location.hash.slice(1);

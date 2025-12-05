@@ -1,11 +1,14 @@
 import { ButtonPlacement, DisplayMode } from "../enums/settings";
+import { SymbolDisplayMode } from "../enums/symbols";
 
 export interface ReadSettings {
   id: string;
   simpleModeEnabled: boolean;
   defaultDisplayMode: DisplayMode;
-  stillReadingDisplayMode: DisplayMode;
   rereadWorthyDisplayMode: DisplayMode;
+  completedDisplayMode: DisplayMode;
+  abandonedDisplayMode: DisplayMode;
+  symbolDisplayMode: SymbolDisplayMode;
 }
 
 export interface IgnoreSettings {

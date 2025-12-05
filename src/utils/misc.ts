@@ -24,3 +24,13 @@ export function isEmpty(value: unknown): boolean {
     return Object.keys(value).length === 0;
   return false;
 }
+
+export function replacePlaceholders(
+  text: string,
+  replacements: Record<string, string>
+) {
+  return Object.entries(replacements).reduce((acc, [key, value]) => {
+    const pattern = new RegExp(`%${key}%`, "g");
+    return acc.replace(pattern, value);
+  }, text);
+}

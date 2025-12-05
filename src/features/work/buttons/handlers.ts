@@ -1,5 +1,10 @@
 import { ACTION_HANDLER_MAP } from "./config";
-import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../config";
+import {
+  ACTION_MESSAGES_MAP,
+  WorkActionEvent,
+  WorkActionState,
+  WorkActionTypeMap,
+} from "../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../helpers";
 import { FormRegistry } from "../forms/registry";
 import { getButtonOrigin } from "./helpers";
@@ -8,14 +13,12 @@ import {
   getCurrentChapterFromWorkPage,
   getTitleFromWorkPage,
 } from "../../../utils/ao3";
-import {
-  handleStorageRead,
-  handleStorageWrite,
-} from "../../../utils/storage/handlers";
-import { createFlashNotice } from "../../../utils/ui/form";
+import { handleStorageRead, handleStorageWrite } from "../../../utils/storage";
+import { getFormattedDate, getFormattedTime } from "../../../utils/date";
+import { createFlashNotice } from "../../../utils/ui/forms";
 import { ButtonPlacement } from "../../../enums/settings";
 import { InProgressWork } from "../../../types/works";
-import { getFormattedDate, getFormattedTime } from "../../../utils/date";
+import { ABBREVIATION } from "../../../constants/global";
 
 export async function handleEditWork<K extends keyof WorkActionTypeMap>(
   id: string,
@@ -55,13 +58,23 @@ export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
 
   const title = getWorkTitleForNotifications((payload as any).title);
 
-  return await handleStorageWrite(cfg.storage.put(payload), {
+  await handleStorageWrite(cfg.storage.put(payload), {
     successMsg: msgs.success.save.replace("%title%", title),
     errorMsg: msgs.error.save.replace("%title%", title),
     onSuccess(message) {
       createFlashNotice(message, getBtnOrigin(btn));
     },
   });
+
+  document.dispatchEvent(
+    new CustomEvent(`${ABBREVIATION}:updated`, {
+      detail: {
+        workAction,
+        state: WorkActionState.MARKED,
+        workActionEvent: WorkActionEvent.SAVE,
+      },
+    })
+  );
 }
 
 export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
@@ -75,18 +88,33 @@ export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
     getTitleFromWorkPage() || undefined
   );
 
-  return await handleStorageWrite(cfg.storage.delete(id), {
+  await handleStorageWrite(cfg.storage.delete(id), {
     successMsg: msgs.success.delete.replace("%title%", title),
     errorMsg: msgs.error.delete.replace("%title%", title),
     onSuccess(message) {
       createFlashNotice(message, getBtnOrigin(btn));
     },
   });
+
+  document.dispatchEvent(
+    new CustomEvent(`${ABBREVIATION}:updated`, {
+      detail: {
+        workAction,
+        state: WorkActionState.UNMARKED,
+        workActionEvent: WorkActionEvent.DELETE,
+      },
+    })
+  );
 }
 
-const getBtnOrigin = (btn: HTMLElement | null | undefined) => {
-  return btn ? getButtonOrigin(btn) : ButtonPlacement.TOP;
-};
+export async function handleCheckExistence<K extends keyof WorkActionTypeMap>(
+  id: string,
+  workAction: K
+) {
+  const cfg = ACTION_HANDLER_MAP[workAction];
+  const exists = (await cfg.storage.exists(id)).data;
+  return exists;
+}
 
 export async function handleUpdateInProgressInfo(
   id: string,
@@ -123,3 +151,7 @@ export async function handleUpdateInProgressInfo(
     }
   );
 }
+
+const getBtnOrigin = (btn: HTMLElement | null | undefined) => {
+  return btn ? getButtonOrigin(btn) : ButtonPlacement.TOP;
+};

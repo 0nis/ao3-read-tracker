@@ -1,8 +1,4 @@
-import {
-  getManifest,
-  replaceManifestPlaceholders,
-} from "../extension/manifest";
-import { error } from "../extension/console";
+import { getManifest, replaceManifestPlaceholders, error } from "../extension";
 
 /**
  * Displays a critical message that requires user attention.

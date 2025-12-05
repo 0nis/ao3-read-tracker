@@ -1,82 +1,40 @@
-import { PREFIX } from "..";
-import { el, injectStyles } from "../../../utils/ui/dom";
-import { createSection, SectionConfig } from "../components/section";
 import { getStyles } from "./style";
+import { SettingsSectionConfig } from "./types";
+import { SettingsSectionTypeMap } from "./config";
+import { saveSettingsData } from "./helpers/save";
+import { createSettingsSectionContent } from "./components/items";
+import { createSettingsSectionSaveButton } from "./components/submit";
 
-export interface SettingsSectionConfig extends SectionConfig {
-  fields: HTMLElement[];
-}
+import { PREFIX } from "..";
+import { createSection } from "../components/section";
 
-export function createSettingsSection(
-  config: SettingsSectionConfig
+import { settingsCache } from "../../../services/cache";
+import { el, injectStyles } from "../../../utils/ui/dom";
+import { populateFormValues } from "../../../utils/ui/forms";
+
+export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
+  cfg: SettingsSectionConfig<SettingsSectionTypeMap[K]> & { id: K }
 ): HTMLElement {
-  const section = createSection(config);
   injectStyles(`${PREFIX}__styles--settings-section`, getStyles(PREFIX));
 
-  const fieldsWrapper = el("div", {
-    className: `${PREFIX}__settings__field__wrapper`,
+  const section = createSection(cfg);
+  section.appendChild(createSettingsSectionContent(cfg.items));
+
+  const saveEl = createSettingsSectionSaveButton(cfg.title);
+  saveEl.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await saveSettingsData(cfg, saveEl);
+    settingsCache.clear();
   });
-  config.fields.forEach((f) => fieldsWrapper.appendChild(f));
-  section.appendChild(fieldsWrapper);
 
   const actions = el(
     "div",
     { className: `actions ${PREFIX}__settings__actions` },
-    [
-      el(
-        "button",
-        {
-          className: `button ${PREFIX}__button ${PREFIX}__button--save`,
-          attrs: { "aria-label": `Save ${config.title}`, type: "submit" },
-        },
-        ["Save"]
-      ),
-    ]
+    [saveEl]
   );
   section.appendChild(actions);
 
+  populateFormValues(cfg.items, cfg.data);
+
   return section;
-}
-
-export interface FieldConfig {
-  section: string;
-  label: string;
-  input: HTMLElement;
-  dataField: string;
-  description?: string;
-}
-
-export function createField({
-  section,
-  input,
-  dataField,
-  label,
-  description,
-}: FieldConfig): HTMLElement {
-  const id = `${PREFIX}__${section}__${dataField}`;
-  input.id = id;
-  input.setAttribute("data-field", dataField);
-  if (description) input.setAttribute("aria-describedby", `${id}-description`);
-
-  const children = [
-    el("label", { attrs: { for: id } }, [label]),
-  ] as HTMLElement[];
-
-  // prettier-ignore
-  if (description)
-    children.push(el("p", {
-      id: `${id}-description`,
-      className: `${PREFIX}__settings__field__description`,
-    }, [description]));
-
-  const field = el("div", { className: `${PREFIX}__settings__field` }, [
-    el(
-      "div",
-      { className: `${PREFIX}__settings__field__label__wrapper` },
-      children
-    ),
-    input,
-  ]);
-
-  return field;
 }

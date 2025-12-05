@@ -33,6 +33,26 @@ export function getStyles(prefix: string): string {
       margin-top: 6px;
     }
 
+    .${prefix}__settings__group {
+      margin: 1em 0;
+      padding: 1em 1.25em;
+      border-radius: 8px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .${prefix}__settings__group .${prefix}__settings__field__description {
+      margin-top: 0;
+    }
+
+    .${prefix}__settings__group__label {
+      height: auto;
+      width: auto;
+      font-size: 1.1em;
+      font-weight: 700;
+      opacity: 1;
+    }
+
     .${prefix}__settings__actions {
       display: flex;
       justify-content: flex-end;
@@ -43,13 +63,19 @@ export function getStyles(prefix: string): string {
 
     @media (max-width: 600px) {
       .${prefix}__settings__field__label__wrapper {
-          max-width: 100%;
+        max-width: 100%;
       }
 
       .${prefix}__settings__field {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+      }
+
+      .${prefix}__settings__group .${prefix}__settings__field {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
       }
     }
     `;

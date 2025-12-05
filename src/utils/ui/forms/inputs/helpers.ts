@@ -1,9 +1,17 @@
-import {
-  getLocalDateString,
-  getLocalDateTimeString,
-} from "../../../../utils/date";
-import { el } from "../../../../utils/ui/dom";
-import { buildSelectFromEnum } from "../../../../utils/ui/form";
+import { getLocalDateTimeString } from "../../../date";
+import { el } from "../../dom";
+import { buildSelectFromEnum, buildToggleSwitch } from "..";
+
+export const text = (
+  placeholder: string = "",
+  disabled: boolean = false
+): HTMLInputElement => {
+  return el("input", {
+    type: "text",
+    placeholder,
+    disabled,
+  }) as HTMLInputElement;
+};
 
 export const textarea = (
   rows: number,
@@ -28,9 +36,13 @@ export const number = (
   }) as HTMLInputElement;
 };
 
-export const checkbox = (disabled: boolean = false): HTMLInputElement => {
+export const checkbox = (
+  checked: boolean = false,
+  disabled: boolean = false
+): HTMLInputElement => {
   return el("input", {
     type: "checkbox",
+    checked,
     disabled,
   }) as HTMLInputElement;
 };
@@ -53,4 +65,13 @@ export const select = <T extends Record<string, string>>(
   defaultValue?: T[keyof T]
 ): HTMLSelectElement => {
   return buildSelectFromEnum(enumObj, defaultValue);
+};
+
+export const toggleSwitch = (
+  id: string,
+  checked: boolean = false
+): HTMLLabelElement => {
+  return buildToggleSwitch(id, {
+    checked,
+  }) as HTMLLabelElement;
 };

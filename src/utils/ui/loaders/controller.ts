@@ -1,6 +1,6 @@
-import { CLASS_PREFIX } from "../../constants/classes";
-import { LoaderType } from "../../enums/ui";
-import { el } from "./dom";
+import { LoaderType } from "../../../enums/ui";
+import { createProgressLoader } from "./progress/element";
+import { createSpinnerLoader } from "./spinner/element";
 
 export interface LoaderController {
   start(): void;
@@ -93,35 +93,5 @@ export function createButtonLoader(
       btn.style.width = originalWidth;
     },
     setProgress: setProgressFn,
-  };
-}
-
-function createSpinnerLoader(): HTMLElement {
-  return el("span", {
-    className: `${CLASS_PREFIX}__loader`,
-    attrs: {
-      role: "status",
-      "aria-label": "Loading",
-    },
-  });
-}
-
-function createProgressLoader() {
-  const container = el("span", {
-    className: `${CLASS_PREFIX}__progress`,
-    attrs: { role: "status", "aria-label": "Loading" },
-  });
-
-  const bar = el("span", {
-    className: `${CLASS_PREFIX}__progress-bar`,
-  });
-
-  container.appendChild(bar);
-
-  return {
-    element: container,
-    setProgress: (value: number) => {
-      bar.style.width = `${Math.max(0, Math.min(100, value))}%`;
-    },
   };
 }

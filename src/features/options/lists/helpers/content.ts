@@ -1,12 +1,13 @@
 import { PREFIX } from "../..";
+import { createSymbolElement } from "./symbols";
+
+import { SymbolRule } from "../../../../services/rules";
 import { el } from "../../../../utils/ui/dom";
 import { IgnoredWork, ReadWork } from "../../../../types/works";
 import { SymbolData } from "../../../../types/symbols";
-import { SymbolRule } from "../../../../services/rules/symbols";
-import { getFormattedDate } from "../../../../utils/date";
-import { createSymbolElement } from "./symbols";
 
 export interface SupplementaryRowInformation {
+  date: string;
   symbols?: {
     symbolData?: SymbolData;
     rules?: SymbolRule[];
@@ -23,6 +24,7 @@ export async function createInnerElement({
   item,
   symbols,
   text,
+  date,
 }: InnerElementParams): Promise<HTMLElement> {
   const mainEls: HTMLElement[] = [];
 
@@ -53,11 +55,7 @@ export async function createInnerElement({
   }
 
   return el("div", { className: `${PREFIX}__list__row__content` }, [
-    el(
-      "span",
-      { className: `${PREFIX}__list__row__date` },
-      getFormattedDate(item.modifiedAt)
-    ),
+    el("span", { className: `${PREFIX}__list__row__date` }, date),
     el("div", { className: `${PREFIX}__list__row__main` }, mainEls),
   ]);
 }

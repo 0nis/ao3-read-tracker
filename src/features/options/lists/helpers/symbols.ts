@@ -1,5 +1,5 @@
 import { PREFIX } from "../..";
-import { SymbolRule } from "../../../../services/rules/symbols";
+import { SymbolRule } from "../../../../services/rules";
 import { SymbolData } from "../../../../types/symbols";
 import { el } from "../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../utils/ui/symbols";

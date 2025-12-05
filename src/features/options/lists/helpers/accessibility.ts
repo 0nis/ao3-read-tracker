@@ -1,4 +1,4 @@
-import { reportSrLive } from "../../../../utils/ui/sr-live";
+import { reportSrLive } from "../../../../utils/ui/accessibility";
 import { SupplementaryRowInformation } from "./content";
 
 export function getSrAccessibleContentSummary({

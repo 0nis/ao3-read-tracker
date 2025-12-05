@@ -1,9 +1,9 @@
 import { ApplyMarksParams } from "../apply";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { symbolsCache } from "../../../../services/cache/symbols";
-import { getActiveSymbolRules } from "../../../../services/rules/symbols";
-import { SymbolRecord } from "../../../../types/symbols";
-import { IgnoredWork, ReadWork } from "../../../../types/works";
+import { symbolsCache } from "../../../../services/cache";
+import {
+  getActiveSymbolRules,
+  type collectSymbolRules,
+} from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   el,
@@ -12,17 +12,18 @@ import {
   injectStyles,
 } from "../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../utils/ui/symbols";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { SymbolRecord } from "../../../../types/symbols";
+import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
 
 /**
  * Adds symbols to a work element showing information
  * like read/ignored status, reread worthiness, and read count.
+ *
+ * Symbols are modified in {@link collectSymbolRules} and {@link DEFAULT_SYMBOL_RECORDS}
  */
-export async function addSymbols({
-  element,
-  readWork,
-  ignoredWork,
-}: ApplyMarksParams) {
-  if (!readWork && !ignoredWork) return;
+export async function addSymbols(params: ApplyMarksParams) {
+  if (!params.readWork && !params.inProgressWork && !params.ignoredWork) return;
 
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-symbols`,
@@ -30,7 +31,7 @@ export async function addSymbols({
   );
 
   const symbolIndicatorList = ensureChild({
-    parent: element.querySelector(".header.module")!,
+    parent: params.element.querySelector(".header.module")!,
     className: `${CLASS_PREFIX}__symbol-indicator`,
     tag: "ul",
     createProps: {
@@ -41,13 +42,10 @@ export async function addSymbols({
     },
   });
 
-  await renderSymbols(element, symbolIndicatorList, readWork, ignoredWork);
+  await renderSymbols(params, symbolIndicatorList);
 }
 
-/**
- * Removes any symbols added by this module from a work element.
- * @param element The work to modify
- */
+/** Removes any symbols added by this module from a work element. */
 export function removeSymbols(element: HTMLElement) {
   const elementsToRemove = [
     getElement(element, `.${CLASS_PREFIX}__symbol-indicator`),
@@ -56,18 +54,31 @@ export function removeSymbols(element: HTMLElement) {
 }
 
 async function renderSymbols(
-  element: HTMLElement,
-  symbolIndicatorList: HTMLElement,
-  readWork: ReadWork | undefined,
-  ignoredWork: IgnoredWork | undefined
+  {
+    element,
+    readWork,
+    inProgressWork,
+    ignoredWork,
+    settings,
+  }: ApplyMarksParams,
+  symbolIndicatorList: HTMLElement
 ) {
   const symbols = await symbolsCache.get();
 
   const rules = getActiveSymbolRules({
-    read: readWork,
-    ignored: ignoredWork,
+    readWork: readWork,
+    inProgressWork: inProgressWork,
+    ignoredWork: ignoredWork,
     details: {
       latestChapter: getLatestChapterFromWorkListing(element) || undefined,
+    },
+    displayMode: {
+      read: settings.readSettings.symbolDisplayMode,
+      // TODO: Uncomment once added
+      // inProgress: settings.generalSettings.symbolDisplayMode,
+    },
+    options: {
+      hideSymbols: settings.generalSettings.hideSymbols,
     },
   });
 

@@ -1,19 +1,15 @@
-import { ReadingStatus } from "../enums/works";
+import { FinishedStatus, ReadingStatus } from "../enums/works";
 
 // TODO in future issue:
-// Change to dateFinished
-// Make one of the dates optional (less bloat for simple mode)
 // Explore the idea of adding multiple "finished at" dates for rereads
 export interface ReadWork {
   id: string;
-  createdAt: number;
-  modifiedAt: number;
+  finishedAt: number;
   title?: string;
-  rereadWorthy?: boolean;
-  count?: number;
   notes?: string;
-  isReading?: boolean;
-  lastReadChapter?: number;
+  rereadWorthy?: boolean;
+  timesRead?: number;
+  finishedStatus?: FinishedStatus;
 }
 
 export interface InProgressWork {
@@ -26,12 +22,9 @@ export interface InProgressWork {
   readingStatus?: ReadingStatus;
 }
 
-// TODO in future issue:
-// Remove one of the dates, it's redundant
 export interface IgnoredWork {
   id: string;
-  createdAt: number;
-  modifiedAt: number;
+  ignoredAt: number;
   title?: string;
   reason?: string;
 }
@@ -41,3 +34,9 @@ export type WorkData = {
   inProgressWorks: Record<string, InProgressWork>;
   ignoredWorks: Record<string, IgnoredWork>;
 };
+
+export interface WorkStateData {
+  readWork?: ReadWork;
+  inProgressWork?: InProgressWork;
+  ignoredWork?: IgnoredWork;
+}

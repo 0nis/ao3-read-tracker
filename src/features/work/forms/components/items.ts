@@ -1,11 +1,8 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
+import type { WorkFormField, WorkFormFieldGroup, WorkFormItem } from "../types";
+
 import { el } from "../../../../utils/ui/dom";
-import {
-  WorkFormField,
-  WorkFormFieldGroup,
-  WorkFormFieldType,
-  WorkFormItem,
-} from "../types";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { FormItemType } from "../../../../enums/forms";
 
 export function createFormContent(items: WorkFormItem<any>[]): HTMLElement {
   const dl = el("dl", {}, []);
@@ -18,9 +15,8 @@ export function createFormContent(items: WorkFormItem<any>[]): HTMLElement {
 }
 
 function createWorkFormItem(item: WorkFormItem<any>) {
-  if (item.type === WorkFormFieldType.FIELD) return createWorkFormField(item);
-  else if (item.type === WorkFormFieldType.GROUP)
-    return createWorkFormGroup(item);
+  if (item.type === FormItemType.FIELD) return createWorkFormField(item);
+  else if (item.type === FormItemType.GROUP) return createWorkFormGroup(item);
 }
 
 function createWorkFormGroup(group: WorkFormFieldGroup<any>) {

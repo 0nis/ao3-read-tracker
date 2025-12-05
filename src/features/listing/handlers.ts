@@ -4,17 +4,11 @@ import {
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import { handleStorageRead } from "../../utils/storage/handlers";
-import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
+import { handleStorageRead } from "../../utils/storage";
+import { WorkData } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<
-  | {
-      elements: NodeListOf<HTMLLIElement>;
-      readWorks: Record<string, ReadWork>;
-      ignoredWorks: Record<string, IgnoredWork>;
-      inProgressWorks: Record<string, InProgressWork>;
-    }
-  | undefined
+  ({ elements: NodeListOf<HTMLLIElement> } & WorkData) | undefined
 > {
   const worksList = getWorksListFromListing();
   if (!worksList) return;
