@@ -1,6 +1,10 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { el, ensureChild, injectStyles } from "../../../utils/ui/dom";
 
+/**
+ * A tiny piece of text added right above the work listing used for
+ * displaying status information about the listing as a whole.
+ */
 export function addStatusElement(child: HTMLElement | null): void {
   if (!child) return;
   const ol = document.querySelector(".work.index.group") as HTMLElement | null;
@@ -18,6 +22,10 @@ export function addStatusElement(child: HTMLElement | null): void {
   status.appendChild(child);
 }
 
+/**
+ * An {@link addStatusElement} child showing how many works are
+ * currently hidden in the listing due to user settings.
+ */
 export function createHiddenWorksCountEl(
   modifiedWorks: NodeListOf<HTMLElement>
 ): HTMLElement | null {

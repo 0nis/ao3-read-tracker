@@ -3,6 +3,8 @@ import { ApplyMarksParams } from "../apply";
 import {
   getActiveTextIndicatorRules,
   getActiveTextNotesRules,
+  type collectTextIndicatorRules,
+  type collectNotesTextRules,
 } from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
@@ -16,80 +18,33 @@ import {
   getElement,
   injectStyles,
 } from "../../../../utils/ui/dom";
+import { replacePlaceholders } from "../../../../utils/misc";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
-import type {
-  ReadWork,
-  IgnoredWork,
-  InProgressWork,
-} from "../../../../types/works";
-
-// TODO: Remove unneeded functions
-// TODO: Export rules to their own functinos
-// TODO: Improve code quality overall
-// TODO: Test
 
 /**
- * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
- * @param work The work to modify
- * @param readWork The read work data, if any
- * @param ignoredWork The ignored work data, if any
+ * Adds text to a work element within a listing, showing when
+ * it was marked as read/ignored/in-progress, along with any notes.
+ *
+ * Text is modified in {@link collectTextIndicatorRules} and {@link collectNotesTextRules}
  */
-export function addText({
-  element,
-  readWork,
-  inProgressWork,
-  ignoredWork,
-}: ApplyMarksParams) {
+export function addText(params: ApplyMarksParams) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
     getStyles(CLASS_PREFIX)
   );
 
   const indicatorList = ensureChild({
-    parent: element,
+    parent: params.element,
     className: `${CLASS_PREFIX}__text-indicator`,
     tag: "ul",
   });
 
-  const indicatorRules = getActiveTextIndicatorRules({
-    readWork,
-    inProgressWork,
-    ignoredWork,
-  });
-
-  for (const rule of indicatorRules) {
-    indicatorList.appendChild(
-      createIndicator(
-        rule.workState,
-        rule.getTimeStamp(),
-        rule.getText(),
-        element
-      )
-    );
-  }
-
-  const notesRules = getActiveTextNotesRules({
-    readWork,
-    inProgressWork,
-    ignoredWork,
-  });
-
-  for (const rule of notesRules) {
-    addNotesText(element, rule.getText(), rule.className);
-  }
-
-  if (readWork) renderReadInformation(element, indicatorList, readWork);
-  if (inProgressWork)
-    renderInProgressInformation(element, indicatorList, inProgressWork);
-  if (ignoredWork)
-    renderIgnoredInformation(element, indicatorList, ignoredWork);
+  createIndicators({ ...params }, indicatorList);
+  createNotes(params);
 }
 
-/**
- * Removes any text added by this module from a work element.
- * @param element The work to modify
- */
+/** Removes any text added by this module from a work element. */
 export function removeText(element: HTMLElement) {
   const elementsToRemove = [
     getElement(element, `.${CLASS_PREFIX}__text-indicator`),
@@ -98,78 +53,58 @@ export function removeText(element: HTMLElement) {
   elementsToRemove.forEach((el) => el.remove());
 }
 
-function renderReadInformation(
-  element: HTMLElement,
-  indicatorList: HTMLElement,
-  readWork: ReadWork
+/** Edit indicators in {@link collectTextIndicatorRules} */
+function createIndicators(
+  params: ApplyMarksParams,
+  indicatorList: HTMLElement
 ) {
-  if (readWork.notes)
-    addNotesText(element, readWork.notes, `${CLASS_PREFIX}__notes--read`);
-}
-
-function renderInProgressInformation(
-  element: HTMLElement,
-  indicatorList: HTMLElement,
-  inProgressWork: InProgressWork
-) {}
-
-function renderIgnoredInformation(
-  element: HTMLElement,
-  indicatorList: HTMLElement,
-  ignoredWork: IgnoredWork
-) {
-  if (ignoredWork.reason)
-    addNotesText(
-      element,
-      ignoredWork.reason,
-      `${CLASS_PREFIX}__notes--ignored`
+  for (const rule of getActiveTextIndicatorRules(params)) {
+    indicatorList.appendChild(
+      addIndicatorText(
+        rule.workState,
+        rule.getTimeStamp(),
+        rule.getText(),
+        params.element
+      )
     );
+  }
 }
 
-function createIndicator(
+/** Edit notes in {@link collectNotesTextRules} */
+function createNotes(params: ApplyMarksParams) {
+  for (const rule of getActiveTextNotesRules(params)) {
+    addNotesText(params.element, rule.getText(), rule.className);
+  }
+}
+
+function addIndicatorText(
   type: WorkState,
   timestamp: number | undefined,
   text: string,
   element: HTMLElement
 ): HTMLElement {
+  const replace = (str: string) => {
+    return replacePlaceholders(str, {
+      type: type,
+      latest_chapter:
+        getLatestChapterFromWorkListing(element)?.toString() || "?",
+    });
+  };
+
+  const [before, after] = text.split("%date%");
+  const nodes: (string | HTMLElement)[] = [];
+
+  if (before) nodes.push(replace(before));
+  nodes.push(createTimeElement(timestamp));
+  if (after) nodes.push(replace(after));
+
   return el(
     "li",
     {
       className: `${CLASS_PREFIX}__text-indicator--${type}`,
     },
-    [createIndicatorText(type, timestamp, text, element)]
+    [el("p", {}, nodes)]
   );
-}
-
-function createIndicatorText(
-  type: WorkState,
-  timestamp: number | undefined,
-  text: string,
-  element: HTMLElement
-): HTMLParagraphElement {
-  const timeEl = el("time", {
-    dateTime: timestampToISOString(timestamp),
-    textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
-      timestamp
-    )}`,
-  });
-
-  const replacePlaceholders = (text: string) =>
-    text
-      .replace("%type%", type)
-      .replace(
-        "%latest_chapter%",
-        `${getLatestChapterFromWorkListing(element) || "?"}`
-      );
-
-  const [before, after] = text.split("%date%");
-  const nodes: (string | HTMLElement)[] = [];
-
-  if (before) nodes.push(replacePlaceholders(before));
-  nodes.push(timeEl);
-  if (after) nodes.push(replacePlaceholders(after));
-
-  return el("p", {}, nodes);
 }
 
 function addNotesText(element: HTMLElement, notes: string, className?: string) {
@@ -181,6 +116,17 @@ function addNotesText(element: HTMLElement, notes: string, className?: string) {
   section.appendChild(el("p", { html: notes }));
   section.setAttribute("aria-label", "User notes");
   if (className) section.classList.add(className);
+}
+
+function createTimeElement(
+  timestamp: number | undefined
+): HTMLElement | string {
+  return el("time", {
+    dateTime: timestampToISOString(timestamp),
+    textContent: `${getFormattedDate(timestamp)} at ${getFormattedTime(
+      timestamp
+    )}`,
+  });
 }
 
 function getStyles(prefix: string): string {

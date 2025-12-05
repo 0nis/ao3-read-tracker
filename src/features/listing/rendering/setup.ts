@@ -12,8 +12,13 @@ import { extractWorkIdFromListingId } from "../../../utils/ao3";
 import { addStatusElement, createHiddenWorksCountEl } from "./status";
 
 /**
- * Marks works on the current listing page as read/ignored based on
- * stored data, with their appropriate indicators.
+ * Applies work states visually to all relevant works on the current listing page.
+ *
+ * Adjusts:
+ * - classes
+ * - text (state indicators and notes)
+ * - symbols in the work header
+ * - display (collapsing/hiding)
  */
 export async function markWorksOnPage(): Promise<void> {
   const data = await getWorkStatusData();
@@ -39,7 +44,7 @@ export async function markWorksOnPage(): Promise<void> {
 
 /**
  * Updates works on the current listing page to reflect any changes
- * in their read/ignored status, adjusting indicators as needed.
+ * in their states. Used when the BFCache is restored.
  */
 export async function updateWorksOnPage(): Promise<void> {
   const data = await getWorkStatusData();

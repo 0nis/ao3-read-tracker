@@ -5,8 +5,10 @@ import { getWork } from "../../handlers";
 
 /**
  * Hides the details of a work in the listing to take up less space.
- * @param mode "gentle" or "aggressive": gentle leaves the header visible, aggressive hides everything except the indicator and toggle
- * @param workOrId The work element or its ID
+ * Adds a toggle to show/hide details again as needed.
+ *
+ * - {@link CollapseMode.GENTLE} leaves the header visible
+ * - {@link CollapseMode.AGGRESSIVE} hides everything except the text indicator and toggle button
  */
 export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
   const work = getWork(workOrId);
@@ -45,8 +47,8 @@ export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
 }
 
 /**
- * Un-collapses a work in the listing to show all its details.
- * @param workOrId The work element or its ID
+ * Removes collapsing logic from a work in the listing, showing all details again.
+ * NOT USED FOR TOGGLING! {@link createCollapseToggle} is used for that.
  */
 export function unCollapse(workOrId: HTMLElement | string) {
   const work = getWork(workOrId);

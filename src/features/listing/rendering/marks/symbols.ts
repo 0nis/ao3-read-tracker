@@ -1,6 +1,9 @@
 import { ApplyMarksParams } from "../apply";
 import { symbolsCache } from "../../../../services/cache";
-import { getActiveSymbolRules } from "../../../../services/rules";
+import {
+  getActiveSymbolRules,
+  type collectSymbolRules,
+} from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   el,
@@ -11,10 +14,13 @@ import {
 import { renderSymbolContent } from "../../../../utils/ui/symbols";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { SymbolRecord } from "../../../../types/symbols";
+import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
 
 /**
  * Adds symbols to a work element showing information
  * like read/ignored status, reread worthiness, and read count.
+ *
+ * Symbols are modified in {@link collectSymbolRules} and {@link DEFAULT_SYMBOL_RECORDS}
  */
 export async function addSymbols(params: ApplyMarksParams) {
   if (!params.readWork && !params.inProgressWork && !params.ignoredWork) return;
@@ -39,10 +45,7 @@ export async function addSymbols(params: ApplyMarksParams) {
   await renderSymbols(params, symbolIndicatorList);
 }
 
-/**
- * Removes any symbols added by this module from a work element.
- * @param element The work to modify
- */
+/** Removes any symbols added by this module from a work element. */
 export function removeSymbols(element: HTMLElement) {
   const elementsToRemove = [
     getElement(element, `.${CLASS_PREFIX}__symbol-indicator`),

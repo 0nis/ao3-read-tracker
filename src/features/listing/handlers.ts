@@ -8,10 +8,7 @@ import { handleStorageRead } from "../../utils/storage";
 import { WorkData } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<
-  | ({
-      elements: NodeListOf<HTMLLIElement>;
-    } & WorkData)
-  | undefined
+  ({ elements: NodeListOf<HTMLLIElement> } & WorkData) | undefined
 > {
   const worksList = getWorksListFromListing();
   if (!worksList) return;

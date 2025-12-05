@@ -16,6 +16,13 @@ export interface ApplyMarksParams extends WorkStateData {
   settings: SettingsData;
 }
 
+/** Applies the following to a work element within a listing:
+ * - landmark heading
+ * - classes
+ * - text indicators and notes
+ * - symbols
+ * - display adjustments
+ */
 export async function applyMarksToWork(params: ApplyMarksParams) {
   ensureLandmarkHeadingPresent(params.element);
   addClasses(params);
