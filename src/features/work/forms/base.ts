@@ -17,7 +17,7 @@ import { populateWorkForm } from "./handlers/populate";
 import { saveWorkFormData } from "./handlers/save";
 import { WorkFormConfig } from "./types";
 import { FormRegistry } from "./registry";
-import { WorkActionState, WorkActionTypeMap } from "../config";
+import { WorkActionEvent, WorkActionState, WorkActionTypeMap } from "../config";
 
 import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
@@ -38,10 +38,14 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
     form.remove();
   };
 
-  const updateState = (state: WorkActionState) => {
+  const updateState = (state: WorkActionState, event: WorkActionEvent) => {
     document.dispatchEvent(
       new CustomEvent(`${ABBREVIATION}:updated`, {
-        detail: { state },
+        detail: {
+          workAction: cfg.id,
+          state,
+          workActionEvent: event,
+        },
       })
     );
   };
@@ -50,7 +54,7 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
   saveEl.addEventListener("click", async (ev) => {
     ev.preventDefault();
     await saveWorkFormData(cfg, saveEl, cfg.origin);
-    updateState(WorkActionState.MARKED);
+    updateState(WorkActionState.MARKED, WorkActionEvent.SAVE);
     remove();
   });
 
@@ -60,7 +64,7 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
     deleteEl.addEventListener("click", async (ev) => {
       ev.preventDefault();
       await deleteWorkFormData(cfg, deleteEl!, cfg.origin);
-      updateState(WorkActionState.UNMARKED);
+      updateState(WorkActionState.UNMARKED, WorkActionEvent.DELETE);
       remove();
     });
   }

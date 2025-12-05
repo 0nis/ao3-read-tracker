@@ -49,11 +49,8 @@ export async function handleStorageRead<T>(
   };
 
   if (errorOnEmpty && isEmpty(result.data)) return err();
-
-  if (result.success) {
-    if (result.data !== undefined) return result.data;
-    if (!errorOnUndefined) return fallback;
-  }
+  if (result.success && result.data !== undefined) return result.data;
+  if (!errorOnUndefined) return fallback;
 
   return err();
 }

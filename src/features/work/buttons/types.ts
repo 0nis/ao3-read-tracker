@@ -1,6 +1,7 @@
-import { WorkAction } from "../config";
-import { ButtonPlacement } from "../../../enums/settings";
-import { StorageResult } from "../../../types/results";
+import type { WorkAction } from "../config";
+import type { WorksData } from "../../../data/models/works";
+import type { SafeServiceFor } from "../../../utils/storage";
+import type { ButtonPlacement } from "../../../enums/settings";
 
 export enum ButtonAction {
   TOGGLE = "toggle",
@@ -36,13 +37,8 @@ export interface ActionLabelSet {
   advanced: { on: string; off: string };
 }
 
-export interface ActionHandlerEntry<T> {
-  storage: {
-    getById: (id: string) => Promise<StorageResult<T>>;
-    put: (data: T) => Promise<any>;
-    delete: (id: string) => Promise<any>;
-    exists: (id: string) => Promise<{ data: boolean }>;
-  };
+export interface ActionHandlerEntry<T extends { id: string }> {
+  storage: SafeServiceFor<WorksData<T>>;
   createForm: (
     data: Partial<T>,
     editing: boolean,

@@ -1,22 +1,21 @@
 import { WorkAction } from "../config";
 import { ACTION_SETTINGS_MAP } from "./config";
+import { handleCheckExistence, handleUpdateInProgressInfo } from "./handlers";
 import {
   buildActionButtonConfig,
   createActionModeButton,
   getButtonParents,
   getWorkNavBars,
+  handleOnUpdateReadProgress,
   insertButtonIntoParent,
 } from "./helpers";
 import { createUpdateButton } from "./components/update";
 
 import { settingsCache } from "../../../services/cache/settings";
-import { SettingsData } from "../../../types/settings";
 import { warn } from "../../../utils/extension";
-import { handleUpdateInProgressInfo } from "./handlers";
-import { ButtonPlacement } from "../../../enums/settings";
-import { handleStorageRead } from "../../../utils/storage";
-import { StorageService } from "../../../services/storage";
 import { getIdFromUrl } from "../../../utils/ao3";
+import { SettingsData } from "../../../types/settings";
+import { ButtonPlacement } from "../../../enums/settings";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
@@ -27,8 +26,10 @@ export async function setupButtons() {
     );
   }
 
+  const workId = getIdFromUrl();
+
   await setupAllActionButtons(settings);
-  setupUpdateReadProgressButton(settings);
+  await setupUpdateReadProgressButton(workId, settings);
 }
 
 async function setupAllActionButtons(settings: SettingsData) {
@@ -55,22 +56,25 @@ async function setupAllActionButtons(settings: SettingsData) {
   }
 }
 
-function setupUpdateReadProgressButton(settings: SettingsData) {
-  const id = getIdFromUrl();
-  if (!id) return;
-  const exists = handleStorageRead(StorageService.inProgressWorks.getById(id), {
-    errorOnUndefined: false,
-  });
-  if (!exists) return;
+// TODO: Set this up always, even if exists, just ensure it's hidden
+// then when a fic is marked as in progress, show it again
+// when it's marked as not in progress anymore, hide it
+async function setupUpdateReadProgressButton(
+  workId: string | null,
+  settings: SettingsData
+) {
+  if (!workId) return;
+  const exists = await handleCheckExistence(workId, WorkAction.IN_PROGRESS);
   const navs = getWorkNavBars();
   if (!navs.bottom) return;
-  // TODO: Make label configurable
+  // TODO: Make label configurable, make placement configurable
   const btn = createUpdateButton(
     "Update Read Progress",
-    handleUpdateInProgressInfo
+    handleUpdateInProgressInfo,
+    handleOnUpdateReadProgress,
+    exists ? false : true,
+    { "data-origin": ButtonPlacement.BOTTOM }
   );
-  // TODO: Make placement configurable
-  btn.setAttribute("data-origin", ButtonPlacement.BOTTOM);
   insertButtonIntoParent(navs.bottom, btn);
 }
 

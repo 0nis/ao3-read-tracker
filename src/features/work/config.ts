@@ -12,6 +12,12 @@ export enum WorkActionState {
   UNMARKED = "unmarked",
 }
 
+export enum WorkActionEvent {
+  SAVE = "save",
+  EDIT = "edit",
+  DELETE = "delete",
+}
+
 export interface WorkActionTypeMap {
   [WorkAction.READ]: ReadWork;
   [WorkAction.IN_PROGRESS]: InProgressWork;
