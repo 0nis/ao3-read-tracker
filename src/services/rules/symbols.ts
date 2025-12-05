@@ -1,11 +1,6 @@
 import { SymbolDisplayMode, SymbolId } from "../../enums/symbols";
 import { FinishedStatus, ReadingStatus } from "../../enums/works";
-import {
-  ReadWork,
-  IgnoredWork,
-  InProgressWork,
-  WorkStateData,
-} from "../../types/works";
+import { WorkStateData } from "../../types/works";
 
 export interface SymbolRule {
   id: SymbolId;

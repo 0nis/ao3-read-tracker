@@ -7,10 +7,9 @@ import {
 } from "../helpers/content";
 import { getSrAccessibleContentSummary } from "../helpers/accessibility";
 
-import { getActiveSymbolRules } from "../../../../services/rules/symbols";
+import { getActiveSymbolRules } from "../../../../services/rules";
 import { StorageService } from "../../../../services/storage";
-import { settingsCache } from "../../../../services/cache/settings";
-import { symbolsCache } from "../../../../services/cache/symbols";
+import { settingsCache, symbolsCache } from "../../../../services/cache";
 
 import { handleStorageWrite } from "../../../../utils/storage";
 import { getWorkLinkFromId } from "../../../../utils/ao3";

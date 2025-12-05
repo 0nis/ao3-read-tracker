@@ -3,7 +3,7 @@ import { PREFIX } from "../..";
 import { SectionId } from "../../config";
 import { SectionElements } from "../../renderer";
 
-import { settingsCache } from "../../../../services/cache/settings";
+import { settingsCache } from "../../../../services/cache";
 import { handleStorageWrite } from "../../../../utils/storage";
 import { getElement } from "../../../../utils/ui/dom";
 import { extractFormValues } from "../../../../utils/ui/forms";

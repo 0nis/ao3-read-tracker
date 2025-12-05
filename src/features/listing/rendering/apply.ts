@@ -4,7 +4,7 @@ import { addClasses } from "./marks/classes";
 
 import { DISPLAY_MODE_MAP } from "../config";
 
-import { collectDisplayRules } from "../../../services/rules/display";
+import { collectDisplayRules } from "../../../services/rules";
 import { ensureChild } from "../../../utils/ui/dom";
 import { getManifest } from "../../../utils/extension";
 import { CLASS_PREFIX } from "../../../constants/classes";

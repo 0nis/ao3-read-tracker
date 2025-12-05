@@ -1,6 +1,6 @@
 /** Converts a timestamp to a formatted date string (YYYY-MM-DD) */
 export const getFormattedDate = (
-  timestamp: number,
+  timestamp: number | undefined,
   separator: string = "-"
 ): string => {
   return formatDateSafely(timestamp, (ts: number) => {
@@ -9,7 +9,7 @@ export const getFormattedDate = (
 };
 
 /** Formats a timestamp to a localized time string (HH:MM) */
-export const getFormattedTime = (timestamp: number): string => {
+export const getFormattedTime = (timestamp: number | undefined): string => {
   return formatDateSafely(
     timestamp,
     (ts: number) => {
@@ -35,7 +35,7 @@ export const getFormattedDateAsFullText = (timestamp: number): string => {
   });
 };
 
-export const timestampToISOString = (timestamp: number): string => {
+export const timestampToISOString = (timestamp: number | undefined): string => {
   return formatDateSafely(
     timestamp,
     (ts: number) => {
@@ -76,11 +76,12 @@ export const getFormattedDateTimeForFilename = (timestamp: number): string => {
 };
 
 const formatDateSafely = (
-  timestamp: number,
+  timestamp: number | undefined,
   formatter: (ts: number) => string,
   fallback: string = "[Invalid Date]"
 ): string => {
-  if (isNaN(timestamp) || timestamp < 0) return fallback;
+  if (timestamp === undefined || isNaN(timestamp) || timestamp < 0)
+    return fallback;
   try {
     return formatter(timestamp);
   } catch {

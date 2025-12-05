@@ -2,7 +2,7 @@ import { SETTINGS_LOAD_MAP } from "../config";
 import { SectionId } from "../../config";
 import { SectionElements } from "../../renderer";
 
-import { settingsCache } from "../../../../services/cache/settings";
+import { settingsCache } from "../../../../services/cache";
 import { populateForm } from "../../../../utils/ui/forms";
 
 export async function loadAllSettingsSections(sections: SectionElements) {

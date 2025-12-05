@@ -1,7 +1,7 @@
-import { SymbolId, SymbolType } from "../../enums/symbols";
-import { symbolsCache } from "../../services/cache/symbols";
-import { SymbolRecord } from "../../types/symbols";
 import { el } from "./dom";
+import { symbolsCache } from "../../services/cache";
+import { SymbolId, SymbolType } from "../../enums/symbols";
+import { SymbolRecord } from "../../types/symbols";
 
 /** Gets a symbol element (image or text) by its ID. */
 export async function getSymbolElement(

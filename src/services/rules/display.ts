@@ -1,12 +1,7 @@
 import { DisplayMode } from "../../enums/settings";
 import { FinishedStatus } from "../../enums/works";
 import { SettingsData } from "../../types/settings";
-import {
-  IgnoredWork,
-  InProgressWork,
-  ReadWork,
-  WorkStateData,
-} from "../../types/works";
+import { WorkStateData } from "../../types/works";
 
 type DisplayRule = {
   name: string;

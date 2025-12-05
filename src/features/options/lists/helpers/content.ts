@@ -1,7 +1,7 @@
 import { PREFIX } from "../..";
 import { createSymbolElement } from "./symbols";
 
-import { SymbolRule } from "../../../../services/rules/symbols";
+import { SymbolRule } from "../../../../services/rules";
 import { el } from "../../../../utils/ui/dom";
 import { IgnoredWork, ReadWork } from "../../../../types/works";
 import { SymbolData } from "../../../../types/symbols";

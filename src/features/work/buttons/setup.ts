@@ -11,7 +11,7 @@ import {
 } from "./helpers";
 import { createUpdateButton } from "./components/update";
 
-import { settingsCache } from "../../../services/cache/settings";
+import { settingsCache } from "../../../services/cache";
 import { warn } from "../../../utils/extension";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { SettingsData } from "../../../types/settings";

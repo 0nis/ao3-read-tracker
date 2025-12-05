@@ -1,8 +1,6 @@
 import { ApplyMarksParams } from "../apply";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { symbolsCache } from "../../../../services/cache/symbols";
-import { getActiveSymbolRules } from "../../../../services/rules/symbols";
-import { SymbolRecord } from "../../../../types/symbols";
+import { symbolsCache } from "../../../../services/cache";
+import { getActiveSymbolRules } from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   el,
@@ -11,6 +9,8 @@ import {
   injectStyles,
 } from "../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../utils/ui/symbols";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { SymbolRecord } from "../../../../types/symbols";
 
 /**
  * Adds symbols to a work element showing information

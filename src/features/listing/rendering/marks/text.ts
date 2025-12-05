@@ -1,11 +1,9 @@
 import { ApplyMarksParams } from "../apply";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { WorkState } from "../../../../enums/works";
-import type {
-  ReadWork,
-  IgnoredWork,
-  InProgressWork,
-} from "../../../../types/works";
+
+import {
+  getActiveTextIndicatorRules,
+  getActiveTextNotesRules,
+} from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   getFormattedDate,
@@ -18,6 +16,18 @@ import {
   getElement,
   injectStyles,
 } from "../../../../utils/ui/dom";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { WorkState } from "../../../../enums/works";
+import type {
+  ReadWork,
+  IgnoredWork,
+  InProgressWork,
+} from "../../../../types/works";
+
+// TODO: Remove unneeded functions
+// TODO: Export rules to their own functinos
+// TODO: Improve code quality overall
+// TODO: Test
 
 /**
  * Adds text to a work element showing that it was marked as read/ignored, and any additional information.
@@ -41,6 +51,33 @@ export function addText({
     className: `${CLASS_PREFIX}__text-indicator`,
     tag: "ul",
   });
+
+  const indicatorRules = getActiveTextIndicatorRules({
+    readWork,
+    inProgressWork,
+    ignoredWork,
+  });
+
+  for (const rule of indicatorRules) {
+    indicatorList.appendChild(
+      createIndicator(
+        rule.workState,
+        rule.getTimeStamp(),
+        rule.getText(),
+        element
+      )
+    );
+  }
+
+  const notesRules = getActiveTextNotesRules({
+    readWork,
+    inProgressWork,
+    ignoredWork,
+  });
+
+  for (const rule of notesRules) {
+    addNotesText(element, rule.getText(), rule.className);
+  }
 
   if (readWork) renderReadInformation(element, indicatorList, readWork);
   if (inProgressWork)
@@ -68,36 +105,19 @@ function renderReadInformation(
 ) {
   if (readWork.notes)
     addNotesText(element, readWork.notes, `${CLASS_PREFIX}__notes--read`);
-
-  indicatorList.appendChild(
-    createIndicator(WorkState.READ, readWork.finishedAt)
-  );
 }
 
 function renderInProgressInformation(
   element: HTMLElement,
   indicatorList: HTMLElement,
   inProgressWork: InProgressWork
-) {
-  indicatorList.appendChild(
-    createIndicator(
-      WorkState.IN_PROGRESS,
-      inProgressWork.startedAt,
-      `Still reading as of %date% (chapter ${
-        inProgressWork.lastReadChapter || "?"
-      }/${getLatestChapterFromWorkListing(element) || "?"})`
-    )
-  );
-}
+) {}
 
 function renderIgnoredInformation(
   element: HTMLElement,
   indicatorList: HTMLElement,
   ignoredWork: IgnoredWork
 ) {
-  indicatorList.appendChild(
-    createIndicator(WorkState.IGNORED, ignoredWork.ignoredAt)
-  );
   if (ignoredWork.reason)
     addNotesText(
       element,
@@ -108,22 +128,24 @@ function renderIgnoredInformation(
 
 function createIndicator(
   type: WorkState,
-  timestamp: number,
-  text: string = "Marked as %type% on %date%"
+  timestamp: number | undefined,
+  text: string,
+  element: HTMLElement
 ): HTMLElement {
   return el(
     "li",
     {
       className: `${CLASS_PREFIX}__text-indicator--${type}`,
     },
-    [createIndicatorText(type, text, timestamp)]
+    [createIndicatorText(type, timestamp, text, element)]
   );
 }
 
 function createIndicatorText(
   type: WorkState,
+  timestamp: number | undefined,
   text: string,
-  timestamp: number
+  element: HTMLElement
 ): HTMLParagraphElement {
   const timeEl = el("time", {
     dateTime: timestampToISOString(timestamp),
@@ -132,15 +154,20 @@ function createIndicatorText(
     )}`,
   });
 
-  const replaceType = (text: string, type: WorkState) =>
-    text.replace("%type%", type);
+  const replacePlaceholders = (text: string) =>
+    text
+      .replace("%type%", type)
+      .replace(
+        "%latest_chapter%",
+        `${getLatestChapterFromWorkListing(element) || "?"}`
+      );
 
   const [before, after] = text.split("%date%");
   const nodes: (string | HTMLElement)[] = [];
 
-  if (before) nodes.push(replaceType(before, type));
+  if (before) nodes.push(replacePlaceholders(before));
   nodes.push(timeEl);
-  if (after) nodes.push(replaceType(after, type));
+  if (after) nodes.push(replacePlaceholders(after));
 
   return el("p", {}, nodes);
 }

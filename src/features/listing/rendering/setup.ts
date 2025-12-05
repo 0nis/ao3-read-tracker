@@ -7,7 +7,7 @@ import { unhide } from "./display/hide";
 import { applyMarksToWork } from "./apply";
 import { getWorkStatusData } from "../handlers";
 
-import { settingsCache } from "../../../services/cache/settings";
+import { settingsCache } from "../../../services/cache";
 import { extractWorkIdFromListingId } from "../../../utils/ao3";
 import { addStatusElement, createHiddenWorksCountEl } from "./status";
 

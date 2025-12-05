@@ -1,10 +1,5 @@
 import { ApplyMarksParams } from "../apply";
-import {
-  IGNORED_CLASS,
-  IN_PROGRESS_CLASS,
-  READ_CLASS,
-  REREAD_WORTHY_CLASS,
-} from "../../../../constants/classes";
+import { collectClassRules } from "../../../../services/rules";
 
 export function addClasses({
   element,
@@ -12,17 +7,18 @@ export function addClasses({
   inProgressWork,
   ignoredWork,
 }: ApplyMarksParams) {
-  if (readWork) element.classList.add(READ_CLASS);
-  if (ignoredWork) element.classList.add(IGNORED_CLASS);
-  if (inProgressWork) element.classList.add(IN_PROGRESS_CLASS);
-  if (readWork?.rereadWorthy) element.classList.add(REREAD_WORTHY_CLASS);
+  const rules = collectClassRules({
+    readWork,
+    inProgressWork,
+    ignoredWork,
+  });
+
+  for (const rule of rules) {
+    if (rule.shouldApply()) element.classList.add(rule.className);
+  }
 }
 
 export function removeClasses(element: HTMLElement) {
-  element.classList.remove(
-    READ_CLASS,
-    IGNORED_CLASS,
-    REREAD_WORTHY_CLASS,
-    IN_PROGRESS_CLASS
-  );
+  for (const rule of collectClassRules({}))
+    element.classList.remove(rule.className);
 }
