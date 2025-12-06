@@ -1,3 +1,5 @@
+import { VerticalPlacement } from "../../enums/settings";
+
 /**
  * Helper to create new elements quickly
  *
@@ -100,3 +102,10 @@ export const getElement = (
   parent: HTMLElement,
   selector: string
 ): HTMLElement | null => parent.querySelector(selector);
+
+export function getButtonOrigin(btn: HTMLElement | null): VerticalPlacement {
+  const origin = btn?.getAttribute("data-origin");
+  return origin === VerticalPlacement.BOTTOM
+    ? VerticalPlacement.BOTTOM
+    : VerticalPlacement.TOP;
+}

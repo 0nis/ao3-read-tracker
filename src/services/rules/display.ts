@@ -25,12 +25,11 @@ export function collectDisplayRules({
       shouldApply: () => !!ignoredWork,
       getMode: () => settings.ignoreSettings.defaultDisplayMode,
     },
-    // TODO: Uncomment when in progress settings are added
-    // {
-    //   name: "in progress",
-    //   shouldApply: () => !!inProgressWork,
-    //   getMode: () => settings.inProgressSettings.defaultDisplayMode,
-    // },
+    {
+      name: "in progress",
+      shouldApply: () => !!inProgressWork,
+      getMode: () => settings.inProgressSettings.defaultDisplayMode,
+    },
     {
       name: "reread worthy",
       shouldApply: () => !!readWork?.rereadWorthy,

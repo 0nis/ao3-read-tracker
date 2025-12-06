@@ -3,10 +3,12 @@ import {
   buildGeneralSettingsSection,
   buildIgnoreSettingsSection,
   buildReadSettingsSection,
+  buildInProgressSettingsSection,
 } from "./settings";
 
 export enum SectionId {
   READ_SETTINGS = "read-settings",
+  IN_PROGRESS_SETTINGS = "in-progress-settings",
   IGNORE_SETTINGS = "ignore-settings",
   GENERAL_SETTINGS = "general-settings",
   READ_LIST = "read-works",
@@ -33,6 +35,12 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     label: "Read Settings",
     type: SectionType.SETTINGS,
     build: buildReadSettingsSection,
+  },
+  {
+    id: SectionId.IN_PROGRESS_SETTINGS,
+    label: "In Progress Settings",
+    type: SectionType.SETTINGS,
+    build: buildInProgressSettingsSection,
   },
   {
     id: SectionId.IGNORE_SETTINGS,

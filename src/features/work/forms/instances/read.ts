@@ -9,7 +9,7 @@ import {
   textarea,
   toggleSwitch,
 } from "../../../../utils/ui/forms";
-import { ButtonPlacement } from "../../../../enums/settings";
+import { VerticalPlacement } from "../../../../enums/settings";
 import { FinishedStatus } from "../../../../enums/works";
 import { FormItemType } from "../../../../enums/forms";
 import { CLASS_PREFIX } from "../../../../constants/classes";
@@ -71,7 +71,7 @@ const items: WorkFormItem<ReadWork>[] = [
 export function createReadWorkForm(
   data: Partial<ReadWork>,
   editing: boolean,
-  origin?: ButtonPlacement
+  origin?: VerticalPlacement
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.READ,

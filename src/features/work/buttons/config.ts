@@ -3,14 +3,15 @@ import { WorkAction, WorkActionTypeMap } from "../config";
 
 import { createIgnoreWorkForm } from "../forms/instances/ignore";
 import { createReadWorkForm } from "../forms/instances/read";
+import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
 import { StorageService } from "../../../services/storage";
 import {
   IgnoreSettings,
+  InProgressSettings,
   ReadSettings,
   SettingsData,
 } from "../../../types/settings";
-import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
 export const ACTION_LABELS: {
   [K in keyof WorkActionTypeMap]: ActionLabelSet;
@@ -69,7 +70,7 @@ export const ACTION_HANDLER_MAP: {
 
 export interface WorkActionSettingsMap {
   [WorkAction.READ]: ReadSettings;
-  [WorkAction.IN_PROGRESS]: ReadSettings; // TODO: Change to InProgressSettings when created
+  [WorkAction.IN_PROGRESS]: InProgressSettings;
   [WorkAction.IGNORE]: IgnoreSettings;
 }
 
@@ -79,6 +80,6 @@ export const ACTION_SETTINGS_MAP: {
   ) => WorkActionSettingsMap[K];
 } = {
   [WorkAction.READ]: (s) => s.readSettings,
-  [WorkAction.IN_PROGRESS]: (s) => s.readSettings, // TODO: Change to inProgressSettings when created
+  [WorkAction.IN_PROGRESS]: (s) => s.inProgressSettings,
   [WorkAction.IGNORE]: (s) => s.ignoreSettings,
 };

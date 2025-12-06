@@ -5,14 +5,16 @@ export enum DisplayMode {
   COLLAPSE_AGGRESSIVE = "aggressive_collapse",
 }
 
-export enum ButtonPlacement {
+export enum VerticalPlacement {
   TOP = "top",
   BOTTOM = "bottom",
   BOTH = "both",
+  NONE = "none",
 }
 
 export enum SettingsType {
   READ = "read_settings",
+  IN_PROGRESS = "in_progress_settings",
   IGNORE = "ignore_settings",
   GENERAL = "general_settings",
 }

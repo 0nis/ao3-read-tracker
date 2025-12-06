@@ -1,30 +1,36 @@
 import { getManifest } from "./manifest";
 
+/** Get the extension name from the manifest formatted for console output prefixes */
+export function getExtensionMsgPrefix(): string {
+  return `[${getManifest().data?.name ?? "AO3 Read Tracker"}] `;
+}
+
+/** Prepend the extension name to a message */
 export function createExtensionMsg(msg: string): string {
-  return `[${getManifest().data?.name ?? "Extension"}] ${msg}`;
+  return `${getExtensionMsgPrefix()}${msg}`;
 }
 
 /** For critical errors that break functionality */
-export const error = (msg: string): void => {
-  console.error(createExtensionMsg(msg));
+export const error = (...msgs: unknown[]): void => {
+  console.error(getExtensionMsgPrefix(), ...msgs);
 };
 
 /** For unexpected but non-critical issues */
-export const warn = (msg: string): void => {
-  console.warn(createExtensionMsg(msg));
+export const warn = (...msgs: unknown[]): void => {
+  console.warn(getExtensionMsgPrefix(), ...msgs);
 };
 
 /** For general extension activity and status messages */
-export const log = (msg: string): void => {
-  console.log(createExtensionMsg(msg));
+export const log = (...msgs: unknown[]): void => {
+  console.log(getExtensionMsgPrefix(), ...msgs);
 };
 
 /** For information messages about extension state or actions */
-export const info = (msg: string): void => {
-  console.info(createExtensionMsg(msg));
+export const info = (...msgs: unknown[]): void => {
+  console.info(getExtensionMsgPrefix(), ...msgs);
 };
 
 /** For verbose output useful during development and debugging */
-export const debug = (msg: string): void => {
-  console.debug(createExtensionMsg(msg));
+export const debug = (...msgs: unknown[]): void => {
+  console.debug(getExtensionMsgPrefix(), ...msgs);
 };

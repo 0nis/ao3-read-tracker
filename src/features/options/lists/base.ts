@@ -1,14 +1,3 @@
-import { PREFIX } from "..";
-import { CLASS_PREFIX } from "../../../constants/classes";
-import {
-  PaginatedParams,
-  PaginatedResult,
-  StorageResult,
-} from "../../../types/results";
-import { handleStorageRead } from "../../../utils/storage";
-import { el, injectStyles } from "../../../utils/ui/dom";
-import { reportSrLive } from "../../../utils/ui/accessibility";
-import { createSection, SectionConfig } from "../components/section";
 import { attachExpandableBehavior } from "./helpers/accessibility";
 import { createActionButtons } from "./helpers/actions";
 import {
@@ -16,6 +5,20 @@ import {
   setupPaginationEvents,
 } from "./helpers/pagination";
 import { getStyles } from "./style";
+
+import { PREFIX } from "..";
+import { SectionConfig } from "../types";
+import { createSection } from "../components/section";
+
+import { handleStorageRead } from "../../../utils/storage";
+import { el, injectStyles } from "../../../utils/ui/dom";
+import { reportSrLive } from "../../../utils/ui/accessibility";
+import { CLASS_PREFIX } from "../../../constants/classes";
+import {
+  PaginatedParams,
+  PaginatedResult,
+  StorageResult,
+} from "../../../types/results";
 
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
   paginator: (

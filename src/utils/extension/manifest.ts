@@ -40,8 +40,7 @@ export function getManifest(): StorageResult<ExtensionManifest> {
     const msg = getCriticalManifestError(
       err instanceof Error ? err.message : String(err)
     );
-    error(`Failed to access manifest: ${err}`);
-    error(msg);
+    error("Failed to access manifest:", msg, err);
 
     return {
       error: msg,

@@ -8,6 +8,7 @@ import { ReadWork, IgnoredWork, InProgressWork } from "../types/works";
 import {
   GeneralSettings,
   IgnoreSettings,
+  InProgressSettings,
   ReadSettings,
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
@@ -21,6 +22,10 @@ export const instances = {
   readSettings: new SettingsData<ReadSettings>(
     db.readSettings,
     SettingsType.READ
+  ),
+  inProgressSettings: new SettingsData<InProgressSettings>(
+    db.inProgressSettings,
+    SettingsType.IN_PROGRESS
   ),
   ignoreSettings: new SettingsData<IgnoreSettings>(
     db.ignoreSettings,

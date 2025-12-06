@@ -1,78 +1,75 @@
-import { WorkAction } from "../config";
 import { ACTION_SETTINGS_MAP } from "./config";
 import { handleCheckExistence, handleUpdateInProgressInfo } from "./handlers";
 import {
-  buildActionButtonConfig,
   createActionModeButton,
-  getButtonParents,
-  getWorkNavBars,
-  handleOnUpdateReadProgress,
-  insertButtonIntoParent,
-} from "./helpers";
+  handleOnUpdateReadProgressEvent,
+} from "./helpers/create";
+import { buildActionButtonConfig } from "./helpers/meta";
+import { ButtonNavs, getWorkNavBars, placeButtons } from "./helpers/placement";
 import { createUpdateButton } from "./components/update";
+import { WorkAction } from "../config";
 
 import { settingsCache } from "../../../services/cache";
 import { warn } from "../../../utils/extension";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { SettingsData } from "../../../types/settings";
-import { ButtonPlacement } from "../../../enums/settings";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
 
-  if (settings.generalSettings?.replaceMarkForLaterText) {
+  if (settings.generalSettings?.replaceMarkForLaterLabel) {
     modifyMarkForLaterButton(
       settings.generalSettings?.markForLaterReplacementLabel
     );
   }
 
   const workId = getIdFromUrl();
-
-  await setupAllActionButtons(settings);
-  await setupUpdateReadProgressButton(workId, settings);
-}
-
-async function setupAllActionButtons(settings: SettingsData) {
   const navs = getWorkNavBars();
   if (!navs.top && !navs.bottom) return;
 
+  await setupAllActionButtons(settings, navs);
+  await setupUpdateReadProgressButton(workId, settings, navs);
+}
+
+async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
   const cfg = buildActionButtonConfig();
 
-  const { generalSettings } = settings;
-  for (const a of Object.keys(cfg) as WorkAction[]) {
-    const s = ACTION_SETTINGS_MAP[a]?.(settings);
+  for (const action of Object.keys(cfg) as WorkAction[]) {
+    const s = ACTION_SETTINGS_MAP[action]?.(settings);
     if (!s) {
-      warn(`No settings found for action button: ${a}`);
+      warn(`No settings found for action button: ${action}`);
       continue;
     }
-    const parents = getButtonParents(generalSettings.buttonPlacement, navs);
-    for (const p of parents) {
-      const btn = await createActionModeButton(
-        s.simpleModeEnabled ? cfg[a].simple : cfg[a].advanced
-      );
-      if (!btn) continue;
-      insertButtonIntoParent(p, btn);
-    }
+
+    await placeButtons(
+      settings.generalSettings.buttonPlacement,
+      navs,
+      async () =>
+        await createActionModeButton(
+          s.simpleModeEnabled ? cfg[action].simple : cfg[action].advanced
+        )
+    );
   }
 }
 
 async function setupUpdateReadProgressButton(
   workId: string | null,
-  settings: SettingsData
+  settings: SettingsData,
+  navs: ButtonNavs
 ) {
   if (!workId) return;
   const exists = await handleCheckExistence(workId, WorkAction.IN_PROGRESS);
-  const navs = getWorkNavBars();
-  if (!navs.bottom) return;
-  // TODO: Make label configurable, make placement configurable
-  const btn = createUpdateButton(
-    "Update Read Progress",
-    handleUpdateInProgressInfo,
-    handleOnUpdateReadProgress,
-    exists ? false : true,
-    { "data-origin": ButtonPlacement.BOTTOM }
+  await placeButtons(
+    settings.inProgressSettings.updateButtonPlacement,
+    navs,
+    () =>
+      createUpdateButton(
+        "Update Read Progress",
+        handleUpdateInProgressInfo,
+        handleOnUpdateReadProgressEvent,
+        exists ? false : true
+      )
   );
-  insertButtonIntoParent(navs.bottom, btn);
 }
 
 function modifyMarkForLaterButton(label: string) {

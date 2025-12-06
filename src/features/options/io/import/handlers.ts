@@ -21,7 +21,7 @@ export async function handleImport(
   btn: HTMLButtonElement,
   file: Blob,
   options: ImportOptions,
-  successMsg: string = "Yippee, successfully imported %rows% rows of data!"
+  successMsg: string = "Successfully imported %rows% rows of data! Enjoy!"
 ) {
   const fileInfo = await getDbInfoFromDexieExport(file);
   if (!validateImportFile(fileInfo)) return;
@@ -49,14 +49,16 @@ export async function handleImport(
   } else {
     const errorMsg =
       res.error instanceof Error ? res.error.message : String(res.error);
-    showNotification(`Oh no, I couldn't import your data: ${errorMsg}`); // Manual to allow showing Dexie errors without reportExtensionFailure
+    showNotification(
+      `Something went wrong while importing your data: ${errorMsg}`
+    ); // Manual to allow showing Dexie errors without reportExtensionFailure
   }
 }
 
 function validateImportFile(info: DexieExportDbInfo): boolean {
   if (info.formatName !== "dexie" || info.databaseName !== DATABASE_NAME) {
     showNotification(
-      "Whups, the selected file isn't an export from this extension. Please select a valid file! Only exports from this extension can be imported."
+      "The selected file isn't an export from this extension, please select a valid file! Only exports from this extension can be imported."
     );
     return false;
   }

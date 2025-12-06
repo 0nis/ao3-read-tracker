@@ -23,6 +23,7 @@ export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
   const saveEl = createSettingsSectionSaveButton(cfg.title);
   saveEl.addEventListener("click", async (e) => {
     e.preventDefault();
+    // TODO: Either show the notification below the save button or scroll to the top to show it
     await saveSettingsData(cfg, saveEl);
     settingsCache.clear();
   });

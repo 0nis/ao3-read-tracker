@@ -6,6 +6,7 @@ import {
   ReadSettings,
   IgnoreSettings,
   GeneralSettings,
+  InProgressSettings,
 } from "../types/settings";
 import { ReadWork, IgnoredWork, InProgressWork } from "../types/works";
 import { SymbolRecord } from "../types/symbols";
@@ -17,6 +18,7 @@ export class Ao3MarkAsReadDb extends Dexie {
   inProgressWorks!: Table<InProgressWork>;
   ignoredWorks!: Table<IgnoredWork>;
   readSettings!: Table<ReadSettings>;
+  inProgressSettings!: Table<InProgressSettings>;
   ignoreSettings!: Table<IgnoreSettings>;
   generalSettings!: Table<GeneralSettings>;
   symbolRecords!: Table<SymbolRecord>;
@@ -29,6 +31,7 @@ export class Ao3MarkAsReadDb extends Dexie {
       inProgressWorks: "id, lastReadAt",
       ignoredWorks: "id, ignoredAt",
       readSettings: "id",
+      inProgressSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",
       symbolRecords: "id",

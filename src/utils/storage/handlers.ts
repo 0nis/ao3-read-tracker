@@ -44,7 +44,7 @@ export async function handleStorageRead<T>(
   } = options ?? {};
 
   const err = () => {
-    reportExtensionFailure(errorMsg, result.error);
+    reportExtensionFailure(errorMsg);
     return fallback;
   };
 
@@ -106,7 +106,7 @@ export async function handleStorageWrite<T>(
     onSuccess(successMsg);
     return Promise.resolve();
   } else {
-    reportExtensionFailure(errorMsg, result.error);
+    reportExtensionFailure(errorMsg);
     return;
   }
 }

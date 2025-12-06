@@ -1,11 +1,17 @@
-import { getManifest, replaceManifestPlaceholders, error } from "../extension";
+import {
+  getManifest,
+  replaceManifestPlaceholders,
+  error,
+  info,
+  createExtensionMsg,
+} from "../extension";
 
 /**
  * Displays a critical message that requires user attention.
  * Uses the native alert dialog.
  */
 export function showNotification(message: string): void {
-  alert(message);
+  alert(createExtensionMsg(message));
 }
 
 /**
@@ -13,7 +19,7 @@ export function showNotification(message: string): void {
  * Uses the native confirm dialog.
  */
 export function showConfirm(message: string): boolean {
-  return confirm(message);
+  return confirm(createExtensionMsg(message));
 }
 
 /**
@@ -29,7 +35,9 @@ export function confirmDestructiveAction(
   confirmPhrase: string
 ): boolean {
   const userInput = prompt(
-    `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
+    createExtensionMsg(
+      `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
+    )
   );
   return userInput?.toUpperCase() === confirmPhrase.toUpperCase();
 }
@@ -41,17 +49,19 @@ export function confirmDestructiveAction(
  * @param msg The error message template. Use %name%, %version%, %url%, %author%, %description% for manifest placeholders.
  * @param err The error object that caused the failure
  */
-export function reportExtensionFailure(msg: string, err: unknown): void {
+export function reportExtensionFailure(msg: string, err?: unknown): void {
   const message = replaceManifestPlaceholders(msg);
   const url = getManifest().data?.homepage_url || "[url unknown]";
 
-  error(`${message}: ${err}`);
-  error(`To help fix this, please report the issue at: ${url}`);
+  error(message, err);
+  info("To help fix this, please report the issue at:", url);
 
   showNotification(
-    `${message}\n\n` +
-      `To help fix this, please report the issue at:\n` +
-      `${url}\n\n` +
-      `Thank you!`
+    createExtensionMsg(
+      `${message}\n\n` +
+        `To help fix this, please report the issue at:\n` +
+        `${url}\n\n` +
+        `Thank you!`
+    )
   );
 }

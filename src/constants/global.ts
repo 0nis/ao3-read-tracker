@@ -8,3 +8,5 @@ export const SETTINGS_PAGE_URL = "/extensions/read-tracker";
 export const IS_DEV = process.env.NODE_ENV === "development";
 
 export const ABBREVIATION: string = "EXT-RT";
+
+export const EXTENSION_DISABLED_KEY = `${ABBREVIATION}_DISABLED`;
