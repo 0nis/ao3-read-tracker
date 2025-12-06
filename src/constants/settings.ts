@@ -26,6 +26,7 @@ export const DEFAULT_IN_PROGRESS_SETTINGS: InProgressSettings = {
   pausedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   waitingDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
+  updateButtonPlacement: VerticalPlacement.BOTTOM,
 };
 
 export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
@@ -38,6 +39,6 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   hideSymbols: false,
   buttonPlacement: VerticalPlacement.TOP,
-  replaceMarkForLaterText: true,
+  replaceMarkForLaterLabel: true,
   markForLaterReplacementLabel: "Finished",
 };

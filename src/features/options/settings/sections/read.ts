@@ -37,7 +37,7 @@ const items: SettingsSectionItem<ReadSettings>[] = [
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.READ_SETTINGS,
-        label: "Reread worthy",
+        label: "Reread Worthy",
         input: select(DisplayMode),
         dataField: "rereadWorthyDisplayMode",
       },

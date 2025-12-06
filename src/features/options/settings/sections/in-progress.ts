@@ -4,7 +4,7 @@ import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
 import { select, toggleSwitch } from "../../../../utils/ui/forms";
-import { DisplayMode } from "../../../../enums/settings";
+import { DisplayMode, VerticalPlacement } from "../../../../enums/settings";
 import { SymbolDisplayMode } from "../../../../enums/symbols";
 import { FormItemType } from "../../../../enums/forms";
 import { InProgressSettings } from "../../../../types/settings";
@@ -65,6 +65,15 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     dataField: "symbolDisplayMode",
     description:
       "Controls how symbols are displayed next to the title of the works in lists. 'State' means read or in progress, 'status' means finished, abandoned, paused, etc.",
+  },
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.IN_PROGRESS_SETTINGS,
+    label: "'Update' Button Placement",
+    input: select(VerticalPlacement),
+    dataField: "updateButtonPlacement",
+    description:
+      "Whether the 'update read progress' button appears at the top or the bottom of the work page.",
   },
 ];
 

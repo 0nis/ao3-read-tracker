@@ -19,7 +19,7 @@ export interface InProgressSettings {
   pausedDisplayMode: DisplayMode;
   waitingDisplayMode: DisplayMode;
   symbolDisplayMode: SymbolDisplayMode;
-  updateVerticalPlacement: VerticalPlacement;
+  updateButtonPlacement: VerticalPlacement;
 }
 
 export interface IgnoreSettings {
@@ -32,7 +32,7 @@ export interface GeneralSettings {
   id: string;
   hideSymbols: boolean;
   buttonPlacement: VerticalPlacement;
-  replaceMarkForLaterText: boolean;
+  replaceMarkForLaterLabel: boolean;
   markForLaterReplacementLabel: string;
 }
 

@@ -7,7 +7,6 @@ import {
 } from "../config";
 import { getDefaultPayload, getWorkTitleForNotifications } from "../helpers";
 import { FormRegistry } from "../forms/registry";
-import { getButtonOrigin } from "./helpers";
 
 import {
   getCurrentChapterFromWorkPage,
@@ -16,6 +15,7 @@ import {
 import { handleStorageRead, handleStorageWrite } from "../../../utils/storage";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
 import { createFlashNotice } from "../../../utils/ui/forms";
+import { getButtonOrigin } from "../../../utils/ui/dom";
 import { VerticalPlacement } from "../../../enums/settings";
 import { InProgressWork } from "../../../types/works";
 import { ABBREVIATION } from "../../../constants/global";

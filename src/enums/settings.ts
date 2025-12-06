@@ -9,6 +9,7 @@ export enum VerticalPlacement {
   TOP = "top",
   BOTTOM = "bottom",
   BOTH = "both",
+  NONE = "none",
 }
 
 export enum SettingsType {
