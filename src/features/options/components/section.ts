@@ -1,12 +1,8 @@
 import { PREFIX } from "..";
 import { el } from "../../../utils/ui/dom";
+import { SectionConfig } from "../types";
 
-export interface SectionConfig {
-  id: string;
-  title: string;
-}
-
-export function createSection(config: SectionConfig) {
+export function createSection(config: SectionConfig): HTMLElement {
   return el(
     "section",
     {
