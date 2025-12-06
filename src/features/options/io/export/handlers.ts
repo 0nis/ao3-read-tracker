@@ -32,12 +32,12 @@ export async function handleExport(btn: HTMLButtonElement) {
     try {
       downloadFile(res.data, "export");
     } catch (error) {
-      reportExtensionFailure("Oops, failed to download exported data!", error);
+      reportExtensionFailure("Failed to download exported data!", error);
       return;
     }
   } else {
     const errorMsg =
       res.error instanceof Error ? res.error.message : String(res.error);
-    showNotification(`Oops, failed to download exported data: ${errorMsg}`);
+    showNotification(`Failed to download exported data: ${errorMsg}`);
   }
 }

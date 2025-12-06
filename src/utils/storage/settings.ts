@@ -8,6 +8,7 @@ import { StorageResult } from "../../types/results";
 import { SettingsData } from "../../types/settings";
 import { StorageService } from "../../services/storage";
 import { reportExtensionFailure } from "../ui/dialogs";
+import { error } from "../extension";
 
 const SETTINGS_LOADERS: Record<
   keyof SettingsData,
@@ -55,10 +56,9 @@ export async function handleGetAllSettings(): Promise<SettingsData> {
 
   if (failures.length > 0) {
     reportExtensionFailure(
-      `Failed to retrieve: ${failures
+      `Failed to retrieve ${failures
         .map((failure) => Object.keys(failure).join(", "))
-        .join(", ")} settings. Default values were applied.`,
-      failures
+        .join(", ")} settings. Default values were applied.`
     );
   }
 

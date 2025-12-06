@@ -1,4 +1,9 @@
-import { getManifest, replaceManifestPlaceholders, error } from "../extension";
+import {
+  getManifest,
+  replaceManifestPlaceholders,
+  error,
+  info,
+} from "../extension";
 
 /**
  * Displays a critical message that requires user attention.
@@ -41,12 +46,12 @@ export function confirmDestructiveAction(
  * @param msg The error message template. Use %name%, %version%, %url%, %author%, %description% for manifest placeholders.
  * @param err The error object that caused the failure
  */
-export function reportExtensionFailure(msg: string, err: unknown): void {
+export function reportExtensionFailure(msg: string, err?: unknown): void {
   const message = replaceManifestPlaceholders(msg);
   const url = getManifest().data?.homepage_url || "[url unknown]";
 
-  error(`${message}: ${err}`);
-  error(`To help fix this, please report the issue at: ${url}`);
+  error(message, err);
+  info("To help fix this, please report the issue at:", url);
 
   showNotification(
     `${message}\n\n` +

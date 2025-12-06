@@ -22,7 +22,7 @@ export async function safeExecute<T>(
     const data = await fn();
     return { success: true, data };
   } catch (err) {
-    error(`Error in ${context}: ${err}`);
+    error(`Error in ${context}:`, err);
     return { success: false, error: err, data: undefined };
   }
 }
