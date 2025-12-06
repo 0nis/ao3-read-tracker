@@ -37,6 +37,7 @@ export interface GeneralSettings {
 
 export type SettingsData = {
   readSettings: ReadSettings;
+  inProgressSettings: InProgressSettings;
   ignoreSettings: IgnoreSettings;
   generalSettings: GeneralSettings;
 };

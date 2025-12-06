@@ -74,8 +74,7 @@ async function renderSymbols(
     },
     displayMode: {
       read: settings.readSettings.symbolDisplayMode,
-      // TODO: Uncomment once added
-      // inProgress: settings.generalSettings.symbolDisplayMode,
+      inProgress: settings.inProgressSettings.symbolDisplayMode,
     },
     options: {
       hideSymbols: settings.generalSettings.hideSymbols,
