@@ -4,7 +4,7 @@ import { WorkAction } from "../../config";
 
 import { datetime, number, select, textarea } from "../../../../utils/ui/forms";
 import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
-import { ButtonPlacement } from "../../../../enums/settings";
+import { VerticalPlacement } from "../../../../enums/settings";
 import { ReadingStatus } from "../../../../enums/works";
 import { FormItemType } from "../../../../enums/forms";
 import { CLASS_PREFIX } from "../../../../constants/classes";
@@ -71,7 +71,7 @@ const items: WorkFormItem<InProgressWork>[] = [
 export function createInProgressWorkForm(
   data: Partial<InProgressWork>,
   editing: boolean,
-  origin?: ButtonPlacement
+  origin?: VerticalPlacement
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.IN_PROGRESS,

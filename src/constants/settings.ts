@@ -1,4 +1,4 @@
-import { ButtonPlacement, DisplayMode } from "../enums/settings";
+import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SettingsType } from "../enums/settings";
 import { SymbolDisplayMode } from "../enums/symbols";
 import {
@@ -37,7 +37,7 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   hideSymbols: false,
-  buttonPlacement: ButtonPlacement.TOP,
+  buttonPlacement: VerticalPlacement.TOP,
   replaceMarkForLaterText: true,
   markForLaterReplacementLabel: "Finished",
 };

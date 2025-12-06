@@ -3,7 +3,7 @@ import { el, ensureChild } from ".././dom";
 import { reportSrLive } from ".././accessibility";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { MessageType } from "../../../enums/messages";
-import { ButtonPlacement } from "../../../enums/settings";
+import { VerticalPlacement } from "../../../enums/settings";
 
 /**
  * Shows a message within a container element, replacing any existing message.
@@ -34,7 +34,7 @@ export function showFormMessage(
 /** Adds an AO3-style flash notice to the top of the main content area */
 export function createFlashNotice(
   msg: string,
-  position: ButtonPlacement = ButtonPlacement.TOP
+  position: VerticalPlacement = VerticalPlacement.TOP
 ): void {
   const main = document.getElementById("main");
   if (!main) return;
@@ -81,7 +81,7 @@ export function createFlashNotice(
 
   reportSrLive(msg);
 
-  if (position === ButtonPlacement.BOTTOM) {
+  if (position === VerticalPlacement.BOTTOM) {
     const el = main.querySelector("#feedback")?.querySelector("ul.actions");
     if (el) el.after(notice);
     else {

@@ -16,7 +16,7 @@ import {
 import { handleStorageRead, handleStorageWrite } from "../../../utils/storage";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
 import { createFlashNotice } from "../../../utils/ui/forms";
-import { ButtonPlacement } from "../../../enums/settings";
+import { VerticalPlacement } from "../../../enums/settings";
 import { InProgressWork } from "../../../types/works";
 import { ABBREVIATION } from "../../../constants/global";
 
@@ -153,5 +153,5 @@ export async function handleUpdateInProgressInfo(
 }
 
 const getBtnOrigin = (btn: HTMLElement | null | undefined) => {
-  return btn ? getButtonOrigin(btn) : ButtonPlacement.TOP;
+  return btn ? getButtonOrigin(btn) : VerticalPlacement.TOP;
 };

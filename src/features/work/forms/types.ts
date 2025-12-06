@@ -1,5 +1,5 @@
 import type { WorkAction } from "../config";
-import type { ButtonPlacement } from "../../../enums/settings";
+import type { VerticalPlacement } from "../../../enums/settings";
 import type {
   FormConfig,
   FormField,
@@ -39,5 +39,5 @@ export interface WorkFormConfig<T>
       onDelete?: (form: HTMLFormElement) => Promise<void>;
     };
   };
-  origin?: ButtonPlacement;
+  origin?: VerticalPlacement;
 }

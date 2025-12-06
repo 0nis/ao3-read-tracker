@@ -15,7 +15,7 @@ import { settingsCache } from "../../../services/cache";
 import { warn } from "../../../utils/extension";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { SettingsData } from "../../../types/settings";
-import { ButtonPlacement } from "../../../enums/settings";
+import { VerticalPlacement } from "../../../enums/settings";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
@@ -70,7 +70,7 @@ async function setupUpdateReadProgressButton(
     handleUpdateInProgressInfo,
     handleOnUpdateReadProgress,
     exists ? false : true,
-    { "data-origin": ButtonPlacement.BOTTOM }
+    { "data-origin": VerticalPlacement.BOTTOM }
   );
   insertButtonIntoParent(navs.bottom, btn);
 }

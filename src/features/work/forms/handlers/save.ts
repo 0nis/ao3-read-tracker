@@ -8,12 +8,12 @@ import {
   extractFormValues,
 } from "../../../../utils/ui/forms";
 import { handleStorageWrite } from "../../../../utils/storage";
-import { ButtonPlacement } from "../../../../enums/settings";
+import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
   saveBtn: HTMLButtonElement,
-  origin?: ButtonPlacement
+  origin?: VerticalPlacement
 ): Promise<void> {
   try {
     const saveMap = FORMS_SAVE_MAP[cfg.id];

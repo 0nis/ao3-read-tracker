@@ -4,7 +4,7 @@ import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
 import { select, text, toggleSwitch } from "../../../../utils/ui/forms";
-import { ButtonPlacement } from "../../../../enums/settings";
+import { VerticalPlacement } from "../../../../enums/settings";
 import { FormItemType } from "../../../../enums/forms";
 import { GeneralSettings } from "../../../../types/settings";
 
@@ -22,7 +22,7 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
     label: "Button placement",
-    input: select(ButtonPlacement),
+    input: select(VerticalPlacement),
     dataField: "buttonPlacement",
     description:
       "Choose where the 'Mark as Read' and 'Ignore' buttons appear on work pages.",

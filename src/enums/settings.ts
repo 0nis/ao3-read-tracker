@@ -5,7 +5,7 @@ export enum DisplayMode {
   COLLAPSE_AGGRESSIVE = "aggressive_collapse",
 }
 
-export enum ButtonPlacement {
+export enum VerticalPlacement {
   TOP = "top",
   BOTTOM = "bottom",
   BOTH = "both",

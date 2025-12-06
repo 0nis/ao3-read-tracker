@@ -10,7 +10,7 @@ import { createOpenFormButton } from "./components/open-form";
 import { handleDeleteWork, handleEditWork, handleSaveWork } from "./handlers";
 
 import { getIdFromUrl } from "../../../utils/ao3";
-import { ButtonPlacement } from "../../../enums/settings";
+import { VerticalPlacement } from "../../../enums/settings";
 import { warn } from "../../../utils/extension";
 import { el } from "../../../utils/ui/dom";
 import { WorkAction, WorkActionEvent } from "../config";
@@ -79,23 +79,23 @@ type ButtonNavs = {
 
 type Parent = {
   el: HTMLElement;
-  placement: ButtonPlacement;
+  placement: VerticalPlacement;
 };
 
 export function getButtonParents(
-  placement: ButtonPlacement,
+  placement: VerticalPlacement,
   nav: ButtonNavs
 ): Parent[] {
   const parents: Parent[] = [];
   switch (placement) {
-    case ButtonPlacement.BOTH:
+    case VerticalPlacement.BOTH:
       if (nav.top) parents.push(nav.top);
       if (nav.bottom) parents.push(nav.bottom);
       break;
-    case ButtonPlacement.TOP:
+    case VerticalPlacement.TOP:
       if (nav.top) parents.push(nav.top);
       break;
-    case ButtonPlacement.BOTTOM:
+    case VerticalPlacement.BOTTOM:
       if (nav.bottom) parents.push(nav.bottom);
       break;
   }
@@ -111,23 +111,23 @@ export function getWorkNavBars(): ButtonNavs {
   return {
     top: {
       el: tNav as HTMLElement,
-      placement: ButtonPlacement.TOP,
+      placement: VerticalPlacement.TOP,
     },
     bottom: {
       el: bNav as HTMLElement,
-      placement: ButtonPlacement.BOTTOM,
+      placement: VerticalPlacement.BOTTOM,
     },
   };
 }
 
 export function insertButtonIntoParent(parent: Parent, button: HTMLElement) {
-  if (parent.placement === ButtonPlacement.TOP) {
-    button.setAttribute("data-origin", ButtonPlacement.TOP);
+  if (parent.placement === VerticalPlacement.TOP) {
+    button.setAttribute("data-origin", VerticalPlacement.TOP);
     const li = el("li", {}, button);
     parent.el.appendChild(li);
   }
-  if (parent.placement === ButtonPlacement.BOTTOM) {
-    button.setAttribute("data-origin", ButtonPlacement.BOTTOM);
+  if (parent.placement === VerticalPlacement.BOTTOM) {
+    button.setAttribute("data-origin", VerticalPlacement.BOTTOM);
     const li = el("li", {}, button);
     const beforeEl = parent.el.querySelector("li#show_comments_link");
     if (beforeEl) parent.el.insertBefore(li, beforeEl);
@@ -135,11 +135,11 @@ export function insertButtonIntoParent(parent: Parent, button: HTMLElement) {
   }
 }
 
-export function getButtonOrigin(btn: HTMLElement | null): ButtonPlacement {
+export function getButtonOrigin(btn: HTMLElement | null): VerticalPlacement {
   const origin = btn?.getAttribute("data-origin");
-  return origin === ButtonPlacement.BOTTOM
-    ? ButtonPlacement.BOTTOM
-    : ButtonPlacement.TOP;
+  return origin === VerticalPlacement.BOTTOM
+    ? VerticalPlacement.BOTTOM
+    : VerticalPlacement.TOP;
 }
 
 export async function handleOnUpdateReadProgress(

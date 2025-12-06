@@ -1,4 +1,4 @@
-import { ButtonPlacement, DisplayMode } from "../enums/settings";
+import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SymbolDisplayMode } from "../enums/symbols";
 
 export interface ReadSettings {
@@ -19,6 +19,7 @@ export interface InProgressSettings {
   pausedDisplayMode: DisplayMode;
   waitingDisplayMode: DisplayMode;
   symbolDisplayMode: SymbolDisplayMode;
+  updateVerticalPlacement: VerticalPlacement;
 }
 
 export interface IgnoreSettings {
@@ -30,7 +31,7 @@ export interface IgnoreSettings {
 export interface GeneralSettings {
   id: string;
   hideSymbols: boolean;
-  buttonPlacement: ButtonPlacement;
+  buttonPlacement: VerticalPlacement;
   replaceMarkForLaterText: boolean;
   markForLaterReplacementLabel: string;
 }
