@@ -13,7 +13,7 @@ export enum VerticalPlacement {
 }
 
 export enum SettingsType {
-  FINISHED = "read_settings",
+  FINISHED = "finished_settings",
   IN_PROGRESS = "in_progress_settings",
   IGNORE = "ignore_settings",
   GENERAL = "general_settings",
