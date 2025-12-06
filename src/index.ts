@@ -3,7 +3,7 @@ import { db } from "./data/db";
 import { localMemory } from "./services/memory";
 
 import { getFormattedDate } from "./utils/date";
-import { reportExtensionFailure } from "./utils/ui/dialogs";
+import { reportExtensionFailure, showNotification } from "./utils/ui/dialogs";
 import { warn } from "./utils/extension";
 import { addReloadButton } from "./utils/ui/footer";
 import { EXTENSION_DISABLED_KEY } from "./constants/global";
@@ -51,6 +51,9 @@ async function reload() {
   extensionAlive = true;
 
   await start();
+
+  if (extensionAlive)
+    showNotification("The extension was successfully re-enabled!");
 }
 
 /**

@@ -3,6 +3,7 @@ import {
   replaceManifestPlaceholders,
   error,
   info,
+  createExtensionMsg,
 } from "../extension";
 
 /**
@@ -10,7 +11,7 @@ import {
  * Uses the native alert dialog.
  */
 export function showNotification(message: string): void {
-  alert(message);
+  alert(createExtensionMsg(message));
 }
 
 /**
@@ -18,7 +19,7 @@ export function showNotification(message: string): void {
  * Uses the native confirm dialog.
  */
 export function showConfirm(message: string): boolean {
-  return confirm(message);
+  return confirm(createExtensionMsg(message));
 }
 
 /**
@@ -34,7 +35,9 @@ export function confirmDestructiveAction(
   confirmPhrase: string
 ): boolean {
   const userInput = prompt(
-    `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
+    createExtensionMsg(
+      `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
+    )
   );
   return userInput?.toUpperCase() === confirmPhrase.toUpperCase();
 }
@@ -54,9 +57,11 @@ export function reportExtensionFailure(msg: string, err?: unknown): void {
   info("To help fix this, please report the issue at:", url);
 
   showNotification(
-    `${message}\n\n` +
-      `To help fix this, please report the issue at:\n` +
-      `${url}\n\n` +
-      `Thank you!`
+    createExtensionMsg(
+      `${message}\n\n` +
+        `To help fix this, please report the issue at:\n` +
+        `${url}\n\n` +
+        `Thank you!`
+    )
   );
 }

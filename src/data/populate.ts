@@ -2,6 +2,8 @@ import { db } from "./db";
 import { seedDatabase } from "./seed";
 
 import { Extension } from "..";
+
+import { reportExtensionFailure } from "../utils/ui/dialogs";
 import { IS_DEV } from "../constants/global";
 import {
   DEFAULT_GENERAL_SETTINGS,
@@ -10,7 +12,6 @@ import {
   DEFAULT_READ_SETTINGS,
 } from "../constants/settings";
 import { DEFAULT_SYMBOL_RECORDS } from "../constants/symbols";
-import { reportExtensionFailure } from "../utils/ui/dialogs";
 
 export async function populateDb() {
   try {

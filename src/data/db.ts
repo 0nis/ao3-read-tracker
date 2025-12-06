@@ -31,6 +31,7 @@ export class Ao3MarkAsReadDb extends Dexie {
       inProgressWorks: "id, lastReadAt",
       ignoredWorks: "id, ignoredAt",
       readSettings: "id",
+      inProgressSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",
       symbolRecords: "id",
