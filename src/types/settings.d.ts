@@ -11,6 +11,16 @@ export interface ReadSettings {
   symbolDisplayMode: SymbolDisplayMode;
 }
 
+export interface InProgressSettings {
+  id: string;
+  simpleModeEnabled: boolean;
+  defaultDisplayMode: DisplayMode;
+  activeDisplayMode: DisplayMode;
+  pausedDisplayMode: DisplayMode;
+  waitingDisplayMode: DisplayMode;
+  symbolDisplayMode: SymbolDisplayMode;
+}
+
 export interface IgnoreSettings {
   id: string;
   simpleModeEnabled: boolean;

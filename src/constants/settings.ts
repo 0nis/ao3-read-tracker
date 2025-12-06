@@ -4,6 +4,7 @@ import { SymbolDisplayMode } from "../enums/symbols";
 import {
   GeneralSettings,
   IgnoreSettings,
+  InProgressSettings,
   ReadSettings,
 } from "../types/settings";
 
@@ -14,6 +15,16 @@ export const DEFAULT_READ_SETTINGS: ReadSettings = {
   rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   completedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   abandonedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
+};
+
+export const DEFAULT_IN_PROGRESS_SETTINGS: InProgressSettings = {
+  id: SettingsType.IN_PROGRESS,
+  simpleModeEnabled: false,
+  defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  activeDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  pausedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  waitingDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
 };
 

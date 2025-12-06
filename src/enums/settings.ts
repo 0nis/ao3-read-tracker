@@ -13,6 +13,7 @@ export enum ButtonPlacement {
 
 export enum SettingsType {
   READ = "read_settings",
+  IN_PROGRESS = "in_progress_settings",
   IGNORE = "ignore_settings",
   GENERAL = "general_settings",
 }
