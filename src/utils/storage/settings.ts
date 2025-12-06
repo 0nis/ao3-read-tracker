@@ -39,7 +39,12 @@ export async function handleGetAllSettings(): Promise<SettingsData> {
   let failures: Record<string, unknown>[] = [];
 
   for (const key of Object.keys(SETTINGS_LOADERS) as (keyof SettingsData)[]) {
-    const result = await SETTINGS_LOADERS[key]();
+    let result: StorageResult<any>;
+    try {
+      result = await SETTINGS_LOADERS[key]();
+    } catch (error) {
+      result = { success: false, error };
+    }
 
     if (result.success && result.data !== undefined) {
       finalSettings[key] = result.data;

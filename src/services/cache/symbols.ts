@@ -1,35 +1,22 @@
-import { ICache } from "./cache.interface";
-import { SymbolData } from "../../types/symbols";
-import { handleStorageRead } from "../../utils/storage";
+import { AsyncCache } from "./abstract";
 import { StorageService } from "../storage";
+
+import { handleStorageRead } from "../../utils/storage";
 import { DEFAULT_SYMBOL_RECORDS } from "../../constants/symbols";
+import { SymbolData } from "../../types/symbols";
 
-export class SymbolsCache implements ICache<SymbolData> {
-  private cache: SymbolData | null = null;
-
-  async get(): Promise<SymbolData> {
-    if (this.cache) return this.cache;
-
+export class SymbolsCache extends AsyncCache<SymbolData> {
+  protected async load(): Promise<SymbolData> {
     const defaultData = Object.fromEntries(
       DEFAULT_SYMBOL_RECORDS.map((r) => [r.id, r])
     );
 
-    this.cache = (await handleStorageRead(StorageService.symbolRecords.get(), {
+    return (await handleStorageRead(StorageService.symbolRecords.get(), {
       errorMsg: "Failed to load symbol records",
       fallback: defaultData,
       errorOnEmpty: true,
       errorOnUndefined: true,
     })) as SymbolData;
-
-    return this.cache;
-  }
-
-  update(value: SymbolData): void {
-    this.cache = value;
-  }
-
-  clear(): void {
-    this.cache = null;
   }
 }
 

@@ -1,22 +1,11 @@
-import { ICache } from "./cache.interface";
-import { SettingsData } from "../../types/settings";
+import { AsyncCache } from "./abstract";
+
 import { handleGetAllSettings } from "../../utils/storage";
+import { SettingsData } from "../../types/settings";
 
-export class SettingsCache implements ICache<SettingsData> {
-  private cache: SettingsData | null = null;
-
-  async get(): Promise<SettingsData> {
-    if (this.cache) return this.cache;
-    this.cache = await handleGetAllSettings();
-    return this.cache;
-  }
-
-  update(value: SettingsData): void {
-    this.cache = value;
-  }
-
-  clear(): void {
-    this.cache = null;
+export class SettingsCache extends AsyncCache<SettingsData> {
+  protected load(): Promise<SettingsData> {
+    return handleGetAllSettings();
   }
 }
 
