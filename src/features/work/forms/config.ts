@@ -10,9 +10,9 @@ export interface SaveMapEntry<T> {
 export const FORMS_SAVE_MAP: {
   [K in keyof WorkActionTypeMap]: SaveMapEntry<WorkActionTypeMap[K]>;
 } = {
-  [WorkAction.READ]: {
-    putter: StorageService.readWorks.put,
-    deleter: StorageService.readWorks.delete,
+  [WorkAction.FINISHED]: {
+    putter: StorageService.finishedWorks.put,
+    deleter: StorageService.finishedWorks.delete,
   },
   [WorkAction.IN_PROGRESS]: {
     putter: StorageService.inProgressWorks.put,

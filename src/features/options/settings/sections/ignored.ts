@@ -33,7 +33,7 @@ export async function buildIgnoreSettingsSection(): Promise<HTMLElement> {
   const { ignoreSettings } = await settingsCache.get();
   return createSettingsSection({
     id: SectionId.IGNORE_SETTINGS,
-    title: "Ignore Settings",
+    title: "Ignored Works Settings",
     data: ignoreSettings,
     items,
   });

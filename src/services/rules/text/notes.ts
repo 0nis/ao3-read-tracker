@@ -11,7 +11,7 @@ type NotesTextRule = {
 export interface TextNotesRuleParameters extends WorkStateData {}
 
 export function collectNotesTextRules({
-  readWork,
+  finishedWork,
   inProgressWork,
   ignoredWork,
 }: TextNotesRuleParameters): NotesTextRule[] {
@@ -29,9 +29,9 @@ export function collectNotesTextRules({
       priority: 90,
     },
     {
-      className: `${CLASS_PREFIX}__notes--read`,
-      shouldApply: () => !!readWork?.notes,
-      getText: () => readWork!.notes || "",
+      className: `${CLASS_PREFIX}__notes--finished`,
+      shouldApply: () => !!finishedWork?.notes,
+      getText: () => finishedWork!.notes || "",
       priority: 80,
     },
   ];

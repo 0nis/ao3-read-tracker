@@ -1,6 +1,6 @@
 export const CLASS_PREFIX = "ext-rt";
 
-export const READ_CLASS = `${CLASS_PREFIX}__read`;
+export const FINISHED_CLASS = `${CLASS_PREFIX}__finished`;
 export const IGNORED_CLASS = `${CLASS_PREFIX}__ignored`;
 export const REREAD_WORTHY_CLASS = `${CLASS_PREFIX}__reread-worthy`;
 export const IN_PROGRESS_CLASS = `${CLASS_PREFIX}__in-progress`;

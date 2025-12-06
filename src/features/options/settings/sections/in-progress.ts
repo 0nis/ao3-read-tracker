@@ -14,10 +14,10 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IN_PROGRESS_SETTINGS,
     label: "Enable Simple Mode",
-    input: toggleSwitch("read-simple-mode-enabled-toggle"),
+    input: toggleSwitch("in-progress-simple-mode-enabled-toggle"),
     dataField: "simpleModeEnabled",
     description:
-      "If enabled, the read feature will not ask you for additional information like notes. It will simply mark the work as read immediately.",
+      "If enabled, the extension will not ask you for additional information like notes. It will simply mark the work as in progress immediately.",
   },
   {
     type: FormItemType.GROUP,
@@ -64,7 +64,7 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     input: select(SymbolDisplayMode),
     dataField: "symbolDisplayMode",
     description:
-      "Controls how symbols are displayed next to the title of the works in lists. 'State' means read or in progress, 'status' means finished, abandoned, paused, etc.",
+      "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means finished, abandoned, paused, etc.",
   },
   {
     type: FormItemType.FIELD,
@@ -73,7 +73,7 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     input: select(VerticalPlacement),
     dataField: "updateButtonPlacement",
     description:
-      "Whether the 'update read progress' button appears at the top or the bottom of the work page.",
+      "Whether the 'Update Read Progress' button appears at the top or the bottom of the work page.",
   },
 ];
 
@@ -81,7 +81,7 @@ export async function buildInProgressSettingsSection(): Promise<HTMLElement> {
   const { inProgressSettings } = await settingsCache.get();
   return createSettingsSection({
     id: SectionId.IN_PROGRESS_SETTINGS,
-    title: "In Progress Settings",
+    title: "In Progress Works Settings",
     data: inProgressSettings,
     items,
   });

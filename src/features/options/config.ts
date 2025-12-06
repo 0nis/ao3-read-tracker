@@ -1,5 +1,8 @@
-import { buildIgnoreListSection, buildReadListSection } from "./lists";
-import { buildInProgressListSection } from "./lists/sections/in-progress";
+import {
+  buildIgnoreListSection,
+  buildFinishedListSection,
+  buildInProgressListSection,
+} from "./lists";
 import {
   buildGeneralSettingsSection,
   buildIgnoreSettingsSection,
@@ -8,11 +11,11 @@ import {
 } from "./settings";
 
 export enum SectionId {
-  READ_SETTINGS = "read-settings",
+  FINISHED_SETTINGS = "finished-settings",
   IN_PROGRESS_SETTINGS = "in-progress-settings",
   IGNORE_SETTINGS = "ignore-settings",
   GENERAL_SETTINGS = "general-settings",
-  READ_LIST = "read-works",
+  FINISHED_LIST = "finished-works",
   IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
 }
@@ -33,20 +36,20 @@ export interface SectionConfigItem {
 
 export const SECTION_CONFIG: readonly SectionConfigItem[] = [
   {
-    id: SectionId.READ_SETTINGS,
-    label: "Read Settings",
+    id: SectionId.FINISHED_SETTINGS,
+    label: "Finished Works Settings",
     type: SectionType.SETTINGS,
     build: buildReadSettingsSection,
   },
   {
     id: SectionId.IN_PROGRESS_SETTINGS,
-    label: "In Progress Settings",
+    label: "In Progress Works Settings",
     type: SectionType.SETTINGS,
     build: buildInProgressSettingsSection,
   },
   {
     id: SectionId.IGNORE_SETTINGS,
-    label: "Ignore Settings",
+    label: "Ignored Works Settings",
     type: SectionType.SETTINGS,
     build: buildIgnoreSettingsSection,
   },
@@ -57,10 +60,10 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     build: buildGeneralSettingsSection,
   },
   {
-    id: SectionId.READ_LIST,
-    label: "Read Works",
+    id: SectionId.FINISHED_LIST,
+    label: "Finished Works",
     type: SectionType.LIST,
-    build: buildReadListSection,
+    build: buildFinishedListSection,
   },
   {
     id: SectionId.IN_PROGRESS_LIST,

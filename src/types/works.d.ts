@@ -2,7 +2,7 @@ import { FinishedStatus, ReadingStatus } from "../enums/works";
 
 // TODO in future issue:
 // Explore the idea of adding multiple "finished at" dates for rereads
-export interface ReadWork {
+export interface FinishedWork {
   id: string;
   finishedAt: number;
   title?: string;
@@ -30,13 +30,13 @@ export interface IgnoredWork {
 }
 
 export type WorkData = {
-  readWorks: Record<string, ReadWork>;
+  finishedWorks: Record<string, FinishedWork>;
   inProgressWorks: Record<string, InProgressWork>;
   ignoredWorks: Record<string, IgnoredWork>;
 };
 
 export interface WorkStateData {
-  readWork?: ReadWork;
+  finishedWork?: FinishedWork;
   inProgressWork?: InProgressWork;
   ignoredWork?: IgnoredWork;
 }

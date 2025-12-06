@@ -1,5 +1,5 @@
 export enum WorkState {
-  READ = "read",
+  FINISHED = "finished",
   IN_PROGRESS = "in_progress",
   IGNORED = "ignored",
 }

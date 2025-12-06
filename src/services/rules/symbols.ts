@@ -15,7 +15,7 @@ export interface SymbolRuleParameters extends WorkStateData {
     latestChapter?: number;
   };
   displayMode?: {
-    read?: SymbolDisplayMode;
+    finished?: SymbolDisplayMode;
     inProgress?: SymbolDisplayMode;
   };
   options?: {
@@ -26,7 +26,7 @@ export interface SymbolRuleParameters extends WorkStateData {
 }
 
 export function collectSymbolRules({
-  readWork,
+  finishedWork,
   ignoredWork,
   inProgressWork,
   details,
@@ -56,27 +56,27 @@ export function collectSymbolRules({
       priority: 90,
     },
     {
-      id: SymbolId.READ,
-      shouldApply: () => !!readWork && getShowState(displayMode?.read),
+      id: SymbolId.FINISHED,
+      shouldApply: () => !!finishedWork && getShowState(displayMode?.finished),
       priority: 80,
     },
     {
       id: SymbolId.REREAD_WORTHY,
-      shouldApply: () => !!readWork?.rereadWorthy,
+      shouldApply: () => !!finishedWork?.rereadWorthy,
       priority: 70,
     },
     {
       id: SymbolId.STATUS_COMPLETED,
       shouldApply: () =>
-        readWork?.finishedStatus === FinishedStatus.COMPLETED &&
-        getShowStatus(displayMode?.read),
+        finishedWork?.finishedStatus === FinishedStatus.COMPLETED &&
+        getShowStatus(displayMode?.finished),
       priority: 40,
     },
     {
       id: SymbolId.STATUS_ABANDONED,
       shouldApply: () =>
-        readWork?.finishedStatus === FinishedStatus.ABANDONED &&
-        getShowStatus(displayMode?.read),
+        finishedWork?.finishedStatus === FinishedStatus.ABANDONED &&
+        getShowStatus(displayMode?.finished),
       priority: 40,
     },
     {
@@ -102,12 +102,13 @@ export function collectSymbolRules({
     },
     {
       id: SymbolId.TIMES_READ,
-      shouldApply: () => !!readWork?.timesRead && readWork.timesRead > 1,
+      shouldApply: () =>
+        !!finishedWork?.timesRead && finishedWork.timesRead > 1,
       getCustomLabel: () =>
-        readWork!.timesRead === 1
+        finishedWork!.timesRead === 1
           ? "Read 1 time"
-          : `Read ${readWork!.timesRead} times`,
-      getSuffix: () => `x${readWork!.timesRead}`,
+          : `Read ${finishedWork!.timesRead} times`,
+      getSuffix: () => `x${finishedWork!.timesRead}`,
       priority: 20,
     },
     {

@@ -15,7 +15,7 @@ export interface DisplayRuleParameters extends WorkStateData {
 
 export function collectDisplayRules({
   settings,
-  readWork,
+  finishedWork,
   inProgressWork,
   ignoredWork,
 }: DisplayRuleParameters): DisplayRule[] {
@@ -32,25 +32,27 @@ export function collectDisplayRules({
     },
     {
       name: "reread worthy",
-      shouldApply: () => !!readWork?.rereadWorthy,
-      getMode: () => settings.readSettings.rereadWorthyDisplayMode,
+      shouldApply: () => !!finishedWork?.rereadWorthy,
+      getMode: () => settings.finishedSettings.rereadWorthyDisplayMode,
     },
     {
-      name: "read (default)",
-      shouldApply: () => !!readWork,
-      getMode: () => settings.readSettings.defaultDisplayMode,
+      name: "finished (default)",
+      shouldApply: () => !!finishedWork,
+      getMode: () => settings.finishedSettings.defaultDisplayMode,
     },
     {
-      name: "read (completed)",
+      name: "finished (completed)",
       shouldApply: () =>
-        !!readWork && readWork.finishedStatus === FinishedStatus.COMPLETED,
-      getMode: () => settings.readSettings.completedDisplayMode,
+        !!finishedWork &&
+        finishedWork.finishedStatus === FinishedStatus.COMPLETED,
+      getMode: () => settings.finishedSettings.completedDisplayMode,
     },
     {
-      name: "read (abandoned)",
+      name: "finished (abandoned)",
       shouldApply: () =>
-        !!readWork && readWork.finishedStatus === FinishedStatus.ABANDONED,
-      getMode: () => settings.readSettings.abandonedDisplayMode,
+        !!finishedWork &&
+        finishedWork.finishedStatus === FinishedStatus.ABANDONED,
+      getMode: () => settings.finishedSettings.abandonedDisplayMode,
     },
   ];
 }

@@ -22,16 +22,16 @@ export async function getWorkStatusData(): Promise<
     if (id) workIds.push(id);
   }
 
-  const { readWorks, inProgressWorks, ignoredWorks } =
+  const { finishedWorks, inProgressWorks, ignoredWorks } =
     (await handleStorageRead(StorageService.getByIds(workIds), {
       errorMsg: "Failed to retrieve stored work data.",
       errorOnUndefined: true,
-      fallback: { readWorks: {}, inProgressWorks: {}, ignoredWorks: {} },
+      fallback: { finishedWorks: {}, inProgressWorks: {}, ignoredWorks: {} },
     })) || {};
 
   return {
     elements,
-    readWorks,
+    finishedWorks,
     inProgressWorks,
     ignoredWorks,
   };

@@ -5,11 +5,11 @@ import {
   GeneralSettings,
   IgnoreSettings,
   InProgressSettings,
-  ReadSettings,
+  FinishedSettings,
 } from "../types/settings";
 
-export const DEFAULT_READ_SETTINGS: ReadSettings = {
-  id: SettingsType.READ,
+export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
+  id: SettingsType.FINISHED,
   simpleModeEnabled: false,
   defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,

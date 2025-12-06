@@ -2,7 +2,7 @@ import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_IN_PROGRESS_SETTINGS,
-  DEFAULT_READ_SETTINGS,
+  DEFAULT_FINISHED_SETTINGS,
 } from "../../constants/settings";
 import { StorageResult } from "../../types/results";
 import { SettingsData } from "../../types/settings";
@@ -14,21 +14,21 @@ const SETTINGS_LOADERS: Record<
   keyof SettingsData,
   () => Promise<StorageResult<any>>
 > = {
-  readSettings: StorageService.readSettings.get,
+  finishedSettings: StorageService.finishedSettings.get,
   inProgressSettings: StorageService.inProgressSettings.get,
   ignoreSettings: StorageService.ignoreSettings.get,
   generalSettings: StorageService.generalSettings.get,
 };
 
 const SETTINGS_DEFAULTS: SettingsData = {
-  readSettings: DEFAULT_READ_SETTINGS,
+  finishedSettings: DEFAULT_FINISHED_SETTINGS,
   inProgressSettings: DEFAULT_IN_PROGRESS_SETTINGS,
   ignoreSettings: DEFAULT_IGNORE_SETTINGS,
   generalSettings: DEFAULT_GENERAL_SETTINGS,
 };
 
 const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
-  readSettings: "read",
+  finishedSettings: "finished",
   inProgressSettings: "in progress",
   ignoreSettings: "ignore",
   generalSettings: "general",

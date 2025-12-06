@@ -1,7 +1,7 @@
 import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SymbolDisplayMode } from "../enums/symbols";
 
-export interface ReadSettings {
+export interface FinishedSettings {
   id: string;
   simpleModeEnabled: boolean;
   defaultDisplayMode: DisplayMode;
@@ -37,7 +37,7 @@ export interface GeneralSettings {
 }
 
 export type SettingsData = {
-  readSettings: ReadSettings;
+  finishedSettings: FinishedSettings;
   inProgressSettings: InProgressSettings;
   ignoreSettings: IgnoreSettings;
   generalSettings: GeneralSettings;
