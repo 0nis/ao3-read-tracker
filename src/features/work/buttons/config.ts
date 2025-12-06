@@ -3,6 +3,7 @@ import { WorkAction, WorkActionTypeMap } from "../config";
 
 import { createIgnoreWorkForm } from "../forms/instances/ignore";
 import { createReadWorkForm } from "../forms/instances/read";
+import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
 import { StorageService } from "../../../services/storage";
 import {
@@ -11,7 +12,6 @@ import {
   ReadSettings,
   SettingsData,
 } from "../../../types/settings";
-import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
 export const ACTION_LABELS: {
   [K in keyof WorkActionTypeMap]: ActionLabelSet;
