@@ -13,6 +13,19 @@ export function getStyles(prefix: string): string {
       padding-right: 3em;
     }
 
+    .${prefix}__nav__groups {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    .${prefix}__nav__group__label {
+      font-size: 0.9em;
+      font-weight: bold;
+      margin: 0 0 0.5em 0;
+      color: #333;
+    }
+
     .${prefix}__nav ul {
       display: flex;
       flex-direction: column;

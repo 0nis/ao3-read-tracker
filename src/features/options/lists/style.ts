@@ -61,7 +61,19 @@ export function getStyles(prefix: string): string {
       align-items: center;
     }
 
-    .${prefix}__list__row__symbols {
+    .${prefix}__list__row__text {
+      margin: 0;
+      font-style: italic;
+      opacity: 0.8;
+    }
+
+    .${prefix}__list__row__info {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .${prefix}__list__row__info--symbols {
       display: flex;
       gap: 4px;
       list-style: none;
@@ -69,15 +81,13 @@ export function getStyles(prefix: string): string {
       margin: 0;
     }
 
-    .${prefix}__list__row__text {
-      margin: 0;
-      font-style: italic;
-      opacity: 0.8;
-    }
-
-    .${prefix}__list__row__symbols__item {
+    .${prefix}__list__row__info--symbols__item {
       cursor: default;
       margin: 0 !important;
+    }
+
+    .${prefix}__list__row__info--status {
+      margin: 0;
     }
 
     .${prefix}__list__row__actions {

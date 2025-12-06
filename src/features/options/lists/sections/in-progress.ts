@@ -40,6 +40,7 @@ async function renderItem(item: InProgressWork): Promise<HTMLElement> {
       rules,
       exclude: [SymbolId.IN_PROGRESS], // Everything is in progress in this list, so exclude the "in progress" symbol
     },
+    status: item.readingStatus,
   };
 
   const innerElement = await createInnerElement({

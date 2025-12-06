@@ -18,6 +18,7 @@ export interface SupplementaryRowInformation {
     exclude?: string[];
   };
   text?: string;
+  status?: string;
 }
 
 export interface InnerElementParams extends SupplementaryRowInformation {
@@ -29,12 +30,14 @@ export async function createInnerElement({
   symbols,
   text,
   date,
+  status,
 }: InnerElementParams): Promise<HTMLElement> {
   if (!item)
     return el("div", { className: `${PREFIX}__list__row__content` }, [
       "Item not found",
     ]);
   const mainEls: HTMLElement[] = [];
+  const infoEls: HTMLElement[] = [];
 
   // Title
   mainEls.push(
@@ -50,6 +53,7 @@ export async function createInnerElement({
     mainEls.push(el("p", { className: `${PREFIX}__list__row__text` }, text));
   }
 
+  // TODO: Make configurable whether they show up or not. Just use local storage for that
   // Symbols
   if (symbols?.symbolData && symbols?.rules) {
     const filteredRules = symbols.rules.filter(
@@ -59,7 +63,22 @@ export async function createInnerElement({
       symbols.symbolData,
       filteredRules
     );
-    mainEls.push(symbolsElement);
+    infoEls.push(symbolsElement);
+  }
+
+  // TODO: Make configurable whether this shows up or not. Again just use local storage
+  // Status
+  if (status) {
+    status = status.charAt(0).toUpperCase() + status.slice(1);
+    infoEls.push(
+      el("p", { className: `${PREFIX}__list__row__info--status` }, status)
+    );
+  }
+
+  if (infoEls.length > 0) {
+    mainEls.push(
+      el("div", { className: `${PREFIX}__list__row__info` }, infoEls)
+    );
   }
 
   return el("div", { className: `${PREFIX}__list__row__content` }, [

@@ -1,8 +1,12 @@
 import { PREFIX } from "..";
+import { NavGroup } from "../types";
+
 import { el } from "../../../utils/ui/dom";
 import { reportSrLive } from "../../../utils/ui/accessibility";
 
-export function buildNav(items: { id: string; label: string }[]): {
+// TODO: Improve responsiveness for mobile
+
+export function buildNav(groups: NavGroup[]): {
   nav: HTMLElement;
   updateSelected: (id: string) => void;
 } {
@@ -10,27 +14,49 @@ export function buildNav(items: { id: string; label: string }[]): {
     className: `${PREFIX}__nav`,
     attrs: { role: "navigation", "aria-label": "Settings navigation" },
   });
-  const ul = el("ul");
-  items.forEach((it) => {
-    const li = el("li");
-    const a = el("a", { href: `#${it.id}` }, [it.label]);
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location.hash = it.id;
-      ul.querySelectorAll("a").forEach((link) => {
-        link.classList.remove("selected");
+
+  const container = el("div", { className: `${PREFIX}__nav__groups` });
+
+  groups.forEach((group) => {
+    const section = el("div", { className: `${PREFIX}__nav__group` });
+
+    const heading = el("h3", { className: `${PREFIX}__nav__group__label` }, [
+      group.label,
+    ]);
+
+    const ul = el("ul");
+
+    group.items.forEach((it) => {
+      const li = el("li");
+      const a = el("a", { href: `#${it.id}` }, [it.label]);
+
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.hash = it.id;
+
+        nav
+          .querySelectorAll("a")
+          .forEach((link) => link.classList.remove("selected"));
+
+        a.classList.add("selected");
+        reportSrLive(`Navigated to ${it.label} section`);
       });
-      a.classList.add("selected");
-      reportSrLive(`Navigated to ${it.label} section`);
+
+      li.appendChild(a);
+      ul.appendChild(li);
     });
-    li.appendChild(a);
-    ul.appendChild(li);
+
+    section.appendChild(heading);
+    section.appendChild(ul);
+    container.appendChild(section);
   });
-  ul.querySelector("a")?.classList.add("selected");
-  nav.appendChild(ul);
+
+  container.querySelector("a")?.classList.add("selected");
+
+  nav.appendChild(container);
 
   function updateSelected(id: string) {
-    ul.querySelectorAll("a").forEach((link) => {
+    nav.querySelectorAll("a").forEach((link) => {
       const linkHash = link.getAttribute("href")?.slice(1);
       link.classList.toggle("selected", linkHash === id);
     });

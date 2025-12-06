@@ -38,7 +38,7 @@ export async function createSymbolElement(
 ): Promise<HTMLElement> {
   const symbolWrapper = el(
     "ul",
-    { className: `${PREFIX}__list__row__symbols` },
+    { className: `${PREFIX}__list__row__info--symbols` },
     []
   );
 
@@ -51,7 +51,7 @@ export async function createSymbolElement(
       el(
         "li",
         {
-          className: `${PREFIX}__list__row__symbols__item`,
+          className: `${PREFIX}__list__row__info--symbols__item`,
           attrs: {
             "aria-label": label,
             title: label,
