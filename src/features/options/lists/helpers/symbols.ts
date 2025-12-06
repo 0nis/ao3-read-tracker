@@ -9,20 +9,21 @@ import { renderSymbolContent } from "../../../../utils/ui/symbols";
 
 export async function loadSymbolsAndRules(
   id: string,
-  { readWork, inProgressWork, ignoredWork }: WorkStateData
+  { finishedWork, inProgressWork, ignoredWork }: WorkStateData
 ) {
   const symbols = await symbolsCache.get();
-  const { readSettings, inProgressSettings } = await settingsCache.get();
+  const { finishedSettings, inProgressSettings } = await settingsCache.get();
 
   const rules = getActiveSymbolRules({
-    readWork: readWork ?? (await StorageService.readWorks.getById(id))?.data,
+    finishedWork:
+      finishedWork ?? (await StorageService.finishedWorks.getById(id))?.data,
     inProgressWork:
       inProgressWork ??
       (await StorageService.inProgressWorks.getById(id))?.data,
     ignoredWork:
       ignoredWork ?? (await StorageService.ignoredWorks.getById(id))?.data,
     displayMode: {
-      read: readSettings.symbolDisplayMode,
+      finished: finishedSettings.symbolDisplayMode,
       inProgress: inProgressSettings.symbolDisplayMode,
     },
     options: { showState: true, showStatus: true },

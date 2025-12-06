@@ -2,21 +2,21 @@ import { ActionHandlerEntry, ActionLabelSet } from "./types";
 import { WorkAction, WorkActionTypeMap } from "../config";
 
 import { createIgnoreWorkForm } from "../forms/instances/ignore";
-import { createReadWorkForm } from "../forms/instances/read";
+import { createFinishedWorkForm } from "../forms/instances/finished";
 import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
 import { StorageService } from "../../../services/storage";
 import {
   IgnoreSettings,
   InProgressSettings,
-  ReadSettings,
+  FinishedSettings,
   SettingsData,
 } from "../../../types/settings";
 
 export const ACTION_LABELS: {
   [K in keyof WorkActionTypeMap]: ActionLabelSet;
 } = {
-  [WorkAction.READ]: {
+  [WorkAction.FINISHED]: {
     simple: {
       off: "Mark as Read",
       on: "Mark as Unread",
@@ -51,10 +51,10 @@ export const ACTION_LABELS: {
 export const ACTION_HANDLER_MAP: {
   [K in keyof WorkActionTypeMap]: ActionHandlerEntry<WorkActionTypeMap[K]>;
 } = {
-  [WorkAction.READ]: {
-    storage: StorageService.readWorks,
+  [WorkAction.FINISHED]: {
+    storage: StorageService.finishedWorks,
     createForm: (data, editing, origin) =>
-      createReadWorkForm(data, editing, origin),
+      createFinishedWorkForm(data, editing, origin),
   },
   [WorkAction.IN_PROGRESS]: {
     storage: StorageService.inProgressWorks,
@@ -69,7 +69,7 @@ export const ACTION_HANDLER_MAP: {
 };
 
 export interface WorkActionSettingsMap {
-  [WorkAction.READ]: ReadSettings;
+  [WorkAction.FINISHED]: FinishedSettings;
   [WorkAction.IN_PROGRESS]: InProgressSettings;
   [WorkAction.IGNORE]: IgnoreSettings;
 }
@@ -79,7 +79,7 @@ export const ACTION_SETTINGS_MAP: {
     s: SettingsData
   ) => WorkActionSettingsMap[K];
 } = {
-  [WorkAction.READ]: (s) => s.readSettings,
+  [WorkAction.FINISHED]: (s) => s.finishedSettings,
   [WorkAction.IN_PROGRESS]: (s) => s.inProgressSettings,
   [WorkAction.IGNORE]: (s) => s.ignoreSettings,
 };

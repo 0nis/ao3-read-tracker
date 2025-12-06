@@ -33,14 +33,14 @@ export async function applyMarksToWork(params: ApplyMarksParams) {
 
 function adjustWorkDisplay({
   element,
-  readWork,
+  finishedWork,
   inProgressWork,
   ignoredWork,
   settings,
 }: ApplyMarksParams) {
   const rules = collectDisplayRules({
     settings,
-    readWork,
+    finishedWork,
     inProgressWork,
     ignoredWork,
   });

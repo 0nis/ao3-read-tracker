@@ -18,12 +18,13 @@ import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
 
 /**
  * Adds symbols to a work element showing information
- * like read/ignored status, reread worthiness, and read count.
+ * like finished/ignored/in-progress status, reread worthiness, and read count.
  *
  * Symbols are modified in {@link collectSymbolRules} and {@link DEFAULT_SYMBOL_RECORDS}
  */
 export async function addSymbols(params: ApplyMarksParams) {
-  if (!params.readWork && !params.inProgressWork && !params.ignoredWork) return;
+  if (!params.finishedWork && !params.inProgressWork && !params.ignoredWork)
+    return;
 
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-symbols`,
@@ -56,7 +57,7 @@ export function removeSymbols(element: HTMLElement) {
 async function renderSymbols(
   {
     element,
-    readWork,
+    finishedWork,
     inProgressWork,
     ignoredWork,
     settings,
@@ -66,14 +67,14 @@ async function renderSymbols(
   const symbols = await symbolsCache.get();
 
   const rules = getActiveSymbolRules({
-    readWork: readWork,
+    finishedWork: finishedWork,
     inProgressWork: inProgressWork,
     ignoredWork: ignoredWork,
     details: {
       latestChapter: getLatestChapterFromWorkListing(element) || undefined,
     },
     displayMode: {
-      read: settings.readSettings.symbolDisplayMode,
+      finished: settings.finishedSettings.symbolDisplayMode,
       inProgress: settings.inProgressSettings.symbolDisplayMode,
     },
     options: {

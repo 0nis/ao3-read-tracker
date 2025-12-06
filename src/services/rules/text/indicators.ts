@@ -12,7 +12,7 @@ type TextIndicatorRule = {
 export interface TextIndicatorRuleParameters extends WorkStateData {}
 
 export function collectTextIndicatorRules({
-  readWork,
+  finishedWork,
   inProgressWork,
   ignoredWork,
 }: TextIndicatorRuleParameters): TextIndicatorRule[] {
@@ -35,9 +35,9 @@ export function collectTextIndicatorRules({
       priority: 90,
     },
     {
-      workState: WorkState.READ,
-      shouldApply: () => !!readWork,
-      getTimeStamp: () => readWork?.finishedAt,
+      workState: WorkState.FINISHED,
+      shouldApply: () => !!finishedWork,
+      getTimeStamp: () => finishedWork?.finishedAt,
       getText: () => `Marked as read on %date%`,
       priority: 80,
     },

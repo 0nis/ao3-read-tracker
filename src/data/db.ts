@@ -3,21 +3,21 @@ import Dexie, { Table } from "dexie";
 import { showNotification } from "../utils/ui/dialogs";
 import { createExtensionMsg } from "../utils/extension";
 import {
-  ReadSettings,
+  FinishedSettings,
   IgnoreSettings,
   GeneralSettings,
   InProgressSettings,
 } from "../types/settings";
-import { ReadWork, IgnoredWork, InProgressWork } from "../types/works";
+import { FinishedWork, IgnoredWork, InProgressWork } from "../types/works";
 import { SymbolRecord } from "../types/symbols";
 import { DATABASE_NAME } from "../constants/global";
 import { populateDb } from "./populate";
 
-export class Ao3MarkAsReadDb extends Dexie {
-  readWorks!: Table<ReadWork>;
+export class Ao3ReadTrackerDb extends Dexie {
+  finishedWorks!: Table<FinishedWork>;
   inProgressWorks!: Table<InProgressWork>;
   ignoredWorks!: Table<IgnoredWork>;
-  readSettings!: Table<ReadSettings>;
+  finishedSettings!: Table<FinishedSettings>;
   inProgressSettings!: Table<InProgressSettings>;
   ignoreSettings!: Table<IgnoreSettings>;
   generalSettings!: Table<GeneralSettings>;
@@ -27,10 +27,10 @@ export class Ao3MarkAsReadDb extends Dexie {
     super(DATABASE_NAME);
 
     this.version(1).stores({
-      readWorks: "id, finishedAt",
+      finishedWorks: "id, finishedAt",
       inProgressWorks: "id, lastReadAt",
       ignoredWorks: "id, ignoredAt",
-      readSettings: "id",
+      finishedSettings: "id",
       inProgressSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",
@@ -50,4 +50,4 @@ export class Ao3MarkAsReadDb extends Dexie {
   }
 }
 
-export const db = new Ao3MarkAsReadDb();
+export const db = new Ao3ReadTrackerDb();

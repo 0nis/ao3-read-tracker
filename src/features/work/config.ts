@@ -1,8 +1,8 @@
-import { IgnoredWork, InProgressWork, ReadWork } from "../../types/works";
+import { IgnoredWork, InProgressWork, FinishedWork } from "../../types/works";
 import { getCurrentChapterFromWorkPage } from "../../utils/ao3";
 
 export enum WorkAction {
-  READ = `read`,
+  FINISHED = `finished`,
   IN_PROGRESS = `in_progress`,
   IGNORE = `ignore`,
 }
@@ -19,7 +19,7 @@ export enum WorkActionEvent {
 }
 
 export interface WorkActionTypeMap {
-  [WorkAction.READ]: ReadWork;
+  [WorkAction.FINISHED]: FinishedWork;
   [WorkAction.IN_PROGRESS]: InProgressWork;
   [WorkAction.IGNORE]: IgnoredWork;
 }
@@ -29,7 +29,7 @@ export const ACTION_DEFAULTS_MAP: {
     data: Partial<WorkActionTypeMap[K]>
   ) => Partial<WorkActionTypeMap[K]>;
 } = {
-  read: (data) => ({
+  finished: (data) => ({
     finishedAt: data.finishedAt || Date.now(),
   }),
   in_progress: (data) => ({
@@ -59,15 +59,15 @@ export interface ActionMessagesEntry {
 export const ACTION_MESSAGES_MAP: {
   [K in keyof WorkActionTypeMap]: ActionMessagesEntry;
 } = {
-  [WorkAction.READ]: {
+  [WorkAction.FINISHED]: {
     success: {
       save: "You have successfully marked %title% as read.",
-      edit: "You have successfully updated read info for %title%.",
+      edit: "You have successfully updated finished info for %title%.",
       delete: "You have successfully marked %title% as unread.",
     },
     error: {
       save: "Something went wrong while marking %title% as read.",
-      edit: "Something went wrong while updating read info for %title%.",
+      edit: "Something went wrong while updating finished info for %title%.",
       delete: "Something went wrong while marking %title% as unread.",
     },
   },

@@ -24,7 +24,7 @@ export async function markWorksOnPage(): Promise<void> {
   const data = await getWorkStatusData();
   if (!data) return;
 
-  const { elements, readWorks, inProgressWorks, ignoredWorks } = data;
+  const { elements, finishedWorks, inProgressWorks, ignoredWorks } = data;
   const settings = await settingsCache.get();
 
   for (const el of elements) {
@@ -32,7 +32,7 @@ export async function markWorksOnPage(): Promise<void> {
     if (!id) continue;
     await applyMarksToWork({
       element: el,
-      readWork: readWorks[id],
+      finishedWork: finishedWorks[id],
       inProgressWork: inProgressWorks[id],
       ignoredWork: ignoredWorks[id],
       settings,
@@ -50,7 +50,7 @@ export async function updateWorksOnPage(): Promise<void> {
   const data = await getWorkStatusData();
   if (!data) return;
 
-  const { elements, readWorks, inProgressWorks, ignoredWorks } = data;
+  const { elements, finishedWorks, inProgressWorks, ignoredWorks } = data;
   const settings = await settingsCache.get();
 
   for (const el of elements) {
@@ -65,7 +65,7 @@ export async function updateWorksOnPage(): Promise<void> {
 
     await applyMarksToWork({
       element: el,
-      readWork: readWorks[id],
+      finishedWork: finishedWorks[id],
       inProgressWork: inProgressWorks[id],
       ignoredWork: ignoredWorks[id],
       settings,

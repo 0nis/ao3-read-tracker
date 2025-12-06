@@ -15,22 +15,22 @@ import {
   getFormattedDateAsFullText,
 } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
-import { ReadWork } from "../../../../types/works";
+import { FinishedWork } from "../../../../types/works";
 
-export async function buildReadListSection(): Promise<HTMLElement> {
+export async function buildFinishedListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({
-    id: SectionId.READ_LIST,
-    title: "Read Works List",
-    paginator: StorageService.readWorks.paginate,
+    id: SectionId.FINISHED_LIST,
+    title: "Finished Works List",
+    paginator: StorageService.finishedWorks.paginate,
     renderItem,
     pageSize: 10,
     orderBy: "finishedAt",
   });
 }
 
-async function renderItem(item: ReadWork): Promise<HTMLElement> {
+async function renderItem(item: FinishedWork): Promise<HTMLElement> {
   const { symbols, rules } = await loadSymbolsAndRules(item.id, {
-    readWork: item,
+    finishedWork: item,
   });
 
   const info: SupplementaryRowInformation = {
@@ -38,7 +38,7 @@ async function renderItem(item: ReadWork): Promise<HTMLElement> {
     symbols: {
       symbolData: symbols,
       rules,
-      exclude: [SymbolId.READ], // Everything is read in this list, so exclude the "read" symbol
+      exclude: [SymbolId.FINISHED], // Everything is finished in this list, so exclude the "finished" symbol
     },
   };
 
@@ -52,22 +52,22 @@ async function renderItem(item: ReadWork): Promise<HTMLElement> {
     innerElement,
     srAccessibleLabel: `${
       item.title || "Untitled"
-    } - Red ${getFormattedDateAsFullText(item.finishedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
+    } - Finished ${getFormattedDateAsFullText(item.finishedAt)}`,
     srAccessibleContentSummary: getSrAccessibleContentSummary(info),
     actions: {
       link: { href: getWorkLinkFromId(item.id) },
       delete: {
         onDelete: (): Promise<void> => {
           return handleStorageWrite<void>(
-            StorageService.readWorks.delete(item.id),
+            StorageService.finishedWorks.delete(item.id),
             {
-              successMsg: `${item.title} has been removed from your read list.`,
-              errorMsg: `Failed to remove ${item.title} from your read list.`,
+              successMsg: `${item.title} has been removed from your finished list.`,
+              errorMsg: `Failed to remove ${item.title} from your finished list.`,
             }
           );
         },
-        confirmationText: `Are you sure you want to remove ${item.title} from your read list?`,
-        successText: `${item.title} has been removed from your read list.`,
+        confirmationText: `Are you sure you want to remove ${item.title} from your finished list?`,
+        successText: `${item.title} has been removed from your finished list.`,
       },
     },
   });

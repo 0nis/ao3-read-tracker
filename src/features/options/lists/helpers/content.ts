@@ -3,7 +3,11 @@ import { createSymbolElement } from "./symbols";
 
 import { SymbolRule } from "../../../../services/rules";
 import { el } from "../../../../utils/ui/dom";
-import { IgnoredWork, ReadWork, WorkStateData } from "../../../../types/works";
+import {
+  IgnoredWork,
+  FinishedWork,
+  WorkStateData,
+} from "../../../../types/works";
 import { SymbolData } from "../../../../types/symbols";
 
 export interface SupplementaryRowInformation {

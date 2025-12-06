@@ -9,7 +9,7 @@ export const migrations: Record<number, MigrationFn[]> = {
   // EXAMPLE:
   //   1: [
   //     (row, tableName) => {
-  //       if (tableName === "readWorks") {
+  //       if (tableName === "finishedWorks") {
   //         if (!("newField" in row)) row.newField = "default";
   //       }
   //       return row;

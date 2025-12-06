@@ -4,24 +4,24 @@ import { WorksData } from "./models/works";
 import { SettingsData } from "./models/settings";
 import { SymbolsData } from "./models/symbols";
 
-import { ReadWork, IgnoredWork, InProgressWork } from "../types/works";
+import { FinishedWork, IgnoredWork, InProgressWork } from "../types/works";
 import {
   GeneralSettings,
   IgnoreSettings,
   InProgressSettings,
-  ReadSettings,
+  FinishedSettings,
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
 import { SettingsType } from "../enums/settings";
 
 export const instances = {
-  readWorks: new WorksData<ReadWork>(db.readWorks),
+  finishedWorks: new WorksData<FinishedWork>(db.finishedWorks),
   inProgressWorks: new WorksData<InProgressWork>(db.inProgressWorks),
   ignoredWorks: new WorksData<IgnoredWork>(db.ignoredWorks),
 
-  readSettings: new SettingsData<ReadSettings>(
-    db.readSettings,
-    SettingsType.READ
+  finishedSettings: new SettingsData<FinishedSettings>(
+    db.finishedSettings,
+    SettingsType.FINISHED
   ),
   inProgressSettings: new SettingsData<InProgressSettings>(
     db.inProgressSettings,

@@ -32,7 +32,7 @@ function buildStorageService<M extends InstanceMap>(map: M) {
   result.getByIds = async (ids: string[]): Promise<StorageResult<WorkData>> =>
     safeExecute(
       async () => ({
-        readWorks: await map.readWorks.getByIds(ids),
+        finishedWorks: await map.finishedWorks.getByIds(ids),
         inProgressWorks: await map.inProgressWorks.getByIds(ids),
         ignoredWorks: await map.ignoredWorks.getByIds(ids),
       }),

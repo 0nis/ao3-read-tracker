@@ -13,9 +13,9 @@ import { VerticalPlacement } from "../../../../enums/settings";
 import { FinishedStatus } from "../../../../enums/works";
 import { FormItemType } from "../../../../enums/forms";
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { ReadWork } from "../../../../types/works";
+import { FinishedWork } from "../../../../types/works";
 
-const items: WorkFormItem<ReadWork>[] = [
+const items: WorkFormItem<FinishedWork>[] = [
   {
     type: FormItemType.FIELD,
     dataField: "notes",
@@ -68,15 +68,15 @@ const items: WorkFormItem<ReadWork>[] = [
   },
 ];
 
-export function createReadWorkForm(
-  data: Partial<ReadWork>,
+export function createFinishedWorkForm(
+  data: Partial<FinishedWork>,
   editing: boolean,
   origin?: VerticalPlacement
 ): HTMLElement {
   return createWorkForm({
-    id: WorkAction.READ,
-    landmark: "Mark Work as Read",
-    heading: editing ? "Edit read work info!" : "Mark this work as read!",
+    id: WorkAction.FINISHED,
+    landmark: "Mark Work as Raed",
+    heading: editing ? "Edit finished work info!" : "Mark this work as read!",
     data,
     editing,
     items,
@@ -88,7 +88,9 @@ export function createReadWorkForm(
       delete: {
         isDeletable: editing === true,
         label: "Mark as Unread",
-        ariaLabel: `Remove ${data.title || "this work"} from your read list`,
+        ariaLabel: `Remove ${
+          data.title || "this work"
+        } from your finished list`,
       },
     },
     origin,

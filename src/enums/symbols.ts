@@ -1,5 +1,5 @@
 export enum SymbolId {
-  READ = "read",
+  FINISHED = "finished",
   IGNORED = "ignored",
   IN_PROGRESS = "in_progress",
   REREAD_WORTHY = "reread_worthy",

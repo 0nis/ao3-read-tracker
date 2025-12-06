@@ -10,14 +10,14 @@ type ClassRule = {
 export interface ClassRuleParameters extends WorkStateData {}
 
 export function collectClassRules({
-  readWork,
+  finishedWork,
   inProgressWork,
   ignoredWork,
 }: ClassRuleParameters): ClassRule[] {
   return [
     {
-      className: Classes.READ_CLASS,
-      shouldApply: () => !!readWork,
+      className: Classes.FINISHED_CLASS,
+      shouldApply: () => !!finishedWork,
     },
     {
       className: Classes.IGNORED_CLASS,
@@ -29,15 +29,17 @@ export function collectClassRules({
     },
     {
       className: Classes.REREAD_WORTHY_CLASS,
-      shouldApply: () => !!readWork?.rereadWorthy,
+      shouldApply: () => !!finishedWork?.rereadWorthy,
     },
     {
       className: Classes.COMPLETED_CLASS,
-      shouldApply: () => readWork?.finishedStatus === FinishedStatus.COMPLETED,
+      shouldApply: () =>
+        finishedWork?.finishedStatus === FinishedStatus.COMPLETED,
     },
     {
       className: Classes.ABANDONED_CLASS,
-      shouldApply: () => readWork?.finishedStatus === FinishedStatus.ABANDONED,
+      shouldApply: () =>
+        finishedWork?.finishedStatus === FinishedStatus.ABANDONED,
     },
     {
       className: Classes.ACTIVE_READING_CLASS,

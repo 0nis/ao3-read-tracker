@@ -3,27 +3,27 @@ import { SymbolRecord } from "../types/symbols";
 
 export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
   {
-    id: SymbolId.READ,
+    id: SymbolId.FINISHED,
     type: SymbolType.TEXT,
-    label: "Marked as read",
+    label: "Finished",
     text: "📘",
   },
   {
     id: SymbolId.IN_PROGRESS,
     type: SymbolType.TEXT,
-    label: "Marked as in progress",
+    label: "In progress",
     text: "📖",
   },
   {
     id: SymbolId.IGNORED,
     type: SymbolType.TEXT,
-    label: "Marked as ignored",
+    label: "Ignored",
     text: "🚫",
   },
   {
     id: SymbolId.REREAD_WORTHY,
     type: SymbolType.TEXT,
-    label: "Marked as re-read worthy",
+    label: "Re-read worthy",
     text: "⭐",
   },
   {
