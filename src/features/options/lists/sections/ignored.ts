@@ -1,4 +1,3 @@
-import { SectionId } from "../../config";
 import { createListRow, createPaginatedListSection } from "../base";
 
 import {
@@ -6,6 +5,7 @@ import {
   SupplementaryRowInformation,
 } from "../helpers/content";
 import { getSrAccessibleContentSummary } from "../helpers/accessibility";
+import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
 import { handleStorageWrite } from "../../../../utils/storage";

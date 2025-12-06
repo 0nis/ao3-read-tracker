@@ -1,4 +1,5 @@
 import { buildIgnoreListSection, buildReadListSection } from "./lists";
+import { buildInProgressListSection } from "./lists/sections/in-progress";
 import {
   buildGeneralSettingsSection,
   buildIgnoreSettingsSection,
@@ -12,6 +13,7 @@ export enum SectionId {
   IGNORE_SETTINGS = "ignore-settings",
   GENERAL_SETTINGS = "general-settings",
   READ_LIST = "read-works",
+  IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
 }
 
@@ -59,6 +61,12 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     label: "Read Works",
     type: SectionType.LIST,
     build: buildReadListSection,
+  },
+  {
+    id: SectionId.IN_PROGRESS_LIST,
+    label: "In Progress Works",
+    type: SectionType.LIST,
+    build: buildInProgressListSection,
   },
   {
     id: SectionId.IGNORE_LIST,

@@ -15,30 +15,30 @@ import {
   getFormattedDateAsFullText,
 } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
-import { ReadWork } from "../../../../types/works";
+import { InProgressWork } from "../../../../types/works";
 
-export async function buildReadListSection(): Promise<HTMLElement> {
+export async function buildInProgressListSection(): Promise<HTMLElement> {
   return createPaginatedListSection({
-    id: SectionId.READ_LIST,
-    title: "Read Works List",
-    paginator: StorageService.readWorks.paginate,
+    id: SectionId.IN_PROGRESS_LIST,
+    title: "In Progress Works List",
+    paginator: StorageService.inProgressWorks.paginate,
     renderItem,
     pageSize: 10,
-    orderBy: "finishedAt",
+    orderBy: "lastReadAt",
   });
 }
 
-async function renderItem(item: ReadWork): Promise<HTMLElement> {
+async function renderItem(item: InProgressWork): Promise<HTMLElement> {
   const { symbols, rules } = await loadSymbolsAndRules(item.id, {
-    readWork: item,
+    inProgressWork: item,
   });
 
   const info: SupplementaryRowInformation = {
-    date: getFormattedDate(item.finishedAt, "/"),
+    date: getFormattedDate(item.lastReadAt, "/"),
     symbols: {
       symbolData: symbols,
       rules,
-      exclude: [SymbolId.READ], // Everything is read in this list, so exclude the "read" symbol
+      exclude: [SymbolId.IN_PROGRESS], // Everything is in progress in this list, so exclude the "in progress" symbol
     },
   };
 
@@ -52,22 +52,22 @@ async function renderItem(item: ReadWork): Promise<HTMLElement> {
     innerElement,
     srAccessibleLabel: `${
       item.title || "Untitled"
-    } - Red ${getFormattedDateAsFullText(item.finishedAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
+    } - Last red ${getFormattedDateAsFullText(item.lastReadAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
     srAccessibleContentSummary: getSrAccessibleContentSummary(info),
     actions: {
       link: { href: getWorkLinkFromId(item.id) },
       delete: {
         onDelete: (): Promise<void> => {
           return handleStorageWrite<void>(
-            StorageService.readWorks.delete(item.id),
+            StorageService.inProgressWorks.delete(item.id),
             {
-              successMsg: `${item.title} has been removed from your read list.`,
-              errorMsg: `Failed to remove ${item.title} from your read list.`,
+              successMsg: `${item.title} has been removed from your in progress list.`,
+              errorMsg: `Failed to remove ${item.title} from your in progress list.`,
             }
           );
         },
-        confirmationText: `Are you sure you want to remove ${item.title} from your read list?`,
-        successText: `${item.title} has been removed from your read list.`,
+        confirmationText: `Are you sure you want to remove ${item.title} from your in progress list?`,
+        successText: `${item.title} has been removed from your in progress list.`,
       },
     },
   });

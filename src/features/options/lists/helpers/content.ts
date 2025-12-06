@@ -3,7 +3,7 @@ import { createSymbolElement } from "./symbols";
 
 import { SymbolRule } from "../../../../services/rules";
 import { el } from "../../../../utils/ui/dom";
-import { IgnoredWork, ReadWork } from "../../../../types/works";
+import { IgnoredWork, ReadWork, WorkStateData } from "../../../../types/works";
 import { SymbolData } from "../../../../types/symbols";
 
 export interface SupplementaryRowInformation {
@@ -17,7 +17,7 @@ export interface SupplementaryRowInformation {
 }
 
 export interface InnerElementParams extends SupplementaryRowInformation {
-  item: ReadWork | IgnoredWork;
+  item: WorkStateData[keyof WorkStateData];
 }
 
 export async function createInnerElement({
@@ -26,6 +26,10 @@ export async function createInnerElement({
   text,
   date,
 }: InnerElementParams): Promise<HTMLElement> {
+  if (!item)
+    return el("div", { className: `${PREFIX}__list__row__content` }, [
+      "Item not found",
+    ]);
   const mainEls: HTMLElement[] = [];
 
   // Title
