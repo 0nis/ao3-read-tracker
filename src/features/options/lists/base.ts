@@ -6,7 +6,6 @@ import {
 } from "./helpers/pagination";
 import { getStyles } from "./style";
 
-import { PREFIX } from "..";
 import { SectionConfig } from "../types";
 import { createSection } from "../components/section";
 
@@ -19,6 +18,8 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../types/results";
+
+export const LIST_CLASS = `${CLASS_PREFIX}__list`;
 
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
   paginator: (
@@ -43,17 +44,17 @@ export function createPaginatedListSection<T>({
   const state: State = { currentPage: 0 };
 
   const section = createSection(config);
-  injectStyles(`${PREFIX}__styles--list-section`, getStyles(PREFIX));
+  injectStyles(`${CLASS_PREFIX}__styles--list-section`, getStyles(LIST_CLASS));
 
   const listContainer = el("ul", {
-    className: `${PREFIX}__list__container`,
+    className: `${LIST_CLASS}__container`,
     role: "list",
   });
 
   const paginationControls = createPaginationControls();
 
   async function renderPage(init: boolean = false) {
-    listContainer.classList.add(`${PREFIX}__list__container--loading`);
+    listContainer.classList.add(`${LIST_CLASS}__container--loading`);
 
     const fragment = document.createDocumentFragment();
     const result = await handleStorageRead<PaginatedResult<T>>(
@@ -82,7 +83,7 @@ export function createPaginatedListSection<T>({
     state.totalPages = totalPages;
 
     if (items.length === 0) {
-      const emptyEl = el("li", { className: `${PREFIX}__list__row--empty` }, [
+      const emptyEl = el("li", { className: `${LIST_CLASS}__row--empty` }, [
         "No items to display :(",
       ]);
       fragment.appendChild(emptyEl);
@@ -98,7 +99,7 @@ export function createPaginatedListSection<T>({
     paginationControls.nextBtn.disabled = !hasNext;
 
     queueMicrotask(() =>
-      listContainer.classList.remove(`${PREFIX}__list__container--loading`)
+      listContainer.classList.remove(`${LIST_CLASS}__container--loading`)
     );
 
     if (!init) reportSrLive(`Page ${page + 1} of ${totalPages}`);
@@ -111,7 +112,7 @@ export function createPaginatedListSection<T>({
   const paginationWrapper = el(
     "nav",
     {
-      className: `${PREFIX}__pagination__controls`,
+      className: `${LIST_CLASS}-pagination__controls`,
       attrs: { "aria-label": "Pagination Controls" },
     },
     [
@@ -177,7 +178,7 @@ export async function createListRow({
     "li",
     {
       id: id,
-      className: `${PREFIX}__list__row`,
+      className: `${LIST_CLASS}__row`,
       tabIndex: 0,
       attrs: {
         "aria-labelledby": `${id}-label`,
@@ -192,7 +193,7 @@ export async function createListRow({
   const actionsWrapper = el(
     "div",
     {
-      className: `actions ${PREFIX}__list__row__actions`,
+      className: `actions ${LIST_CLASS}__row-actions`,
       attrs: { "aria-hidden": "true" },
     },
     actionEls

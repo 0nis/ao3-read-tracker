@@ -1,7 +1,8 @@
-import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { ABBREVIATION } from "../../../../../constants/global";
-import { el, injectStyles } from "../../../dom";
 import { getStyles } from "./style";
+
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { el, injectStyles } from "../../../dom";
+import { CustomInputType } from "../../../../../enums/ui";
 
 const prefix = `${CLASS_PREFIX}__toggle-switch`;
 
@@ -15,7 +16,7 @@ export function buildToggleSwitch(
 ): HTMLElement {
   const { checked = false, attrs, onChange } = options;
 
-  injectStyles(`${prefix}--styles`, getStyles(prefix));
+  injectStyles(`${CLASS_PREFIX}__styles--toggle-switch`, getStyles(prefix));
 
   const input = el(
     "input",
@@ -43,7 +44,7 @@ export function buildToggleSwitch(
     {
       className: `${prefix}`,
       attrs: {
-        "input-type": `${ABBREVIATION}-toggle-switch`,
+        "input-type": CustomInputType.TOGGLE_SWITCH,
       },
     },
     [input, slider]

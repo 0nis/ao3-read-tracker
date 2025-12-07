@@ -1,3 +1,4 @@
+import { buildDataSection } from "./io/section";
 import {
   buildIgnoreListSection,
   buildFinishedListSection,
@@ -18,11 +19,13 @@ export enum SectionId {
   FINISHED_LIST = "finished-works",
   IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
+  DATA = "data",
 }
 
 export enum SectionType {
   SETTINGS = "settings",
   LIST = "lists",
+  MISC = "misc",
 }
 
 export type SectionBuilder = () => Promise<HTMLElement> | HTMLElement;
@@ -77,6 +80,12 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     type: SectionType.LIST,
     build: buildIgnoreListSection,
   },
+  {
+    id: SectionId.DATA,
+    label: "Data & Storage",
+    type: SectionType.MISC,
+    build: buildDataSection,
+  },
 ] as const;
 
 export interface NavConfigItem {
@@ -92,5 +101,9 @@ export const NAV_CONFIG: readonly NavConfigItem[] = [
   {
     label: "Lists",
     type: SectionType.LIST,
+  },
+  {
+    label: "Advanced",
+    type: SectionType.MISC,
   },
 ];

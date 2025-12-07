@@ -1,4 +1,5 @@
 import { ABBREVIATION } from "../../../constants/global";
+import { CustomInputType } from "../../../enums/ui";
 import { FormField, FormGroup, FormItem } from "../../../types/forms";
 import { getLocalDateTimeString } from "../../date";
 import { walkFormItems } from "./items";
@@ -68,7 +69,7 @@ function getInputValue(input: HTMLElement): any {
       return (input as HTMLSelectElement).value;
     case HTMLDivElement:
       const type = input.getAttribute("input-type");
-      if (type === `${ABBREVIATION}-toggle-switch`) {
+      if (type === CustomInputType.TOGGLE_SWITCH) {
         const toggleInput = input.querySelector(
           "input[type='checkbox']"
         ) as HTMLInputElement;
@@ -114,7 +115,7 @@ function setInputValue(input: HTMLElement, value: unknown): void {
     }
     case HTMLDivElement: {
       const type = input.getAttribute("input-type");
-      if (type === `${ABBREVIATION}-toggle-switch`) {
+      if (type === CustomInputType.TOGGLE_SWITCH) {
         const toggleInput = input.querySelector(
           "input[type='checkbox']"
         ) as HTMLInputElement;

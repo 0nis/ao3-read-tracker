@@ -1,6 +1,6 @@
-import { PREFIX } from "../..";
+import { State, LIST_CLASS } from "../base";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
-import { State } from "../base";
 
 export interface PaginationControls {
   prevBtn: HTMLButtonElement;
@@ -14,7 +14,7 @@ export function createPaginationControls(): PaginationControls {
     "button",
     {
       disabled: true,
-      className: `${PREFIX}__button ${PREFIX}__button--prev`,
+      className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--prev`,
       attrs: { "aria-label": "Previous page" },
     },
     ["Prev"]
@@ -24,14 +24,14 @@ export function createPaginationControls(): PaginationControls {
     "button",
     {
       disabled: true,
-      className: `${PREFIX}__button ${PREFIX}__button--next`,
+      className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--next`,
       attrs: { "aria-label": "Next page" },
     },
     ["Next"]
   ) as HTMLButtonElement;
 
   const pageInput = el("input", {
-    className: `${PREFIX}__pagination__input`,
+    className: `${LIST_CLASS}-pagination__controls-input`,
     attrs: {
       type: "number",
       min: "1",
@@ -39,12 +39,16 @@ export function createPaginationControls(): PaginationControls {
     },
   });
 
-  const pageLabel = el("span", { className: `${PREFIX}__pagination__label` }, [
-    el("span", {}, ["Page "]) as HTMLElement,
-    pageInput as HTMLElement,
-    el("span", {}, [" of "]) as HTMLElement,
-    el("span", {}, ["1"]) as HTMLElement,
-  ]);
+  const pageLabel = el(
+    "span",
+    { className: `${LIST_CLASS}-pagination__controls-label` },
+    [
+      el("span", {}, ["Page "]) as HTMLElement,
+      pageInput as HTMLElement,
+      el("span", {}, [" of "]) as HTMLElement,
+      el("span", {}, ["1"]) as HTMLElement,
+    ]
+  );
 
   return {
     prevBtn,

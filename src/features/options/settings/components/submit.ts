@@ -1,5 +1,5 @@
 import { SettingsSectionConfig } from "../types";
-import { PREFIX } from "../..";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
 
 export function createSettingsSectionSaveButton(
@@ -8,7 +8,7 @@ export function createSettingsSectionSaveButton(
   return el(
     "button",
     {
-      className: `button ${PREFIX}__button ${PREFIX}__button--save`,
+      className: `button ${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--save`,
       attrs: { "aria-label": `Save ${title}`, type: "submit" },
     },
     ["Save"]

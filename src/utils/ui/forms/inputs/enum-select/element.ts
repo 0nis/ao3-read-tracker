@@ -17,7 +17,7 @@ export function buildSelectFromEnum<T extends Record<string, string>>(
   selected?: T[keyof T],
   attrs?: Record<string, string>
 ): HTMLSelectElement {
-  injectStyles(`${className}--styles`, getStyles(className));
+  injectStyles(`${CLASS_PREFIX}__styles--enum-select`, getStyles(className));
   const select = el("select", {
     className: className,
     attrs: {

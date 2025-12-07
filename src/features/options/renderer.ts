@@ -1,8 +1,8 @@
-import { PREFIX } from ".";
 import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
 import { buildHeader } from "./components/header";
-import { buildNav } from "./components/nav";
+import { buildNav } from "./components/nav/component";
 
+import { CLASS_PREFIX } from "../../constants/classes";
 import { error, addGlobalListener, getManifest } from "../../utils/extension";
 import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
@@ -45,13 +45,13 @@ export async function render(): Promise<void> {
     return items.length ? { label: group.label, items } : null;
   }).filter((g): g is NavGroup => g !== null);
 
-  const { nav, updateSelected } = buildNav(navGroups);
+  const { nav, updateSelected } = await buildNav(navGroups);
 
-  const wrapper = el("div", { className: `${PREFIX}__wrapper` }, [
+  const wrapper = el("div", { className: `${CLASS_PREFIX}__wrapper` }, [
     nav,
     el(
       "div",
-      { className: `${PREFIX}__content` },
+      { className: `${CLASS_PREFIX}__content` },
       Object.values(sections).map((s) => s.element)
     ),
   ]);

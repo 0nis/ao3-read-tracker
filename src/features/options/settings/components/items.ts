@@ -1,18 +1,21 @@
+import { SETTINGS_CLASS } from "../base";
 import {
   SettingsSectionField,
   SettingsSectionGroup,
   SettingsSectionItem,
 } from "../types";
-import { PREFIX } from "../..";
 
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
 import { FormItemType } from "../../../../enums/forms";
+import { ABBREVIATION } from "../../../../constants/global";
+import { CustomInputType } from "../../../../enums/ui";
 
 export function createSettingsSectionContent(
   items: SettingsSectionItem<any>[]
 ): HTMLElement {
   const fieldsWrapper = el("div", {
-    className: `${PREFIX}__settings__field__wrapper`,
+    className: `${SETTINGS_CLASS}__field-wrapper`,
   });
   items.forEach((item) => {
     const itemElement = createSettingsSectionItem(item);
@@ -39,29 +42,27 @@ function createSettingsSectionGroup({
   const children: HTMLElement[] = [];
 
   children.push(
-    el("legend", { className: `${PREFIX}__settings__group__label` }, [label])
+    el("legend", { className: `${SETTINGS_CLASS}__group-label` }, [label])
   );
 
   // prettier-ignore
   if (description)
     children.push(el("p", {
       id: `${id}-description`,
-      className: `${PREFIX}__settings__field__description`,
+      className: `${SETTINGS_CLASS}__field-description`,
     }, [description]));
 
   // prettier-ignore
-  const fieldsWrapper = el("div", { className: `${PREFIX}__settings__group__fields` }, []);
+  const fieldsWrapper = el("div", { className: `${SETTINGS_CLASS}__group-fields` }, []);
   fields.forEach((field) => {
     const fieldElement = createSettingsSectionItem(field);
     if (fieldElement) fieldsWrapper.appendChild(fieldElement);
   });
   children.push(fieldsWrapper);
 
-  const group = el(
-    "fieldset",
-    { id, className: `${PREFIX}__settings__group` },
-    [...children]
-  );
+  const group = el("fieldset", { id, className: `${SETTINGS_CLASS}__group` }, [
+    ...children,
+  ]);
 
   return group;
 }
@@ -73,10 +74,16 @@ function createSettingsSectionField({
   label,
   description,
 }: SettingsSectionField<any>): HTMLElement {
-  const id = `${PREFIX}__${sectionId}__${String(dataField)}`;
-  input.id = id;
-  input.setAttribute("data-field", String(dataField));
-  if (description) input.setAttribute("aria-describedby", `${id}-description`);
+  const id = `${CLASS_PREFIX}__${sectionId}__${String(dataField)}`;
+
+  const inputEl =
+    input.getAttribute("input-type") == CustomInputType.TOGGLE_SWITCH
+      ? (input.querySelector("input[type='checkbox']") as HTMLInputElement)
+      : input;
+  inputEl.id = id;
+  inputEl.setAttribute("data-field", String(dataField));
+  if (description)
+    inputEl.setAttribute("aria-describedby", `${id}-description`);
 
   const children = [
     el("label", { attrs: { for: id } }, [label]),
@@ -86,13 +93,13 @@ function createSettingsSectionField({
   if (description)
     children.push(el("p", {
       id: `${id}-description`,
-      className: `${PREFIX}__settings__field__description`,
+      className: `${SETTINGS_CLASS}__field-description`,
     }, [description]));
 
-  const field = el("div", { className: `${PREFIX}__settings__field` }, [
+  const field = el("div", { className: `${SETTINGS_CLASS}__field` }, [
     el(
       "div",
-      { className: `${PREFIX}__settings__field__label__wrapper` },
+      { className: `${SETTINGS_CLASS}__field-label-wrapper` },
       children
     ),
     input,

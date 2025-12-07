@@ -1,14 +1,16 @@
-import { PREFIX } from "../..";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
 import { handleClearData } from "./handlers";
 
 export function buildClearDataButton() {
   const btn = el(
     "button",
-    { className: `button ${PREFIX}__button ${PREFIX}__button--danger` },
+    {
+      className: `button ${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--danger`,
+    },
     ["Clear All Data"]
   );
   btn.onclick = async () => await handleClearData(btn);
 
-  return el("li", { className: `${PREFIX}__clear` }, [btn]);
+  return el("li", { className: `${CLASS_PREFIX}__clear` }, [btn]);
 }
