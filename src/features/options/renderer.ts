@@ -1,6 +1,6 @@
 import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
 import { buildHeader } from "./components/header";
-import { buildNav } from "./components/nav/component";
+import { buildNav, buildNavToggleEl } from "./components/nav/component";
 
 import { CLASS_PREFIX } from "../../constants/classes";
 import { error, addGlobalListener, getManifest } from "../../utils/extension";
@@ -24,6 +24,7 @@ export async function render(): Promise<void> {
     error("Failed to render options page: #main element not found");
     return;
   }
+  main.style.overflow = "hidden";
 
   const header = buildHeader(extensionName);
 
@@ -46,6 +47,8 @@ export async function render(): Promise<void> {
   }).filter((g): g is NavGroup => g !== null);
 
   const { nav, updateSelected } = await buildNav(navGroups);
+
+  header.appendChild(await buildNavToggleEl(nav));
 
   const wrapper = el("div", { className: `${CLASS_PREFIX}__wrapper` }, [
     nav,

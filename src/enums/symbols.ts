@@ -13,6 +13,7 @@ export enum SymbolId {
   LINK = "link",
   DELETE = "delete",
   HAMBURGER = "hamburger",
+  CLOSE = "closed",
   EXTENSION = "extension",
 }
 

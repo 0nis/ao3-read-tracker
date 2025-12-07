@@ -87,6 +87,12 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     text: "☰",
   },
   {
+    id: SymbolId.CLOSE,
+    type: SymbolType.TEXT,
+    label: "Closed",
+    text: "✕",
+  },
+  {
     id: SymbolId.EXTENSION,
     type: SymbolType.TEXT,
     label: "Extension",

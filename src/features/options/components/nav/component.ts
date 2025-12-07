@@ -1,7 +1,7 @@
 import { NavGroup } from "../../types";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { el, injectStyles } from "../../../../utils/ui/dom";
+import { el, ensureChild, injectStyles } from "../../../../utils/ui/dom";
 import { reportSrLive } from "../../../../utils/ui/accessibility";
 import { getSymbolElement } from "../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../enums/symbols";
@@ -60,7 +60,6 @@ export async function buildNav(groups: NavGroup[]): Promise<{
 
   container.querySelector("a")?.classList.add("selected");
 
-  nav.prepend(await buildToggleEl(nav));
   nav.appendChild(container);
 
   function updateSelected(id: string) {
@@ -73,8 +72,10 @@ export async function buildNav(groups: NavGroup[]): Promise<{
   return { nav, updateSelected };
 }
 
-async function buildToggleEl(nav: HTMLElement): Promise<HTMLElement> {
+export async function buildNavToggleEl(nav: HTMLElement): Promise<HTMLElement> {
   const hamburgerEl = await getSymbolElement(SymbolId.HAMBURGER, "☰");
+  const closeEl = await getSymbolElement(SymbolId.CLOSE, "✕");
+
   const toggleBtn = el(
     "button",
     {
@@ -90,6 +91,11 @@ async function buildToggleEl(nav: HTMLElement): Promise<HTMLElement> {
   toggleBtn.addEventListener("click", () => {
     const isOpen = nav.classList.toggle(`${NAV_CLASS}--open`);
     toggleBtn.setAttribute("aria-expanded", String(isOpen));
+
+    toggleBtn.textContent = "";
+    toggleBtn.appendChild(
+      isOpen ? closeEl.cloneNode(true) : hamburgerEl.cloneNode(true)
+    );
   });
 
   return toggleBtn;
