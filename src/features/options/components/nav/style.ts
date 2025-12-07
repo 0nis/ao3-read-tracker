@@ -68,7 +68,7 @@ export function getStyles(prefix: string): string {
     @media (max-width: 600px) {
 
       .${prefix} {
-        position: relative;
+        position: absolute;
         width: 100%;
         border: none;
         padding: 0;

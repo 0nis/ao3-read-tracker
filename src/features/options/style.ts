@@ -56,6 +56,7 @@ export function getStyles(prefix: string): string {
     @media (max-width: 600px) {
       .${prefix}__wrapper {
         flex-direction: column;
+        position: relative;
       }
 
       .${prefix}__header-actions {
