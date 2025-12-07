@@ -81,6 +81,7 @@ function createSettingsSectionField({
       ? (input.querySelector("input[type='checkbox']") as HTMLInputElement)
       : input;
   inputEl.id = id;
+  inputEl.classList.add(`${SETTINGS_CLASS}__field-input`);
   inputEl.setAttribute("data-field", String(dataField));
   if (description)
     inputEl.setAttribute("aria-describedby", `${id}-description`);
@@ -96,10 +97,17 @@ function createSettingsSectionField({
       className: `${SETTINGS_CLASS}__field-description`,
     }, [description]));
 
-  const field = el("div", { className: `${SETTINGS_CLASS}__field` }, [
+  const isCheckbox =
+    inputEl instanceof HTMLInputElement && inputEl.type === "checkbox";
+
+  const field = el("div", { className: `${SETTINGS_CLASS}__field ` }, [
     el(
       "div",
-      { className: `${SETTINGS_CLASS}__field-label-wrapper` },
+      {
+        className: `${SETTINGS_CLASS}__field-label-wrapper ${
+          isCheckbox ? `${SETTINGS_CLASS}__field-label-wrapper--short` : ""
+        }`,
+      },
       children
     ),
     input,

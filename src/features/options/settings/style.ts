@@ -33,6 +33,10 @@ export function getStyles(prefix: string): string {
       margin-top: 6px;
     }
 
+    .${prefix}__field-input {
+      align-self: center;
+    }
+
     .${prefix}__group {
       margin: 1em 0;
       padding: 1em 1.25em;
@@ -62,13 +66,17 @@ export function getStyles(prefix: string): string {
     }
 
     @media (max-width: 600px) {
+      .${prefix}__field-label-wrapper--short {
+        max-width: 80% !important;
+      }
+
       .${prefix}__field-label-wrapper {
         max-width: 100%;
       }
 
       .${prefix}__field {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-wrap: wrap;
+        align-items: center;
         gap: 0;
       }
 
