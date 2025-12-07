@@ -1,13 +1,13 @@
 export function getStyles(prefix: string): string {
   return `
-    .${prefix}__header__actions li {
+    .${prefix}__header-actions li {
         position: relative;
         display: inline-block;
         margin: 0;
         padding: 0;
     }
 
-    .${prefix}__header__actions li button {
+    .${prefix}__header-actions li button {
         margin: 0;
     }
 
