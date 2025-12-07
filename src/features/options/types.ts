@@ -3,6 +3,7 @@ import { SectionId } from "./config";
 export interface SectionConfig {
   id: SectionId;
   title: string;
+  description?: string;
 }
 
 export interface NavItem {

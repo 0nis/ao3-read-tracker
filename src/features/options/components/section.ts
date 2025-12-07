@@ -22,6 +22,13 @@ export function createSection(config: SectionConfig): HTMLElement {
         },
         [config.title]
       ),
+      ...(config.description
+        ? [
+            el("p", { className: `${CLASS_PREFIX}__section-description` }, [
+              config.description,
+            ]),
+          ]
+        : []),
     ]
   );
 }

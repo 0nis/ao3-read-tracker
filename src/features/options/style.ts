@@ -22,6 +22,11 @@ export function getStyles(prefix: string): string {
       margin-bottom: 12px;
     }
 
+    .${prefix}__section-description {
+      opacity: 0.8;
+      font-size: 0.95em;
+    }
+
     .${prefix}__header {
       display: flex;
       justify-content: space-between;
@@ -33,6 +38,17 @@ export function getStyles(prefix: string): string {
     .${prefix}__header-actions {
       display: flex;
       gap: 8px;
+    }
+
+    .${prefix}__header-actions li {
+      position: relative;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .${prefix}__header-actions li button {
+      margin: 0;
     }
     
     .${prefix}__button {
@@ -47,10 +63,6 @@ export function getStyles(prefix: string): string {
     .${prefix}__button--danger {
       color: #900 !important;
       border-color: #900 !important;
-    }
-
-    @media (max-width: 800px) {
-
     }
 
     @media (max-width: 600px) {
