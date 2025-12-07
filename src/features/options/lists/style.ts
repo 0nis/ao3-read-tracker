@@ -122,5 +122,12 @@ export function getStyles(prefix: string): string {
         justify-content: space-between;
       }
     }
+
+    @media (max-width: 400px) {
+      .${prefix}__row-main--info {
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
+    }
   `;
 }
