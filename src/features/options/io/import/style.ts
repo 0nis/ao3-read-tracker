@@ -1,14 +1,9 @@
 export function getStyles(prefix: string): string {
   return `
     .${prefix}__import__expandable-secondary {
-        display: flex;
-        flex-direction: column;
         align-items: stretch;
         width: 11em;
-        box-sizing: border-box;
-        position: absolute;
         top: 2.411em;
-        left: 0;
     }
 
     .${prefix}__import__expandable-secondary li {

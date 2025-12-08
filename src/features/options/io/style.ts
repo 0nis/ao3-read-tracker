@@ -35,7 +35,6 @@ export function getStyles(prefix: string): string {
     }
 
     .${prefix}__category-actions li {
-        position: relative;
         display: inline-block;
         margin: 0;
         padding: 0;

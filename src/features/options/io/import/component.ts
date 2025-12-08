@@ -2,6 +2,7 @@ import { CLASS_PREFIX } from "../../../../constants/classes";
 import { toLowerCaseAndReplaceSpaces } from "../../../../utils/misc";
 import { showNotification } from "../../../../utils/ui/dialogs";
 import { el, injectStyles } from "../../../../utils/ui/dom";
+import { makeExpandable } from "../../../../utils/ui/elements/expandable/element";
 import { ExpandableItemParams, getExpandedImportButtons } from "./config";
 import { getStyles } from "./style";
 
@@ -17,36 +18,21 @@ export function buildImportButton() {
 
   const importBtn = createImportExpandableButton();
   const importSecondary = createImportExpandableSecondary(items);
-  addExpandableBehavior(importBtn, importSecondary);
 
-  return el(
+  const li = el(
     "li",
     {
       className: `${IMPORT_CLASS}`,
       attrs: {
         "aria-label": "Import your data for this extension from a file",
-        "aria-expanded": "false",
       },
     },
     [importBtn, importSecondary]
   );
-}
 
-function addExpandableBehavior(btn: HTMLElement, secondary: HTMLElement) {
-  btn.addEventListener("click", () => {
-    const isHidden = secondary.classList.contains("hidden");
-    if (isHidden) {
-      secondary.classList.remove("hidden");
-      btn.classList.remove("collapsed");
-      btn.classList.add("expanded");
-      btn.setAttribute("aria-expanded", "true");
-    } else {
-      secondary.classList.add("hidden");
-      btn.classList.remove("expanded");
-      btn.classList.add("collapsed");
-      btn.setAttribute("aria-expanded", "false");
-    }
-  });
+  makeExpandable({ trigger: importBtn, panel: importSecondary, parent: li });
+
+  return li;
 }
 
 function createImportExpandableButton(): HTMLElement {
