@@ -46,6 +46,7 @@ export function getStyles(prefix: string): string {
     .${prefix}__row-title {
       margin: 0;
       min-width: 33%;
+      white-space: normal;
     }
 
     .${prefix}__row-date {
@@ -127,6 +128,10 @@ export function getStyles(prefix: string): string {
       .${prefix}__row-main--info {
         flex-wrap: wrap;
         gap: 0.5em;
+      }
+
+      .${prefix}__row-main--info--status {
+        font-size: 0.8em;
       }
     }
   `;
