@@ -1,4 +1,3 @@
-import { PREFIX } from "../..";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { toLowerCaseAndReplaceSpaces } from "../../../../utils/misc";
 import { showNotification } from "../../../../utils/ui/dialogs";
@@ -6,10 +5,12 @@ import { el, injectStyles } from "../../../../utils/ui/dom";
 import { ExpandableItemParams, getExpandedImportButtons } from "./config";
 import { getStyles } from "./style";
 
-export function buildImportButton() {
-  injectStyles(`${PREFIX}__options__import--styles`, getStyles(PREFIX));
+const IMPORT_CLASS = `${CLASS_PREFIX}__import`;
 
-  const btnConfigs = getExpandedImportButtons(PREFIX);
+export function buildImportButton() {
+  injectStyles(`${CLASS_PREFIX}__styles--import`, getStyles(CLASS_PREFIX));
+
+  const btnConfigs = getExpandedImportButtons(CLASS_PREFIX);
   const items = btnConfigs.map((cfg) =>
     createImportExpandableSecondaryItem(cfg)
   );
@@ -21,7 +22,7 @@ export function buildImportButton() {
   return el(
     "li",
     {
-      className: `${PREFIX}__import`,
+      className: `${IMPORT_CLASS}`,
       attrs: {
         "aria-label": "Import your data for this extension from a file",
         "aria-expanded": "false",
@@ -51,7 +52,9 @@ function addExpandableBehavior(btn: HTMLElement, secondary: HTMLElement) {
 function createImportExpandableButton(): HTMLElement {
   return el(
     "button",
-    { className: `${PREFIX}__button ${PREFIX}__button--danger collapsed` },
+    {
+      className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--danger collapsed`,
+    },
     ["Import"]
   );
 }
@@ -62,7 +65,7 @@ function createImportExpandableSecondary(
   return el(
     "ul",
     {
-      className: `${PREFIX}__import__expandable-secondary expandable secondary hidden`,
+      className: `${IMPORT_CLASS}__expandable-secondary expandable secondary hidden`,
     },
     [...items]
   );
@@ -88,7 +91,7 @@ function createImportExpandableSecondaryItem({
     [label]
   );
   const input = el("input", {
-    id: `${PREFIX}__import__file-input--${toLowerCaseAndReplaceSpaces(label)}`,
+    id: `${IMPORT_CLASS}__file-input--${toLowerCaseAndReplaceSpaces(label)}`,
     type: "file",
     accept: ".json",
     multiple: false,

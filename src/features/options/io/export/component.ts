@@ -1,12 +1,12 @@
-import { PREFIX } from "../..";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
 import { handleExport } from "./handlers";
 
 export function buildExportButton() {
-  const btn = el("button", { className: `button ${PREFIX}__button` }, [
+  const btn = el("button", { className: `button ${CLASS_PREFIX}__button` }, [
     "Export",
   ]);
   btn.onclick = async () => await handleExport(btn);
 
-  return el("li", { className: `${PREFIX}__export` }, [btn]);
+  return el("li", { className: `${CLASS_PREFIX}__export` }, [btn]);
 }

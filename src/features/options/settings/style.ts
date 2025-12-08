@@ -1,10 +1,10 @@
 export function getStyles(prefix: string): string {
   return `
-    .${prefix}__settings__field__wrapper {
+    .${prefix}__field-wrapper {
       margin: 1em 0;
     }
 
-    .${prefix}__settings__field {
+    .${prefix}__field {
       padding: 8px 0;
       display: flex;
       gap: 12px;
@@ -13,27 +13,31 @@ export function getStyles(prefix: string): string {
       border-bottom: 1px solid #eee;
     }
 
-    .${prefix}__settings__field__label__wrapper {
+    .${prefix}__field-label-wrapper {
       max-width: 70%;
     }
 
-    .${prefix}__settings__field label {
+    .${prefix}__field label {
       font-weight: 600;
     }
 
-    .${prefix}__settings__field input, 
-    .${prefix}__settings__field select, 
-    .${prefix}__settings__field textarea {
+    .${prefix}__field input, 
+    .${prefix}__field select, 
+    .${prefix}__field textarea {
       width: auto !important;
     }
 
-    .${prefix}__settings__field__description {
+    .${prefix}__field-description {
       opacity: 0.8;
       font-size: 0.95em;
       margin-top: 6px;
     }
 
-    .${prefix}__settings__group {
+    .${prefix}__field-input {
+      align-self: center;
+    }
+
+    .${prefix}__group {
       margin: 1em 0;
       padding: 1em 1.25em;
       border-radius: 8px;
@@ -41,11 +45,11 @@ export function getStyles(prefix: string): string {
       box-shadow: none;
     }
 
-    .${prefix}__settings__group .${prefix}__settings__field__description {
+    .${prefix}__group .${prefix}__field-description {
       margin-top: 0;
     }
 
-    .${prefix}__settings__group__label {
+    .${prefix}__group-label {
       height: auto;
       width: auto;
       font-size: 1.1em;
@@ -53,7 +57,7 @@ export function getStyles(prefix: string): string {
       opacity: 1;
     }
 
-    .${prefix}__settings__actions {
+    .${prefix}__actions {
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -62,17 +66,21 @@ export function getStyles(prefix: string): string {
     }
 
     @media (max-width: 600px) {
-      .${prefix}__settings__field__label__wrapper {
+      .${prefix}__field-label-wrapper--short {
+        max-width: 80% !important;
+      }
+
+      .${prefix}__field-label-wrapper {
         max-width: 100%;
       }
 
-      .${prefix}__settings__field {
-        flex-direction: column;
-        align-items: flex-start;
+      .${prefix}__field {
+        flex-wrap: wrap;
+        align-items: center;
         gap: 0;
       }
 
-      .${prefix}__settings__group .${prefix}__settings__field {
+      .${prefix}__group .${prefix}__field {
         flex-direction: row;
         align-items: center;
         gap: 12px;

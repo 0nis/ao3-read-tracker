@@ -4,6 +4,10 @@ export function getGlobalStyles(prefix: string): string {
       display: none !important;
     }
 
+    body.${prefix}__lock-scroll {
+      overflow: hidden;
+    }
+
     .${prefix}__sr-only {
       position: absolute !important;
       width: 1px !important;

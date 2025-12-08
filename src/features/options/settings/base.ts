@@ -4,18 +4,22 @@ import { SettingsSectionTypeMap } from "./config";
 import { saveSettingsData } from "./helpers/save";
 import { createSettingsSectionContent } from "./components/items";
 import { createSettingsSectionSaveButton } from "./components/submit";
-
-import { PREFIX } from "..";
 import { createSection } from "../components/section";
 
+import { CLASS_PREFIX } from "../../../constants/classes";
 import { settingsCache } from "../../../services/cache";
 import { el, injectStyles } from "../../../utils/ui/dom";
 import { populateFormValues } from "../../../utils/ui/forms";
 
+export const SETTINGS_CLASS = `${CLASS_PREFIX}__settings`;
+
 export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
   cfg: SettingsSectionConfig<SettingsSectionTypeMap[K]> & { id: K }
 ): HTMLElement {
-  injectStyles(`${PREFIX}__styles--settings-section`, getStyles(PREFIX));
+  injectStyles(
+    `${CLASS_PREFIX}__styles--settings-section`,
+    getStyles(SETTINGS_CLASS)
+  );
 
   const section = createSection(cfg);
   section.appendChild(createSettingsSectionContent(cfg.items));
@@ -30,7 +34,7 @@ export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
 
   const actions = el(
     "div",
-    { className: `actions ${PREFIX}__settings__actions` },
+    { className: `actions ${SETTINGS_CLASS}__actions` },
     [saveEl]
   );
   section.appendChild(actions);

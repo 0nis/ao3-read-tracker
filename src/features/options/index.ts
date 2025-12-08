@@ -8,11 +8,9 @@ import { injectStyles } from "../../utils/ui/dom";
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SETTINGS_PAGE_URL } from "../../constants/global";
 
-export const PREFIX = `${CLASS_PREFIX}__options`;
-
 export const Options = {
   async init() {
-    injectStyles(PREFIX, getStyles(PREFIX));
+    injectStyles(`${CLASS_PREFIX}__styles--options`, getStyles(CLASS_PREFIX));
     await addOptionsLinkToAo3Nav(SETTINGS_PAGE_URL);
     Router.register(SETTINGS_PAGE_URL, render);
   },

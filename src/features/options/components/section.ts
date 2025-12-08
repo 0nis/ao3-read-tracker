@@ -1,4 +1,4 @@
-import { PREFIX } from "..";
+import { CLASS_PREFIX } from "../../../constants/classes";
 import { el } from "../../../utils/ui/dom";
 import { SectionConfig } from "../types";
 
@@ -6,7 +6,7 @@ export function createSection(config: SectionConfig): HTMLElement {
   return el(
     "section",
     {
-      className: `${PREFIX}__section`,
+      className: `${CLASS_PREFIX}__section`,
       id: `section-${config.id}`,
       attrs: {
         role: "region",
@@ -17,11 +17,18 @@ export function createSection(config: SectionConfig): HTMLElement {
       el(
         "h3",
         {
-          className: `${PREFIX}__section__title`,
+          className: `${CLASS_PREFIX}__section-title`,
           id: `section-${config.id}-title`,
         },
         [config.title]
       ),
+      ...(config.description
+        ? [
+            el("p", { className: `${CLASS_PREFIX}__section-description` }, [
+              config.description,
+            ]),
+          ]
+        : []),
     ]
   );
 }

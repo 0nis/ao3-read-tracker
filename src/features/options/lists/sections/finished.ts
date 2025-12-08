@@ -40,6 +40,7 @@ async function renderItem(item: FinishedWork): Promise<HTMLElement> {
       rules,
       exclude: [SymbolId.FINISHED], // Everything is finished in this list, so exclude the "finished" symbol
     },
+    status: item.finishedStatus,
   };
 
   const innerElement = await createInnerElement({

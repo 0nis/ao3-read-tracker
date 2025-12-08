@@ -1,13 +1,9 @@
-import { PREFIX } from "../..";
 import { createSymbolElement } from "./symbols";
+import { LIST_CLASS } from "../base";
 
 import { SymbolRule } from "../../../../services/rules";
 import { el } from "../../../../utils/ui/dom";
-import {
-  IgnoredWork,
-  FinishedWork,
-  WorkStateData,
-} from "../../../../types/works";
+import { WorkStateData } from "../../../../types/works";
 import { SymbolData } from "../../../../types/symbols";
 
 export interface SupplementaryRowInformation {
@@ -18,6 +14,7 @@ export interface SupplementaryRowInformation {
     exclude?: string[];
   };
   text?: string;
+  status?: string;
 }
 
 export interface InnerElementParams extends SupplementaryRowInformation {
@@ -29,27 +26,26 @@ export async function createInnerElement({
   symbols,
   text,
   date,
+  status,
 }: InnerElementParams): Promise<HTMLElement> {
   if (!item)
-    return el("div", { className: `${PREFIX}__list__row__content` }, [
+    return el("div", { className: `${LIST_CLASS}__row-content` }, [
       "Item not found",
     ]);
   const mainEls: HTMLElement[] = [];
+  const infoEls: HTMLElement[] = [];
 
   // Title
   mainEls.push(
-    el(
-      "p",
-      { className: `${PREFIX}__list__row__title` },
-      item.title || "untitled"
-    )
+    el("p", { className: `${LIST_CLASS}__row-title` }, item.title || "untitled")
   );
 
   // Reason, note, etc.
   if (text) {
-    mainEls.push(el("p", { className: `${PREFIX}__list__row__text` }, text));
+    mainEls.push(el("p", { className: `${LIST_CLASS}__row-main--text` }, text));
   }
 
+  // TODO: Make configurable whether they show up or not. Just use local storage for that
   // Symbols
   if (symbols?.symbolData && symbols?.rules) {
     const filteredRules = symbols.rules.filter(
@@ -59,11 +55,26 @@ export async function createInnerElement({
       symbols.symbolData,
       filteredRules
     );
-    mainEls.push(symbolsElement);
+    infoEls.push(symbolsElement);
   }
 
-  return el("div", { className: `${PREFIX}__list__row__content` }, [
-    el("span", { className: `${PREFIX}__list__row__date` }, date),
-    el("div", { className: `${PREFIX}__list__row__main` }, mainEls),
+  // TODO: Make configurable whether this shows up or not. Again just use local storage
+  // Status
+  if (status) {
+    status = status.charAt(0).toUpperCase() + status.slice(1);
+    infoEls.push(
+      el("p", { className: `${LIST_CLASS}__row-main--info--status` }, status)
+    );
+  }
+
+  if (infoEls.length > 0) {
+    mainEls.push(
+      el("div", { className: `${LIST_CLASS}__row-main--info` }, infoEls)
+    );
+  }
+
+  return el("div", { className: `${LIST_CLASS}__row-content` }, [
+    el("span", { className: `${LIST_CLASS}__row-date` }, date),
+    el("div", { className: `${LIST_CLASS}__row-main` }, mainEls),
   ]);
 }

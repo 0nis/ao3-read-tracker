@@ -1,16 +1,5 @@
 export function getStyles(prefix: string): string {
   return `
-    .${prefix}__header__actions li {
-        position: relative;
-        display: inline-block;
-        margin: 0;
-        padding: 0;
-    }
-
-    .${prefix}__header__actions li button {
-        margin: 0;
-    }
-
     .${prefix}__import__expandable-secondary {
         display: flex;
         flex-direction: column;

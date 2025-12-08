@@ -7,41 +7,6 @@ export function getStyles(prefix: string): string {
       margin-top: 12px;
     }
 
-    .${prefix}__nav {
-      width: max-content;
-      border-right: 1px solid #ddd;
-      padding-right: 3em;
-    }
-
-    .${prefix}__nav ul {
-      display: flex;
-      flex-direction: column;
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
-    }
-
-    .${prefix}__nav li {
-      margin: 0.5em 0;
-    }
-
-    .${prefix}__nav a {
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      border-bottom: 0px;
-    }
-
-    .${prefix}__nav a:hover {
-      color: #900;
-      border-bottom: 1px solid;
-    }
-
-    .${prefix}__nav a.selected {
-      color: #900;
-      border-bottom: 1px solid;
-    }
-
     .${prefix}__content {
       flex: 1;
       width: 100%;
@@ -52,9 +17,14 @@ export function getStyles(prefix: string): string {
       padding: 0 0 10px 0;
     }
 
-    .${prefix}__section__title {
+    .${prefix}__section-title {
       margin-top: 0;
       margin-bottom: 12px;
+    }
+
+    .${prefix}__section-description {
+      opacity: 0.8;
+      font-size: 0.95em;
     }
 
     .${prefix}__header {
@@ -65,9 +35,20 @@ export function getStyles(prefix: string): string {
       margin-bottom: 12px;
     }
 
-    .${prefix}__header__actions {
+    .${prefix}__header-actions {
       display: flex;
       gap: 8px;
+    }
+
+    .${prefix}__header-actions li {
+      position: relative;
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+    }
+
+    .${prefix}__header-actions li button {
+      margin: 0;
     }
     
     .${prefix}__button {
@@ -84,33 +65,14 @@ export function getStyles(prefix: string): string {
       border-color: #900 !important;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 600px) {
       .${prefix}__wrapper {
         flex-direction: column;
+        position: relative;
       }
 
-      .${prefix}__nav {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
-      }
-
-      .${prefix}__nav ul {
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 1em;
-        overflow-x: auto;
-      }
-
-      .${prefix}__header {
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-      }
-
-      .${prefix}__header__title {
-        text-align: center;
+      .${prefix}__header-actions {
+        display: none;
       }
     }
   `;

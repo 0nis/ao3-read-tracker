@@ -1,11 +1,11 @@
-import { PREFIX } from "../..";
+import { LIST_CLASS } from "../base";
 import { settingsCache, symbolsCache } from "../../../../services/cache";
 import { getActiveSymbolRules, SymbolRule } from "../../../../services/rules";
 import { StorageService } from "../../../../services/storage";
-import { SymbolData } from "../../../../types/symbols";
-import { WorkStateData } from "../../../../types/works";
 import { el } from "../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../utils/ui/symbols";
+import { SymbolData } from "../../../../types/symbols";
+import { WorkStateData } from "../../../../types/works";
 
 export async function loadSymbolsAndRules(
   id: string,
@@ -38,7 +38,7 @@ export async function createSymbolElement(
 ): Promise<HTMLElement> {
   const symbolWrapper = el(
     "ul",
-    { className: `${PREFIX}__list__row__symbols` },
+    { className: `${LIST_CLASS}__row-main--info--symbols` },
     []
   );
 
@@ -51,7 +51,7 @@ export async function createSymbolElement(
       el(
         "li",
         {
-          className: `${PREFIX}__list__row__symbols__item`,
+          className: `${LIST_CLASS}__row-main--info--symbols__item`,
           attrs: {
             "aria-label": label,
             title: label,

@@ -81,6 +81,18 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     text: "🗑︎",
   },
   {
+    id: SymbolId.HAMBURGER,
+    type: SymbolType.TEXT,
+    label: "Hamburger Menu",
+    text: "☰",
+  },
+  {
+    id: SymbolId.CLOSE,
+    type: SymbolType.TEXT,
+    label: "Closed",
+    text: "✕",
+  },
+  {
     id: SymbolId.EXTENSION,
     type: SymbolType.TEXT,
     label: "Extension",

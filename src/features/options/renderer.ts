@@ -1,12 +1,13 @@
-import { PREFIX } from ".";
-import { SECTION_CONFIG, SectionId, SectionType } from "./config";
+import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
 import { buildHeader } from "./components/header";
-import { buildNav } from "./components/nav";
+import { buildNav, buildNavToggleEl } from "./components/nav/component";
 
+import { CLASS_PREFIX } from "../../constants/classes";
 import { error, addGlobalListener, getManifest } from "../../utils/extension";
 import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
 import { ABBREVIATION } from "../../constants/global";
+import { NavGroup, NavItem } from "./types";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -23,6 +24,7 @@ export async function render(): Promise<void> {
     error("Failed to render options page: #main element not found");
     return;
   }
+  main.style.overflow = "hidden";
 
   const header = buildHeader(extensionName);
 
@@ -34,15 +36,25 @@ export async function render(): Promise<void> {
   );
   const sections = Object.fromEntries(entries) as SectionElements;
 
-  const { nav, updateSelected } = buildNav(
-    SECTION_CONFIG.map(({ id, label }) => ({ id, label }))
-  );
+  const navGroups: NavGroup[] = NAV_CONFIG.map((group) => {
+    const items: NavItem[] = SECTION_CONFIG.filter(
+      (section) => section.type === group.type
+    ).map((section) => ({
+      id: section.id,
+      label: section.label,
+    }));
+    return items.length ? { label: group.label, items } : null;
+  }).filter((g): g is NavGroup => g !== null);
 
-  const wrapper = el("div", { className: `${PREFIX}__wrapper` }, [
+  const { nav, updateSelected } = await buildNav(navGroups);
+
+  header.appendChild(await buildNavToggleEl(nav));
+
+  const wrapper = el("div", { className: `${CLASS_PREFIX}__wrapper` }, [
     nav,
     el(
       "div",
-      { className: `${PREFIX}__content` },
+      { className: `${CLASS_PREFIX}__content` },
       Object.values(sections).map((s) => s.element)
     ),
   ]);

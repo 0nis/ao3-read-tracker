@@ -1,3 +1,4 @@
+import { buildDataSection } from "./io/section";
 import {
   buildIgnoreListSection,
   buildFinishedListSection,
@@ -18,11 +19,13 @@ export enum SectionId {
   FINISHED_LIST = "finished-works",
   IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
+  DATA = "data",
 }
 
 export enum SectionType {
   SETTINGS = "settings",
   LIST = "lists",
+  MISC = "misc",
 }
 
 export type SectionBuilder = () => Promise<HTMLElement> | HTMLElement;
@@ -37,44 +40,70 @@ export interface SectionConfigItem {
 export const SECTION_CONFIG: readonly SectionConfigItem[] = [
   {
     id: SectionId.FINISHED_SETTINGS,
-    label: "Finished Works Settings",
+    label: "Settings: Finished",
     type: SectionType.SETTINGS,
     build: buildReadSettingsSection,
   },
   {
     id: SectionId.IN_PROGRESS_SETTINGS,
-    label: "In Progress Works Settings",
+    label: "Settings: In Progress",
     type: SectionType.SETTINGS,
     build: buildInProgressSettingsSection,
   },
   {
     id: SectionId.IGNORE_SETTINGS,
-    label: "Ignored Works Settings",
+    label: "Settings: Ignored",
     type: SectionType.SETTINGS,
     build: buildIgnoreSettingsSection,
   },
   {
     id: SectionId.GENERAL_SETTINGS,
-    label: "General Settings",
+    label: "Settings: General",
     type: SectionType.SETTINGS,
     build: buildGeneralSettingsSection,
   },
   {
     id: SectionId.FINISHED_LIST,
-    label: "Finished Works",
+    label: "List: Finished Works",
     type: SectionType.LIST,
     build: buildFinishedListSection,
   },
   {
     id: SectionId.IN_PROGRESS_LIST,
-    label: "In Progress Works",
+    label: "List: In Progress Works",
     type: SectionType.LIST,
     build: buildInProgressListSection,
   },
   {
     id: SectionId.IGNORE_LIST,
-    label: "Ignored Works",
+    label: "List: Ignored Works",
     type: SectionType.LIST,
     build: buildIgnoreListSection,
   },
+  {
+    id: SectionId.DATA,
+    label: "Data & Storage",
+    type: SectionType.MISC,
+    build: buildDataSection,
+  },
 ] as const;
+
+export interface NavConfigItem {
+  label: string;
+  type: SectionType;
+}
+
+export const NAV_CONFIG: readonly NavConfigItem[] = [
+  {
+    label: "Settings",
+    type: SectionType.SETTINGS,
+  },
+  {
+    label: "Lists",
+    type: SectionType.LIST,
+  },
+  {
+    label: "Advanced",
+    type: SectionType.MISC,
+  },
+];

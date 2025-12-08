@@ -1,4 +1,4 @@
-import { PREFIX } from "../..";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import { SymbolId } from "../../../../enums/symbols";
 import { showConfirm } from "../../../../utils/ui/dialogs";
 import { el } from "../../../../utils/ui/dom";
@@ -40,7 +40,7 @@ export async function createDeleteBtn(
   const deleteBtn = el(
     "button",
     {
-      className: `${PREFIX}__button ${PREFIX}__button--row-delete`,
+      className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--row-delete`,
       title: "Delete this item",
       attrs: {
         "aria-label": "Delete this item",
@@ -57,7 +57,7 @@ export async function createLinkBtn(href: string): Promise<HTMLAnchorElement> {
   const linkBtn = el(
     "a",
     {
-      className: `${PREFIX}__button ${PREFIX}__button--row-link`,
+      className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--row-link`,
       title: "Open work in new tab",
       href: href,
       target: "_blank",
