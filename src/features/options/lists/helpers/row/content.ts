@@ -1,10 +1,10 @@
 import { createSymbolElement } from "./symbols";
-import { LIST_CLASS } from "../base/list.old";
+import { LIST_CLASS } from "../../base/list.old";
 
-import { SymbolRule } from "../../../../services/rules";
-import { el } from "../../../../utils/ui/dom";
-import { WorkStateData } from "../../../../types/works";
-import { SymbolData } from "../../../../types/symbols";
+import { SymbolRule } from "../../../../../services/rules";
+import { el } from "../../../../../utils/ui/dom";
+import { WorkStateData } from "../../../../../types/works";
+import { SymbolData } from "../../../../../types/symbols";
 
 export interface SupplementaryRowInformation {
   date: string;

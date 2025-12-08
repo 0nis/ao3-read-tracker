@@ -1,7 +1,7 @@
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
-import { attachExpandableBehavior } from "../helpers/accessibility";
-import { createActionButtons } from "../helpers/actions";
+import { attachExpandableBehavior } from "../helpers/row/accessibility";
+import { createActionButtons } from "../helpers/row/actions";
 import { LIST_CLASS } from "./list.old";
 
 export interface ListRow {

@@ -11,6 +11,11 @@ export function getStyles(prefix: string): string {
       opacity: 0;
     }
 
+    .${prefix}__options-panel {
+      align-items: stretch;
+      top: 2.411em;
+    }
+
     .${prefix}__row {
       display: flex;
       justify-content: space-between;

@@ -1,7 +1,7 @@
 import {
   createPaginationControls,
   setupPaginationEvents,
-} from "../helpers/pagination";
+} from "../helpers/list/pagination";
 import { getStyles } from "../style";
 
 import { createSectionWrapper } from "../../components/section";

@@ -17,6 +17,12 @@ export function getStyles(prefix: string): string {
       padding: 0 0 10px 0;
     }
 
+    .${prefix}__section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .${prefix}__section-title {
       margin-top: 0;
       margin-bottom: 12px;

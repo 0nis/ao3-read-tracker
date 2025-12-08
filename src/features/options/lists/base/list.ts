@@ -9,18 +9,19 @@ import { reportSrLive } from "../../../../utils/ui/accessibility";
 import { el, injectStyles } from "../../../../utils/ui/dom";
 import { createSectionWrapper } from "../../components/section";
 import { SectionConfig } from "../../types";
+import { buildOptionButton } from "../helpers/list/options";
 import {
   createPaginationControls,
   setupPaginationEvents,
-} from "../helpers/pagination";
+} from "../helpers/list/pagination";
 import { getStyles } from "../style";
 
 export const LIST_CLASS = `${CLASS_PREFIX}__list`;
 
 export type State = { currentPage: number; totalPages?: number };
 
-export interface UserOptions<T, K extends keyof T> {
-  orderBy: K;
+export interface UserOptions<T> {
+  orderBy: keyof T;
   pageSize: number;
   reverse: boolean;
 }
@@ -32,24 +33,23 @@ export interface CustomUserOption {
   onChange: (value: any) => void;
 }
 
-export interface PaginatedListSectionConfig<T, K extends keyof T>
-  extends SectionConfig {
-  allowedOrderBy: K[];
-  defaultUserOptions: UserOptions<T, K>;
-  customUserOptions?: CustomUserOption[];
+export interface PaginatedListSectionConfig<T> extends SectionConfig {
+  allowedOrderBy: (keyof T)[];
+  defaultUserOptions: UserOptions<T>;
 }
 
-export abstract class PaginatedListSectionBase<T, K extends keyof T> {
+export abstract class PaginatedListSectionBase<T> {
   protected state: State = { currentPage: 0 };
   protected container: HTMLElement | null = null;
   protected controls = createPaginationControls();
 
-  constructor(protected config: PaginatedListSectionConfig<T, K>) {}
+  constructor(protected config: PaginatedListSectionConfig<T>) {}
 
   protected abstract renderItem(item: T): Promise<HTMLElement>;
   protected abstract paginator(
     args: PaginatedParams
   ): Promise<StorageResult<PaginatedResult<T>>>;
+  protected abstract getCustomUserOptions(): CustomUserOption[];
 
   mount(): HTMLElement {
     injectStyles(
@@ -57,7 +57,20 @@ export abstract class PaginatedListSectionBase<T, K extends keyof T> {
       getStyles(LIST_CLASS)
     );
 
-    const section = createSectionWrapper(this.config);
+    const section = createSectionWrapper({
+      ...this.config,
+      headerChildren: [
+        // TODO: Style better
+        buildOptionButton(
+          {
+            defaultUserOptions: this.config.defaultUserOptions,
+            allowedOrderBy: this.config.allowedOrderBy.map((v) => String(v)),
+            customUserOptions: this.getCustomUserOptions(),
+          },
+          this.renderPage
+        ),
+      ],
+    });
 
     this.container = el("ul", {
       className: `${LIST_CLASS}__container`,
@@ -73,11 +86,12 @@ export abstract class PaginatedListSectionBase<T, K extends keyof T> {
     return section;
   }
 
-  protected async renderPage(initial: boolean = false) {
+  protected renderPage = async (initial: boolean = false) => {
     if (!this.container) return;
     this.container.classList.add(`${LIST_CLASS}__container--loading`);
 
     const result = await handleStorageRead<PaginatedResult<T>>(
+      // TODO: Use the options from the options button here
       this.paginator({
         page: this.state.currentPage,
         pageSize: this.config.defaultUserOptions.pageSize,
@@ -98,9 +112,9 @@ export abstract class PaginatedListSectionBase<T, K extends keyof T> {
 
     if (!initial && result)
       reportSrLive(`Page ${result.page + 1} of ${result.totalPages}`);
-  }
+  };
 
-  private async renderItems(result: PaginatedResult<T> | undefined) {
+  private renderItems = async (result: PaginatedResult<T> | undefined) => {
     if (!this.container) return;
 
     const fragment = document.createDocumentFragment();
@@ -119,9 +133,9 @@ export abstract class PaginatedListSectionBase<T, K extends keyof T> {
     }
 
     this.container.replaceChildren(fragment);
-  }
+  };
 
-  private updatePagination(result: PaginatedResult<T> | undefined) {
+  private updatePagination = async (result: PaginatedResult<T> | undefined) => {
     const { page, totalPages, hasPrev, hasNext } = result ?? {
       page: 0,
       totalPages: 0,
@@ -132,5 +146,5 @@ export abstract class PaginatedListSectionBase<T, K extends keyof T> {
     this.controls.pageLabel.lastChild!.textContent = totalPages.toString();
     this.controls.prevBtn.disabled = !hasPrev;
     this.controls.nextBtn.disabled = !hasNext;
-  }
+  };
 }

@@ -1,7 +1,7 @@
-import { LIST_CLASS } from "../base/list.old";
-import { State } from "../types";
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { el } from "../../../../utils/ui/dom";
+import { LIST_CLASS } from "../../base/list.old";
+import { State } from "../../types";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { el } from "../../../../../utils/ui/dom";
 
 export interface PaginationControls {
   prevBtn: HTMLButtonElement;

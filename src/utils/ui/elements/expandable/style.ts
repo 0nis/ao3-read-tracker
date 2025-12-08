@@ -13,6 +13,7 @@ export function getStyles(prefix: string): string {
       flex-direction: column;
       position: absolute;
       box-sizing: border-box;
+      z-index: 100;
     }
 
     .${prefix}-panel--left {

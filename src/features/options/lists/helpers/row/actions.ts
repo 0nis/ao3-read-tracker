@@ -1,9 +1,9 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { SymbolId } from "../../../../enums/symbols";
-import { showConfirm } from "../../../../utils/ui/dialogs";
-import { el } from "../../../../utils/ui/dom";
-import { getSymbolElement } from "../../../../utils/ui/symbols";
-import { ListRowActions } from "../base/list.old";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { SymbolId } from "../../../../../enums/symbols";
+import { showConfirm } from "../../../../../utils/ui/dialogs";
+import { el } from "../../../../../utils/ui/dom";
+import { getSymbolElement } from "../../../../../utils/ui/symbols";
+import { ListRowActions } from "../../base/row";
 
 export async function createActionButtons(
   actions: ListRowActions,

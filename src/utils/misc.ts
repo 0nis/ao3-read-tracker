@@ -2,6 +2,19 @@ export function toLowerCaseAndReplaceSpaces(str: string): string {
   return str.toLowerCase().replace(/\s+/g, "-");
 }
 
+export function camelCaseToSentenceCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
+export function snakeCaseToSentenceCase(str: string): string {
+  return str
+    .replace(/_/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
 /** Helper to extract string or number keys from a JSON-like string buffer */
 export const extractKey = (
   buffer: string,

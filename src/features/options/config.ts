@@ -1,6 +1,6 @@
 import { buildDataSection } from "./io/section";
 import {
-  buildIgnoreListSection,
+  buildIgnoredListSection,
   buildFinishedListSection,
   buildInProgressListSection,
 } from "./lists";
@@ -78,7 +78,7 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     id: SectionId.IGNORE_LIST,
     label: "List: Ignored Works",
     type: SectionType.LIST,
-    build: buildIgnoreListSection,
+    build: buildIgnoredListSection,
   },
   {
     id: SectionId.DATA,

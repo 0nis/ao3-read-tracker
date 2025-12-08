@@ -49,7 +49,7 @@ export function populateFormValues<
   });
 }
 
-function getInputValue(input: HTMLElement): any {
+export function getInputValue(input: HTMLElement): any {
   switch (input.constructor) {
     case HTMLInputElement:
       const el = input as HTMLInputElement;
@@ -81,7 +81,7 @@ function getInputValue(input: HTMLElement): any {
   }
 }
 
-function setInputValue(input: HTMLElement, value: unknown): void {
+export function setInputValue(input: HTMLElement, value: unknown): void {
   switch (input.constructor) {
     case HTMLInputElement: {
       const el = input as HTMLInputElement;

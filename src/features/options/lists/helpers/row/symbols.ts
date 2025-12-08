@@ -1,11 +1,14 @@
-import { LIST_CLASS } from "../base/list.old";
-import { settingsCache, symbolsCache } from "../../../../services/cache";
-import { getActiveSymbolRules, SymbolRule } from "../../../../services/rules";
-import { StorageService } from "../../../../services/storage";
-import { el } from "../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../utils/ui/symbols";
-import { SymbolData } from "../../../../types/symbols";
-import { WorkStateData } from "../../../../types/works";
+import { LIST_CLASS } from "../../base/list.old";
+import { settingsCache, symbolsCache } from "../../../../../services/cache";
+import {
+  getActiveSymbolRules,
+  SymbolRule,
+} from "../../../../../services/rules";
+import { StorageService } from "../../../../../services/storage";
+import { el } from "../../../../../utils/ui/dom";
+import { renderSymbolContent } from "../../../../../utils/ui/symbols";
+import { SymbolData } from "../../../../../types/symbols";
+import { WorkStateData } from "../../../../../types/works";
 
 export async function loadSymbolsAndRules(
   id: string,
