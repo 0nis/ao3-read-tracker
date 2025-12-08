@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { el, injectStyles } from "../../../utils/ui/dom";
-import { createSection } from "../components/section";
+import { createSectionWrapper } from "../components/section";
 import { SectionId } from "../config";
 import { buildClearDataButton } from "./clear/component";
 import { buildExportButton } from "./export/component";
@@ -12,7 +12,7 @@ const DATA_CLASS = `${CLASS_PREFIX}__data`;
 export function buildDataSection() {
   injectStyles(`${CLASS_PREFIX}__styles--data`, getStyles(DATA_CLASS));
 
-  const section = createSection({
+  const section = createSectionWrapper({
     id: SectionId.DATA,
     title: "Data & Storage",
   });

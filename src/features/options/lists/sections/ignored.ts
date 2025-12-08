@@ -1,4 +1,5 @@
-import { createListRow, createPaginatedListSection } from "../base";
+import { createPaginatedListSection } from "../base/list.old";
+import { createListRow } from "../base/row";
 
 import {
   createInnerElement,

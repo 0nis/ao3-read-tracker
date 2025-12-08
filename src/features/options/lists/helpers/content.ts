@@ -1,5 +1,5 @@
 import { createSymbolElement } from "./symbols";
-import { LIST_CLASS } from "../base";
+import { LIST_CLASS } from "../base/list.old";
 
 import { SymbolRule } from "../../../../services/rules";
 import { el } from "../../../../utils/ui/dom";

@@ -1,4 +1,5 @@
-import { State, LIST_CLASS } from "../base";
+import { LIST_CLASS } from "../base/list.old";
+import { State } from "../types";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
 
@@ -7,6 +8,7 @@ export interface PaginationControls {
   nextBtn: HTMLButtonElement;
   pageInput: HTMLInputElement;
   pageLabel: HTMLElement;
+  wrapper: HTMLElement;
 }
 
 export function createPaginationControls(): PaginationControls {
@@ -50,11 +52,21 @@ export function createPaginationControls(): PaginationControls {
     ]
   );
 
+  const wrapper = el(
+    "nav",
+    {
+      className: `${LIST_CLASS}-pagination__controls`,
+      attrs: { "aria-label": "Pagination Controls" },
+    },
+    [prevBtn, pageLabel, nextBtn]
+  );
+
   return {
     prevBtn,
     nextBtn,
     pageInput,
     pageLabel,
+    wrapper,
   };
 }
 
