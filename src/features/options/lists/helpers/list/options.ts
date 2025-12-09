@@ -1,4 +1,5 @@
-import { CustomUserOption, LIST_CLASS, UserOptions } from "../../base/list";
+import { getListClass } from "../../base/list";
+import { CustomUserOption, UserOptions } from "../../types";
 
 import { el } from "../../../../../utils/ui/dom";
 import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
@@ -8,12 +9,12 @@ import {
   enumSelect,
   getInputElement,
 } from "../../../../../utils/ui/forms";
-import { CustomInputType, SortDirection } from "../../../../../enums/ui";
+import { SortDirection } from "../../../../../enums/ui";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { select } from "../../../../../utils/ui/forms/inputs/select";
 
 function getOptionsClass() {
-  return `${LIST_CLASS}__options`;
+  return `${getListClass()}__options`;
 }
 
 interface OptionButtonConfig {

@@ -2,6 +2,10 @@ export function toLowerCaseAndReplaceSpaces(str: string): string {
   return str.toLowerCase().replace(/\s+/g, "-");
 }
 
+export function capitalizeFirstLetter(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function toSentenceCase(str: string): string {
   return str
     .toLowerCase()

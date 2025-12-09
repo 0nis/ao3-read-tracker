@@ -1,4 +1,4 @@
-import { LIST_CLASS } from "../../base/list.old";
+import { getListClass } from "../../base/list";
 import { State } from "../../types";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { el } from "../../../../../utils/ui/dom";
@@ -33,7 +33,7 @@ export function createPaginationControls(): PaginationControls {
   ) as HTMLButtonElement;
 
   const pageInput = el("input", {
-    className: `${LIST_CLASS}-pagination__controls-input`,
+    className: `${getListClass()}-pagination__controls-input`,
     attrs: {
       type: "number",
       min: "1",
@@ -43,7 +43,7 @@ export function createPaginationControls(): PaginationControls {
 
   const pageLabel = el(
     "span",
-    { className: `${LIST_CLASS}-pagination__controls-label` },
+    { className: `${getListClass()}-pagination__controls-label` },
     [
       el("span", {}, ["Page "]) as HTMLElement,
       pageInput as HTMLElement,
@@ -55,7 +55,7 @@ export function createPaginationControls(): PaginationControls {
   const wrapper = el(
     "nav",
     {
-      className: `${LIST_CLASS}-pagination__controls`,
+      className: `${getListClass()}-pagination__controls`,
       attrs: { "aria-label": "Pagination Controls" },
     },
     [prevBtn, pageLabel, nextBtn]

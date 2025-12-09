@@ -1,29 +1,19 @@
-import { createPaginatedListSection } from "../base/list.old";
+import { ListRowType } from "../config";
+import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
-import {
-  createInnerElement,
-  SupplementaryRowInformation,
-} from "../helpers/row/content";
-import { getSrAccessibleContentSummary } from "../helpers/row/accessibility";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { handleStorageWrite } from "../../../../utils/storage";
-import { getWorkLinkFromId } from "../../../../utils/ao3";
-import {
-  getFormattedDate,
-  getFormattedDateAsFullText,
-} from "../../../../utils/date";
+import { getFormattedDate } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
+import { SortDirection } from "../../../../enums/ui";
 import { FinishedWork } from "../../../../types/works";
-import { PaginatedListSectionBase } from "../base/list";
 import {
   PaginatedParams,
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
-import { SortDirection } from "../../../../enums/ui";
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   constructor() {
@@ -39,10 +29,6 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
     });
   }
 
-  protected getCustomUserOptions() {
-    return []; // TODO: Add
-  }
-
   protected paginator(
     args: PaginatedParams
   ): Promise<StorageResult<PaginatedResult<FinishedWork>>> {
@@ -50,41 +36,18 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   }
 
   protected async renderItem(item: FinishedWork): Promise<HTMLElement> {
-    const { symbols, rules } = await loadSymbolsAndRules(item.id, {
-      finishedWork: item,
-    });
-
-    const info: SupplementaryRowInformation = {
-      date: getFormattedDate(item.finishedAt, "/"),
-      symbols: {
-        symbolData: symbols,
-        rules,
-        exclude: [SymbolId.FINISHED],
-      },
-      status: item.finishedStatus,
-    };
-
-    const inner = await createInnerElement({ item, ...info });
-
     return createListRow({
-      id: item.id,
-      innerElement: inner,
-      srAccessibleLabel: `${
-        item.title || "Untitled"
-      } - Finished ${getFormattedDateAsFullText(item.finishedAt)}`,
-      srAccessibleContentSummary: getSrAccessibleContentSummary(info),
-
-      actions: {
-        link: { href: getWorkLinkFromId(item.id) },
-        delete: {
-          onDelete: () =>
-            handleStorageWrite(StorageService.finishedWorks.delete(item.id), {
-              successMsg: `${item.title} removed.`,
-              errorMsg: `Failed to remove ${item.title}.`,
-            }),
-          confirmationText: `Remove ${item.title}?`,
-          successText: `${item.title} removed.`,
+      type: ListRowType.FINISHED,
+      item,
+      info: {
+        date: getFormattedDate(item.finishedAt, "/"),
+        symbols: {
+          ...(await loadSymbolsAndRules(item.id, {
+            finishedWork: item,
+          })),
+          exclude: [SymbolId.FINISHED],
         },
+        status: item.finishedStatus,
       },
     });
   }
