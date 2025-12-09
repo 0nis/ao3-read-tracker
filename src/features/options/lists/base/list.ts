@@ -96,7 +96,6 @@ export abstract class PaginatedListSectionBase<T> {
     const result = await handleStorageRead<PaginatedResult<T>>(
       this.paginator({
         page: this.state.currentPage,
-        // TODO: This can be undefined at the moment, which throws. Prevent it from throwing.
         pageSize: this.userOptions.pageSize,
         options: {
           orderBy: this.userOptions.orderBy,
@@ -126,8 +125,11 @@ export abstract class PaginatedListSectionBase<T> {
         this.userOptions.sortDirection = value as SortDirection;
         break;
       case `${LIST_CLASS}__options--page-size`:
-        this.userOptions.pageSize = Number(value);
-        this.state.currentPage = 0;
+        const newSize = Number(value);
+        if (!Number.isNaN(newSize)) {
+          this.userOptions.pageSize = newSize;
+          this.state.currentPage = 0;
+        }
         break;
       default:
         break;
