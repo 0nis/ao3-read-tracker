@@ -1,4 +1,5 @@
 import { CLASS_PREFIX } from "../../../../constants/classes";
+import { SortDirection } from "../../../../enums/ui";
 import {
   PaginatedParams,
   PaginatedResult,
@@ -22,8 +23,8 @@ export type State = { currentPage: number; totalPages?: number };
 
 export interface UserOptions<T> {
   orderBy: keyof T;
+  sortDirection: SortDirection;
   pageSize: number;
-  reverse: boolean;
 }
 
 export interface CustomUserOption {
@@ -36,20 +37,28 @@ export interface CustomUserOption {
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
   allowedOrderBy: (keyof T)[];
   defaultUserOptions: UserOptions<T>;
+  customUserOptions?: CustomUserOption[];
 }
 
 export abstract class PaginatedListSectionBase<T> {
   protected state: State = { currentPage: 0 };
-  protected container: HTMLElement | null = null;
+  protected userOptions: UserOptions<T>;
+  protected container: HTMLElement;
   protected controls = createPaginationControls();
 
-  constructor(protected config: PaginatedListSectionConfig<T>) {}
+  constructor(protected config: PaginatedListSectionConfig<T>) {
+    this.config = config;
+    this.userOptions = { ...config.defaultUserOptions };
+    this.container = el("ul", {
+      className: `${LIST_CLASS}__container`,
+      role: "list",
+    });
+  }
 
   protected abstract renderItem(item: T): Promise<HTMLElement>;
   protected abstract paginator(
     args: PaginatedParams
   ): Promise<StorageResult<PaginatedResult<T>>>;
-  protected abstract getCustomUserOptions(): CustomUserOption[];
 
   mount(): HTMLElement {
     injectStyles(
@@ -60,21 +69,15 @@ export abstract class PaginatedListSectionBase<T> {
     const section = createSectionWrapper({
       ...this.config,
       headerChildren: [
-        // TODO: Style better
         buildOptionButton(
           {
             defaultUserOptions: this.config.defaultUserOptions,
             allowedOrderBy: this.config.allowedOrderBy.map((v) => String(v)),
-            customUserOptions: this.getCustomUserOptions(),
+            customUserOptions: this.config.customUserOptions || [],
           },
-          this.renderPage
+          this.handleOptionsChange
         ),
       ],
-    });
-
-    this.container = el("ul", {
-      className: `${LIST_CLASS}__container`,
-      role: "list",
     });
 
     setupPaginationEvents(this.controls, this.state, this.renderPage);
@@ -91,13 +94,13 @@ export abstract class PaginatedListSectionBase<T> {
     this.container.classList.add(`${LIST_CLASS}__container--loading`);
 
     const result = await handleStorageRead<PaginatedResult<T>>(
-      // TODO: Use the options from the options button here
       this.paginator({
         page: this.state.currentPage,
-        pageSize: this.config.defaultUserOptions.pageSize,
+        // TODO: This can be undefined at the moment, which throws. Prevent it from throwing.
+        pageSize: this.userOptions.pageSize,
         options: {
-          orderBy: this.config.defaultUserOptions.orderBy,
-          reverse: this.config.defaultUserOptions.reverse,
+          orderBy: this.userOptions.orderBy,
+          reverse: this.userOptions.sortDirection === SortDirection.DESC,
         },
       }),
       { errorMsg: `Failed to fetch paginated data for ${this.config.title}.` }
@@ -112,6 +115,25 @@ export abstract class PaginatedListSectionBase<T> {
 
     if (!initial && result)
       reportSrLive(`Page ${result.page + 1} of ${result.totalPages}`);
+  };
+
+  protected handleOptionsChange = (id: string, value: unknown) => {
+    switch (id) {
+      case `${LIST_CLASS}__options--order-by`:
+        this.userOptions.orderBy = value as keyof T;
+        break;
+      case `${LIST_CLASS}__options--sort-direction`:
+        this.userOptions.sortDirection = value as SortDirection;
+        break;
+      case `${LIST_CLASS}__options--page-size`:
+        this.userOptions.pageSize = Number(value);
+        this.state.currentPage = 0;
+        break;
+      default:
+        break;
+    }
+
+    this.renderPage();
   };
 
   private renderItems = async (result: PaginatedResult<T> | undefined) => {

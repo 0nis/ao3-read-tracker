@@ -1,11 +1,8 @@
+import { SortDirection } from "../../../../../enums/ui";
 import { camelCaseToSentenceCase } from "../../../../../utils/misc";
 import { el } from "../../../../../utils/ui/dom";
 import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
-import {
-  getInputValue,
-  number,
-  toggleSwitch,
-} from "../../../../../utils/ui/forms";
+import { getInputValue, number, select } from "../../../../../utils/ui/forms";
 import { CustomUserOption, LIST_CLASS, UserOptions } from "../../base/list";
 
 function getOptionsClass() {
@@ -18,9 +15,10 @@ interface OptionButtonConfig {
   customUserOptions: CustomUserOption[];
 }
 
+// TODO: Style better
 export function buildOptionButton(
   cfg: OptionButtonConfig,
-  onChange: () => void
+  onChange: (id: string, value: unknown) => void
 ): HTMLElement {
   const trigger = createTrigger();
   const panel = createPanel(cfg, onChange);
@@ -45,7 +43,7 @@ function createTrigger(): HTMLButtonElement {
 
 function createPanel(
   cfg: OptionButtonConfig,
-  onChange?: () => void
+  onChange?: (id: string, value: unknown) => void
 ): HTMLElement {
   const ul = el("ul", {
     className: `${getOptionsClass()}-panel expandable secondary`,
@@ -68,8 +66,9 @@ function createPanel(
     ]);
     ul.appendChild(li);
     meta.input.addEventListener("input", (e) => {
-      meta.onChange?.(meta.id, getInputValue(meta.input));
-      onChange?.();
+      const value = getInputValue(meta.input);
+      meta.onChange?.(meta.id, value);
+      onChange?.(meta.id, value);
     });
   });
 
@@ -83,24 +82,25 @@ function getOptionMeta(cfg: OptionButtonConfig): {
   onChange?: (key: string, value: unknown) => void;
 }[] {
   return [
+    ...(cfg.allowedOrderBy.length > 1
+      ? [
+          {
+            id: `${getOptionsClass()}--order-by`,
+            label: "Order By",
+            input: createOrderBySelector(
+              cfg.allowedOrderBy,
+              cfg.defaultUserOptions.orderBy.toString()
+            ),
+          },
+        ]
+      : []),
     {
-      id: `${getOptionsClass()}-order-by`,
-      label: "Order By",
-      input: createOrderBySelector(
-        cfg.allowedOrderBy,
-        cfg.defaultUserOptions.orderBy.toString()
-      ),
+      id: `${getOptionsClass()}--sort-direction`,
+      label: "Sort",
+      input: select(SortDirection, cfg.defaultUserOptions.sortDirection),
     },
     {
-      id: `${getOptionsClass()}-reverse`,
-      label: "Reverse",
-      input: toggleSwitch(
-        `${getOptionsClass()}-reverse`,
-        cfg.defaultUserOptions.reverse
-      ),
-    },
-    {
-      id: `${getOptionsClass()}-page-size`,
+      id: `${getOptionsClass()}--page-size`,
       label: "Page Size",
       input: number("1", cfg.defaultUserOptions.pageSize.toString()),
     },

@@ -23,6 +23,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
+import { SortDirection } from "../../../../enums/ui";
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   constructor() {
@@ -32,8 +33,8 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
       allowedOrderBy: ["finishedAt"],
       defaultUserOptions: {
         orderBy: "finishedAt",
+        sortDirection: SortDirection.DESC,
         pageSize: 10,
-        reverse: false,
       },
     });
   }

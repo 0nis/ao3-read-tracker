@@ -23,6 +23,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
+import { SortDirection } from "../../../../enums/ui";
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   constructor() {
@@ -32,8 +33,8 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       allowedOrderBy: ["lastReadAt"],
       defaultUserOptions: {
         orderBy: "lastReadAt",
+        sortDirection: SortDirection.DESC,
         pageSize: 10,
-        reverse: false,
       },
     });
   }

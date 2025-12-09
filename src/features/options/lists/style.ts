@@ -11,9 +11,25 @@ export function getStyles(prefix: string): string {
       opacity: 0;
     }
 
+    .${prefix}__options-wrapper {
+      top: -.4em;
+    }
+
     .${prefix}__options-panel {
       align-items: stretch;
       top: 2.411em;
+    }
+
+    .${prefix}__options-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+      white-space: nowrap;
+      align-items: center;
+    }
+    .${prefix}__options-item select {
+      margin: 0;
+      min-width: auto;
     }
 
     .${prefix}__row {

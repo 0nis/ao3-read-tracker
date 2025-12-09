@@ -22,6 +22,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
+import { SortDirection } from "../../../../enums/ui";
 
 class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   constructor() {
@@ -31,8 +32,8 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
       allowedOrderBy: ["ignoredAt"],
       defaultUserOptions: {
         orderBy: "ignoredAt",
+        sortDirection: SortDirection.DESC,
         pageSize: 10,
-        reverse: false,
       },
     });
   }
