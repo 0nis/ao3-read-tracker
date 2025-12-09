@@ -8,6 +8,30 @@ export function getGlobalStyles(prefix: string): string {
       overflow: hidden;
     }
 
+    .${prefix}__button {
+      cursor: pointer;
+    }
+    .${prefix}__button:hover {
+      color: #900;
+      border-top: 1px solid #999;
+      border-left: 1px solid #999;
+      box-shadow: inset 2px 2px 2px #bbb;
+    }
+    .${prefix}__button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .${prefix}__button--danger {
+      color: #900 !important;
+      border-color: #900 !important;
+    }
+
+    .${prefix}__select {
+      font: 100% 'Lucida Grande', 'Lucida Sans Unicode', Verdana, Helvetica, sans-serif, 'GNU Unifont';
+      border: 1px solid #bbb;
+      box-shadow: inset 0 1px 2px #ccc;
+    }
+
     .${prefix}__sr-only {
       position: absolute !important;
       width: 1px !important;

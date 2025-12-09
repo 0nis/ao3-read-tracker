@@ -49,7 +49,29 @@ export function populateFormValues<
   });
 }
 
-export function getInputValue(input: HTMLElement): any {
+/**
+ * If the element is an input, textarea, or select, returns it.
+ * Otherwise, returns the first input, textarea, or select inside the element.
+ */
+export function getInputElement(
+  element: HTMLElement
+): HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null {
+  if (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement ||
+    element instanceof HTMLSelectElement
+  ) {
+    return element;
+  }
+
+  return element.querySelector<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >("input, textarea, select");
+}
+
+export function getInputValue(element: HTMLElement): any {
+  const input = getInputElement(element);
+  if (!input) return undefined;
   switch (input.constructor) {
     case HTMLInputElement:
       const el = input as HTMLInputElement;
@@ -67,21 +89,14 @@ export function getInputValue(input: HTMLElement): any {
       return (input as HTMLTextAreaElement).value.trim();
     case HTMLSelectElement:
       return (input as HTMLSelectElement).value;
-    case HTMLDivElement:
-      const type = input.getAttribute("input-type");
-      if (type === CustomInputType.TOGGLE_SWITCH) {
-        const toggleInput = input.querySelector(
-          "input[type='checkbox']"
-        ) as HTMLInputElement;
-        return toggleInput?.checked ?? undefined;
-      }
-      return undefined;
     default:
       return undefined;
   }
 }
 
-export function setInputValue(input: HTMLElement, value: unknown): void {
+export function setInputValue(element: HTMLElement, value: unknown): void {
+  const input = getInputElement(element);
+  if (!input) return;
   switch (input.constructor) {
     case HTMLInputElement: {
       const el = input as HTMLInputElement;
@@ -111,16 +126,6 @@ export function setInputValue(input: HTMLElement, value: unknown): void {
       const el = input as HTMLSelectElement;
       el.value =
         value != null ? String(value) : el.getAttribute("default-value") || "";
-      break;
-    }
-    case HTMLDivElement: {
-      const type = input.getAttribute("input-type");
-      if (type === CustomInputType.TOGGLE_SWITCH) {
-        const toggleInput = input.querySelector(
-          "input[type='checkbox']"
-        ) as HTMLInputElement;
-        if (toggleInput) toggleInput.checked = Boolean(value);
-      }
       break;
     }
   }

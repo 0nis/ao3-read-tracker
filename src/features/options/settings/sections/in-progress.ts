@@ -3,7 +3,7 @@ import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { select, toggleSwitch } from "../../../../utils/ui/forms";
+import { enumSelect, toggleSwitch } from "../../../../utils/ui/forms";
 import { DisplayMode, VerticalPlacement } from "../../../../enums/settings";
 import { SymbolDisplayMode } from "../../../../enums/symbols";
 import { FormItemType } from "../../../../enums/forms";
@@ -31,28 +31,28 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
         type: FormItemType.FIELD,
         sectionId: SectionId.IN_PROGRESS_SETTINGS,
         label: "Default",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "defaultDisplayMode",
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.IN_PROGRESS_SETTINGS,
         label: "Actively Reading",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "activeDisplayMode",
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.IN_PROGRESS_SETTINGS,
         label: "Waiting to Read",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "waitingDisplayMode",
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.IN_PROGRESS_SETTINGS,
         label: "Paused Reading",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "pausedDisplayMode",
       },
     ],
@@ -61,7 +61,7 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IN_PROGRESS_SETTINGS,
     label: "Symbol Display Mode",
-    input: select(SymbolDisplayMode),
+    input: enumSelect(SymbolDisplayMode),
     dataField: "symbolDisplayMode",
     description:
       "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means finished, abandoned, paused, etc.",
@@ -70,7 +70,7 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IN_PROGRESS_SETTINGS,
     label: "'Update' Button Placement",
-    input: select(VerticalPlacement),
+    input: enumSelect(VerticalPlacement),
     dataField: "updateButtonPlacement",
     description:
       "Whether the 'Update Read Progress' button appears at the top or the bottom of the work page.",

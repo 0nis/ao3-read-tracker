@@ -26,6 +26,7 @@ export function getStyles(prefix: string): string {
       gap: 1em;
       white-space: nowrap;
       align-items: center;
+      margin: 0.25em 0;
     }
     .${prefix}__options-item select {
       margin: 0;

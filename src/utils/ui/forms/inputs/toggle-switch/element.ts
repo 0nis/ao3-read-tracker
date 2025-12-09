@@ -4,25 +4,25 @@ import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { el, injectStyles } from "../../../dom";
 import { CustomInputType } from "../../../../../enums/ui";
 
-const prefix = `${CLASS_PREFIX}__toggle-switch`;
+const getClass = () => `${CLASS_PREFIX}__toggle-switch`;
 
-export function buildToggleSwitch(
+export function toggleSwitch(
   id: string,
-  options: {
+  options?: {
     checked?: boolean;
     attrs?: Record<string, string>;
     onChange?: (checked: boolean) => void;
   }
 ): HTMLElement {
-  const { checked = false, attrs, onChange } = options;
+  const { checked = false, attrs, onChange } = options || {};
 
-  injectStyles(`${CLASS_PREFIX}__styles--toggle-switch`, getStyles(prefix));
+  injectStyles(`${CLASS_PREFIX}__styles--toggle-switch`, getStyles(getClass()));
 
   const input = el(
     "input",
     {
       id,
-      className: `${prefix}__input`,
+      className: `${getClass()}__input`,
       type: "checkbox",
       checked,
       ...attrs,
@@ -34,7 +34,7 @@ export function buildToggleSwitch(
       onChange((e.target as HTMLInputElement).checked);
     });
 
-  const slider = el("span", { className: `${prefix}__slider` }, []);
+  const slider = el("span", { className: `${getClass()}__slider` }, []);
   slider.addEventListener("click", () => {
     input.click();
   });
@@ -42,7 +42,7 @@ export function buildToggleSwitch(
   return el(
     "div",
     {
-      className: `${prefix}`,
+      className: `${getClass()}`,
       attrs: {
         "input-type": CustomInputType.TOGGLE_SWITCH,
       },

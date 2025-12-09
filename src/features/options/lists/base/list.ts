@@ -139,8 +139,6 @@ export abstract class PaginatedListSectionBase<T> {
   };
 
   private renderItems = async (result: PaginatedResult<T> | undefined) => {
-    if (!this.container) return;
-
     const fragment = document.createDocumentFragment();
 
     if (!result || result.items.length === 0) {

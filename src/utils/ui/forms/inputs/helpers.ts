@@ -1,6 +1,5 @@
-import { getLocalDateTimeString } from "../../../date";
 import { el } from "../../dom";
-import { buildSelectFromEnum, buildToggleSwitch } from "..";
+import { getLocalDateTimeString } from "../../../date";
 
 export const text = (
   placeholder: string = "",
@@ -58,20 +57,4 @@ export const datetime = (
       : undefined,
     disabled,
   }) as HTMLInputElement;
-};
-
-export const select = <T extends Record<string, string>>(
-  enumObj: T,
-  defaultValue?: T[keyof T]
-): HTMLSelectElement => {
-  return buildSelectFromEnum(enumObj, defaultValue);
-};
-
-export const toggleSwitch = (
-  id: string,
-  checked: boolean = false
-): HTMLLabelElement => {
-  return buildToggleSwitch(id, {
-    checked,
-  }) as HTMLLabelElement;
 };

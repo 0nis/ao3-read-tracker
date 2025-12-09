@@ -2,17 +2,14 @@ export function toLowerCaseAndReplaceSpaces(str: string): string {
   return str.toLowerCase().replace(/\s+/g, "-");
 }
 
-export function camelCaseToSentenceCase(str: string): string {
+export function toSentenceCase(str: string): string {
   return str
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/^./, (c) => c.toUpperCase());
-}
-
-export function snakeCaseToSentenceCase(str: string): string {
-  return str
-    .replace(/_/g, " ")
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/^./, (c) => c.toUpperCase());
+    .toLowerCase()
+    .replace(/_/g, " ") // replace underscores
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2") // insert space before camelCase capitals
+    .replace(/\s+/g, " ") // collapse multiple spaces
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize first letter of each word
 }
 
 /** Helper to extract string or number keys from a JSON-like string buffer */

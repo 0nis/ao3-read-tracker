@@ -3,7 +3,7 @@ import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { select, toggleSwitch } from "../../../../utils/ui/forms";
+import { enumSelect, toggleSwitch } from "../../../../utils/ui/forms";
 import { DisplayMode } from "../../../../enums/settings";
 import { SymbolDisplayMode } from "../../../../enums/symbols";
 import { FormItemType } from "../../../../enums/forms";
@@ -31,28 +31,28 @@ const items: SettingsSectionItem<FinishedSettings>[] = [
         type: FormItemType.FIELD,
         sectionId: SectionId.FINISHED_SETTINGS,
         label: "Default",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "defaultDisplayMode",
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.FINISHED_SETTINGS,
         label: "Reread Worthy",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "rereadWorthyDisplayMode",
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.FINISHED_SETTINGS,
         label: "Completed",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "completedDisplayMode",
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.FINISHED_SETTINGS,
         label: "Abandoned",
-        input: select(DisplayMode),
+        input: enumSelect(DisplayMode),
         dataField: "abandonedDisplayMode",
       },
     ],
@@ -61,7 +61,7 @@ const items: SettingsSectionItem<FinishedSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.FINISHED_SETTINGS,
     label: "Symbol Display Mode",
-    input: select(SymbolDisplayMode),
+    input: enumSelect(SymbolDisplayMode),
     dataField: "symbolDisplayMode",
     description:
       "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means finished, abandoned, paused, etc.",

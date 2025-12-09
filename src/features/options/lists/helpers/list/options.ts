@@ -1,9 +1,16 @@
-import { SortDirection } from "../../../../../enums/ui";
-import { camelCaseToSentenceCase } from "../../../../../utils/misc";
+import { CustomUserOption, LIST_CLASS, UserOptions } from "../../base/list";
+
 import { el } from "../../../../../utils/ui/dom";
 import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
-import { getInputValue, number, select } from "../../../../../utils/ui/forms";
-import { CustomUserOption, LIST_CLASS, UserOptions } from "../../base/list";
+import {
+  getInputValue,
+  number,
+  enumSelect,
+  getInputElement,
+} from "../../../../../utils/ui/forms";
+import { CustomInputType, SortDirection } from "../../../../../enums/ui";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { select } from "../../../../../utils/ui/forms/inputs/select";
 
 function getOptionsClass() {
   return `${LIST_CLASS}__options`;
@@ -15,7 +22,6 @@ interface OptionButtonConfig {
   customUserOptions: CustomUserOption[];
 }
 
-// TODO: Style better
 export function buildOptionButton(
   cfg: OptionButtonConfig,
   onChange: (id: string, value: unknown) => void
@@ -36,9 +42,13 @@ export function buildOptionButton(
 }
 
 function createTrigger(): HTMLButtonElement {
-  return el("button", { className: `${getOptionsClass()}-trigger collapsed` }, [
-    "Options",
-  ]);
+  return el(
+    "button",
+    {
+      className: `${CLASS_PREFIX}__button ${getOptionsClass()}-trigger collapsed`,
+    },
+    ["Options"]
+  );
 }
 
 function createPanel(
@@ -50,7 +60,9 @@ function createPanel(
   });
 
   getOptionMeta(cfg).forEach((meta) => {
-    meta.input.id = meta.id;
+    const input = getInputElement(meta.input);
+    if (!input) return;
+    input.id = meta.id;
     const li = el("li", { className: `${getOptionsClass()}-item` }, [
       el(
         "label",
@@ -65,8 +77,8 @@ function createPanel(
       meta.input,
     ]);
     ul.appendChild(li);
-    meta.input.addEventListener("input", (e) => {
-      const value = getInputValue(meta.input);
+    input.addEventListener("input", () => {
+      const value = getInputValue(input);
       meta.onChange?.(meta.id, value);
       onChange?.(meta.id, value);
     });
@@ -87,17 +99,17 @@ function getOptionMeta(cfg: OptionButtonConfig): {
           {
             id: `${getOptionsClass()}--order-by`,
             label: "Order By",
-            input: createOrderBySelector(
-              cfg.allowedOrderBy,
-              cfg.defaultUserOptions.orderBy.toString()
-            ),
+            input: select({
+              options: cfg.allowedOrderBy,
+              defaultOption: cfg.defaultUserOptions.orderBy.toString(),
+            }),
           },
         ]
       : []),
     {
       id: `${getOptionsClass()}--sort-direction`,
       label: "Sort",
-      input: select(SortDirection, cfg.defaultUserOptions.sortDirection),
+      input: enumSelect(SortDirection, cfg.defaultUserOptions.sortDirection),
     },
     {
       id: `${getOptionsClass()}--page-size`,
@@ -106,25 +118,4 @@ function getOptionMeta(cfg: OptionButtonConfig): {
     },
     ...cfg.customUserOptions,
   ];
-}
-
-function createOrderBySelector(
-  allowedOrderBy: string[],
-  defaultOrderBy?: string
-) {
-  return el(
-    "select",
-    {
-      className: `${LIST_CLASS}__select`,
-      attrs: {
-        "default-value": defaultOrderBy ? String(defaultOrderBy) : "",
-      },
-    },
-    allowedOrderBy.map((v) => {
-      return el("option", {
-        value: String(v),
-        textContent: camelCaseToSentenceCase(v),
-      });
-    })
-  );
 }
