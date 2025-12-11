@@ -1,21 +1,3 @@
-export function toLowerCaseAndReplaceSpaces(str: string): string {
-  return str.toLowerCase().replace(/\s+/g, "-");
-}
-
-export function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export function toSentenceCase(str: string): string {
-  return str
-    .toLowerCase()
-    .replace(/_/g, " ") // replace underscores
-    .replace(/([a-z0-9])([A-Z])/g, "$1 $2") // insert space before camelCase capitals
-    .replace(/\s+/g, " ") // collapse multiple spaces
-    .trim()
-    .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize first letter of each word
-}
-
 /** Helper to extract string or number keys from a JSON-like string buffer */
 export const extractKey = (
   buffer: string,
@@ -37,14 +19,4 @@ export function isEmpty(value: unknown): boolean {
   if (value && typeof value === "object")
     return Object.keys(value).length === 0;
   return false;
-}
-
-export function replacePlaceholders(
-  text: string,
-  replacements: Record<string, string>
-) {
-  return Object.entries(replacements).reduce((acc, [key, value]) => {
-    const pattern = new RegExp(`%${key}%`, "g");
-    return acc.replace(pattern, value);
-  }, text);
 }

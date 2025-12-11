@@ -1,5 +1,5 @@
 import { getStyles } from "../style";
-import { CustomUserOption, State, UserOptions } from "../types";
+import { State, UserOption } from "../types";
 import { buildOptionButton } from "../helpers/list/options";
 import {
   createPaginationControls,
@@ -19,24 +19,32 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
+import { enumSelect, number, select } from "../../../../utils/ui/forms";
 
 export const getListClass = () => `${CLASS_PREFIX}__list`;
 
+export interface PaginationUserOptions<T> {
+  orderBy: keyof T;
+  sortDirection: SortDirection;
+  pageSize: number;
+}
+
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
+  defaultOptions: PaginationUserOptions<T>;
   allowedOrderBy: (keyof T)[];
-  defaultUserOptions: UserOptions<T>;
-  customUserOptions?: CustomUserOption[];
 }
 
 export abstract class PaginatedListSectionBase<T> {
   protected state: State = { currentPage: 0 };
-  protected userOptions: UserOptions<T>;
+  protected options: PaginationUserOptions<T>;
   protected container: HTMLElement;
   protected controls = createPaginationControls();
+  protected userOptionDefinitions: Record<string, UserOption<any>>;
 
   constructor(protected config: PaginatedListSectionConfig<T>) {
     this.config = config;
-    this.userOptions = { ...config.defaultUserOptions };
+    this.options = { ...config.defaultOptions };
+    this.userOptionDefinitions = this.buildUserOptionDefinitions();
     this.container = el("ul", {
       className: `${getListClass()}__container`,
       role: "list",
@@ -44,9 +52,12 @@ export abstract class PaginatedListSectionBase<T> {
   }
 
   protected abstract renderItem(item: T): Promise<HTMLElement>;
+
   protected abstract paginator(
     args: PaginatedParams
   ): Promise<StorageResult<PaginatedResult<T>>>;
+
+  protected abstract getCustomUserOptions(): Record<string, UserOption<any>>;
 
   mount(): HTMLElement {
     injectStyles(
@@ -57,14 +68,10 @@ export abstract class PaginatedListSectionBase<T> {
     const section = createSectionWrapper({
       ...this.config,
       headerChildren: [
-        buildOptionButton(
-          {
-            defaultUserOptions: this.config.defaultUserOptions,
-            allowedOrderBy: this.config.allowedOrderBy.map((v) => String(v)),
-            customUserOptions: this.config.customUserOptions || [],
-          },
-          this.handleOptionsChange
-        ),
+        buildOptionButton({
+          userOptions: this.userOptionDefinitions,
+          allowedOrderBy: this.config.allowedOrderBy.map((v) => String(v)),
+        }),
       ],
     });
 
@@ -84,10 +91,10 @@ export abstract class PaginatedListSectionBase<T> {
     const result = await handleStorageRead<PaginatedResult<T>>(
       this.paginator({
         page: this.state.currentPage,
-        pageSize: this.userOptions.pageSize,
+        pageSize: this.options.pageSize,
         options: {
-          orderBy: this.userOptions.orderBy,
-          reverse: this.userOptions.sortDirection === SortDirection.DESC,
+          orderBy: this.options.orderBy,
+          reverse: this.options.sortDirection === SortDirection.DESC,
         },
       }),
       { errorMsg: `Failed to fetch paginated data for ${this.config.title}.` }
@@ -102,28 +109,6 @@ export abstract class PaginatedListSectionBase<T> {
 
     if (!initial && result)
       reportSrLive(`Page ${result.page + 1} of ${result.totalPages}`);
-  };
-
-  protected handleOptionsChange = (id: string, value: unknown) => {
-    switch (id) {
-      case `${getListClass()}__options--order-by`:
-        this.userOptions.orderBy = value as keyof T;
-        break;
-      case `${getListClass()}__options--sort-direction`:
-        this.userOptions.sortDirection = value as SortDirection;
-        break;
-      case `${getListClass()}__options--page-size`:
-        const newSize = Number(value);
-        if (!Number.isNaN(newSize)) {
-          this.userOptions.pageSize = newSize;
-          this.state.currentPage = 0;
-        }
-        break;
-      default:
-        break;
-    }
-
-    this.renderPage();
   };
 
   private renderItems = async (result: PaginatedResult<T> | undefined) => {
@@ -156,5 +141,43 @@ export abstract class PaginatedListSectionBase<T> {
     this.controls.pageLabel.lastChild!.textContent = totalPages.toString();
     this.controls.prevBtn.disabled = !hasPrev;
     this.controls.nextBtn.disabled = !hasNext;
+  };
+
+  private buildUserOptionDefinitions = (): Record<string, UserOption<any>> => {
+    const baseOptions: Record<string, UserOption<any>> = {
+      orderBy: {
+        label: "Order by",
+        input: select({
+          options: this.config.allowedOrderBy.map((v) => String(v)),
+          defaultOption: this.options.orderBy.toString(),
+        }),
+        show: this.config.allowedOrderBy.length > 1,
+        onChange: (value: keyof T) => {
+          this.options.orderBy = value;
+          this.renderPage();
+        },
+      },
+      sortDirection: {
+        label: "Sort",
+        input: enumSelect(SortDirection, this.options.sortDirection),
+        onChange: (value: SortDirection) => {
+          this.options.sortDirection = value as SortDirection;
+          this.renderPage();
+        },
+      },
+      pageSize: {
+        label: "Page Size",
+        input: number("1", String(this.options.pageSize)),
+        onChange: (value: number) => {
+          this.options.pageSize = value;
+          this.renderPage();
+        },
+      },
+    };
+
+    return {
+      ...baseOptions,
+      ...this.getCustomUserOptions(),
+    };
   };
 }

@@ -18,7 +18,7 @@ import {
   getElement,
   injectStyles,
 } from "../../../../utils/ui/dom";
-import { replacePlaceholders } from "../../../../utils/misc";
+import { replacePlaceholders } from "../../../../utils/string";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
 

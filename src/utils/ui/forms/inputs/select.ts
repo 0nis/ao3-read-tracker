@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { toSentenceCase } from "../../../misc";
+import { toSentenceCase } from "../../../string";
 import { el } from "../../dom";
 
 export type SelectOptions = {
@@ -16,7 +16,7 @@ export function select({
   attrs,
   id,
 }: SelectOptions): HTMLSelectElement {
-  return el(
+  const element = el(
     "select",
     {
       id,
@@ -33,4 +33,6 @@ export function select({
       });
     })
   );
+  element.value = defaultOption ? String(defaultOption) : String(options[0]);
+  return element;
 }

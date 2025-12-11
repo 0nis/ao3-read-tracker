@@ -1,34 +1,24 @@
 import { getListClass } from "../../base/list";
-import { CustomUserOption, UserOptions } from "../../types";
+import { UserOption } from "../../types";
 
 import { el } from "../../../../../utils/ui/dom";
 import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
-import {
-  getInputValue,
-  number,
-  enumSelect,
-  getInputElement,
-} from "../../../../../utils/ui/forms";
-import { SortDirection } from "../../../../../enums/ui";
+import { getInputValue, getInputElement } from "../../../../../utils/ui/forms";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { select } from "../../../../../utils/ui/forms/inputs/select";
+import { toKebabCase } from "../../../../../utils/string";
 
 function getOptionsClass() {
   return `${getListClass()}__options`;
 }
 
 interface OptionButtonConfig {
-  defaultUserOptions: UserOptions<any>;
+  userOptions: Record<string, UserOption<any>>;
   allowedOrderBy: string[];
-  customUserOptions: CustomUserOption[];
 }
 
-export function buildOptionButton(
-  cfg: OptionButtonConfig,
-  onChange: (id: string, value: unknown) => void
-): HTMLElement {
+export function buildOptionButton(cfg: OptionButtonConfig): HTMLElement {
   const trigger = createTrigger();
-  const panel = createPanel(cfg, onChange);
+  const panel = createPanel(cfg);
 
   const wrapper = el("div", { className: getOptionsClass() }, [trigger, panel]);
 
@@ -52,71 +42,34 @@ function createTrigger(): HTMLButtonElement {
   );
 }
 
-function createPanel(
-  cfg: OptionButtonConfig,
-  onChange?: (id: string, value: unknown) => void
-): HTMLElement {
+function createPanel(cfg: OptionButtonConfig): HTMLElement {
   const ul = el("ul", {
     className: `${getOptionsClass()}-panel expandable secondary`,
   });
 
-  getOptionMeta(cfg).forEach((meta) => {
-    const input = getInputElement(meta.input);
-    if (!input) return;
-    input.id = meta.id;
+  for (const [key, value] of Object.entries(cfg.userOptions)) {
+    if (value.show === false) continue;
+    const input = getInputElement(value.input);
+    if (!input) continue;
+    input.id = `${getOptionsClass()}--${toKebabCase(key)}`;
     const li = el("li", { className: `${getOptionsClass()}-item` }, [
       el(
         "label",
         {
           className: `${getOptionsClass()}-label`,
           attrs: {
-            for: meta.id,
+            for: input.id,
           },
         },
-        [meta.label]
+        [value.label]
       ),
-      meta.input,
+      value.input,
     ]);
     ul.appendChild(li);
     input.addEventListener("input", () => {
-      const value = getInputValue(input);
-      meta.onChange?.(meta.id, value);
-      onChange?.(meta.id, value);
+      value.onChange?.(getInputValue(input));
     });
-  });
+  }
 
   return ul;
-}
-
-function getOptionMeta(cfg: OptionButtonConfig): {
-  id: string;
-  label: string;
-  input: HTMLElement;
-  onChange?: (key: string, value: unknown) => void;
-}[] {
-  return [
-    ...(cfg.allowedOrderBy.length > 1
-      ? [
-          {
-            id: `${getOptionsClass()}--order-by`,
-            label: "Order By",
-            input: select({
-              options: cfg.allowedOrderBy,
-              defaultOption: cfg.defaultUserOptions.orderBy.toString(),
-            }),
-          },
-        ]
-      : []),
-    {
-      id: `${getOptionsClass()}--sort-direction`,
-      label: "Sort",
-      input: enumSelect(SortDirection, cfg.defaultUserOptions.sortDirection),
-    },
-    {
-      id: `${getOptionsClass()}--page-size`,
-      label: "Page Size",
-      input: number("1", cfg.defaultUserOptions.pageSize.toString()),
-    },
-    ...cfg.customUserOptions,
-  ];
 }

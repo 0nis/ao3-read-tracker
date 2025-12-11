@@ -1,4 +1,5 @@
 import { ListRowType } from "../config";
+import { UserOption } from "../types";
 import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
 import { SectionId } from "../../config";
@@ -19,12 +20,16 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
       id: SectionId.IGNORE_LIST,
       title: "Ignored Works List",
       allowedOrderBy: ["ignoredAt"],
-      defaultUserOptions: {
+      defaultOptions: {
         orderBy: "ignoredAt",
         sortDirection: SortDirection.DESC,
         pageSize: 10,
       },
     });
+  }
+
+  protected getCustomUserOptions(): Record<string, UserOption<any>> {
+    return {};
   }
 
   protected paginator(

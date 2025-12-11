@@ -1,24 +1,11 @@
-import { SortDirection } from "../../../enums/ui";
 import { SymbolRule } from "../../../services/rules";
-import {
-  PaginatedParams,
-  PaginatedResult,
-  StorageResult,
-} from "../../../types/results";
 import { SymbolData } from "../../../types/symbols";
-import { SectionConfig } from "../types";
 
-export interface UserOptions<T> {
-  orderBy: keyof T;
-  sortDirection: SortDirection;
-  pageSize: number;
-}
-
-export interface CustomUserOption {
-  id: string;
+export interface UserOption<T> {
   label: string;
   input: HTMLElement;
-  onChange: (value: any) => void;
+  show?: boolean;
+  onChange?: (value: T) => void;
 }
 
 export type State = { currentPage: number; totalPages?: number };

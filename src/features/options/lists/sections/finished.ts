@@ -1,4 +1,5 @@
 import { ListRowType } from "../config";
+import { UserOption } from "../types";
 import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
@@ -14,6 +15,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
+import { toggleSwitch } from "../../../../utils/ui/forms";
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   constructor() {
@@ -21,12 +23,26 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
       id: SectionId.FINISHED_LIST,
       title: "Finished Works List",
       allowedOrderBy: ["finishedAt"],
-      defaultUserOptions: {
+      defaultOptions: {
         orderBy: "finishedAt",
         sortDirection: SortDirection.DESC,
         pageSize: 10,
       },
     });
+  }
+
+  protected getCustomUserOptions(): Record<string, UserOption<any>> {
+    // return {
+    //   showSymbols: {
+    //     label: "Show Symbols",
+    //     input: toggleSwitch("finished-list-show-symbols-toggle"),
+    //   },
+    //   showStatus: {
+    //     label: "Show Status",
+    //     input: toggleSwitch("finished-list-show-status-toggle"),
+    //   },
+    // };
+    return {};
   }
 
   protected paginator(

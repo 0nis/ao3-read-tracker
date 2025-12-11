@@ -1,4 +1,5 @@
 import { ListRowType } from "../config";
+import { UserOption } from "../types";
 import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
@@ -21,12 +22,16 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       id: SectionId.IN_PROGRESS_LIST,
       title: "In Progress Works List",
       allowedOrderBy: ["lastReadAt"],
-      defaultUserOptions: {
+      defaultOptions: {
         orderBy: "lastReadAt",
         sortDirection: SortDirection.DESC,
         pageSize: 10,
       },
     });
+  }
+
+  protected getCustomUserOptions(): Record<string, UserOption<any>> {
+    return {};
   }
 
   protected paginator(
@@ -51,6 +56,8 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       },
     });
   }
+
+  protected handleCustomOptionChange(key: string, value: unknown): void {}
 }
 
 export function buildInProgressListSection() {

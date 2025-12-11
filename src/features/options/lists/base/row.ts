@@ -1,5 +1,5 @@
 import { getWorkLinkFromId } from "../../../../utils/ao3";
-import { capitalizeFirstLetter } from "../../../../utils/misc";
+import { capitalizeFirstLetter } from "../../../../utils/string";
 import { handleStorageWrite } from "../../../../utils/storage";
 import { showConfirm } from "../../../../utils/ui/dialogs";
 import { el } from "../../../../utils/ui/dom";
