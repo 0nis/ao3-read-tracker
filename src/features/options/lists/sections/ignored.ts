@@ -20,7 +20,7 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
       id: SectionId.IGNORE_LIST,
       title: "Ignored Works List",
       allowedOrderBy: ["ignoredAt"],
-      defaultOptions: {
+      defaultPaginationOptions: {
         orderBy: "ignoredAt",
         sortDirection: SortDirection.DESC,
         pageSize: 10,

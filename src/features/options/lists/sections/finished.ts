@@ -15,7 +15,6 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
-import { toggleSwitch } from "../../../../utils/ui/forms";
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   constructor() {
@@ -23,7 +22,7 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
       id: SectionId.FINISHED_LIST,
       title: "Finished Works List",
       allowedOrderBy: ["finishedAt"],
-      defaultOptions: {
+      defaultPaginationOptions: {
         orderBy: "finishedAt",
         sortDirection: SortDirection.DESC,
         pageSize: 10,

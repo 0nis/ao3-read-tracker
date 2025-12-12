@@ -76,12 +76,12 @@ export function setupPaginationEvents(
   renderPage: () => Promise<void>
 ) {
   paginationControls.prevBtn.addEventListener("click", async () => {
-    if (state.currentPage > 0) state.currentPage--;
+    if (state.currentPage > 1) state.currentPage--;
     await renderPage();
   });
 
   paginationControls.nextBtn.addEventListener("click", async () => {
-    state.currentPage++;
+    if (state.currentPage < (state.totalPages || 1)) state.currentPage++;
     await renderPage();
   });
 
@@ -99,7 +99,7 @@ export function setupPaginationEvents(
       inputPage > 0 &&
       inputPage <= (state.totalPages || 1)
     ) {
-      state.currentPage = inputPage - 1;
+      state.currentPage = inputPage;
       await renderPage();
     }
   });

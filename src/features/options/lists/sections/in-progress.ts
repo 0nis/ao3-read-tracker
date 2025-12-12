@@ -22,7 +22,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       id: SectionId.IN_PROGRESS_LIST,
       title: "In Progress Works List",
       allowedOrderBy: ["lastReadAt"],
-      defaultOptions: {
+      defaultPaginationOptions: {
         orderBy: "lastReadAt",
         sortDirection: SortDirection.DESC,
         pageSize: 10,
