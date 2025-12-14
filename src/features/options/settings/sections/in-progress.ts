@@ -14,7 +14,7 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IN_PROGRESS_SETTINGS,
     label: "Enable Simple Mode",
-    input: toggleSwitch("in-progress-simple-mode-enabled-toggle"),
+    input: toggleSwitch(),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the extension will not ask you for additional information like notes. It will simply mark the work as in progress immediately.",

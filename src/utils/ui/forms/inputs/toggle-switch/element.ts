@@ -4,16 +4,16 @@ import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { el, injectStyles } from "../../../dom";
 import { CustomInputType } from "../../../../../enums/ui";
 
+interface ToggleSwitchOptions {
+  id?: string;
+  checked?: boolean;
+  attrs?: Record<string, string>;
+  onChange?: (checked: boolean) => void;
+}
+
 const getClass = () => `${CLASS_PREFIX}__toggle-switch`;
 
-export function toggleSwitch(
-  id: string,
-  options?: {
-    checked?: boolean;
-    attrs?: Record<string, string>;
-    onChange?: (checked: boolean) => void;
-  }
-): HTMLElement {
+export function toggleSwitch(options?: ToggleSwitchOptions): HTMLElement {
   const { checked = false, attrs, onChange } = options || {};
 
   injectStyles(`${CLASS_PREFIX}__styles--toggle-switch`, getStyles(getClass()));
@@ -21,7 +21,7 @@ export function toggleSwitch(
   const input = el(
     "input",
     {
-      id,
+      id: options?.id,
       className: `${getClass()}__input`,
       type: "checkbox",
       checked,

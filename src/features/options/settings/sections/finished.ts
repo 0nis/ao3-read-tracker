@@ -14,7 +14,7 @@ const items: SettingsSectionItem<FinishedSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.FINISHED_SETTINGS,
     label: "Enable Simple Mode",
-    input: toggleSwitch("finished-simple-mode-enabled-toggle"),
+    input: toggleSwitch(),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the extension will not ask you for additional information like notes. It will simply mark the work as read immediately.",

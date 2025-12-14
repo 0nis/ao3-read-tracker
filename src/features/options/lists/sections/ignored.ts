@@ -15,6 +15,8 @@ import {
   StorageResult,
 } from "../../../../types/results";
 
+interface IgnoredListUserOptions {}
+
 class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   private key: string;
 
@@ -34,7 +36,9 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
     this.key = key;
   }
 
-  protected getCustomUserOptions(): Record<string, UserOption<any>> {
+  protected getCustomUserOptions(): {
+    [K in keyof IgnoredListUserOptions]: UserOption<IgnoredListUserOptions[K]>;
+  } {
     return {};
   }
 

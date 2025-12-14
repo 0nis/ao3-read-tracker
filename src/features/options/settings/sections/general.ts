@@ -13,7 +13,7 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
     label: "Hide Symbols",
-    input: toggleSwitch("hide-symbols-toggle"),
+    input: toggleSwitch(),
     dataField: "hideSymbols",
     description:
       "Whether to hide all symbols next to the title of the works in lists.",
@@ -31,7 +31,7 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
     label: "Replace 'Mark as Read' Button Label?",
-    input: toggleSwitch("replace-mark-for-later-text-toggle"),
+    input: toggleSwitch(),
     dataField: "replaceMarkForLaterLabel",
     description:
       "Whether to replace the text within AO3's default 'Mark as Read' button (the one that appears when you mark a work for later, not the one the extension adds) with custom text.",

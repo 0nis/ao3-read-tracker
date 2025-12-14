@@ -13,7 +13,7 @@ const items: SettingsSectionItem<IgnoreSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IGNORE_SETTINGS,
     label: "Enable Simple Mode",
-    input: toggleSwitch("ignore-simple-mode-enabled-toggle"),
+    input: toggleSwitch(),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",

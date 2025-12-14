@@ -17,6 +17,8 @@ import {
   StorageResult,
 } from "../../../../types/results";
 
+interface InProgressListUserOptions {}
+
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private key: string;
 
@@ -36,7 +38,11 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
     this.key = key;
   }
 
-  protected getCustomUserOptions(): Record<string, UserOption<any>> {
+  protected getCustomUserOptions(): {
+    [K in keyof InProgressListUserOptions]: UserOption<
+      InProgressListUserOptions[K]
+    >;
+  } {
     return {};
   }
 
