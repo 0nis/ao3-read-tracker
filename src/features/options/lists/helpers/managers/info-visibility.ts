@@ -12,7 +12,12 @@ export class InfoVisibilityOptionsManager {
   constructor(
     protected key: string,
     protected options: InfoVisibilityOptions,
-    protected onChangeCallback: () => void
+    protected onChangeCallback: () => void,
+    protected labels: Partial<Record<keyof InfoVisibilityOptions, string>> = {
+      showSymbols: "Show Symbols",
+      showStatus: "Show Status",
+      showNotes: "Show Notes",
+    }
   ) {}
 
   getUserOptions(): Partial<
@@ -21,7 +26,7 @@ export class InfoVisibilityOptionsManager {
     return {
       ...(this.options.showSymbols !== undefined && {
         showSymbols: {
-          label: "Show Symbols",
+          label: this.labels.showSymbols || "Show Symbols",
           input: toggleSwitch({ checked: this.options.showSymbols }),
           onChange: (value: boolean) => {
             this.options.showSymbols = value;
@@ -33,7 +38,7 @@ export class InfoVisibilityOptionsManager {
 
       ...(this.options.showStatus !== undefined && {
         showStatus: {
-          label: "Show Status",
+          label: this.labels.showStatus || "Show Status",
           input: toggleSwitch({ checked: this.options.showStatus }),
           onChange: (value: boolean) => {
             this.options.showStatus = value;
@@ -45,7 +50,7 @@ export class InfoVisibilityOptionsManager {
 
       ...(this.options.showNotes !== undefined && {
         showNotes: {
-          label: "Show Notes",
+          label: this.labels.showNotes || "Show Notes",
           input: toggleSwitch({ checked: this.options.showNotes }),
           onChange: (value: boolean) => {
             this.options.showNotes = value;

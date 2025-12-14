@@ -54,7 +54,8 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
     this.infoVisManager = new InfoVisibilityOptionsManager(
       KEY,
       this.options,
-      () => this.renderPage()
+      () => this.renderPage(),
+      { showNotes: "Show Reason" }
     );
   }
 
