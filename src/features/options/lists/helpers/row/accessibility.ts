@@ -1,21 +1,22 @@
-import { reportSrLive } from "../../../../utils/ui/accessibility";
-import { SupplementaryRowInformation } from "./content";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { reportSrLive } from "../../../../../utils/ui/accessibility";
+import { el } from "../../../../../utils/ui/dom";
+import { SupplementaryRowInformation } from "../../types";
 
 export function getSrAccessibleContentSummary({
   symbols,
   text,
+  status,
 }: SupplementaryRowInformation): string {
   const descriptions: string[] = [];
-  if (symbols?.symbolData && symbols?.rules) {
+  if (symbols?.data && symbols?.rules) {
     for (const rule of symbols.rules) {
-      const label =
-        rule.getCustomLabel?.() || symbols.symbolData[rule.id]?.label;
+      const label = rule.getCustomLabel?.() || symbols.data[rule.id]?.label;
       if (label) descriptions.push(label);
     }
   }
-  if (text) {
-    descriptions.push(text);
-  }
+  if (text) descriptions.push(text);
+  if (status) descriptions.push(`status: ${status}`);
   return descriptions.length ? `${descriptions.join(", ")}.` : "";
 }
 
@@ -69,4 +70,32 @@ export function attachExpandableBehavior(
   );
 
   return { collapse, expand };
+}
+
+export function getAccessibleLabels(
+  id: string,
+  label: string
+): {
+  hiddenLabel: HTMLElement;
+  hint: HTMLElement;
+} {
+  const hiddenLabel = el(
+    "span",
+    {
+      id: `${id}-label`,
+      className: `${CLASS_PREFIX}__sr-only`,
+    },
+    [label]
+  );
+
+  const hint = el(
+    "span",
+    {
+      id: `${id}-hint`,
+      className: `${CLASS_PREFIX}__sr-only`,
+    },
+    ["Press Enter to show details and actions."]
+  );
+
+  return { hiddenLabel, hint };
 }

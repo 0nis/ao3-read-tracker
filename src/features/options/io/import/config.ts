@@ -5,6 +5,7 @@ import {
 } from "../../../../utils/ui/dialogs";
 import { handleImport } from "./handlers";
 import { createExistenceCache } from "../../../../data/cache/existence";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 
 const DEFAULT_IMPORT_OPTIONS: ImportOptions = {
   acceptVersionDiff: true,
@@ -21,13 +22,11 @@ export interface ExpandableItemParams {
   onConfirm?: () => boolean;
 }
 
-export const getExpandedImportButtons = (
-  prefix: string
-): ExpandableItemParams[] => [
+export const getExpandedImportButtons = (): ExpandableItemParams[] => [
   {
     label: "Import Only New Data",
     description: "Import data that does not already exist in your current data",
-    className: `${prefix}__button`,
+    className: `${CLASS_PREFIX}__button`,
     onClick: async (btn, file) => {
       const exists = await createExistenceCache();
       return await handleImport(
@@ -54,7 +53,7 @@ export const getExpandedImportButtons = (
     label: "Merge & Overwrite Duplicates",
     description:
       "Merge imported data with your current data, overwriting any duplicates",
-    className: `${prefix}__button ${prefix}__button--danger`,
+    className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--danger`,
     onClick: async (btn, file) => {
       return await handleImport(btn, file, {
         overwriteValues: true,
@@ -72,7 +71,7 @@ export const getExpandedImportButtons = (
   {
     label: "Overwrite Data",
     description: "Overwrite your current data with an exported file",
-    className: `${prefix}__button ${prefix}__button--danger`,
+    className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--danger`,
     onClick: async (btn, file) => {
       return await handleImport(btn, file, {
         overwriteValues: true,

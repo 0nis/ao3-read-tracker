@@ -2,7 +2,12 @@ import { createWorkForm } from "../base";
 import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 
-import { datetime, number, select, textarea } from "../../../../utils/ui/forms";
+import {
+  datetime,
+  number,
+  enumSelect,
+  textarea,
+} from "../../../../utils/ui/forms";
 import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { ReadingStatus } from "../../../../enums/works";
@@ -31,7 +36,7 @@ const items: WorkFormItem<InProgressWork>[] = [
             type: FormItemType.FIELD,
             dataField: "readingStatus",
             label: "Reading Status",
-            input: select(ReadingStatus, ReadingStatus.ACTIVE),
+            input: enumSelect(ReadingStatus, ReadingStatus.ACTIVE),
           },
           {
             type: FormItemType.FIELD,

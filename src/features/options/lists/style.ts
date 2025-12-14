@@ -11,6 +11,28 @@ export function getStyles(prefix: string): string {
       opacity: 0;
     }
 
+    .${prefix}__options-wrapper {
+      top: -.4em;
+    }
+
+    .${prefix}__options-panel {
+      align-items: stretch;
+      top: 2.411em;
+    }
+
+    .${prefix}__options-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 1em;
+      white-space: nowrap;
+      align-items: center;
+      margin: 0.25em 0;
+    }
+    .${prefix}__options-item select {
+      margin: 0;
+      min-width: auto;
+    }
+
     .${prefix}__row {
       display: flex;
       justify-content: space-between;
@@ -43,13 +65,10 @@ export function getStyles(prefix: string): string {
       width: 100%;
     }
 
-    .${prefix}__row-title {
-      margin: 0;
-      min-width: 33%;
-      white-space: normal;
-    }
-
     .${prefix}__row-date {
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
       opacity: 0.6;
       font-size: 0.8em;
       white-space: nowrap;
@@ -60,6 +79,12 @@ export function getStyles(prefix: string): string {
       justify-content: space-between;
       width: 100%;
       align-items: center;
+    }
+
+    .${prefix}__row-main--title{
+      margin: 0;
+      min-width: 33%;
+      white-space: normal;
     }
 
     .${prefix}__row-main--text {
@@ -76,6 +101,7 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__row-main--info--symbols {
       display: flex;
+      flex-wrap: wrap;
       gap: 4px;
       list-style: none;
       padding: 0;
@@ -114,7 +140,6 @@ export function getStyles(prefix: string): string {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: max-content;
         gap: 0;
         align-items: flex-start;
       }
@@ -132,6 +157,12 @@ export function getStyles(prefix: string): string {
 
       .${prefix}__row-main--info--status {
         font-size: 0.8em;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .${prefix}__row-date {
+        flex-wrap: wrap;
       }
     }
   `;

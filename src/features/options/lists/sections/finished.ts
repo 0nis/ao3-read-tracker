@@ -1,75 +1,108 @@
-import { createListRow, createPaginatedListSection } from "../base";
+import { ListRowType } from "../config";
+import { UserOption } from "../types";
+import { PaginatedListSectionBase } from "../base/list";
+import { createListRow } from "../base/row";
+import { loadSymbolsAndRules } from "../helpers/row/symbols";
 import {
-  createInnerElement,
-  SupplementaryRowInformation,
-} from "../helpers/content";
-import { getSrAccessibleContentSummary } from "../helpers/accessibility";
-import { loadSymbolsAndRules } from "../helpers/symbols";
+  InfoVisibilityOptions,
+  InfoVisibilityOptionsManager,
+} from "../helpers/managers/info-visibility";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { handleStorageWrite } from "../../../../utils/storage";
-import { getWorkLinkFromId } from "../../../../utils/ao3";
-import {
-  getFormattedDate,
-  getFormattedDateAsFullText,
-} from "../../../../utils/date";
+import { getDateParts } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
+import { SortDirection } from "../../../../enums/ui";
+import { ABBREVIATION } from "../../../../constants/global";
 import { FinishedWork } from "../../../../types/works";
+import {
+  PaginatedParams,
+  PaginatedResult,
+  StorageResult,
+} from "../../../../types/results";
 
-export async function buildFinishedListSection(): Promise<HTMLElement> {
-  return createPaginatedListSection({
-    id: SectionId.FINISHED_LIST,
-    title: "Finished Works List",
-    paginator: StorageService.finishedWorks.paginate,
-    renderItem,
-    pageSize: 10,
-    orderBy: "finishedAt",
-  });
-}
+interface FinishedListUserOptions extends InfoVisibilityOptions {}
 
-async function renderItem(item: FinishedWork): Promise<HTMLElement> {
-  const { symbols, rules } = await loadSymbolsAndRules(item.id, {
-    finishedWork: item,
-  });
+const KEY = `${ABBREVIATION}.finished-list`.toLowerCase();
 
-  const info: SupplementaryRowInformation = {
-    date: getFormattedDate(item.finishedAt, "/"),
-    symbols: {
-      symbolData: symbols,
-      rules,
-      exclude: [SymbolId.FINISHED], // Everything is finished in this list, so exclude the "finished" symbol
-    },
-    status: item.finishedStatus,
+class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
+  private options: FinishedListUserOptions = {
+    showSymbols: this.getStored<boolean>({
+      key: `${KEY}.show.symbols`,
+      fallback: true,
+    }),
+    showStatus: this.getStored<boolean>({
+      key: `${KEY}.show.status`,
+      fallback: false,
+    }),
+  };
+  private infoVisManager: InfoVisibilityOptionsManager;
+
+  constructor() {
+    super({
+      id: SectionId.FINISHED_LIST,
+      title: "Finished Works List",
+      key: KEY,
+      allowedOrderBy: ["finishedAt"],
+      defaultPaginationOptions: {
+        orderBy: "finishedAt",
+        sortDirection: SortDirection.DESC,
+        pageSize: 10,
+      },
+    });
+
+    this.infoVisManager = new InfoVisibilityOptionsManager(
+      KEY,
+      this.options,
+      () => this.renderPage()
+    );
+  }
+
+  protected getCustomUserOptions = (): {
+    [K in keyof FinishedListUserOptions]: UserOption<
+      FinishedListUserOptions[K]
+    >;
+  } => {
+    return { ...this.infoVisManager.getUserOptions() };
   };
 
-  const innerElement = await createInnerElement({
-    item,
-    ...info,
-  });
+  protected paginator = (
+    args: PaginatedParams
+  ): Promise<StorageResult<PaginatedResult<FinishedWork>>> => {
+    return StorageService.finishedWorks.paginate(args);
+  };
 
-  return await createListRow({
-    id: item.id,
-    innerElement,
-    srAccessibleLabel: `${
-      item.title || "Untitled"
-    } - Finished ${getFormattedDateAsFullText(item.finishedAt)}`,
-    srAccessibleContentSummary: getSrAccessibleContentSummary(info),
-    actions: {
-      link: { href: getWorkLinkFromId(item.id) },
-      delete: {
-        onDelete: (): Promise<void> => {
-          return handleStorageWrite<void>(
-            StorageService.finishedWorks.delete(item.id),
-            {
-              successMsg: `${item.title} has been removed from your finished list.`,
-              errorMsg: `Failed to remove ${item.title} from your finished list.`,
-            }
-          );
+  protected renderItem = async (item: FinishedWork): Promise<HTMLElement> => {
+    const info = {
+      date: getDateParts(item.finishedAt),
+      ...(this.options.showSymbols === true && {
+        symbols: {
+          ...(await loadSymbolsAndRules(item.id, {
+            finishedWork: item,
+          })),
+          exclude: [
+            SymbolId.FINISHED,
+            ...((this.options.showStatus === true && [
+              SymbolId.STATUS_COMPLETED,
+              SymbolId.STATUS_ABANDONED,
+            ]) ||
+              []), // Status already shown as text
+          ],
         },
-        confirmationText: `Are you sure you want to remove ${item.title} from your finished list?`,
-        successText: `${item.title} has been removed from your finished list.`,
-      },
-    },
-  });
+      }),
+      ...(this.options.showStatus === true && {
+        status: item.finishedStatus,
+      }),
+    };
+
+    return createListRow({
+      type: ListRowType.FINISHED,
+      item,
+      info,
+    });
+  };
+}
+
+export function buildFinishedListSection() {
+  return new FinishedListSection().mount();
 }

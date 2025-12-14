@@ -1,37 +1,7 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { SymbolId } from "../../../../enums/symbols";
-import { showConfirm } from "../../../../utils/ui/dialogs";
-import { el } from "../../../../utils/ui/dom";
-import { getSymbolElement } from "../../../../utils/ui/symbols";
-import { ListRowActions } from "../base";
-
-export async function createActionButtons(
-  actions: ListRowActions,
-  row: HTMLElement
-): Promise<HTMLElement[]> {
-  const buttonPromises: Promise<HTMLElement>[] = [];
-
-  if (actions?.link) {
-    buttonPromises.push(createLinkBtn(actions.link.href));
-  }
-
-  if (actions?.delete?.onDelete) {
-    buttonPromises.push(
-      createDeleteBtn(() => {
-        const confirmed = showConfirm(
-          actions!.delete!.confirmationText ||
-            "Are you sure you want to delete this item?"
-        );
-        if (!confirmed) return;
-        actions!.delete!.onDelete().then(() => {
-          row.remove();
-        });
-      })
-    );
-  }
-
-  return Promise.all(buttonPromises);
-}
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { SymbolId } from "../../../../../enums/symbols";
+import { el } from "../../../../../utils/ui/dom";
+import { getSymbolElement } from "../../../../../utils/ui/symbols";
 
 export async function createDeleteBtn(
   onDelete: () => void

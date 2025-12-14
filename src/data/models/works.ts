@@ -47,6 +47,10 @@ export class WorksData<T extends { id: string }> {
     });
   }
 
+  /**
+   * Paginate through the works in the table.
+   * Uses 1-based page indexing (params *and* returns)
+   */
   async paginate({
     page,
     pageSize,
@@ -56,8 +60,11 @@ export class WorksData<T extends { id: string }> {
 
     const totalItems = await this.table.count();
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
-    const clampedPage = Math.min(Math.max(0, page), totalPages - 1);
-    const offset = clampedPage * pageSize;
+
+    const clampedPage = Math.min(Math.max(1, page), totalPages);
+    const zeroIndexedPage = clampedPage - 1;
+
+    const offset = zeroIndexedPage * pageSize;
 
     let query = this.table.orderBy(orderBy as string);
     if (reverse) query = query.reverse();
@@ -69,8 +76,8 @@ export class WorksData<T extends { id: string }> {
       pageSize,
       totalItems,
       totalPages,
-      hasNext: clampedPage < totalPages - 1,
-      hasPrev: clampedPage > 0,
+      hasNext: clampedPage < totalPages,
+      hasPrev: clampedPage > 1,
     };
   }
 }

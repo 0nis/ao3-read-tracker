@@ -10,6 +10,7 @@ import { el } from "../../../../utils/ui/dom";
 import { FormItemType } from "../../../../enums/forms";
 import { ABBREVIATION } from "../../../../constants/global";
 import { CustomInputType } from "../../../../enums/ui";
+import { getInputElement } from "../../../../utils/ui/forms";
 
 export function createSettingsSectionContent(
   items: SettingsSectionItem<any>[]
@@ -76,10 +77,7 @@ function createSettingsSectionField({
 }: SettingsSectionField<any>): HTMLElement {
   const id = `${CLASS_PREFIX}__${sectionId}__${String(dataField)}`;
 
-  const inputEl =
-    input.getAttribute("input-type") == CustomInputType.TOGGLE_SWITCH
-      ? (input.querySelector("input[type='checkbox']") as HTMLInputElement)
-      : input;
+  const inputEl = getInputElement(input) ?? input;
   inputEl.id = id;
   inputEl.classList.add(`${SETTINGS_CLASS}__field-input`);
   inputEl.setAttribute("data-field", String(dataField));

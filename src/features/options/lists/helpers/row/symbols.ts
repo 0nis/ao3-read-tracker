@@ -1,11 +1,14 @@
-import { LIST_CLASS } from "../base";
-import { settingsCache, symbolsCache } from "../../../../services/cache";
-import { getActiveSymbolRules, SymbolRule } from "../../../../services/rules";
-import { StorageService } from "../../../../services/storage";
-import { el } from "../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../utils/ui/symbols";
-import { SymbolData } from "../../../../types/symbols";
-import { WorkStateData } from "../../../../types/works";
+import { getListClass } from "../../base/list";
+import { settingsCache, symbolsCache } from "../../../../../services/cache";
+import {
+  getActiveSymbolRules,
+  SymbolRule,
+} from "../../../../../services/rules";
+import { StorageService } from "../../../../../services/storage";
+import { el } from "../../../../../utils/ui/dom";
+import { renderSymbolContent } from "../../../../../utils/ui/symbols";
+import { SymbolData } from "../../../../../types/symbols";
+import { WorkStateData } from "../../../../../types/works";
 
 export async function loadSymbolsAndRules(
   id: string,
@@ -29,7 +32,7 @@ export async function loadSymbolsAndRules(
     options: { showState: true, showStatus: true },
   });
 
-  return { symbols, rules };
+  return { data: symbols, rules };
 }
 
 export async function createSymbolElement(
@@ -38,7 +41,7 @@ export async function createSymbolElement(
 ): Promise<HTMLElement> {
   const symbolWrapper = el(
     "ul",
-    { className: `${LIST_CLASS}__row-main--info--symbols` },
+    { className: `${getListClass()}__row-main--info--symbols` },
     []
   );
 
@@ -51,7 +54,7 @@ export async function createSymbolElement(
       el(
         "li",
         {
-          className: `${LIST_CLASS}__row-main--info--symbols__item`,
+          className: `${getListClass()}__row-main--info--symbols__item`,
           attrs: {
             "aria-label": label,
             title: label,

@@ -1,7 +1,3 @@
-export function toLowerCaseAndReplaceSpaces(str: string): string {
-  return str.toLowerCase().replace(/\s+/g, "-");
-}
-
 /** Helper to extract string or number keys from a JSON-like string buffer */
 export const extractKey = (
   buffer: string,
@@ -23,14 +19,4 @@ export function isEmpty(value: unknown): boolean {
   if (value && typeof value === "object")
     return Object.keys(value).length === 0;
   return false;
-}
-
-export function replacePlaceholders(
-  text: string,
-  replacements: Record<string, string>
-) {
-  return Object.entries(replacements).reduce((acc, [key, value]) => {
-    const pattern = new RegExp(`%${key}%`, "g");
-    return acc.replace(pattern, value);
-  }, text);
 }

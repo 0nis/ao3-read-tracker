@@ -1,65 +1,100 @@
-import { createListRow, createPaginatedListSection } from "../base";
-
+import { ListRowType } from "../config";
+import { UserOption } from "../types";
+import { PaginatedListSectionBase } from "../base/list";
+import { createListRow } from "../base/row";
 import {
-  createInnerElement,
-  SupplementaryRowInformation,
-} from "../helpers/content";
-import { getSrAccessibleContentSummary } from "../helpers/accessibility";
+  InfoVisibilityOptions,
+  InfoVisibilityOptionsManager,
+} from "../helpers/managers/info-visibility";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { handleStorageWrite } from "../../../../utils/storage";
-import { getWorkLinkFromId } from "../../../../utils/ao3";
-import {
-  getFormattedDate,
-  getFormattedDateAsFullText,
-} from "../../../../utils/date";
+import { getDateParts } from "../../../../utils/date";
+import { SortDirection } from "../../../../enums/ui";
+import { ABBREVIATION } from "../../../../constants/global";
 import { IgnoredWork } from "../../../../types/works";
+import {
+  PaginatedParams,
+  PaginatedResult,
+  StorageResult,
+} from "../../../../types/results";
+import { SymbolId } from "../../../../enums/symbols";
+import { loadSymbolsAndRules } from "../helpers/row/symbols";
 
-export async function buildIgnoreListSection(): Promise<HTMLElement> {
-  return createPaginatedListSection({
-    id: SectionId.IGNORE_LIST,
-    title: "Ignored Works List",
-    paginator: StorageService.ignoredWorks.paginate,
-    renderItem,
-    pageSize: 10,
-    orderBy: "ignoredAt",
-  });
-}
+interface IgnoredListUserOptions extends InfoVisibilityOptions {}
 
-async function renderItem(item: IgnoredWork): Promise<HTMLElement> {
-  const info: SupplementaryRowInformation = {
-    date: getFormattedDate(item.ignoredAt, "/"),
-    text: item.reason,
+const KEY = `${ABBREVIATION}.ignored-list`.toLowerCase();
+
+class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
+  private options: IgnoredListUserOptions = {
+    showSymbols: this.getStored<boolean>({
+      key: `${KEY}.show.symbols`,
+      fallback: false,
+    }),
+    showNotes: this.getStored<boolean>({
+      key: `${KEY}.show.notes`,
+      fallback: true,
+    }),
+  };
+  private infoVisManager: InfoVisibilityOptionsManager;
+
+  constructor() {
+    super({
+      id: SectionId.IGNORE_LIST,
+      title: "Ignored Works List",
+      key: KEY,
+      allowedOrderBy: ["ignoredAt"],
+      defaultPaginationOptions: {
+        orderBy: "ignoredAt",
+        sortDirection: SortDirection.DESC,
+        pageSize: 10,
+      },
+    });
+
+    this.infoVisManager = new InfoVisibilityOptionsManager(
+      KEY,
+      this.options,
+      () => this.renderPage(),
+      { showNotes: "Show Reason" }
+    );
+  }
+
+  protected getCustomUserOptions = (): {
+    [K in keyof IgnoredListUserOptions]: UserOption<IgnoredListUserOptions[K]>;
+  } => {
+    return { ...this.infoVisManager.getUserOptions() };
   };
 
-  const innerElement = await createInnerElement({
-    item,
-    ...info,
-  });
+  protected paginator = (
+    args: PaginatedParams
+  ): Promise<StorageResult<PaginatedResult<IgnoredWork>>> => {
+    return StorageService.ignoredWorks.paginate(args);
+  };
 
-  return await createListRow({
-    id: item.id,
-    innerElement,
-    srAccessibleLabel: `${
-      item.title || "Untitled"
-    } - Ignored ${getFormattedDateAsFullText(item.ignoredAt)}`,
-    srAccessibleContentSummary: getSrAccessibleContentSummary(info),
-    actions: {
-      link: { href: getWorkLinkFromId(item.id) },
-      delete: {
-        onDelete: (): Promise<void> => {
-          return handleStorageWrite<void>(
-            StorageService.ignoredWorks.delete(item.id),
-            {
-              successMsg: `${item.title} has been removed from your ignored list.`,
-              errorMsg: `Failed to remove ${item.title} from your ignored list.`,
-            }
-          );
+  protected renderItem = async (item: IgnoredWork): Promise<HTMLElement> => {
+    const info = {
+      date: getDateParts(item.ignoredAt),
+      ...(this.options.showSymbols === true && {
+        symbols: {
+          ...(await loadSymbolsAndRules(item.id, {
+            ignoredWork: item,
+          })),
+          exclude: [SymbolId.IGNORED],
         },
-        confirmationText: `Are you sure you want to remove ${item.title} from your ignored list?`,
-        successText: `${item.title} has been removed from your ignored list.`,
-      },
-    },
-  });
+      }),
+      ...(this.options.showNotes === true && {
+        status: item.reason,
+      }),
+    };
+
+    return createListRow({
+      type: ListRowType.IGNORED,
+      item,
+      info,
+    });
+  };
+}
+
+export function buildIgnoredListSection() {
+  return new IgnoredListSection().mount();
 }

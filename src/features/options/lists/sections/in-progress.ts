@@ -1,75 +1,110 @@
-import { createListRow, createPaginatedListSection } from "../base";
+import { ListRowType } from "../config";
+import { UserOption } from "../types";
+import { PaginatedListSectionBase } from "../base/list";
+import { createListRow } from "../base/row";
+import { loadSymbolsAndRules } from "../helpers/row/symbols";
 import {
-  createInnerElement,
-  SupplementaryRowInformation,
-} from "../helpers/content";
-import { getSrAccessibleContentSummary } from "../helpers/accessibility";
-import { loadSymbolsAndRules } from "../helpers/symbols";
+  InfoVisibilityOptions,
+  InfoVisibilityOptionsManager,
+} from "../helpers/managers/info-visibility";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { handleStorageWrite } from "../../../../utils/storage";
-import { getWorkLinkFromId } from "../../../../utils/ao3";
-import {
-  getFormattedDate,
-  getFormattedDateAsFullText,
-} from "../../../../utils/date";
+import { getDateParts } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
+import { SortDirection } from "../../../../enums/ui";
+import { ABBREVIATION } from "../../../../constants/global";
 import { InProgressWork } from "../../../../types/works";
+import {
+  PaginatedParams,
+  PaginatedResult,
+  StorageResult,
+} from "../../../../types/results";
 
-export async function buildInProgressListSection(): Promise<HTMLElement> {
-  return createPaginatedListSection({
-    id: SectionId.IN_PROGRESS_LIST,
-    title: "In Progress Works List",
-    paginator: StorageService.inProgressWorks.paginate,
-    renderItem,
-    pageSize: 10,
-    orderBy: "lastReadAt",
-  });
-}
+interface InProgressListUserOptions extends InfoVisibilityOptions {}
 
-async function renderItem(item: InProgressWork): Promise<HTMLElement> {
-  const { symbols, rules } = await loadSymbolsAndRules(item.id, {
-    inProgressWork: item,
-  });
+const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
 
-  const info: SupplementaryRowInformation = {
-    date: getFormattedDate(item.lastReadAt, "/"),
-    symbols: {
-      symbolData: symbols,
-      rules,
-      exclude: [SymbolId.IN_PROGRESS], // Everything is in progress in this list, so exclude the "in progress" symbol
-    },
-    status: item.readingStatus,
+class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
+  private options: InProgressListUserOptions = {
+    showSymbols: this.getStored<boolean>({
+      key: `${KEY}.show.symbols`,
+      fallback: true,
+    }),
+    showStatus: this.getStored<boolean>({
+      key: `${KEY}.show.status`,
+      fallback: false,
+    }),
+  };
+  private infoVisManager: InfoVisibilityOptionsManager;
+
+  constructor() {
+    super({
+      id: SectionId.IN_PROGRESS_LIST,
+      title: "In Progress Works List",
+      key: KEY,
+      allowedOrderBy: ["lastReadAt"],
+      defaultPaginationOptions: {
+        orderBy: "lastReadAt",
+        sortDirection: SortDirection.DESC,
+        pageSize: 10,
+      },
+    });
+    this.infoVisManager = new InfoVisibilityOptionsManager(
+      KEY,
+      this.options,
+      () => this.renderPage()
+    );
+  }
+
+  protected getCustomUserOptions = (): {
+    [K in keyof InProgressListUserOptions]: UserOption<
+      InProgressListUserOptions[K]
+    >;
+  } => {
+    return { ...this.infoVisManager.getUserOptions() };
   };
 
-  const innerElement = await createInnerElement({
-    item,
-    ...info,
-  });
+  protected paginator = (
+    args: PaginatedParams
+  ): Promise<StorageResult<PaginatedResult<InProgressWork>>> => {
+    return StorageService.inProgressWorks.paginate(args);
+  };
 
-  return await createListRow({
-    id: item.id,
-    innerElement,
-    srAccessibleLabel: `${
-      item.title || "Untitled"
-    } - Last red ${getFormattedDateAsFullText(item.lastReadAt)}`, // Phonetic spelling of past tense "read" lol this is intentional
-    srAccessibleContentSummary: getSrAccessibleContentSummary(info),
-    actions: {
-      link: { href: getWorkLinkFromId(item.id) },
-      delete: {
-        onDelete: (): Promise<void> => {
-          return handleStorageWrite<void>(
-            StorageService.inProgressWorks.delete(item.id),
-            {
-              successMsg: `${item.title} has been removed from your in progress list.`,
-              errorMsg: `Failed to remove ${item.title} from your in progress list.`,
-            }
-          );
+  protected renderItem = async (item: InProgressWork): Promise<HTMLElement> => {
+    const info = {
+      date: getDateParts(item.lastReadAt),
+      ...(this.options.showSymbols === true && {
+        symbols: {
+          ...(await loadSymbolsAndRules(item.id, {
+            inProgressWork: item,
+          })),
+          exclude: [
+            SymbolId.IN_PROGRESS,
+            ...((this.options.showStatus === true && [
+              SymbolId.STATUS_READING_ACTIVE,
+              SymbolId.STATUS_READING_PAUSED,
+              SymbolId.STATUS_READING_WAITING,
+            ]) ||
+              []), // Status already shown as text
+          ],
         },
-        confirmationText: `Are you sure you want to remove ${item.title} from your in progress list?`,
-        successText: `${item.title} has been removed from your in progress list.`,
-      },
-    },
-  });
+      }),
+      ...(this.options.showStatus === true && {
+        status: item.readingStatus,
+      }),
+    };
+
+    return createListRow({
+      type: ListRowType.IN_PROGRESS,
+      item,
+      info,
+    });
+  };
+
+  protected handleCustomOptionChange(key: string, value: unknown): void {}
+}
+
+export function buildInProgressListSection() {
+  return new InProgressListSection().mount();
 }

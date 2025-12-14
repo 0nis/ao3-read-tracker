@@ -5,7 +5,7 @@ import { WorkAction } from "../../config";
 import {
   datetime,
   number,
-  select,
+  enumSelect,
   textarea,
   toggleSwitch,
 } from "../../../../utils/ui/forms";
@@ -42,7 +42,7 @@ const items: WorkFormItem<FinishedWork>[] = [
             type: FormItemType.FIELD,
             dataField: "finishedStatus",
             label: "Status",
-            input: select(FinishedStatus, FinishedStatus.COMPLETED),
+            input: enumSelect(FinishedStatus, FinishedStatus.COMPLETED),
           },
         ],
       },
@@ -60,7 +60,7 @@ const items: WorkFormItem<FinishedWork>[] = [
             type: FormItemType.FIELD,
             dataField: "rereadWorthy",
             label: "Re-read worthy?",
-            input: toggleSwitch("reread-worthy-toggle"),
+            input: toggleSwitch(),
           },
         ],
       },

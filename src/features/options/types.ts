@@ -4,6 +4,7 @@ export interface SectionConfig {
   id: SectionId;
   title: string;
   description?: string;
+  headerChildren?: HTMLElement[];
 }
 
 export interface NavItem {

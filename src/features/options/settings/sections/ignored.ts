@@ -3,7 +3,7 @@ import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { select, toggleSwitch } from "../../../../utils/ui/forms";
+import { enumSelect, toggleSwitch } from "../../../../utils/ui/forms";
 import { FormItemType } from "../../../../enums/forms";
 import { DisplayMode } from "../../../../enums/settings";
 import { IgnoreSettings } from "../../../../types/settings";
@@ -13,7 +13,7 @@ const items: SettingsSectionItem<IgnoreSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IGNORE_SETTINGS,
     label: "Enable Simple Mode",
-    input: toggleSwitch("ignore-simple-mode-enabled-toggle"),
+    input: toggleSwitch(),
     dataField: "simpleModeEnabled",
     description:
       "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",
@@ -22,7 +22,7 @@ const items: SettingsSectionItem<IgnoreSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.IGNORE_SETTINGS,
     label: "Default Display Mode",
-    input: select(DisplayMode),
+    input: enumSelect(DisplayMode),
     dataField: "defaultDisplayMode",
     description:
       "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",

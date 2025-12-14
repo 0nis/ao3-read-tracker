@@ -4,7 +4,7 @@ import { SettingsSectionTypeMap } from "./config";
 import { saveSettingsData } from "./helpers/save";
 import { createSettingsSectionContent } from "./components/items";
 import { createSettingsSectionSaveButton } from "./components/submit";
-import { createSection } from "../components/section";
+import { createSectionWrapper } from "../components/section";
 
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { settingsCache } from "../../../services/cache";
@@ -21,7 +21,7 @@ export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
     getStyles(SETTINGS_CLASS)
   );
 
-  const section = createSection(cfg);
+  const section = createSectionWrapper(cfg);
   section.appendChild(createSettingsSectionContent(cfg.items));
 
   const saveEl = createSettingsSectionSaveButton(cfg.title);

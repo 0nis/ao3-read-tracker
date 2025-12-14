@@ -17,9 +17,15 @@ export function getStyles(prefix: string): string {
       padding: 0 0 10px 0;
     }
 
-    .${prefix}__section-title {
-      margin-top: 0;
+    .${prefix}__section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 12px;
+    }
+
+    .${prefix}__section-title {
+      margin: 0;
     }
 
     .${prefix}__section-description {
@@ -49,20 +55,6 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__header-actions li button {
       margin: 0;
-    }
-    
-    .${prefix}__button {
-      cursor: pointer;
-    }
-
-    .${prefix}__button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .${prefix}__button--danger {
-      color: #900 !important;
-      border-color: #900 !important;
     }
 
     @media (max-width: 600px) {

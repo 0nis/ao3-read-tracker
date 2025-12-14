@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { el, injectStyles } from "../../../utils/ui/dom";
-import { createSection } from "../components/section";
+import { createSectionWrapper } from "../components/section";
 import { SectionId } from "../config";
 import { buildClearDataButton } from "./clear/component";
 import { buildExportButton } from "./export/component";
@@ -12,7 +12,7 @@ const DATA_CLASS = `${CLASS_PREFIX}__data`;
 export function buildDataSection() {
   injectStyles(`${CLASS_PREFIX}__styles--data`, getStyles(DATA_CLASS));
 
-  const section = createSection({
+  const section = createSectionWrapper({
     id: SectionId.DATA,
     title: "Data & Storage",
   });
@@ -34,19 +34,17 @@ export function buildDataSection() {
             <li><strong>Clear Data:</strong> Deletes all stored data permanently.</li>
         </ul>
     `,
-      children: el(
-        "ul",
-        { className: `actions ${DATA_CLASS}__category-actions` },
-        [
-          el("p", {
-            className: `${DATA_CLASS}__category-warning`,
-            innerHTML: `<strong>Warning</strong>: Clearing or overwriting data cannot be undone. Make sure to export your data first if you want a backup.`,
-          }),
+      children: [
+        el("p", {
+          className: `${DATA_CLASS}__category-warning`,
+          innerHTML: `<strong>Warning</strong>: Clearing or overwriting data cannot be undone. Make sure to export your data first if you want a backup.`,
+        }),
+        el("ul", { className: `actions ${DATA_CLASS}__category-actions` }, [
           buildExportButton(),
           buildImportButton(),
           buildClearDataButton(),
-        ]
-      ),
+        ]),
+      ],
     })
   );
 
