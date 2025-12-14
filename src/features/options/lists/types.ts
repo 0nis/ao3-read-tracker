@@ -11,7 +11,11 @@ export interface UserOption<T> {
 export type State = { currentPage: number; totalPages?: number };
 
 export interface SupplementaryRowInformation {
-  date: string;
+  date: {
+    year: number;
+    month: number;
+    day: number;
+  } | null;
   symbols?: {
     data?: SymbolData;
     rules?: SymbolRule[];

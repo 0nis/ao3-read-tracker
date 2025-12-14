@@ -65,13 +65,10 @@ export function getStyles(prefix: string): string {
       width: 100%;
     }
 
-    .${prefix}__row-title {
-      margin: 0;
-      min-width: 33%;
-      white-space: normal;
-    }
-
     .${prefix}__row-date {
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
       opacity: 0.6;
       font-size: 0.8em;
       white-space: nowrap;
@@ -82,6 +79,12 @@ export function getStyles(prefix: string): string {
       justify-content: space-between;
       width: 100%;
       align-items: center;
+    }
+
+    .${prefix}__row-main--title{
+      margin: 0;
+      min-width: 33%;
+      white-space: normal;
     }
 
     .${prefix}__row-main--text {
@@ -98,6 +101,7 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__row-main--info--symbols {
       display: flex;
+      flex-wrap: wrap;
       gap: 4px;
       list-style: none;
       padding: 0;
@@ -136,7 +140,6 @@ export function getStyles(prefix: string): string {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: max-content;
         gap: 0;
         align-items: flex-start;
       }
@@ -154,6 +157,12 @@ export function getStyles(prefix: string): string {
 
       .${prefix}__row-main--info--status {
         font-size: 0.8em;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .${prefix}__row-date {
+        flex-wrap: wrap;
       }
     }
   `;

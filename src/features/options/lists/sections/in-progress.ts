@@ -10,7 +10,7 @@ import {
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { getFormattedDate } from "../../../../utils/date";
+import { getDateParts } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
 import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
@@ -73,7 +73,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
 
   protected renderItem = async (item: InProgressWork): Promise<HTMLElement> => {
     const info = {
-      date: getFormattedDate(item.lastReadAt, "/"),
+      date: getDateParts(item.lastReadAt),
       ...(this.options.showSymbols === true && {
         symbols: {
           ...(await loadSymbolsAndRules(item.id, {

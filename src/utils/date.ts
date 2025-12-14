@@ -1,3 +1,18 @@
+/** Extracts year, month, and day from a given date input */
+export const getDateParts = (
+  date: number | Date | undefined
+): { year: number; month: number; day: number } | null => {
+  if (date === undefined) return null;
+  if (typeof date === "number" && (isNaN(date) || date < 0)) return null;
+
+  const dateObj = date instanceof Date ? date : new Date(date);
+  return {
+    year: dateObj.getFullYear(),
+    month: dateObj.getMonth(),
+    day: dateObj.getDate(),
+  };
+};
+
 /**
  * Converts a timestamp to a formatted date string (YYYY-MM-DD)
  * Uses {@link getLocalDateString}, but is separated to make potential future refactors easier.

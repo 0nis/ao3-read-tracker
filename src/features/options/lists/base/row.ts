@@ -98,7 +98,7 @@ async function createInnerElement({
   mainEls.push(
     el(
       "p",
-      { className: `${getListClass()}__row-title` },
+      { className: `${getListClass()}__row-main--title` },
       item.title || "untitled"
     )
   );
@@ -110,7 +110,6 @@ async function createInnerElement({
     );
   }
 
-  // TODO: Make configurable whether they show up or not. Just use local storage for that
   // Symbols
   if (symbols?.data && symbols?.rules) {
     const filteredRules = symbols.rules.filter(
@@ -123,7 +122,6 @@ async function createInnerElement({
     infoEls.push(symbolsElement);
   }
 
-  // TODO: Make configurable whether this shows up or not. Again just use local storage
   // Status
   if (status)
     infoEls.push(
@@ -139,8 +137,16 @@ async function createInnerElement({
       el("div", { className: `${getListClass()}__row-main--info` }, infoEls)
     );
 
+  const dateParts = [
+    el("span", {}, [date?.year?.toString() || "----"]),
+    el("span", {}, ["/"]),
+    el("span", {}, [date?.month?.toString().padStart(2, "0") || "--"]),
+    el("span", {}, ["/"]),
+    el("span", {}, [date?.day?.toString().padStart(2, "0") || "--"]),
+  ];
+
   return el("div", { className: `${getListClass()}__row-content` }, [
-    el("span", { className: `${getListClass()}__row-date` }, date),
+    el("span", { className: `${getListClass()}__row-date` }, dateParts),
     el("div", { className: `${getListClass()}__row-main` }, mainEls),
   ]);
 }

@@ -21,11 +21,11 @@ export function getStyles(prefix: string): string {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 12px;
     }
 
     .${prefix}__section-title {
-      margin-top: 0;
-      margin-bottom: 12px;
+      margin: 0;
     }
 
     .${prefix}__section-description {

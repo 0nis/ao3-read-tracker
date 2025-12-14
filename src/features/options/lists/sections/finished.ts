@@ -10,7 +10,7 @@ import {
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { getFormattedDate } from "../../../../utils/date";
+import { getDateParts } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
 import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
@@ -74,7 +74,7 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
 
   protected renderItem = async (item: FinishedWork): Promise<HTMLElement> => {
     const info = {
-      date: getFormattedDate(item.finishedAt, "/"),
+      date: getDateParts(item.finishedAt),
       ...(this.options.showSymbols === true && {
         symbols: {
           ...(await loadSymbolsAndRules(item.id, {

@@ -9,7 +9,7 @@ import {
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
-import { getFormattedDate } from "../../../../utils/date";
+import { getDateParts } from "../../../../utils/date";
 import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
 import { IgnoredWork } from "../../../../types/works";
@@ -73,7 +73,7 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
 
   protected renderItem = async (item: IgnoredWork): Promise<HTMLElement> => {
     const info = {
-      date: getFormattedDate(item.ignoredAt, "/"),
+      date: getDateParts(item.ignoredAt),
       ...(this.options.showSymbols === true && {
         symbols: {
           ...(await loadSymbolsAndRules(item.id, {
