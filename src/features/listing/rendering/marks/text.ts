@@ -1,10 +1,8 @@
 import { ApplyMarksParams } from "../apply";
 
 import {
-  getActiveTextIndicatorRules,
-  getActiveTextNotesRules,
-  type collectTextIndicatorRules,
-  type collectNotesTextRules,
+  textIndicatorRuleCollector,
+  workNotesRuleCollector,
 } from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
@@ -58,7 +56,7 @@ function createIndicators(
   params: ApplyMarksParams,
   indicatorList: HTMLElement
 ) {
-  for (const rule of getActiveTextIndicatorRules(params)) {
+  for (const rule of textIndicatorRuleCollector.getActiveRules(params)) {
     indicatorList.appendChild(
       addIndicatorText(
         rule.workState,
@@ -72,7 +70,7 @@ function createIndicators(
 
 /** Edit notes in {@link collectNotesTextRules} */
 function createNotes(params: ApplyMarksParams) {
-  for (const rule of getActiveTextNotesRules(params)) {
+  for (const rule of workNotesRuleCollector.getActiveRules(params)) {
     addNotesText(params.element, rule.getText(), rule.className);
   }
 }
