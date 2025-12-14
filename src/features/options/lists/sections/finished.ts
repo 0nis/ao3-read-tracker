@@ -7,8 +7,10 @@ import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
 import { getFormattedDate } from "../../../../utils/date";
+import { toggleSwitch } from "../../../../utils/ui/forms";
 import { SymbolId } from "../../../../enums/symbols";
 import { SortDirection } from "../../../../enums/ui";
+import { ABBREVIATION } from "../../../../constants/global";
 import { FinishedWork } from "../../../../types/works";
 import {
   PaginatedParams,
@@ -17,10 +19,14 @@ import {
 } from "../../../../types/results";
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
+  private key: string;
+
   constructor() {
+    const key = `${ABBREVIATION}:finished-list`;
     super({
       id: SectionId.FINISHED_LIST,
       title: "Finished Works List",
+      key: key,
       allowedOrderBy: ["finishedAt"],
       defaultPaginationOptions: {
         orderBy: "finishedAt",
@@ -28,6 +34,7 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
         pageSize: 10,
       },
     });
+    this.key = key;
   }
 
   protected getCustomUserOptions(): Record<string, UserOption<any>> {
@@ -35,10 +42,22 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
     //   showSymbols: {
     //     label: "Show Symbols",
     //     input: toggleSwitch("finished-list-show-symbols-toggle"),
+    //     onChange: (value: boolean) => {
+    //       localStorage.setItem(
+    //         this.key + "-showSymbols",
+    //         value ? "true" : "false"
+    //       );
+    //     },
     //   },
     //   showStatus: {
     //     label: "Show Status",
     //     input: toggleSwitch("finished-list-show-status-toggle"),
+    //     onChange: (value: boolean) => {
+    //       localStorage.setItem(
+    //         this.key + "-showStatus",
+    //         value ? "true" : "false"
+    //       );
+    //     },
     //   },
     // };
     return {};

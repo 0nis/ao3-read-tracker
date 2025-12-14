@@ -20,6 +20,7 @@ import {
   StorageResult,
 } from "../../../../types/results";
 import { enumSelect, number, select } from "../../../../utils/ui/forms";
+import { localMemory } from "../../../../services/memory";
 
 export const getListClass = () => `${CLASS_PREFIX}__list`;
 
@@ -30,6 +31,7 @@ export interface PaginationUserOptions<T> {
 }
 
 export interface PaginatedListSectionConfig<T> extends SectionConfig {
+  key: string;
   defaultPaginationOptions: PaginationUserOptions<T>;
   allowedOrderBy: (keyof T)[];
 }
@@ -83,6 +85,16 @@ export abstract class PaginatedListSectionBase<T> {
     this.renderPage(true);
     return section;
   }
+
+  protected getStored = <T>(
+    key: string,
+    fallback: T,
+    validator?: (val: unknown) => val is T
+  ): T => {
+    const stored = localMemory.get(key);
+    if (stored !== null && validator?.(stored)) return stored;
+    return fallback;
+  };
 
   protected renderPage = async (initial: boolean = false) => {
     if (!this.container) return;
@@ -145,33 +157,67 @@ export abstract class PaginatedListSectionBase<T> {
   };
 
   private buildUserOptionDefinitions = (): Record<string, UserOption<any>> => {
+    const defaultOptions = {
+      orderBy: this.getStored<string>(
+        `${this.config.key}-orderBy`,
+        String(this.paginationOptions.orderBy),
+        (v): v is string =>
+          this.config.allowedOrderBy.map(String).includes(v as string)
+      ),
+      sortDirection: this.getStored<SortDirection>(
+        `${this.config.key}-sortDirection`,
+        this.paginationOptions.sortDirection,
+        (v): v is SortDirection =>
+          Object.values(SortDirection).includes(v as SortDirection)
+      ),
+      pageSize: this.getStored<string>(
+        `${this.config.key}-pageSize`,
+        String(this.paginationOptions.pageSize),
+        (v): v is string => !Number.isNaN(Number(v))
+      ),
+    };
+
     const baseOptions: Record<string, UserOption<any>> = {
       orderBy: {
         label: "Order by",
         input: select({
           options: this.config.allowedOrderBy.map((v) => String(v)),
-          defaultOption: this.paginationOptions.orderBy.toString(),
+          defaultOption: defaultOptions.orderBy,
         }),
         show: this.config.allowedOrderBy.length > 1,
         onChange: (value: keyof T) => {
           this.paginationOptions.orderBy = value;
+          localMemory.set(
+            this.config.key + "-orderBy",
+            String(this.paginationOptions.orderBy)
+          );
           this.renderPage();
         },
       },
       sortDirection: {
         label: "Sort",
-        input: enumSelect(SortDirection, this.paginationOptions.sortDirection),
+        input: enumSelect(SortDirection, defaultOptions.sortDirection),
         onChange: (value: SortDirection) => {
           this.paginationOptions.sortDirection = value as SortDirection;
+          localMemory.set(
+            this.config.key + "-sortDirection",
+            String(this.paginationOptions.sortDirection)
+          );
           this.renderPage();
         },
       },
       pageSize: {
         label: "Page Size",
-        input: number("1", String(this.paginationOptions.pageSize)),
+        input: number("1", defaultOptions.pageSize),
         onChange: (value: number) => {
           const newSize = Number(value);
-          if (!Number.isNaN(newSize)) this.paginationOptions.pageSize = newSize;
+          if (!Number.isNaN(newSize)) {
+            this.paginationOptions.pageSize = newSize;
+            localMemory.set(
+              this.config.key + "-pageSize",
+              String(this.paginationOptions.pageSize)
+            );
+          }
           this.renderPage();
         },
       },

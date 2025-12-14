@@ -7,6 +7,7 @@ import { SectionId } from "../../config";
 import { StorageService } from "../../../../services/storage";
 import { getFormattedDate } from "../../../../utils/date";
 import { SortDirection } from "../../../../enums/ui";
+import { ABBREVIATION } from "../../../../constants/global";
 import { IgnoredWork } from "../../../../types/works";
 import {
   PaginatedParams,
@@ -15,10 +16,14 @@ import {
 } from "../../../../types/results";
 
 class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
+  private key: string;
+
   constructor() {
+    const key = `${ABBREVIATION}:ignored-list`;
     super({
       id: SectionId.IGNORE_LIST,
       title: "Ignored Works List",
+      key: key,
       allowedOrderBy: ["ignoredAt"],
       defaultPaginationOptions: {
         orderBy: "ignoredAt",
@@ -26,6 +31,7 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
         pageSize: 10,
       },
     });
+    this.key = key;
   }
 
   protected getCustomUserOptions(): Record<string, UserOption<any>> {

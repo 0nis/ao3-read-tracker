@@ -9,6 +9,7 @@ import { StorageService } from "../../../../services/storage";
 import { getFormattedDate } from "../../../../utils/date";
 import { SymbolId } from "../../../../enums/symbols";
 import { SortDirection } from "../../../../enums/ui";
+import { ABBREVIATION } from "../../../../constants/global";
 import { InProgressWork } from "../../../../types/works";
 import {
   PaginatedParams,
@@ -17,10 +18,14 @@ import {
 } from "../../../../types/results";
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
+  private key: string;
+
   constructor() {
+    const key = `${ABBREVIATION}:in-progress-list`;
     super({
       id: SectionId.IN_PROGRESS_LIST,
       title: "In Progress Works List",
+      key: key,
       allowedOrderBy: ["lastReadAt"],
       defaultPaginationOptions: {
         orderBy: "lastReadAt",
@@ -28,6 +33,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
         pageSize: 10,
       },
     });
+    this.key = key;
   }
 
   protected getCustomUserOptions(): Record<string, UserOption<any>> {
