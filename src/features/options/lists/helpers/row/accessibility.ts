@@ -6,6 +6,7 @@ import { SupplementaryRowInformation } from "../../types";
 export function getSrAccessibleContentSummary({
   symbols,
   text,
+  status,
 }: SupplementaryRowInformation): string {
   const descriptions: string[] = [];
   if (symbols?.data && symbols?.rules) {
@@ -14,9 +15,8 @@ export function getSrAccessibleContentSummary({
       if (label) descriptions.push(label);
     }
   }
-  if (text) {
-    descriptions.push(text);
-  }
+  if (text) descriptions.push(text);
+  if (status) descriptions.push(`status: ${status}`);
   return descriptions.length ? `${descriptions.join(", ")}.` : "";
 }
 

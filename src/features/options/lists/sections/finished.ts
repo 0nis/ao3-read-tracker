@@ -3,11 +3,14 @@ import { UserOption } from "../types";
 import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
+import {
+  InfoVisibilityOptions,
+  InfoVisibilityOptionsManager,
+} from "../helpers/managers/info-visibility";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
 import { getFormattedDate } from "../../../../utils/date";
-import { toggleSwitch } from "../../../../utils/ui/forms";
 import { SymbolId } from "../../../../enums/symbols";
 import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
@@ -17,22 +20,29 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
-import { localMemory } from "../../../../services/memory";
 
-interface FinishedListUserOptions {
-  showSymbols: boolean;
-  showStatus: boolean;
-}
+interface FinishedListUserOptions extends InfoVisibilityOptions {}
+
+const KEY = `${ABBREVIATION}.finished-list`.toLowerCase();
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
-  private key: string;
+  private options: FinishedListUserOptions = {
+    showSymbols: this.getStored<boolean>({
+      key: `${KEY}.show.symbols`,
+      fallback: true,
+    }),
+    showStatus: this.getStored<boolean>({
+      key: `${KEY}.show.status`,
+      fallback: false,
+    }),
+  };
+  private infoVisManager: InfoVisibilityOptionsManager;
 
   constructor() {
-    const key = `${ABBREVIATION}.finished-list`.toLowerCase();
     super({
       id: SectionId.FINISHED_LIST,
       title: "Finished Works List",
-      key: key,
+      key: KEY,
       allowedOrderBy: ["finishedAt"],
       defaultPaginationOptions: {
         orderBy: "finishedAt",
@@ -40,50 +50,57 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
         pageSize: 10,
       },
     });
-    this.key = key;
+
+    this.infoVisManager = new InfoVisibilityOptionsManager(
+      KEY,
+      this.options,
+      () => this.renderPage()
+    );
   }
 
-  protected getCustomUserOptions(): Record<string, UserOption<any>> {
-    return {
-      showSymbols: {
-        label: "Show Symbols",
-        input: toggleSwitch("finished-list-show-symbols-toggle"),
-        onChange: (value: boolean) => {
-          localMemory.set(`${this.key}-showSymbols`, value ? "true" : "false");
-        },
-      },
-      showStatus: {
-        label: "Show Status",
-        input: toggleSwitch("finished-list-show-status-toggle"),
-        onChange: (value: boolean) => {
-          localMemory.set(`${this.key}-showStatus`, value ? "true" : "false");
-        },
-      },
-    };
-  }
+  protected getCustomUserOptions = (): {
+    [K in keyof FinishedListUserOptions]: UserOption<
+      FinishedListUserOptions[K]
+    >;
+  } => {
+    return { ...this.infoVisManager.getUserOptions() };
+  };
 
-  protected paginator(
+  protected paginator = (
     args: PaginatedParams
-  ): Promise<StorageResult<PaginatedResult<FinishedWork>>> {
+  ): Promise<StorageResult<PaginatedResult<FinishedWork>>> => {
     return StorageService.finishedWorks.paginate(args);
-  }
+  };
 
-  protected async renderItem(item: FinishedWork): Promise<HTMLElement> {
-    return createListRow({
-      type: ListRowType.FINISHED,
-      item,
-      info: {
-        date: getFormattedDate(item.finishedAt, "/"),
+  protected renderItem = async (item: FinishedWork): Promise<HTMLElement> => {
+    const info = {
+      date: getFormattedDate(item.finishedAt, "/"),
+      ...(this.options.showSymbols === true && {
         symbols: {
           ...(await loadSymbolsAndRules(item.id, {
             finishedWork: item,
           })),
-          exclude: [SymbolId.FINISHED],
+          exclude: [
+            SymbolId.FINISHED,
+            ...((this.options.showStatus === true && [
+              SymbolId.STATUS_COMPLETED,
+              SymbolId.STATUS_ABANDONED,
+            ]) ||
+              []), // Status already shown as text
+          ],
         },
+      }),
+      ...(this.options.showStatus === true && {
         status: item.finishedStatus,
-      },
+      }),
+    };
+
+    return createListRow({
+      type: ListRowType.FINISHED,
+      item,
+      info,
     });
-  }
+  };
 }
 
 export function buildFinishedListSection() {

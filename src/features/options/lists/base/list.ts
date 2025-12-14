@@ -41,12 +41,11 @@ export abstract class PaginatedListSectionBase<T> {
   protected paginationOptions: PaginationUserOptions<T>;
   protected container: HTMLElement;
   protected controls = createPaginationControls();
-  protected userOptionDefinitions: Record<string, UserOption<any>>;
+  protected userOptionDefinitions: Record<string, UserOption<any>> | undefined;
 
   constructor(protected config: PaginatedListSectionConfig<T>) {
     this.config = config;
     this.paginationOptions = { ...config.defaultPaginationOptions };
-    this.userOptionDefinitions = this.buildUserOptionDefinitions();
     this.container = el("ul", {
       className: `${getListClass()}__container`,
       role: "list",
@@ -67,6 +66,8 @@ export abstract class PaginatedListSectionBase<T> {
       getStyles(getListClass())
     );
 
+    this.userOptionDefinitions = this.buildUserOptionDefinitions();
+
     const section = createSectionWrapper({
       ...this.config,
       headerChildren: [
@@ -86,13 +87,18 @@ export abstract class PaginatedListSectionBase<T> {
     return section;
   }
 
-  protected getStored = <T>(
-    key: string,
-    fallback: T,
-    validator?: (val: unknown) => val is T
-  ): T => {
+  protected getStored = <T>({
+    key,
+    fallback,
+    validator,
+  }: {
+    key: string;
+    fallback: T;
+    validator?: (val: unknown) => val is T;
+  }): T => {
     const stored = localMemory.get(key);
-    if (stored !== null && validator?.(stored)) return stored;
+    if (validator) if (stored !== null && validator?.(stored)) return stored;
+    if (stored !== null) return stored as T;
     return fallback;
   };
 
@@ -158,23 +164,23 @@ export abstract class PaginatedListSectionBase<T> {
 
   private buildUserOptionDefinitions = (): Record<string, UserOption<any>> => {
     const defaultOptions = {
-      orderBy: this.getStored<string>(
-        `${this.config.key}.order-by`,
-        String(this.paginationOptions.orderBy),
-        (v): v is string =>
-          this.config.allowedOrderBy.map(String).includes(v as string)
-      ),
-      sortDirection: this.getStored<SortDirection>(
-        `${this.config.key}.sort-direction`,
-        this.paginationOptions.sortDirection,
-        (v): v is SortDirection =>
-          Object.values(SortDirection).includes(v as SortDirection)
-      ),
-      pageSize: this.getStored<string>(
-        `${this.config.key}.page-size`,
-        String(this.paginationOptions.pageSize),
-        (v): v is string => !Number.isNaN(Number(v))
-      ),
+      orderBy: this.getStored<string>({
+        key: `${this.config.key}.order-by`,
+        fallback: String(this.paginationOptions.orderBy),
+        validator: (v): v is string =>
+          this.config.allowedOrderBy.map(String).includes(v as string),
+      }),
+      sortDirection: this.getStored<SortDirection>({
+        key: `${this.config.key}.sort-direction`,
+        fallback: this.paginationOptions.sortDirection,
+        validator: (v): v is SortDirection =>
+          Object.values(SortDirection).includes(v as SortDirection),
+      }),
+      pageSize: this.getStored<number>({
+        key: `${this.config.key}.page-size`,
+        fallback: this.paginationOptions.pageSize,
+        validator: (v): v is number => !Number.isNaN(Number(v)),
+      }),
     };
 
     const baseOptions: Record<string, UserOption<any>> = {
@@ -208,14 +214,14 @@ export abstract class PaginatedListSectionBase<T> {
       },
       pageSize: {
         label: "Page Size",
-        input: number("1", defaultOptions.pageSize),
+        input: number("1", String(defaultOptions.pageSize)),
         onChange: (value: number) => {
           const newSize = Number(value);
           if (!Number.isNaN(newSize)) {
             this.paginationOptions.pageSize = newSize;
             localMemory.set(
               this.config.key + "-pageSize",
-              String(this.paginationOptions.pageSize)
+              this.paginationOptions.pageSize
             );
           }
           this.renderPage();
