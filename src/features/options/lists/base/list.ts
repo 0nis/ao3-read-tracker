@@ -159,19 +159,19 @@ export abstract class PaginatedListSectionBase<T> {
   private buildUserOptionDefinitions = (): Record<string, UserOption<any>> => {
     const defaultOptions = {
       orderBy: this.getStored<string>(
-        `${this.config.key}-orderBy`,
+        `${this.config.key}.order-by`,
         String(this.paginationOptions.orderBy),
         (v): v is string =>
           this.config.allowedOrderBy.map(String).includes(v as string)
       ),
       sortDirection: this.getStored<SortDirection>(
-        `${this.config.key}-sortDirection`,
+        `${this.config.key}.sort-direction`,
         this.paginationOptions.sortDirection,
         (v): v is SortDirection =>
           Object.values(SortDirection).includes(v as SortDirection)
       ),
       pageSize: this.getStored<string>(
-        `${this.config.key}-pageSize`,
+        `${this.config.key}.page-size`,
         String(this.paginationOptions.pageSize),
         (v): v is string => !Number.isNaN(Number(v))
       ),

@@ -21,7 +21,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private key: string;
 
   constructor() {
-    const key = `${ABBREVIATION}:in-progress-list`;
+    const key = `${ABBREVIATION}.in-progress-list`.toLowerCase();
     super({
       id: SectionId.IN_PROGRESS_LIST,
       title: "In Progress Works List",

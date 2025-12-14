@@ -19,7 +19,7 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   private key: string;
 
   constructor() {
-    const key = `${ABBREVIATION}:ignored-list`;
+    const key = `${ABBREVIATION}.ignored-list`.toLowerCase();
     super({
       id: SectionId.IGNORE_LIST,
       title: "Ignored Works List",

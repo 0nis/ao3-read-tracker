@@ -17,12 +17,18 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/results";
+import { localMemory } from "../../../../services/memory";
+
+interface FinishedListUserOptions {
+  showSymbols: boolean;
+  showStatus: boolean;
+}
 
 class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   private key: string;
 
   constructor() {
-    const key = `${ABBREVIATION}:finished-list`;
+    const key = `${ABBREVIATION}.finished-list`.toLowerCase();
     super({
       id: SectionId.FINISHED_LIST,
       title: "Finished Works List",
@@ -38,29 +44,22 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   }
 
   protected getCustomUserOptions(): Record<string, UserOption<any>> {
-    // return {
-    //   showSymbols: {
-    //     label: "Show Symbols",
-    //     input: toggleSwitch("finished-list-show-symbols-toggle"),
-    //     onChange: (value: boolean) => {
-    //       localStorage.setItem(
-    //         this.key + "-showSymbols",
-    //         value ? "true" : "false"
-    //       );
-    //     },
-    //   },
-    //   showStatus: {
-    //     label: "Show Status",
-    //     input: toggleSwitch("finished-list-show-status-toggle"),
-    //     onChange: (value: boolean) => {
-    //       localStorage.setItem(
-    //         this.key + "-showStatus",
-    //         value ? "true" : "false"
-    //       );
-    //     },
-    //   },
-    // };
-    return {};
+    return {
+      showSymbols: {
+        label: "Show Symbols",
+        input: toggleSwitch("finished-list-show-symbols-toggle"),
+        onChange: (value: boolean) => {
+          localMemory.set(`${this.key}-showSymbols`, value ? "true" : "false");
+        },
+      },
+      showStatus: {
+        label: "Show Status",
+        input: toggleSwitch("finished-list-show-status-toggle"),
+        onChange: (value: boolean) => {
+          localMemory.set(`${this.key}-showStatus`, value ? "true" : "false");
+        },
+      },
+    };
   }
 
   protected paginator(
