@@ -38,14 +38,16 @@ export interface PaginatedListSectionConfig<T> extends SectionConfig {
 
 export abstract class PaginatedListSectionBase<T> {
   protected state: State = { currentPage: 1 };
-  protected paginationOptions: PaginationUserOptions<T>;
   protected container: HTMLElement;
   protected controls = createPaginationControls();
+  protected paginationOptions: PaginationUserOptions<T>;
   protected userOptionDefinitions: Record<string, UserOption<any>> | undefined;
 
   constructor(protected config: PaginatedListSectionConfig<T>) {
     this.config = config;
-    this.paginationOptions = { ...config.defaultPaginationOptions };
+    this.paginationOptions = this.getStoredPaginationOptions(
+      this.config.defaultPaginationOptions
+    );
     this.container = el("ul", {
       className: `${getListClass()}__container`,
       role: "list",
@@ -162,6 +164,30 @@ export abstract class PaginatedListSectionBase<T> {
     this.controls.nextBtn.disabled = !hasNext;
   };
 
+  private getStoredPaginationOptions = (defaults: {
+    [K in keyof PaginationUserOptions<T>]: PaginationUserOptions<T>[K];
+  }): PaginationUserOptions<T> => {
+    return {
+      orderBy: this.getStored<keyof T>({
+        key: `${this.config.key}.order-by`,
+        fallback: defaults.orderBy,
+        validator: (v): v is keyof T =>
+          this.config.allowedOrderBy.map(String).includes(v as string),
+      }),
+      sortDirection: this.getStored<SortDirection>({
+        key: `${this.config.key}.sort-direction`,
+        fallback: defaults.sortDirection,
+        validator: (v): v is SortDirection =>
+          Object.values(SortDirection).includes(v as SortDirection),
+      }),
+      pageSize: this.getStored<number>({
+        key: `${this.config.key}.page-size`,
+        fallback: defaults.pageSize,
+        validator: (v): v is number => !Number.isNaN(Number(v)),
+      }),
+    };
+  };
+
   private buildUserOptionDefinitions = (): Record<string, UserOption<any>> => {
     const defaultOptions = {
       orderBy: this.getStored<string>({
@@ -194,24 +220,26 @@ export abstract class PaginatedListSectionBase<T> {
         onChange: (value: keyof T) => {
           this.paginationOptions.orderBy = value;
           localMemory.set(
-            this.config.key + "-orderBy",
+            `${this.config.key}.order-by`,
             String(this.paginationOptions.orderBy)
           );
           this.renderPage();
         },
       },
+
       sortDirection: {
         label: "Sort",
         input: enumSelect(SortDirection, defaultOptions.sortDirection),
         onChange: (value: SortDirection) => {
           this.paginationOptions.sortDirection = value as SortDirection;
           localMemory.set(
-            this.config.key + "-sortDirection",
-            String(this.paginationOptions.sortDirection)
+            `${this.config.key}.sort-direction`,
+            this.paginationOptions.sortDirection
           );
           this.renderPage();
         },
       },
+
       pageSize: {
         label: "Page Size",
         input: number("1", String(defaultOptions.pageSize)),
@@ -220,7 +248,7 @@ export abstract class PaginatedListSectionBase<T> {
           if (!Number.isNaN(newSize)) {
             this.paginationOptions.pageSize = newSize;
             localMemory.set(
-              this.config.key + "-pageSize",
+              `${this.config.key}.page-size`,
               this.paginationOptions.pageSize
             );
           }
