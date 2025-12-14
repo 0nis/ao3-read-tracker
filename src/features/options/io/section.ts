@@ -34,19 +34,17 @@ export function buildDataSection() {
             <li><strong>Clear Data:</strong> Deletes all stored data permanently.</li>
         </ul>
     `,
-      children: el(
-        "ul",
-        { className: `actions ${DATA_CLASS}__category-actions` },
-        [
-          el("p", {
-            className: `${DATA_CLASS}__category-warning`,
-            innerHTML: `<strong>Warning</strong>: Clearing or overwriting data cannot be undone. Make sure to export your data first if you want a backup.`,
-          }),
+      children: [
+        el("p", {
+          className: `${DATA_CLASS}__category-warning`,
+          innerHTML: `<strong>Warning</strong>: Clearing or overwriting data cannot be undone. Make sure to export your data first if you want a backup.`,
+        }),
+        el("ul", { className: `actions ${DATA_CLASS}__category-actions` }, [
           buildExportButton(),
           buildImportButton(),
           buildClearDataButton(),
-        ]
-      ),
+        ]),
+      ],
     })
   );
 
