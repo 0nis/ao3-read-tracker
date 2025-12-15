@@ -1,4 +1,4 @@
-import { PaginatedParams, PaginatedResult } from "../../types/results";
+import { PaginatedParams, PaginatedResult } from "../../types/storage";
 import { db } from "../db";
 import { Table } from "dexie";
 

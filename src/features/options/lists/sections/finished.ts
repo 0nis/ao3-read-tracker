@@ -19,7 +19,7 @@ import {
   PaginatedParams,
   PaginatedResult,
   StorageResult,
-} from "../../../../types/results";
+} from "../../../../types/storage";
 
 interface FinishedListUserOptions extends InfoVisibilityOptions {}
 

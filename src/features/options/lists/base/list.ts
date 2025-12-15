@@ -18,7 +18,7 @@ import {
   PaginatedParams,
   PaginatedResult,
   StorageResult,
-} from "../../../../types/results";
+} from "../../../../types/storage";
 import { enumSelect, number, select } from "../../../../utils/ui/forms";
 import { localMemory } from "../../../../services/memory";
 

@@ -6,7 +6,7 @@ import {
   DEFAULT_IN_PROGRESS_SETTINGS,
   DEFAULT_FINISHED_SETTINGS,
 } from "../../../constants/settings";
-import type { StorageResult } from "../../../types/results";
+import type { StorageResult } from "../../../types/storage";
 import type {
   GeneralSettings,
   IgnoreSettings,

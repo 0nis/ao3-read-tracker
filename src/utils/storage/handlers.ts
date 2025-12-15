@@ -1,5 +1,5 @@
 import { LoaderType } from "../../enums/ui";
-import { StorageResult } from "../../types/results";
+import { StorageResult } from "../../types/storage";
 import { isEmpty } from "../misc";
 import { reportExtensionFailure } from "../ui/dialogs";
 import { createFlashNotice } from "../ui/forms";

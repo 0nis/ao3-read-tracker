@@ -17,7 +17,7 @@ import {
   PaginatedParams,
   PaginatedResult,
   StorageResult,
-} from "../../../../types/results";
+} from "../../../../types/storage";
 import { SymbolId } from "../../../../enums/symbols";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
 
