@@ -1,7 +1,6 @@
 import { getClass } from "./setup";
 import { WorkMetaDetailsList, WorkMetaGroup } from "./types";
 import { el } from "../../../utils/ui/dom";
-import { warn } from "../../../utils/extension";
 
 export function addWorkMetaGroupToArea(
   area: HTMLElement,
@@ -64,23 +63,4 @@ export function createWorkMetaDetailsList({
     { className: `stats ${getClass()}__list ${getClass()}__list--${key}` },
     dlChildren
   );
-}
-
-export function createWorkMetaArea(key: string): HTMLElement {
-  return el("div", { className: `wrapper ${getClass()}-wrapper` }, [
-    el("dl", {
-      className: `work meta group ${getClass()}-area ${getClass()}-area--${key}`,
-    }),
-  ]);
-}
-
-export function insertNewWorkMetaArea(area: HTMLElement): void {
-  const work = document.querySelector<HTMLElement>("div.work");
-  const wrapper = work?.querySelector<HTMLElement>("div.wrapper");
-  const nextSib = wrapper?.nextSibling;
-  if (!work || !wrapper || !nextSib) {
-    warn("Could not find work or wrapper for work meta area insertion.");
-    return;
-  }
-  work.insertBefore(area, nextSib);
 }

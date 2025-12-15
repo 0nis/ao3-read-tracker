@@ -5,20 +5,20 @@ import {
 } from "../create";
 import { getItemsFromRules } from "../helpers";
 
-import { detailsMetaRuleCollector } from "../../../../services/rules";
+import { stateMetaRuleCollector } from "../../../../services/rules";
 import { WorkStateData } from "../../../../types/works";
 
-export function addDetails(data: WorkStateData, area: HTMLElement): void {
-  const rules = detailsMetaRuleCollector.getActiveRules(data);
+export function addStates(data: WorkStateData, area: HTMLElement): void {
+  const rules = stateMetaRuleCollector.getActiveRules(data);
   if (rules.length === 0) return;
 
   addWorkMetaGroupToArea(
     area,
     createWorkMetaGroupElements({
-      key: "details",
-      label: "Details",
+      key: "states",
+      label: "States",
       children: createWorkMetaDetailsList({
-        key: "details",
+        key: "states",
         items: getItemsFromRules(rules),
       }),
       className: "stats", // For native AO3 styling

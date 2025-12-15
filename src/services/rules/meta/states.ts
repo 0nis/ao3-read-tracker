@@ -1,12 +1,13 @@
-import { BaseMetaItemRule } from "../details";
-import { BaseRuleCollector } from "../../base";
-
-import { WorkStateData } from "../../../../types/works";
-import { getFormattedDate } from "../../../../utils/date";
+import { BaseRule, BaseRuleCollector } from "../base";
+import { WorkStateData } from "../../../types/works";
 
 export interface StateMetaRuleParams extends WorkStateData {}
 
-interface StateMetaRule extends BaseMetaItemRule {}
+interface StateMetaRule extends BaseRule {
+  key: string;
+  label: string;
+  getValue: () => string;
+}
 
 class StateMetaRuleCollector extends BaseRuleCollector<
   StateMetaRuleParams,
@@ -21,28 +22,21 @@ class StateMetaRuleCollector extends BaseRuleCollector<
       {
         key: "finished",
         label: "Finished",
-        getValue: () =>
-          !!finishedWork
-            ? getFormattedDate(finishedWork.finishedAt, "-")
-            : "No",
+        getValue: () => (!!finishedWork ? "Yes" : "No"),
         shouldApply: () => true,
         priority: 100,
       },
       {
         key: "in-progress",
-        label: "In Progress",
-        getValue: () =>
-          !!inProgressWork
-            ? getFormattedDate(inProgressWork.startedAt, "-")
-            : "No",
+        label: "In progress",
+        getValue: () => (!!inProgressWork ? "Yes" : "No"),
         shouldApply: () => true,
         priority: 90,
       },
       {
         key: "ignored",
         label: "Ignored",
-        getValue: () =>
-          !!ignoredWork ? getFormattedDate(ignoredWork.ignoredAt, "-") : "No",
+        getValue: () => (!!ignoredWork ? "Yes" : "No"),
         shouldApply: () => true,
         priority: 80,
       },

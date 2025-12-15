@@ -1,6 +1,5 @@
 import { getStyles } from "./style";
-import { addDetailsToWorkMetaArea } from "./instances/details";
-import { createNotesInNewWorkMetaArea } from "./instances/notes";
+import { addDetails, addStates, addNotes } from "./instances";
 
 import { StorageService } from "../../../services/storage";
 import { getIdFromUrl } from "../../../utils/ao3";
@@ -12,10 +11,6 @@ import { WorkStateData } from "../../../types/works";
 
 export const getClass = () => `${CLASS_PREFIX}__work-meta`;
 
-// TODO:
-// - Maybe combine the details? It looks ugly now... Then go back to finished yes/no, etc
-// - Don't add a separate area for the notes? Was not how I imagined it to be
-
 export async function setupWorkMetaAreas(): Promise<void> {
   const id = getIdFromUrl();
   if (!id) {
@@ -23,12 +18,20 @@ export async function setupWorkMetaAreas(): Promise<void> {
     return;
   }
 
+  const workMetaArea =
+    document.querySelector<HTMLElement>("dl.work.meta.group");
+  if (!workMetaArea) {
+    warn("Default AO3 work meta area not found. Skipping meta setup.");
+    return;
+  }
+
   injectStyles(`${CLASS_PREFIX}__styles--work-meta`, getStyles(getClass()));
 
   const data = await getWorkStateData(id);
 
-  addDetailsToWorkMetaArea(data);
-  createNotesInNewWorkMetaArea(data);
+  addStates(data, workMetaArea);
+  addDetails(data, workMetaArea);
+  addNotes(data, workMetaArea);
 }
 
 async function getWorkStateData(id: string): Promise<WorkStateData> {
