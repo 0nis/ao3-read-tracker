@@ -1,21 +1,9 @@
 import { createSymbolElement } from "./symbols";
+import { ListRowTypeMap } from "../../config";
+import { SupplementaryRowInformation } from "../../types";
 import { getListClass } from "../../base/list";
 
-import { SymbolRule } from "../../../../../services/rules";
 import { el } from "../../../../../utils/ui/dom";
-import { SymbolData } from "../../../../../types/symbols";
-import { ListRowTypeMap } from "../../config";
-
-export interface SupplementaryRowInformation {
-  date: string;
-  symbols?: {
-    symbolData?: SymbolData;
-    rules?: SymbolRule[];
-    exclude?: string[];
-  };
-  text?: string;
-  status?: string;
-}
 
 export interface InnerElementParams extends SupplementaryRowInformation {
   item: ListRowTypeMap[keyof ListRowTypeMap];
@@ -39,7 +27,7 @@ export async function createInnerElement({
   mainEls.push(
     el(
       "p",
-      { className: `${getListClass()}__row-title` },
+      { className: `${getListClass()}__row-main--title` },
       item.title || "untitled"
     )
   );
@@ -51,20 +39,18 @@ export async function createInnerElement({
     );
   }
 
-  // TODO: Make configurable whether they show up or not. Just use local storage for that
   // Symbols
-  if (symbols?.symbolData && symbols?.rules) {
+  if (symbols?.data && symbols?.rules) {
     const filteredRules = symbols.rules.filter(
       (rule) => !symbols.exclude?.includes(rule.id)
     );
     const symbolsElement = await createSymbolElement(
-      symbols.symbolData,
+      symbols.data,
       filteredRules
     );
     infoEls.push(symbolsElement);
   }
 
-  // TODO: Make configurable whether this shows up or not. Again just use local storage
   // Status
   if (status) {
     status = status.charAt(0).toUpperCase() + status.slice(1);
@@ -83,8 +69,16 @@ export async function createInnerElement({
     );
   }
 
+  const dateParts = [
+    el("span", {}, date?.year?.toString() || "----"),
+    el("span", {}, "/"),
+    el("span", {}, date?.month?.toString() || "--"),
+    el("span", {}, "/"),
+    el("span", {}, date?.day?.toString() || "--"),
+  ];
+
   return el("div", { className: `${getListClass()}__row-content` }, [
-    el("span", { className: `${getListClass()}__row-date` }, date),
+    el("span", { className: `${getListClass()}__row-date` }, dateParts),
     el("div", { className: `${getListClass()}__row-main` }, mainEls),
   ]);
 }

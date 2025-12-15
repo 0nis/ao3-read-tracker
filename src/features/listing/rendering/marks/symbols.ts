@@ -1,9 +1,6 @@
 import { ApplyMarksParams } from "../apply";
 import { symbolsCache } from "../../../../services/cache";
-import {
-  getActiveSymbolRules,
-  type collectSymbolRules,
-} from "../../../../services/rules";
+import { symbolRuleCollector } from "../../../../services/rules";
 import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   el,
@@ -20,7 +17,7 @@ import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
  * Adds symbols to a work element showing information
  * like finished/ignored/in-progress status, reread worthiness, and read count.
  *
- * Symbols are modified in {@link collectSymbolRules} and {@link DEFAULT_SYMBOL_RECORDS}
+ * Symbols are modified in {@link symbolRuleCollector} and {@link DEFAULT_SYMBOL_RECORDS}
  */
 export async function addSymbols(params: ApplyMarksParams) {
   if (!params.finishedWork && !params.inProgressWork && !params.ignoredWork)
@@ -66,7 +63,7 @@ async function renderSymbols(
 ) {
   const symbols = await symbolsCache.get();
 
-  const rules = getActiveSymbolRules({
+  const rules = symbolRuleCollector.getActiveRules({
     finishedWork: finishedWork,
     inProgressWork: inProgressWork,
     ignoredWork: ignoredWork,

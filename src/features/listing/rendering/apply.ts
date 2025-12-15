@@ -4,7 +4,7 @@ import { addClasses } from "./marks/classes";
 
 import { DISPLAY_MODE_MAP } from "../config";
 
-import { collectDisplayRules } from "../../../services/rules";
+import { displayRuleCollector } from "../../../services/rules";
 import { ensureChild } from "../../../utils/ui/dom";
 import { getManifest } from "../../../utils/extension";
 import { CLASS_PREFIX } from "../../../constants/classes";
@@ -38,7 +38,7 @@ function adjustWorkDisplay({
   ignoredWork,
   settings,
 }: ApplyMarksParams) {
-  const rules = collectDisplayRules({
+  const rules = displayRuleCollector.collect({
     settings,
     finishedWork,
     inProgressWork,

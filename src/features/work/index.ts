@@ -1,5 +1,6 @@
 import { setupForms } from "./forms/setup";
 import { setupButtons } from "./buttons/setup";
+import { setupWorkMetaAreas } from "./meta/setup";
 
 export const Work = {
   async init(main: HTMLElement) {
@@ -7,5 +8,6 @@ export const Work = {
 
     await setupForms();
     await setupButtons();
+    await setupWorkMetaAreas();
   },
 };

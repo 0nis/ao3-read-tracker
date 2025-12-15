@@ -1,9 +1,6 @@
 import { getListClass } from "../../base/list";
 import { settingsCache, symbolsCache } from "../../../../../services/cache";
-import {
-  getActiveSymbolRules,
-  SymbolRule,
-} from "../../../../../services/rules";
+import { symbolRuleCollector, SymbolRule } from "../../../../../services/rules";
 import { StorageService } from "../../../../../services/storage";
 import { el } from "../../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../../utils/ui/symbols";
@@ -17,7 +14,7 @@ export async function loadSymbolsAndRules(
   const symbols = await symbolsCache.get();
   const { finishedSettings, inProgressSettings } = await settingsCache.get();
 
-  const rules = getActiveSymbolRules({
+  const rules = symbolRuleCollector.getActiveRules({
     finishedWork:
       finishedWork ?? (await StorageService.finishedWorks.getById(id))?.data,
     inProgressWork:

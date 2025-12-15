@@ -12,6 +12,13 @@ interface ExtensionManifest {
 let cachedManifest: ExtensionManifest | null = null;
 
 /**
+ * @returns The name of the extension without the 'AO3' prefix
+ */
+export function getExtensionName(): string {
+  return getManifest().data?.name?.replace(/^AO3 /, "") ?? "Read Tracker";
+}
+
+/**
  * Safely retrieves the extension manifest.
  * Caches the result for future calls.
  */
