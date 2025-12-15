@@ -59,7 +59,7 @@ const items: WorkFormItem<FinishedWork>[] = [
           {
             type: FormItemType.FIELD,
             dataField: "rereadWorthy",
-            label: "Re-read worthy?",
+            label: "Reread worthy?",
             input: toggleSwitch(),
           },
         ],

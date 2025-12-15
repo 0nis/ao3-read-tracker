@@ -23,7 +23,7 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
   {
     id: SymbolId.REREAD_WORTHY,
     type: SymbolType.TEXT,
-    label: "Re-read worthy",
+    label: "Reread worthy",
     text: "⭐",
   },
   {
