@@ -1,12 +1,15 @@
 import { getStyles } from "./style";
 import { addDetails, addStates, addNotes } from "./instances";
+import { removeExtensionMetaFromArea } from "./helpers";
 
 import { StorageService } from "../../../services/storage";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { warn } from "../../../utils/extension";
 import { handleStorageRead } from "../../../utils/storage";
 import { injectStyles } from "../../../utils/ui/dom";
+
 import { CLASS_PREFIX } from "../../../constants/classes";
+import { ABBREVIATION } from "../../../constants/global";
 import { WorkStateData } from "../../../types/works";
 
 export const getClass = () => `${CLASS_PREFIX}__work-meta`;
@@ -27,6 +30,18 @@ export async function setupWorkMetaAreas(): Promise<void> {
 
   injectStyles(`${CLASS_PREFIX}__styles--work-meta`, getStyles(getClass()));
 
+  document.addEventListener(`${ABBREVIATION}:updated`, async () => {
+    removeExtensionMetaFromArea(workMetaArea);
+    await addExtensionMetaToArea(id, workMetaArea);
+  });
+
+  await addExtensionMetaToArea(id, workMetaArea);
+}
+
+async function addExtensionMetaToArea(
+  id: string,
+  workMetaArea: HTMLElement
+): Promise<void> {
   const data = await getWorkStateData(id);
 
   addStates(data, workMetaArea);

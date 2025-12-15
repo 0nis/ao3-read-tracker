@@ -28,13 +28,13 @@ export function createWorkMetaGroupElements({
       {
         className: `${
           className || ""
-        } ${getClass()}-label ${getClass()}--${key}`,
+        } ${getClass()} ${getClass()}-label ${getClass()}--${key}`,
       },
       [`${label}: `]
     ),
     descEl: el(
       "dd",
-      { className: `${className || ""} ${getClass()}--${key}` },
+      { className: `${className || ""} ${getClass()} ${getClass()}--${key}` },
       children
     ),
   };
