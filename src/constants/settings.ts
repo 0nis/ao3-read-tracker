@@ -14,7 +14,8 @@ export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
   defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   completedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  abandonedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  droppedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  dormantDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
 };
 

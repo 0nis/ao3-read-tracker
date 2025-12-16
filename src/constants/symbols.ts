@@ -45,10 +45,16 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     text: "🟢",
   },
   {
-    id: SymbolId.STATUS_ABANDONED,
+    id: SymbolId.STATUS_DROPPED,
     type: SymbolType.TEXT,
-    label: "Status: Abandoned",
+    label: "Status: Dropped",
     text: "🔴",
+  },
+  {
+    id: SymbolId.STATUS_DORMANT,
+    type: SymbolType.TEXT,
+    label: "Status: Dormant",
+    text: "🟠",
   },
   {
     id: SymbolId.STATUS_READING_ACTIVE,

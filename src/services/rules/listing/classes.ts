@@ -39,9 +39,14 @@ class ClassRuleCollector extends BaseRuleCollector<ClassRuleParams, ClassRule> {
           finishedWork?.finishedStatus === FinishedStatus.COMPLETED,
       },
       {
-        className: Classes.ABANDONED_CLASS,
+        className: Classes.DROPPED_CLASS,
         shouldApply: () =>
-          finishedWork?.finishedStatus === FinishedStatus.ABANDONED,
+          finishedWork?.finishedStatus === FinishedStatus.DROPPED,
+      },
+      {
+        className: Classes.DORMANT_CLASS,
+        shouldApply: () =>
+          finishedWork?.finishedStatus === FinishedStatus.DORMANT,
       },
       {
         className: Classes.ACTIVE_READING_CLASS,

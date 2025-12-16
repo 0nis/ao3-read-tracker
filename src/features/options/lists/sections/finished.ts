@@ -140,7 +140,8 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
             SymbolId.FINISHED,
             ...((this.options.showStatus === true && [
               SymbolId.STATUS_COMPLETED,
-              SymbolId.STATUS_ABANDONED,
+              SymbolId.STATUS_DROPPED,
+              SymbolId.STATUS_DORMANT,
             ]) ||
               []), // Status already shown as text
           ],
