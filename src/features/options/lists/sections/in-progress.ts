@@ -1,5 +1,5 @@
 import { ListRowType } from "../config";
-import { UserOption } from "../types";
+import { FilterState, UserOption } from "../types";
 import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
@@ -7,7 +7,7 @@ import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
 } from "../helpers/managers/info-visibility";
-import { getStored } from "../helpers/gen";
+import { filtersFromState, getStored } from "../helpers/gen";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
@@ -22,10 +22,19 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../types/storage";
+import { enumSelect } from "../../../../utils/ui/forms";
+import { ReadingStatus } from "../../../../enums/works";
+import { localMemory } from "../../../../services/memory";
 
-interface InProgressListUserOptions extends InfoVisibilityOptions {}
+interface InProgressListUserOptions extends InfoVisibilityOptions {
+  readingStatus: string;
+}
 
 const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
+
+// TODO: Fill filter object on initialization to load persisted values
+// TODO: Fix pagination not updating on filter change (we have a bunch of empty pages)
+// TODO: Expand orderBy
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private options: InProgressListUserOptions = {
@@ -37,7 +46,12 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       key: `${KEY}.show.status`,
       fallback: false,
     }),
+    readingStatus: getStored<string>({
+      key: `${KEY}.status`,
+      fallback: "all",
+    }),
   };
+  private filterState: FilterState<InProgressWork> = {};
   private infoVisManager: InfoVisibilityOptionsManager;
 
   constructor() {
@@ -59,16 +73,30 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
     );
   }
 
-  protected getFilters(): EqualityFilter<InProgressWork>[] {
-    return [];
-  }
+  protected getFilters = (): EqualityFilter<InProgressWork>[] =>
+    filtersFromState(this.filterState);
 
   protected getCustomUserOptions = (): {
     [K in keyof InProgressListUserOptions]: UserOption<
       InProgressListUserOptions[K]
     >;
   } => {
-    return { ...this.infoVisManager.getUserOptions() };
+    return {
+      ...this.infoVisManager.getUserOptions(),
+      readingStatus: {
+        label: "Status",
+        input: enumSelect({ all: "all", ...ReadingStatus }),
+        onChange: (value: string) => {
+          this.options.readingStatus = value;
+          localMemory.set(`${KEY}.status`, value);
+
+          if (value === "all") delete this.filterState.readingStatus;
+          else this.filterState.readingStatus = value as ReadingStatus;
+
+          this.renderPage();
+        },
+      },
+    };
   };
 
   protected paginator = (
