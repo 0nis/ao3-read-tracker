@@ -7,7 +7,8 @@ export interface FinishedSettings {
   defaultDisplayMode: DisplayMode;
   rereadWorthyDisplayMode: DisplayMode;
   completedDisplayMode: DisplayMode;
-  abandonedDisplayMode: DisplayMode;
+  droppedDisplayMode: DisplayMode;
+  dormantDisplayMode: DisplayMode;
   symbolDisplayMode: SymbolDisplayMode;
 }
 

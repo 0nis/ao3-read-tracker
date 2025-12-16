@@ -1,6 +1,6 @@
-import { PaginatedParams, PaginatedResult } from "../../types/results";
+import Dexie, { Table } from "dexie";
 import { db } from "../db";
-import { Table } from "dexie";
+import { PaginatedParams, PaginatedResult } from "../../types/storage";
 
 export class WorksData<T extends { id: string }> {
   constructor(private readonly table: Table<T, string>) {}
@@ -55,19 +55,24 @@ export class WorksData<T extends { id: string }> {
     page,
     pageSize,
     options,
-  }: PaginatedParams): Promise<PaginatedResult<T>> {
+    filters,
+  }: PaginatedParams<T>): Promise<PaginatedResult<T>> {
     const { orderBy, reverse = false } = options || {};
 
-    const totalItems = await this.table.count();
+    let query = this.table.orderBy(orderBy as string);
+
+    if (reverse) query = query.reverse();
+
+    for (const filter of filters ?? []) {
+      query = query.and((item) => item[filter.field] === filter.value);
+    }
+
+    const totalItems = await query.count();
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
     const clampedPage = Math.min(Math.max(1, page), totalPages);
-    const zeroIndexedPage = clampedPage - 1;
+    const offset = (clampedPage - 1) * pageSize;
 
-    const offset = zeroIndexedPage * pageSize;
-
-    let query = this.table.orderBy(orderBy as string);
-    if (reverse) query = query.reverse();
     const items = await query.offset(offset).limit(pageSize).toArray();
 
     return {

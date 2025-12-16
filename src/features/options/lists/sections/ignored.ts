@@ -6,6 +6,7 @@ import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
 } from "../helpers/managers/info-visibility";
+import { getStored } from "../helpers/gen";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
@@ -14,10 +15,11 @@ import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
 import { IgnoredWork } from "../../../../types/works";
 import {
+  EqualityFilter,
   PaginatedParams,
   PaginatedResult,
   StorageResult,
-} from "../../../../types/results";
+} from "../../../../types/storage";
 import { SymbolId } from "../../../../enums/symbols";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
 
@@ -27,11 +29,11 @@ const KEY = `${ABBREVIATION}.ignored-list`.toLowerCase();
 
 class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   private options: IgnoredListUserOptions = {
-    showSymbols: this.getStored<boolean>({
+    showSymbols: getStored<boolean>({
       key: `${KEY}.show.symbols`,
       fallback: false,
     }),
-    showNotes: this.getStored<boolean>({
+    showNotes: getStored<boolean>({
       key: `${KEY}.show.notes`,
       fallback: true,
     }),
@@ -59,6 +61,10 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
     );
   }
 
+  protected getFilters(): EqualityFilter<IgnoredWork>[] {
+    return [];
+  }
+
   protected getCustomUserOptions = (): {
     [K in keyof IgnoredListUserOptions]: UserOption<IgnoredListUserOptions[K]>;
   } => {
@@ -66,7 +72,7 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   };
 
   protected paginator = (
-    args: PaginatedParams
+    args: PaginatedParams<IgnoredWork>
   ): Promise<StorageResult<PaginatedResult<IgnoredWork>>> => {
     return StorageService.ignoredWorks.paginate(args);
   };

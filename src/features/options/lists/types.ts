@@ -10,6 +10,8 @@ export interface UserOption<T> {
 
 export type State = { currentPage: number; totalPages?: number };
 
+export type FilterState<T> = Partial<Record<keyof T, unknown>>;
+
 export interface SupplementaryRowInformation {
   date: {
     year: number;

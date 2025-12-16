@@ -53,11 +53,11 @@ class DisplayRuleCollector extends BaseRuleCollector<
         getMode: () => settings.finishedSettings.completedDisplayMode,
       },
       {
-        name: "finished (abandoned)",
+        name: "finished (dropped)",
         shouldApply: () =>
           !!finishedWork &&
-          finishedWork.finishedStatus === FinishedStatus.ABANDONED,
-        getMode: () => settings.finishedSettings.abandonedDisplayMode,
+          finishedWork.finishedStatus === FinishedStatus.DROPPED,
+        getMode: () => settings.finishedSettings.droppedDisplayMode,
       },
     ];
   }

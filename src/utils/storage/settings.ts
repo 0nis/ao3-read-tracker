@@ -4,7 +4,7 @@ import {
   DEFAULT_IN_PROGRESS_SETTINGS,
   DEFAULT_FINISHED_SETTINGS,
 } from "../../constants/settings";
-import { StorageResult } from "../../types/results";
+import { StorageResult } from "../../types/storage";
 import { SettingsData } from "../../types/settings";
 import { StorageService } from "../../services/storage";
 import { reportExtensionFailure } from "../ui/dialogs";

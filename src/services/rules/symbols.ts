@@ -80,9 +80,16 @@ class SymbolRuleCollector extends BaseRuleCollector<
         priority: 40,
       },
       {
-        id: SymbolId.STATUS_ABANDONED,
+        id: SymbolId.STATUS_DROPPED,
         shouldApply: () =>
-          finishedWork?.finishedStatus === FinishedStatus.ABANDONED &&
+          finishedWork?.finishedStatus === FinishedStatus.DROPPED &&
+          getShowStatus(displayMode?.finished),
+        priority: 40,
+      },
+      {
+        id: SymbolId.STATUS_DORMANT,
+        shouldApply: () =>
+          finishedWork?.finishedStatus === FinishedStatus.DORMANT &&
           getShowStatus(displayMode?.finished),
         priority: 40,
       },

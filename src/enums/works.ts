@@ -12,5 +12,6 @@ export enum ReadingStatus {
 
 export enum FinishedStatus {
   COMPLETED = "completed",
-  ABANDONED = "abandoned",
+  DROPPED = "dropped",
+  DORMANT = "dormant",
 }

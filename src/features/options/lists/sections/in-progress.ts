@@ -1,5 +1,5 @@
 import { ListRowType } from "../config";
-import { UserOption } from "../types";
+import { FilterState, UserOption } from "../types";
 import { PaginatedListSectionBase } from "../base/list";
 import { createListRow } from "../base/row";
 import { loadSymbolsAndRules } from "../helpers/row/symbols";
@@ -7,6 +7,7 @@ import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
 } from "../helpers/managers/info-visibility";
+import { filtersFromState, getStored } from "../helpers/gen";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
@@ -16,24 +17,34 @@ import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
 import { InProgressWork } from "../../../../types/works";
 import {
+  EqualityFilter,
   PaginatedParams,
   PaginatedResult,
   StorageResult,
-} from "../../../../types/results";
+} from "../../../../types/storage";
+import { enumSelect } from "../../../../utils/ui/forms";
+import { ReadingStatus } from "../../../../enums/works";
+import { localMemory } from "../../../../services/memory";
 
-interface InProgressListUserOptions extends InfoVisibilityOptions {}
+interface InProgressListUserOptions extends InfoVisibilityOptions {
+  readingStatus: string;
+}
 
 const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private options: InProgressListUserOptions = {
-    showSymbols: this.getStored<boolean>({
+    showSymbols: getStored<boolean>({
       key: `${KEY}.show.symbols`,
       fallback: true,
     }),
-    showStatus: this.getStored<boolean>({
+    showStatus: getStored<boolean>({
       key: `${KEY}.show.status`,
       fallback: false,
+    }),
+    readingStatus: getStored<string>({
+      key: `${KEY}.status`,
+      fallback: "all",
     }),
   };
   private infoVisManager: InfoVisibilityOptionsManager;
@@ -43,7 +54,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       id: SectionId.IN_PROGRESS_LIST,
       title: "In Progress Works List",
       key: KEY,
-      allowedOrderBy: ["lastReadAt"],
+      allowedOrderBy: ["lastReadAt", "startedAt"],
       defaultPaginationOptions: {
         orderBy: "lastReadAt",
         sortDirection: SortDirection.DESC,
@@ -57,16 +68,39 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
     );
   }
 
+  protected getFilters = (): EqualityFilter<InProgressWork>[] => {
+    const state: FilterState<InProgressWork> = {};
+
+    if (this.options.readingStatus !== "all")
+      state.readingStatus = this.options.readingStatus as ReadingStatus;
+
+    return filtersFromState(state);
+  };
+
   protected getCustomUserOptions = (): {
     [K in keyof InProgressListUserOptions]: UserOption<
       InProgressListUserOptions[K]
     >;
   } => {
-    return { ...this.infoVisManager.getUserOptions() };
+    return {
+      ...this.infoVisManager.getUserOptions(),
+      readingStatus: {
+        label: "Status",
+        input: enumSelect(
+          { all: "all", ...ReadingStatus },
+          this.options.readingStatus
+        ),
+        onChange: (value: string) => {
+          this.options.readingStatus = value;
+          localMemory.set(`${KEY}.status`, value);
+          this.renderPage();
+        },
+      },
+    };
   };
 
   protected paginator = (
-    args: PaginatedParams
+    args: PaginatedParams<InProgressWork>
   ): Promise<StorageResult<PaginatedResult<InProgressWork>>> => {
     return StorageService.inProgressWorks.paginate(args);
   };

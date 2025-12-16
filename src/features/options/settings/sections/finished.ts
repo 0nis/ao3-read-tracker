@@ -51,9 +51,16 @@ const items: SettingsSectionItem<FinishedSettings>[] = [
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.FINISHED_SETTINGS,
-        label: "Abandoned",
+        label: "Dropped",
         input: enumSelect(DisplayMode),
-        dataField: "abandonedDisplayMode",
+        dataField: "droppedDisplayMode",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.FINISHED_SETTINGS,
+        label: "Dormant",
+        input: enumSelect(DisplayMode),
+        dataField: "dormantDisplayMode",
       },
     ],
   },
@@ -64,7 +71,7 @@ const items: SettingsSectionItem<FinishedSettings>[] = [
     input: enumSelect(SymbolDisplayMode),
     dataField: "symbolDisplayMode",
     description:
-      "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means finished, abandoned, paused, etc.",
+      "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means completed, dropped, paused, etc.",
   },
 ];
 

@@ -2,7 +2,7 @@ import { ExportOptions, ImportOptions } from "dexie-export-import";
 import { io } from "../data/io";
 import { migrations } from "../data/migrations";
 
-import { StorageResult } from "../types/results";
+import { StorageResult } from "../types/storage";
 import { safeExecute } from "../utils/storage";
 import { DATABASE_VERSION } from "../constants/global";
 

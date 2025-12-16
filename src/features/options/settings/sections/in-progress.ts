@@ -64,7 +64,7 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
     input: enumSelect(SymbolDisplayMode),
     dataField: "symbolDisplayMode",
     description:
-      "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means finished, abandoned, paused, etc.",
+      "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means completed, dropped, paused, etc.",
   },
   {
     type: FormItemType.FIELD,

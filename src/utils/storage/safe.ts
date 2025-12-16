@@ -2,7 +2,7 @@ import { WorksData } from "../../data/models/works";
 import { SettingsData } from "../../data/models/settings";
 import { SymbolsData } from "../../data/models/symbols";
 
-import { StorageResult } from "../../types/results";
+import { StorageResult } from "../../types/storage";
 
 import { error } from "../extension";
 

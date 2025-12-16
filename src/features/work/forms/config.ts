@@ -1,5 +1,5 @@
 import { StorageService } from "../../../services/storage";
-import { StorageResult } from "../../../types/results";
+import { StorageResult } from "../../../types/storage";
 import { WorkAction, WorkActionTypeMap } from "../config";
 
 export interface SaveMapEntry<T> {

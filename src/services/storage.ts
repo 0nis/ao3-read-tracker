@@ -4,7 +4,7 @@ import {
   SafeServiceFor,
 } from "../utils/storage/safe";
 import type { WorkData } from "../types/works";
-import type { StorageResult } from "../types/results";
+import type { StorageResult } from "../types/storage";
 import { instances, type InstanceMap } from "../data/instances";
 
 type BaseSafeServices<M extends InstanceMap> = {

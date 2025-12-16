@@ -9,6 +9,10 @@ export function generateFinishedWorks(count: number = 100): FinishedWork[] {
     rereadWorthy: Math.random() > 0.8,
     timesRead: Math.floor(Math.random() * 5) + 1,
     finishedStatus:
-      Math.random() > 0.5 ? FinishedStatus.COMPLETED : FinishedStatus.ABANDONED,
+      Math.random() > 0.5
+        ? FinishedStatus.COMPLETED
+        : Math.random() > 0.5
+        ? FinishedStatus.DROPPED
+        : FinishedStatus.DORMANT,
   }));
 }
