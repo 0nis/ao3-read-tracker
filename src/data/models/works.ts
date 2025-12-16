@@ -67,7 +67,7 @@ export class WorksData<T extends { id: string }> {
       query = query.and((item) => item[filter.field] === filter.value);
     }
 
-    const totalItems = await this.table.count();
+    const totalItems = await query.count();
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
 
     const clampedPage = Math.min(Math.max(1, page), totalPages);

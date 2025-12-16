@@ -33,7 +33,6 @@ interface InProgressListUserOptions extends InfoVisibilityOptions {
 const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
 
 // TODO: Fill filter object on initialization to load persisted values
-// TODO: Fix pagination not updating on filter change (we have a bunch of empty pages)
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private options: InProgressListUserOptions = {
