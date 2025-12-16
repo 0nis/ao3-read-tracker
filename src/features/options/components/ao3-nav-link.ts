@@ -20,11 +20,13 @@ export async function addOptionsLinkToAo3Nav(url: string): Promise<void> {
   // If it exists already, merely fetch it.
   const dropdown = ensureChild({
     parent: nav as HTMLElement,
-    className: "dropdown extensions",
+    className: "extensions",
     tag: "li",
     insertBefore: search || undefined,
     createProps: { attrs: { "aria-haspopup": "true" } },
   });
+  if (!dropdown.classList.contains("dropdown"))
+    dropdown.classList.add("dropdown");
 
   // Add the navigation element to the dropdown if it doesn't exist already.
   // If it exists already, merely fetch it.
