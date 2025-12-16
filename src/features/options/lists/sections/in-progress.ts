@@ -34,7 +34,6 @@ const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
 
 // TODO: Fill filter object on initialization to load persisted values
 // TODO: Fix pagination not updating on filter change (we have a bunch of empty pages)
-// TODO: Expand orderBy
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private options: InProgressListUserOptions = {
@@ -59,7 +58,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       id: SectionId.IN_PROGRESS_LIST,
       title: "In Progress Works List",
       key: KEY,
-      allowedOrderBy: ["lastReadAt"],
+      allowedOrderBy: ["lastReadAt", "startedAt"],
       defaultPaginationOptions: {
         orderBy: "lastReadAt",
         sortDirection: SortDirection.DESC,

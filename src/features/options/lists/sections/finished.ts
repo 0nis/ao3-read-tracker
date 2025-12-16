@@ -61,7 +61,7 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
       id: SectionId.FINISHED_LIST,
       title: "Finished Works List",
       key: KEY,
-      allowedOrderBy: ["finishedAt"],
+      allowedOrderBy: ["finishedAt", "timesRead"],
       defaultPaginationOptions: {
         orderBy: "finishedAt",
         sortDirection: SortDirection.DESC,
