@@ -32,8 +32,6 @@ interface InProgressListUserOptions extends InfoVisibilityOptions {
 
 const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
 
-// TODO: Fill filter object on initialization to load persisted values
-
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private options: InProgressListUserOptions = {
     showSymbols: getStored<boolean>({
@@ -49,7 +47,6 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       fallback: "all",
     }),
   };
-  private filterState: FilterState<InProgressWork> = {};
   private infoVisManager: InfoVisibilityOptionsManager;
 
   constructor() {
@@ -71,8 +68,14 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
     );
   }
 
-  protected getFilters = (): EqualityFilter<InProgressWork>[] =>
-    filtersFromState(this.filterState);
+  protected getFilters = (): EqualityFilter<InProgressWork>[] => {
+    const state: FilterState<InProgressWork> = {};
+
+    if (this.options.readingStatus !== "all")
+      state.readingStatus = this.options.readingStatus as ReadingStatus;
+
+    return filtersFromState(state);
+  };
 
   protected getCustomUserOptions = (): {
     [K in keyof InProgressListUserOptions]: UserOption<
@@ -83,14 +86,13 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       ...this.infoVisManager.getUserOptions(),
       readingStatus: {
         label: "Status",
-        input: enumSelect({ all: "all", ...ReadingStatus }),
+        input: enumSelect(
+          { all: "all", ...ReadingStatus },
+          this.options.readingStatus
+        ),
         onChange: (value: string) => {
           this.options.readingStatus = value;
           localMemory.set(`${KEY}.status`, value);
-
-          if (value === "all") delete this.filterState.readingStatus;
-          else this.filterState.readingStatus = value as ReadingStatus;
-
           this.renderPage();
         },
       },

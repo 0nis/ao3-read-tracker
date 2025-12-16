@@ -53,7 +53,6 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
       fallback: BooleanFilterSelect.ALL,
     }),
   };
-  private filterState: FilterState<FinishedWork> = {};
   private infoVisManager: InfoVisibilityOptionsManager;
 
   constructor() {
@@ -76,8 +75,18 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
     );
   }
 
-  protected getFilters = (): EqualityFilter<FinishedWork>[] =>
-    filtersFromState(this.filterState);
+  protected getFilters = (): EqualityFilter<FinishedWork>[] => {
+    const state: FilterState<FinishedWork> = {};
+
+    if (this.options.finishedStatus !== "all")
+      state.finishedStatus = this.options.finishedStatus as FinishedStatus;
+
+    if (this.options.rereadWorthy !== BooleanFilterSelect.ALL)
+      state.rereadWorthy =
+        this.options.rereadWorthy === BooleanFilterSelect.TRUE;
+
+    return filtersFromState(state);
+  };
 
   protected getCustomUserOptions = (): {
     [K in keyof FinishedListUserOptions]: UserOption<
@@ -88,28 +97,25 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
       ...this.infoVisManager.getUserOptions(),
       finishedStatus: {
         label: "Status",
-        input: enumSelect({ all: "all", ...FinishedStatus }),
+        input: enumSelect(
+          { all: "all", ...FinishedStatus },
+          this.options.finishedStatus
+        ),
         onChange: (value: string) => {
           this.options.finishedStatus = value;
           localMemory.set(`${KEY}.status`, value);
-
-          if (value === "all") delete this.filterState.finishedStatus;
-          else this.filterState.finishedStatus = value as FinishedStatus;
-
           this.renderPage();
         },
       },
       rereadWorthy: {
         label: "Reread Worthy",
-        input: enumSelect(BooleanFilterSelect),
+        input: enumSelect(
+          BooleanFilterSelect,
+          this.options.rereadWorthy as BooleanFilterSelect
+        ),
         onChange: (value: string) => {
           this.options.rereadWorthy = value;
           localMemory.set(`${KEY}.reread-worthy`, value);
-
-          if (value === "all") delete this.filterState.rereadWorthy;
-          else
-            this.filterState.rereadWorthy = value === BooleanFilterSelect.TRUE;
-
           this.renderPage();
         },
       },
