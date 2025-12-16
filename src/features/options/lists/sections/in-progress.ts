@@ -66,7 +66,7 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   };
 
   protected paginator = (
-    args: PaginatedParams
+    args: PaginatedParams<InProgressWork>
   ): Promise<StorageResult<PaginatedResult<InProgressWork>>> => {
     return StorageService.inProgressWorks.paginate(args);
   };

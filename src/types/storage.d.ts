@@ -4,13 +4,19 @@ export type StorageResult<T = void> = {
   success: boolean;
 };
 
-export interface PaginatedParams {
+export type EqualityFilter<T, K extends keyof T = keyof T> = {
+  field: K;
+  value: T[K];
+};
+
+export interface PaginatedParams<T> {
   page: number;
   pageSize: number;
   options: {
     orderBy: keyof T;
     reverse?: boolean;
   };
+  filters?: EqualityFilter<T>[];
 }
 
 export interface PaginatedResult<T> {

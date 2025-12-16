@@ -27,8 +27,8 @@ export class Ao3ReadTrackerDb extends Dexie {
     super(DATABASE_NAME);
 
     this.version(1).stores({
-      finishedWorks: "id, finishedAt, rereadWorthy, timesRead, finishedStatus",
-      inProgressWorks: "id, lastReadAt, startedAt, readingStatus",
+      finishedWorks: "id, finishedAt, timesRead",
+      inProgressWorks: "id, lastReadAt, startedAt",
       ignoredWorks: "id, ignoredAt",
       finishedSettings: "id",
       inProgressSettings: "id",

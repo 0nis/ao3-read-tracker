@@ -66,7 +66,7 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   };
 
   protected paginator = (
-    args: PaginatedParams
+    args: PaginatedParams<IgnoredWork>
   ): Promise<StorageResult<PaginatedResult<IgnoredWork>>> => {
     return StorageService.ignoredWorks.paginate(args);
   };

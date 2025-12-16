@@ -57,7 +57,7 @@ export abstract class PaginatedListSectionBase<T> {
   protected abstract renderItem(item: T): Promise<HTMLElement>;
 
   protected abstract paginator(
-    args: PaginatedParams
+    args: PaginatedParams<T>
   ): Promise<StorageResult<PaginatedResult<T>>>;
 
   protected abstract getCustomUserOptions(): Record<string, UserOption<any>>;

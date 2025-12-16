@@ -67,7 +67,7 @@ class FinishedListSection extends PaginatedListSectionBase<FinishedWork> {
   };
 
   protected paginator = (
-    args: PaginatedParams
+    args: PaginatedParams<FinishedWork>
   ): Promise<StorageResult<PaginatedResult<FinishedWork>>> => {
     return StorageService.finishedWorks.paginate(args);
   };
