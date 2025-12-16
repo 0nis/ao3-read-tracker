@@ -1,29 +1,67 @@
 import { Router } from "../../../app/router";
-import { SymbolId } from "../../../enums/symbols";
-import { getManifest } from "../../../utils/extension";
-import { el } from "../../../utils/ui/dom";
-import { getSymbolElement } from "../../../utils/ui/symbols";
+import { getExtensionName } from "../../../utils/extension";
+import { el, ensureChild } from "../../../utils/ui/dom";
 
+/**
+ * This function creates the "Extensions" dropdown if it doesn't exist already,
+ * and adds our link to it.
+ *
+ * If another separate extension wishes to add a link to this dropdown, ensure that it is
+ * implemented in the same way: create if it doesn't exist already, and fetch if it does.
+ * Ensure that it is created with the same props and classes as AO3's native dropdowns.
+ */
 export async function addOptionsLinkToAo3Nav(url: string): Promise<void> {
   const nav = document.querySelector("ul.primary.navigation.actions");
   if (!nav) return;
 
-  const symbolElement = await getSymbolElement(SymbolId.EXTENSION, "🧩");
-  const extensionName =
-    getManifest()?.data?.name?.replace(/^AO3\s+/i, "") || "Extension";
+  const search = nav.querySelector("li.search") as HTMLElement | null;
 
-  const button = el(
-    "a",
-    {
-      href: url,
+  // Add a new "extensions" dropdown before the search bar if it doesn't exist already.
+  // If it exists already, merely fetch it.
+  const dropdown = ensureChild({
+    parent: nav as HTMLElement,
+    className: "dropdown extensions",
+    tag: "li",
+    insertBefore: search || undefined,
+    createProps: { attrs: { "aria-haspopup": "true" } },
+  });
+
+  // Add the navigation element to the dropdown if it doesn't exist already.
+  // If it exists already, merely fetch it.
+  ensureChild({
+    parent: dropdown,
+    className: "dropdown-toggle",
+    tag: "a",
+    createProps: {
+      textContent: "Extensions",
+      attrs: {
+        href: "/menu/extensions",
+        "data-toggle": "dropdown",
+        "data-target": "#",
+      },
     },
-    [symbolElement, el("span", { textContent: ` ${extensionName} Options` })]
-  );
-  button.addEventListener("click", (ev) => {
+  });
+
+  // Add the link list to the dropdown if it doesn't exist already.
+  // If it exists already, merely fetch it.
+  const ul = ensureChild({
+    parent: dropdown,
+    className: "menu dropdown-menu",
+    tag: "ul",
+  });
+
+  // Add our own extension link to the list
+  const myLink = el("li", {}, [
+    el("a", {
+      href: url,
+      textContent: getExtensionName(),
+    }),
+  ]);
+
+  myLink.addEventListener("click", (ev) => {
     ev.preventDefault();
     Router.navigate(url);
   });
 
-  const li = el("li", {}, button);
-  nav.appendChild(li);
+  ul.appendChild(myLink);
 }

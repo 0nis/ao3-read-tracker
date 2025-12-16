@@ -15,7 +15,6 @@ export enum SymbolId {
   DELETE = "delete",
   HAMBURGER = "hamburger",
   CLOSE = "closed",
-  EXTENSION = "extension",
 }
 
 export enum SymbolType {

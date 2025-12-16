@@ -98,10 +98,4 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     label: "Closed",
     text: "✕",
   },
-  {
-    id: SymbolId.EXTENSION,
-    type: SymbolType.TEXT,
-    label: "Extension",
-    text: "🧩",
-  },
 ];
