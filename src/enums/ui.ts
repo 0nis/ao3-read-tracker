@@ -18,3 +18,9 @@ export enum SortDirection {
   ASC = "ascending",
   DESC = "descending",
 }
+
+export enum BooleanFilterSelect {
+  ALL = "all",
+  TRUE = "yes",
+  FALSE = "no",
+}

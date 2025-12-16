@@ -5,22 +5,24 @@ import {
   createPaginationControls,
   setupPaginationEvents,
 } from "../helpers/list/pagination";
+import { getStored } from "../helpers/gen";
 
 import { SectionConfig } from "../../types";
 import { createSectionWrapper } from "../../components/section";
 
+import { localMemory } from "../../../../services/memory";
 import { handleStorageRead } from "../../../../utils/storage";
 import { reportSrLive } from "../../../../utils/ui/accessibility";
 import { el, injectStyles } from "../../../../utils/ui/dom";
 import { SortDirection } from "../../../../enums/ui";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import {
+  EqualityFilter,
   PaginatedParams,
   PaginatedResult,
   StorageResult,
 } from "../../../../types/storage";
 import { enumSelect, number, select } from "../../../../utils/ui/forms";
-import { localMemory } from "../../../../services/memory";
 
 export const getListClass = () => `${CLASS_PREFIX}__list`;
 
@@ -54,14 +56,41 @@ export abstract class PaginatedListSectionBase<T> {
     });
   }
 
+  /**
+   * Must be implemented by subclasses in order to decide how to render each item.
+   * An item meaning a full row of the list (li element).
+   */
   protected abstract renderItem(item: T): Promise<HTMLElement>;
 
+  /**
+   * Must be implemented by subclasses in order to load data.
+   * Must take a {@link PaginatedParams} as an argument.
+   * Must return a promise of a {@link StorageResult} of type {@link PaginatedResult}.
+   * @param args
+   */
   protected abstract paginator(
     args: PaginatedParams<T>
   ): Promise<StorageResult<PaginatedResult<T>>>;
 
+  /**
+   * Returns a list of {@link EqualityFilter} objects to filter when calling {@link paginator}.
+   * Warning: Could be slow to load on a large dataset, since these are not indexed.
+   * If no filters are chosen, return an empty array.
+   */
+  protected abstract getFilters(): EqualityFilter<T>[];
+
+  /**
+   * Return a record of custom user options to be added to the options button.
+   * All options logic must be handled within the subclass itself.
+   * If no custom options are needed, return an empty object.
+   * @returns A record with a string (key of the option) and a {@link UserOption}
+   */
   protected abstract getCustomUserOptions(): Record<string, UserOption<any>>;
 
+  /**
+   * Must be called upon initialization of a new instance of this class.
+   * @returns The root element of the list section
+   */
   mount(): HTMLElement {
     injectStyles(
       `${CLASS_PREFIX}__styles--list-section`,
@@ -89,21 +118,11 @@ export abstract class PaginatedListSectionBase<T> {
     return section;
   }
 
-  protected getStored = <T>({
-    key,
-    fallback,
-    validator,
-  }: {
-    key: string;
-    fallback: T;
-    validator?: (val: unknown) => val is T;
-  }): T => {
-    const stored = localMemory.get(key);
-    if (validator) if (stored !== null && validator?.(stored)) return stored;
-    if (stored !== null) return stored as T;
-    return fallback;
-  };
-
+  /**
+   * Renders a page of items by calling {@link paginate} and {@link renderItem}.
+   * @param initial If true, indicates that the page is being rendered for the first time (aka upon navigating to the options page)
+   * Used to prevent reporting a page change to screen reader users when the page is being rendered for the first time
+   */
   protected renderPage = async (initial: boolean = false) => {
     if (!this.container) return;
     this.container.classList.add(`${getListClass()}__container--loading`);
@@ -116,6 +135,7 @@ export abstract class PaginatedListSectionBase<T> {
           orderBy: this.paginationOptions.orderBy,
           reverse: this.paginationOptions.sortDirection === SortDirection.DESC,
         },
+        filters: this.getFilters(),
       }),
       { errorMsg: `Failed to fetch paginated data for ${this.config.title}.` }
     );
@@ -168,19 +188,19 @@ export abstract class PaginatedListSectionBase<T> {
     [K in keyof PaginationUserOptions<T>]: PaginationUserOptions<T>[K];
   }): PaginationUserOptions<T> => {
     return {
-      orderBy: this.getStored<keyof T>({
+      orderBy: getStored<keyof T>({
         key: `${this.config.key}.order-by`,
         fallback: defaults.orderBy,
         validator: (v): v is keyof T =>
           this.config.allowedOrderBy.map(String).includes(v as string),
       }),
-      sortDirection: this.getStored<SortDirection>({
+      sortDirection: getStored<SortDirection>({
         key: `${this.config.key}.sort-direction`,
         fallback: defaults.sortDirection,
         validator: (v): v is SortDirection =>
           Object.values(SortDirection).includes(v as SortDirection),
       }),
-      pageSize: this.getStored<number>({
+      pageSize: getStored<number>({
         key: `${this.config.key}.page-size`,
         fallback: defaults.pageSize,
         validator: (v): v is number => !Number.isNaN(Number(v)),
@@ -189,32 +209,12 @@ export abstract class PaginatedListSectionBase<T> {
   };
 
   private buildUserOptionDefinitions = (): Record<string, UserOption<any>> => {
-    const defaultOptions = {
-      orderBy: this.getStored<string>({
-        key: `${this.config.key}.order-by`,
-        fallback: String(this.paginationOptions.orderBy),
-        validator: (v): v is string =>
-          this.config.allowedOrderBy.map(String).includes(v as string),
-      }),
-      sortDirection: this.getStored<SortDirection>({
-        key: `${this.config.key}.sort-direction`,
-        fallback: this.paginationOptions.sortDirection,
-        validator: (v): v is SortDirection =>
-          Object.values(SortDirection).includes(v as SortDirection),
-      }),
-      pageSize: this.getStored<number>({
-        key: `${this.config.key}.page-size`,
-        fallback: this.paginationOptions.pageSize,
-        validator: (v): v is number => !Number.isNaN(Number(v)),
-      }),
-    };
-
     const baseOptions: Record<string, UserOption<any>> = {
       orderBy: {
         label: "Order by",
         input: select({
           options: this.config.allowedOrderBy.map((v) => String(v)),
-          defaultOption: defaultOptions.orderBy,
+          defaultOption: String(this.paginationOptions.orderBy),
         }),
         show: this.config.allowedOrderBy.length > 1,
         onChange: (value: keyof T) => {
@@ -229,7 +229,7 @@ export abstract class PaginatedListSectionBase<T> {
 
       sortDirection: {
         label: "Sort",
-        input: enumSelect(SortDirection, defaultOptions.sortDirection),
+        input: enumSelect(SortDirection, this.paginationOptions.sortDirection),
         onChange: (value: SortDirection) => {
           this.paginationOptions.sortDirection = value as SortDirection;
           localMemory.set(
@@ -242,7 +242,7 @@ export abstract class PaginatedListSectionBase<T> {
 
       pageSize: {
         label: "Page Size",
-        input: number("1", String(defaultOptions.pageSize)),
+        input: number("1", String(this.paginationOptions.pageSize)),
         onChange: (value: number) => {
           const newSize = Number(value);
           if (!Number.isNaN(newSize)) {

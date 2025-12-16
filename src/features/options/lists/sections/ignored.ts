@@ -6,6 +6,7 @@ import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
 } from "../helpers/managers/info-visibility";
+import { getStored } from "../helpers/gen";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
@@ -14,6 +15,7 @@ import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
 import { IgnoredWork } from "../../../../types/works";
 import {
+  EqualityFilter,
   PaginatedParams,
   PaginatedResult,
   StorageResult,
@@ -27,11 +29,11 @@ const KEY = `${ABBREVIATION}.ignored-list`.toLowerCase();
 
 class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
   private options: IgnoredListUserOptions = {
-    showSymbols: this.getStored<boolean>({
+    showSymbols: getStored<boolean>({
       key: `${KEY}.show.symbols`,
       fallback: false,
     }),
-    showNotes: this.getStored<boolean>({
+    showNotes: getStored<boolean>({
       key: `${KEY}.show.notes`,
       fallback: true,
     }),
@@ -57,6 +59,10 @@ class IgnoredListSection extends PaginatedListSectionBase<IgnoredWork> {
       () => this.renderPage(),
       { showNotes: "Show Reason" }
     );
+  }
+
+  protected getFilters(): EqualityFilter<IgnoredWork>[] {
+    return [];
   }
 
   protected getCustomUserOptions = (): {

@@ -7,6 +7,7 @@ import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
 } from "../helpers/managers/info-visibility";
+import { getStored } from "../helpers/gen";
 import { SectionId } from "../../config";
 
 import { StorageService } from "../../../../services/storage";
@@ -16,6 +17,7 @@ import { SortDirection } from "../../../../enums/ui";
 import { ABBREVIATION } from "../../../../constants/global";
 import { InProgressWork } from "../../../../types/works";
 import {
+  EqualityFilter,
   PaginatedParams,
   PaginatedResult,
   StorageResult,
@@ -27,11 +29,11 @@ const KEY: string = `${ABBREVIATION}.in-progress-list`.toLowerCase();
 
 class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
   private options: InProgressListUserOptions = {
-    showSymbols: this.getStored<boolean>({
+    showSymbols: getStored<boolean>({
       key: `${KEY}.show.symbols`,
       fallback: true,
     }),
-    showStatus: this.getStored<boolean>({
+    showStatus: getStored<boolean>({
       key: `${KEY}.show.status`,
       fallback: false,
     }),
@@ -55,6 +57,10 @@ class InProgressListSection extends PaginatedListSectionBase<InProgressWork> {
       this.options,
       () => this.renderPage()
     );
+  }
+
+  protected getFilters(): EqualityFilter<InProgressWork>[] {
+    return [];
   }
 
   protected getCustomUserOptions = (): {
