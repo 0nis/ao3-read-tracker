@@ -18,6 +18,7 @@ export function getStyles(prefix: string): string {
     .${prefix}__options-panel {
       align-items: stretch;
       top: 2.411em;
+      padding: .2em .4em;
     }
 
     .${prefix}__options-item {
