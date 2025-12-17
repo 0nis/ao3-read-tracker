@@ -2,12 +2,12 @@ import { el } from "../../dom";
 import { getLocalDateTimeString } from "../../../date";
 
 export const text = (
-  placeholder: string = "",
+  defaultValue?: string,
   disabled: boolean = false
 ): HTMLInputElement => {
   return el("input", {
     type: "text",
-    placeholder,
+    defaultValue,
     disabled,
   }) as HTMLInputElement;
 };

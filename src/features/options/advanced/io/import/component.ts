@@ -1,8 +1,8 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { toKebabCase } from "../../../../utils/string";
-import { showNotification } from "../../../../utils/ui/dialogs";
-import { el, injectStyles } from "../../../../utils/ui/dom";
-import { makeExpandable } from "../../../../utils/ui/elements/expandable/element";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
+import { toKebabCase } from "../../../../../utils/string";
+import { showNotification } from "../../../../../utils/ui/dialogs";
+import { el, injectStyles } from "../../../../../utils/ui/dom";
+import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
 import { ExpandableItemParams, getExpandedImportButtons } from "./config";
 import { getStyles } from "./style";
 

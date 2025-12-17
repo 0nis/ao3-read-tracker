@@ -1,15 +1,15 @@
-import { buildDataSection } from "./io/section";
-import {
-  buildIgnoredListSection,
-  buildFinishedListSection,
-  buildInProgressListSection,
-} from "./lists";
 import {
   buildGeneralSettingsSection,
   buildIgnoreSettingsSection,
   buildReadSettingsSection,
   buildInProgressSettingsSection,
 } from "./settings";
+import {
+  buildIgnoredListSection,
+  buildFinishedListSection,
+  buildInProgressListSection,
+} from "./lists";
+import { buildDataSection, buildSymbolsSection } from "./advanced";
 
 export enum SectionId {
   FINISHED_SETTINGS = "finished-settings",
@@ -19,13 +19,14 @@ export enum SectionId {
   FINISHED_LIST = "finished-works",
   IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
+  SYMBOLS = "symbols",
   DATA = "data",
 }
 
 export enum SectionType {
   SETTINGS = "settings",
   LIST = "lists",
-  MISC = "misc",
+  ADVANCED = "advanced",
 }
 
 export type SectionBuilder = () => Promise<HTMLElement> | HTMLElement;
@@ -81,9 +82,15 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     build: buildIgnoredListSection,
   },
   {
+    id: SectionId.SYMBOLS,
+    label: "Symbol Modification",
+    type: SectionType.ADVANCED,
+    build: buildSymbolsSection,
+  },
+  {
     id: SectionId.DATA,
     label: "Data & Storage",
-    type: SectionType.MISC,
+    type: SectionType.ADVANCED,
     build: buildDataSection,
   },
 ] as const;
@@ -104,6 +111,6 @@ export const NAV_CONFIG: readonly NavConfigItem[] = [
   },
   {
     label: "Advanced",
-    type: SectionType.MISC,
+    type: SectionType.ADVANCED,
   },
 ];

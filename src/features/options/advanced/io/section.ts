@@ -1,7 +1,7 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { el, injectStyles } from "../../../utils/ui/dom";
-import { createSectionWrapper } from "../components/section";
-import { SectionId } from "../config";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { el, injectStyles } from "../../../../utils/ui/dom";
+import { createSectionWrapper } from "../../components/section";
+import { SectionId } from "../../config";
 import { buildClearDataButton } from "./clear/component";
 import { buildExportButton } from "./export/component";
 import { buildImportButton } from "./import/component";

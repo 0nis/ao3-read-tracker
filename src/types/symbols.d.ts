@@ -2,10 +2,10 @@ import { SymbolId, SymbolType } from "../enums/symbols";
 
 export interface SymbolRecord {
   id: string;
-  type: SymbolType;
   label: string;
-  text?: string;
-  imgUrl?: string;
+  priority: number;
+  emoji?: string;
+  imgBlob?: Blob;
 }
 
 export type SymbolData = Record<SymbolId, SymbolRecord>;
