@@ -13,7 +13,7 @@ export function getStyles(prefix: string): string {
       gap: 1em;
       border: 1px solid #ddd;
       border-radius: 4px;
-      padding: 1em;
+      padding: .8em;
       margin: 0;
     }
 
@@ -39,22 +39,22 @@ export function getStyles(prefix: string): string {
     }
     
     .${prefix}__block__field-label {
-      margin-right: 1em;
+      width: 6em;
     }
 
     .${prefix}__block__field-input {
-      width: auto;
+      width: 100%;
       margin: 0 !important;
+      box-sizing: border-box;
     }
 
     .${prefix}__block__field-input--upload {
+      position: relative;
       display: inline-flex;
       flex-direction: row;
       justify-content: space-between;
       gap: 0.5em;
       align-items: center;
-      width: 100%;
-      padding-left: .5em;
     }
     
     .${prefix}__block__field-input--upload-group {
@@ -72,6 +72,21 @@ export function getStyles(prefix: string): string {
       flex-direction: row;
       justify-content: flex-end;
       gap: .4em;
+    }
+
+    @media (max-width: 600px) {
+      .${prefix}__block {
+        width: 44%;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .${prefix}__block {
+        width: 100%;
+      }
+      .${prefix}__block__field-label {
+        width: 33%;
+      }
     }
   `;
 }
