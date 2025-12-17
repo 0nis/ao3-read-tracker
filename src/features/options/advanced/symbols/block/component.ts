@@ -24,12 +24,13 @@ export function buildBlock(id: SymbolId, record: SymbolRecord): HTMLElement {
       id,
       type: "imgBlob",
       element: imageSelector({
-        label: "Upload image",
+        label: "Upload",
         onChange: () => {
           // TODO: implement
           console.log("TODO");
         },
         defaultValue: record.imgBlob,
+        addClearButton: true,
       }),
     },
   ];

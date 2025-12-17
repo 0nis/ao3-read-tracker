@@ -32,6 +32,13 @@ export function getGlobalStyles(prefix: string): string {
       box-shadow: inset 0 1px 2px #ccc;
     }
 
+    .${prefix}__inline-image {
+      display: inline-block;
+      height: 1.15em;
+      vertical-align: -0.25em;
+      object-fit: contain;
+    }
+
     .${prefix}__sr-only {
       position: absolute !important;
       width: 1px !important;
@@ -44,5 +51,6 @@ export function getGlobalStyles(prefix: string): string {
       clip: rect(0 0 0 0) !important;
       overflow: hidden !important;
     }
+
   `;
 }

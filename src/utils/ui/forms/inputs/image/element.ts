@@ -1,69 +1,62 @@
 import { getStyles } from "./style";
+import { resizeImage } from "./helpers";
+import { buildPreviewElement } from "./components/preview";
+import { buildInputElement } from "./components/input";
+import { buildClearButton, buildUploadButton } from "./components/buttons";
+
 import { el, injectStyles } from "../../../dom";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 
-const getClass = () => `${CLASS_PREFIX}__image-selector`;
+export const getClass = () => `${CLASS_PREFIX}__image-selector`;
+
+export type State = { currentUrl?: string };
 
 export type ImageOptions = {
   label: string;
-  onChange?: (value: Blob) => void;
+  onChange?: (value: Blob | null) => void;
   defaultValue?: Blob;
+  addClearButton?: boolean;
 };
 
 export function imageSelector({
   label,
   onChange,
   defaultValue,
+  addClearButton = false,
 }: ImageOptions): HTMLElement {
+  const state: State = {};
+
   injectStyles(
     `${CLASS_PREFIX}__styles--image-selector`,
     getStyles(getClass())
   );
 
-  const btn = el(
-    "button",
-    {
-      className: `${CLASS_PREFIX}__button ${getClass()}-button`,
-      type: "button",
-      title: "Click to select a file.",
-      attrs: { "aria-label": "Click to select a file." },
-    },
-    [label]
-  );
+  const preview = buildPreviewElement(defaultValue, state);
 
-  // TODO: Add constraints on size
-  const input = el("input", {
-    type: "file",
-    accept: "image/*",
-    multiple: false,
-    className: `${CLASS_PREFIX}__hidden ${getClass()}-input`,
-    tabIndex: -1,
-    attrs: { "aria-hidden": "true" },
+  const input = buildInputElement(async (file) => {
+    if (!file || !file.type.startsWith("image/")) return;
+    const processed = await resizeImage(file, 128);
+    if (onChange) onChange(processed);
+    if (state.currentUrl) URL.revokeObjectURL(state.currentUrl);
+    state.currentUrl = URL.createObjectURL(processed);
+    preview.src = state.currentUrl;
   });
 
-  // TODO: Make small
-  const preview = el("img", {
-    className: `${getClass()}-preview`,
-    attrs: { "aria-hidden": "true", role: "img" },
+  const clearBtn = buildClearButton(() => {
+    if (state.currentUrl) URL.revokeObjectURL(state.currentUrl);
+    state.currentUrl = "";
+    preview.src = "";
+    input.value = "";
+    if (onChange) onChange(null);
   });
-  if (defaultValue) preview.src = URL.createObjectURL(defaultValue);
 
-  btn.addEventListener("click", () => input.click());
-
-  input.addEventListener("change", (e) => {
-    const target = e.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      const file = target.files[0];
-      if (onChange) onChange(file);
-      preview.src = URL.createObjectURL(file);
-    }
-  });
+  const uploadBtn = buildUploadButton(label, () => input.click());
 
   return el(
     "div",
     {
       className: getClass(),
     },
-    [preview, btn, input]
+    [preview, uploadBtn, ...(addClearButton ? [clearBtn] : []), input]
   );
 }
