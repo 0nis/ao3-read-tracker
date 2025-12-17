@@ -102,4 +102,10 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     emoji: "✕",
     priority: 7,
   },
+  {
+    id: SymbolId.CLEAR,
+    label: "Clear",
+    emoji: "✕",
+    priority: 6,
+  },
 ];

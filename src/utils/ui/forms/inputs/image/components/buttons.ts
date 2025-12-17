@@ -3,7 +3,7 @@ import { el } from "../../../../dom";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 
 export function buildUploadButton(
-  label: string,
+  label: HTMLElement | string,
   onClick: () => void
 ): HTMLButtonElement {
   const btn = el(
@@ -20,7 +20,10 @@ export function buildUploadButton(
   return btn;
 }
 
-export function buildClearButton(onClick: () => void): HTMLButtonElement {
+export function buildClearButton(
+  label: HTMLElement | string = "Clear",
+  onClick: () => void
+): HTMLButtonElement {
   const btn = el(
     "button",
     {
@@ -28,7 +31,7 @@ export function buildClearButton(onClick: () => void): HTMLButtonElement {
       title: "Clear image selection",
       attrs: { "aria-label": "Clear image selection" },
     },
-    ["Clear"]
+    [label]
   );
   btn.addEventListener("click", onClick);
   return btn;

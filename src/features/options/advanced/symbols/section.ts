@@ -21,14 +21,16 @@ export async function buildSymbolsSection(): Promise<HTMLElement> {
     id: SectionId.SYMBOLS,
     title: "Symbol Modification",
     description:
-      "This section allows you to modify the icons or emojis used for symbols throughout the extension.",
+      "This section allows you to modify the icons or emojis used for symbols throughout the extension. If no image is selected, the emoji will be used instead. The order in which symbols are displayed is determined by their priority: the higher the priority, the earlier they will appear in the UI.",
   });
 
   const symbols = await symbolsCache.get();
 
-  const blocks = Object.values(symbols).map((symbol) => {
-    return buildBlock(symbol.id as SymbolId, symbol);
-  });
+  const blocks = await Promise.all(
+    Object.values(symbols).map((symbol) => {
+      return buildBlock(symbol.id as SymbolId, symbol, symbols);
+    })
+  );
 
   section.appendChild(el("ul", { className: `${getClass()}__grid` }, blocks));
 

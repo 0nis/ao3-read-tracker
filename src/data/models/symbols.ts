@@ -8,6 +8,10 @@ export class SymbolsData<T extends { id: string }> {
     return Object.fromEntries(records.map((r) => [r.id, r]));
   }
 
+  async getById(id: string): Promise<T | undefined> {
+    return await this.table.get(id);
+  }
+
   async set(items: T[]): Promise<void> {
     await this.table.clear();
     await this.table.bulkPut(items);

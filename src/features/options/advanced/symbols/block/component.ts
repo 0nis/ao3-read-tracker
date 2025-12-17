@@ -1,39 +1,29 @@
-import { getLabelFromType } from "./helpers";
 import { BlockField } from "./types";
+import { buildField, getFields } from "./fields";
+import { getSaveElement, onSave } from "./actions/save";
+import { getResetElement, onReset } from "./actions/reset";
 
 import { getClass } from "../section";
 
 import { el } from "../../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../../utils/ui/symbols";
-import {
-  imageSelector,
-  getInputElement,
-  number,
-  text,
-} from "../../../../../utils/ui/forms";
-
 import { SymbolId } from "../../../../../enums/symbols";
-import { SymbolRecord } from "../../../../../types/symbols";
+import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
-export function buildBlock(id: SymbolId, record: SymbolRecord): HTMLElement {
-  const fields: BlockField[] = [
-    { id, type: "label", element: text(record.label) },
-    { id, type: "priority", element: number("0", record.priority.toString()) },
-    { id, type: "emoji", element: text(record.emoji ?? "") },
-    {
-      id,
-      type: "imgBlob",
-      element: imageSelector({
-        label: "Upload",
-        onChange: () => {
-          // TODO: implement
-          console.log("TODO");
-        },
-        defaultValue: record.imgBlob,
-        addClearButton: true,
-      }),
-    },
-  ];
+// TODO: Ensure all symbols (the images) use the inline-image class
+// TODO: Make sure SVG display works
+// TODO: Ensure success messages are displayed within the block itself, not outside, for user friendliness
+
+export type State = {
+  file?: Blob;
+};
+
+export async function buildBlock(
+  id: SymbolId,
+  record: SymbolRecord,
+  symbols: SymbolData
+): Promise<HTMLElement> {
+  const state: State = {};
 
   const header = el("header", {}, [
     el("h4", { className: `${getClass()}__block-title` }, [
@@ -42,9 +32,21 @@ export function buildBlock(id: SymbolId, record: SymbolRecord): HTMLElement {
     ]),
   ]);
 
-  const fieldsWrapper = el("ul", { className: `${getClass()}__block-fields` }, [
-    ...fields.map((field) => buildField(field)),
-  ]);
+  const fields: BlockField[] = getFields(id, record, symbols, state);
+  const fieldsWrapper = el(
+    "ul",
+    { className: `${getClass()}__block-fields` },
+    fields.map((field) => buildField(field))
+  );
+
+  const actionsWrapper = el(
+    "ul",
+    { className: `${getClass()}__block-actions` },
+    [
+      getResetElement(() => onReset(id, fields, state)),
+      getSaveElement(() => onSave(id, fields, state)),
+    ]
+  );
 
   return el(
     "li",
@@ -52,25 +54,6 @@ export function buildBlock(id: SymbolId, record: SymbolRecord): HTMLElement {
       id: `symbol-${id}`,
       className: `${getClass()}__block`,
     },
-    [header, fieldsWrapper]
+    [header, fieldsWrapper, actionsWrapper]
   );
-}
-
-export function buildField({ id, type, element }: BlockField): HTMLElement {
-  const inputEl = getInputElement(element) ?? element;
-  inputEl.id = `symbol-${id}-${type}`;
-  inputEl.setAttribute("data-field", type);
-  element.classList.add(`${getClass()}__block__field-input`);
-
-  return el("div", { className: `${getClass()}__block__field` }, [
-    el(
-      "label",
-      {
-        className: `${getClass()}__block__field-label`,
-        htmlFor: `symbol-${id}-${type}`,
-      },
-      [getLabelFromType(type)]
-    ),
-    element,
-  ]);
 }
