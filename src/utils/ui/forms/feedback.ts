@@ -43,21 +43,20 @@ export function createFlashNotice(
     `#${CLASS_PREFIX}__flash-notice`
   ) as HTMLElement | null;
 
+  let counter = Number(existing?.dataset.count ?? 1);
+
   if (
     existing &&
     existing.childNodes[0]?.textContent?.trim() === msg &&
     existing.getAttribute("position") === position
   ) {
+    existing.dataset.count = String(++counter);
     const count = ensureChild({
       parent: existing,
       tag: "span",
       className: `${CLASS_PREFIX}__flash-notice__count`,
     });
-    const currentCount = parseInt(
-      count.textContent?.replace(/\D/g, "") || "1",
-      10
-    );
-    count.textContent = ` (x${currentCount + 1})`;
+    count.textContent = ` (x${counter})`;
     reportSrLive(msg);
     return;
   }

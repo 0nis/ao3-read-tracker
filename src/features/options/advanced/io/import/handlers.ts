@@ -3,19 +3,19 @@ import { ImportProgress } from "dexie-export-import/dist/import";
 
 import { handleProgressCallback } from "../handlers";
 
-import { IoService } from "../../../../services/io";
+import { IoService } from "../../../../../services/io";
 import {
   DexieExportDbInfo,
   getDbInfoFromDexieExport,
-} from "../../../../utils/file";
+} from "../../../../../utils/file";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../utils/ui/loaders";
-import { createFlashNotice } from "../../../../utils/ui/forms";
-import { showNotification } from "../../../../utils/ui/dialogs";
-import { LoaderType } from "../../../../enums/ui";
-import { DATABASE_NAME } from "../../../../constants/global";
+} from "../../../../../utils/ui/loaders";
+import { createFlashNotice } from "../../../../../utils/ui/forms";
+import { showNotification } from "../../../../../utils/ui/dialogs";
+import { LoaderType } from "../../../../../enums/ui";
+import { DATABASE_NAME } from "../../../../../constants/global";
 
 export async function handleImport(
   btn: HTMLButtonElement,

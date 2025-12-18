@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { toSentenceCase } from "../../../string";
+import { toTitleCase } from "../../../string";
 import { el } from "../../dom";
 
 export type SelectOptions = {
@@ -29,7 +29,7 @@ export function select({
     options.map((v) => {
       return el("option", {
         value: String(v),
-        textContent: toSentenceCase(String(v)),
+        textContent: toTitleCase(String(v)),
       });
     })
   );

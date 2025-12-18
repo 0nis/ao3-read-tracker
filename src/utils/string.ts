@@ -3,7 +3,7 @@ export function capitalizeFirstLetter(str: string): string {
 }
 
 /** Example: "this_is_a_string" -> "This Is A String" */
-export function toSentenceCase(str: string): string {
+export function toTitleCase(str: string): string {
   return str
     .replace(/_/g, " ") // replace underscores
     .replace(/([a-z0-9])([A-Z])/g, "$1 $2") // insert space before camelCase capitals

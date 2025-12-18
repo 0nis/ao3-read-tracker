@@ -1,8 +1,6 @@
-import { ABBREVIATION } from "../../../constants/global";
-import { CustomInputType } from "../../../enums/ui";
-import { FormField, FormGroup, FormItem } from "../../../types/forms";
-import { getLocalDateTimeString } from "../../date";
 import { walkFormItems } from "./items";
+import { getLocalDateTimeString } from "../../date";
+import { FormField, FormGroup, FormItem } from "../../../types/forms";
 
 /**
  * Extracts values from form inputs in a section using data-field attributes.
@@ -82,6 +80,8 @@ export function getInputValue(element: HTMLElement): any {
           return parseInt(el.value, 10);
         case "datetime-local":
           return new Date(el.value).getTime();
+        case "file":
+          return el.files?.[0];
         default:
           return el.value;
       }
@@ -111,6 +111,8 @@ export function setInputValue(element: HTMLElement, value: unknown): void {
           el.value = value
             ? getLocalDateTimeString(new Date(value as number))
             : el.defaultValue || "";
+          break;
+        case "file":
           break;
         default:
           el.value = value != null ? String(value) : "";

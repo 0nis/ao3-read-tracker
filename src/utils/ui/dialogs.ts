@@ -57,11 +57,9 @@ export function reportExtensionFailure(msg: string, err?: unknown): void {
   info("To help fix this, please report the issue at:", url);
 
   showNotification(
-    createExtensionMsg(
-      `${message}\n\n` +
-        `To help fix this, please report the issue at:\n` +
-        `${url}\n\n` +
-        `Thank you!`
-    )
+    `${message}\n\n` +
+      `To help fix this, please report the issue at:\n` +
+      `${url}\n\n` +
+      `Thank you!`
   );
 }

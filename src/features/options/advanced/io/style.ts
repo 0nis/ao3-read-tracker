@@ -17,7 +17,6 @@ export function getStyles(prefix: string): string {
     .${prefix}__category-description ol {
         list-style: initial; 
         margin: 0.5em 0 0.5em 1.5em;
-        padding-left: 1.5em;
     }
 
     .${prefix}__category-description li {

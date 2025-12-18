@@ -2,17 +2,17 @@ import { ExportProgress } from "dexie-export-import";
 
 import { handleProgressCallback } from "../handlers";
 
-import { IoService } from "../../../../services/io";
-import { LoaderType } from "../../../../enums/ui";
+import { IoService } from "../../../../../services/io";
+import { LoaderType } from "../../../../../enums/ui";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../utils/ui/loaders";
-import { downloadFile } from "../../../../utils/file";
+} from "../../../../../utils/ui/loaders";
+import { downloadFile } from "../../../../../utils/file";
 import {
   reportExtensionFailure,
   showNotification,
-} from "../../../../utils/ui/dialogs";
+} from "../../../../../utils/ui/dialogs";
 
 export async function handleExport(btn: HTMLButtonElement) {
   const controller = createButtonLoader(btn, LoaderType.PROGRESS);

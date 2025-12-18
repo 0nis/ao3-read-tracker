@@ -1,15 +1,15 @@
-import { LoaderType } from "../../../../enums/ui";
-import { IoService } from "../../../../services/io";
+import { LoaderType } from "../../../../../enums/ui";
+import { IoService } from "../../../../../services/io";
 import {
   confirmDestructiveAction,
   reportExtensionFailure,
   showNotification,
-} from "../../../../utils/ui/dialogs";
-import { createFlashNotice } from "../../../../utils/ui/forms";
+} from "../../../../../utils/ui/dialogs";
+import { createFlashNotice } from "../../../../../utils/ui/forms";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../utils/ui/loaders";
+} from "../../../../../utils/ui/loaders";
 
 export async function handleClearData(btn: HTMLButtonElement) {
   const confirmed = confirmDestructiveAction(

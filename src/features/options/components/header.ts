@@ -1,8 +1,8 @@
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { el } from "../../../utils/ui/dom";
-import { buildClearDataButton } from "../io/clear/component";
-import { buildExportButton } from "../io/export/component";
-import { buildImportButton } from "../io/import/component";
+import { buildClearDataButton } from "../advanced/io/clear/component";
+import { buildExportButton } from "../advanced/io/export/component";
+import { buildImportButton } from "../advanced/io/import/component";
 
 export function buildHeader(extensionName: string) {
   return el(

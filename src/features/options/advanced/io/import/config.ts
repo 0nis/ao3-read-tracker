@@ -2,10 +2,10 @@ import { ImportOptions } from "dexie-export-import";
 import {
   confirmDestructiveAction,
   showConfirm,
-} from "../../../../utils/ui/dialogs";
+} from "../../../../../utils/ui/dialogs";
 import { handleImport } from "./handlers";
-import { createExistenceCache } from "../../../../data/cache/existence";
-import { CLASS_PREFIX } from "../../../../constants/classes";
+import { createExistenceCache } from "../../../../../data/cache/existence";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
 
 const DEFAULT_IMPORT_OPTIONS: ImportOptions = {
   acceptVersionDiff: true,

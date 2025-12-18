@@ -34,7 +34,7 @@ export class Ao3ReadTrackerDb extends Dexie {
       inProgressSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",
-      symbolRecords: "id",
+      symbolRecords: "id, priority",
     });
 
     this.on("populate", async () => await populateDb());
