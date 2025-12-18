@@ -19,7 +19,7 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__block-title {
       display: flex;
-      gap: 1em;
+      gap: .5em;
       align-items: center;
       margin: 0;
     }

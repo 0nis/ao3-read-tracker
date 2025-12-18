@@ -39,6 +39,10 @@ export function getGlobalStyles(prefix: string): string {
       object-fit: contain;
     }
 
+    .${prefix}__suffix {
+      margin-left: 2px;
+    }
+
     .${prefix}__sr-only {
       position: absolute !important;
       width: 1px !important;

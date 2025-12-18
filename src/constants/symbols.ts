@@ -14,7 +14,7 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
   },
   {
     id: SymbolId.IN_PROGRESS,
-    label: "In progress",
+    label: "In Progress",
     emoji: "📖",
     priority: 89,
   },
@@ -26,19 +26,19 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
   },
   {
     id: SymbolId.REREAD_WORTHY,
-    label: "Reread worthy",
+    label: "Reread Worthy",
     emoji: "⭐",
     priority: 100,
   },
   {
     id: SymbolId.TIMES_READ,
-    label: "Times read",
+    label: "Times Read",
     emoji: "📚",
     priority: 30,
   },
   {
     id: SymbolId.NEW_CHAPTERS_AVAILABLE,
-    label: "New chapters available",
+    label: "New Chapters Available",
     emoji: "🔔",
     priority: 20,
   },

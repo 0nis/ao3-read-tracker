@@ -19,7 +19,7 @@ export async function getSymbolElement(
 /**
  * Renders the content for a symbol, either as an image or text.
  * This is merely the *content* of the symbol, it still needs to be wrapped in a container.
- * The content will be aria-hidden, it is up to the caller to give it an appropriate label.
+ * The content will have role presentation, it is up to the caller to give it an appropriate label in the wrapper.
  *
  * @param symbol The symbol record to render
  * @param suffix Optional suffix to append to text symbols
@@ -46,7 +46,13 @@ export function renderSymbolContent(
     children.push(el("span", { textContent: symbol.emoji || symbol.label }));
   }
 
-  if (suffix) children.push(el("span", { textContent: suffix }));
+  if (suffix)
+    children.push(
+      el("span", {
+        className: `${CLASS_PREFIX}__suffix`,
+        textContent: suffix,
+      })
+    );
 
   return el("span", { attrs: { role: "presentation" } }, children);
 }
