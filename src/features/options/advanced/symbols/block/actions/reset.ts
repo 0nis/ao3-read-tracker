@@ -1,11 +1,9 @@
-import { State } from "../component";
 import { onSave } from "./save";
-import { BlockField } from "../types";
+import { BlockContext } from "../types";
 import { getClass } from "../../section";
 
 import { el } from "../../../../../../utils/ui/dom";
 import { setInputValue } from "../../../../../../utils/ui/forms";
-import { SymbolId } from "../../../../../../enums/symbols";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 import { DEFAULT_SYMBOL_RECORDS } from "../../../../../../constants/symbols";
 import { ABBREVIATION } from "../../../../../../constants/global";
@@ -22,37 +20,27 @@ export function getResetElement(onReset: () => void) {
   return resetEl;
 }
 
-export async function onReset({
-  id,
-  fields,
-  state,
-  notificationEl,
-}: {
-  id: SymbolId;
-  fields: BlockField[];
-  state: State;
-  notificationEl?: HTMLElement;
-}) {
+export async function onReset(context: BlockContext) {
+  if (!context.fields) return;
   const confirmed = confirm(
     "Are you sure you want to reset this symbol to its default values?"
   );
   if (confirmed) {
-    const defaultValue = DEFAULT_SYMBOL_RECORDS.find((s) => s.id === id)!;
-    fields.forEach((field) => {
+    const defaultValue = DEFAULT_SYMBOL_RECORDS.find(
+      (s) => s.id === context.id
+    )!;
+    context.fields.forEach((field) => {
       setInputValue(field.element, defaultValue[field.type]);
     });
-    state.file = defaultValue.imgBlob;
+    context.state.file = defaultValue.imgBlob;
     await onSave({
-      id,
-      fields,
-      state,
-      notificationEl,
+      ...context,
       successMsg: "Successfully reset to default values.",
     });
     document.dispatchEvent(
       new CustomEvent(`${ABBREVIATION}:symbol-record-updated`, {
         detail: {
-          id,
+          id: context.id,
           imgBlob: defaultValue.imgBlob,
         },
       })

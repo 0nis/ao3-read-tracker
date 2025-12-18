@@ -1,6 +1,5 @@
-import { State } from "./component";
-import { getLabelFromType } from "./helpers";
-import { BlockField } from "./types";
+import { getLabelFromType, setFeedback } from "./helpers";
+import { BlockContext, BlockField } from "./types";
 import { getClass, ACCEPTED_IMAGE_TYPES } from "../section";
 
 import { el } from "../../../../../utils/ui/dom";
@@ -13,23 +12,26 @@ import {
 } from "../../../../../utils/ui/forms";
 import { SymbolId } from "../../../../../enums/symbols";
 import { ABBREVIATION } from "../../../../../constants/global";
-import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
-export function getFields(
-  id: SymbolId,
-  record: SymbolRecord,
-  symbols: SymbolData,
-  state: State
-): BlockField[] {
+export function getFields({
+  id,
+  record,
+  symbols,
+  state,
+  feedbackEl,
+}: BlockContext): BlockField[] {
   const imgSelectorEls = getImageSelectorElements({
     defaultImg: record.imgBlob,
     upload: {
       label: "Upload",
     },
     clear: {
-      label: renderSymbolContent(symbols[SymbolId.CLEAR]),
+      label: symbols ? renderSymbolContent(symbols[SymbolId.CLEAR]) : "Clear",
     },
     onChange: (blob) => (state.file = blob ?? undefined),
+    onError: (message) => {
+      if (feedbackEl) setFeedback("error", message, feedbackEl);
+    },
     accept: ACCEPTED_IMAGE_TYPES,
   });
 

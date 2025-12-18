@@ -82,16 +82,16 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     build: buildIgnoredListSection,
   },
   {
-    id: SectionId.SYMBOLS,
-    label: "Symbol Modification",
-    type: SectionType.ADVANCED,
-    build: buildSymbolsSection,
-  },
-  {
     id: SectionId.DATA,
     label: "Data & Storage",
     type: SectionType.ADVANCED,
     build: buildDataSection,
+  },
+  {
+    id: SectionId.SYMBOLS,
+    label: "Extension Symbols",
+    type: SectionType.ADVANCED,
+    build: buildSymbolsSection,
   },
 ] as const;
 

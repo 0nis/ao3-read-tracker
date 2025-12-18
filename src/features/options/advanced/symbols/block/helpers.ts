@@ -16,31 +16,30 @@ export function getLabelFromType(type: keyof SymbolRecord): string {
   return "";
 }
 
-export function modifyNotification(
+export function setFeedback(
   type: "success" | "error",
   message: string,
-  notificationEl: HTMLElement
+  element: HTMLElement
 ) {
-  let counter = Number(notificationEl.dataset.count ?? 1);
+  let counter = Number(element.dataset.count ?? 1);
 
-  if (notificationEl.textContent?.startsWith(message)) counter++;
+  if (element.textContent?.startsWith(message)) counter++;
   else counter = 1;
 
-  notificationEl.dataset.count = String(counter);
+  element.dataset.count = String(counter);
 
-  notificationEl.classList.remove(`${getClass()}__block-notification--success`);
-  notificationEl.classList.remove(`${getClass()}__block-notification--error`);
+  element.classList.remove(`${getClass()}__block-feedback--success`);
+  element.classList.remove(`${getClass()}__block-feedback--error`);
 
   if (type === "success") {
-    notificationEl.classList.add(`${getClass()}__block-notification--success`);
+    element.classList.add(`${getClass()}__block-feedback--success`);
   } else if (type === "error") {
-    notificationEl.classList.add(`${getClass()}__block-notification--error`);
+    element.classList.add(`${getClass()}__block-feedback--error`);
   }
 
   // Timeout to make "polite" actually work for SR users
   setTimeout(() => {
-    notificationEl.textContent = message;
-    if (counter > 1)
-      notificationEl.appendChild(el("span", {}, [` (x${counter})`]));
+    element.textContent = message;
+    if (counter > 1) element.appendChild(el("span", {}, [` (x${counter})`]));
   }, 100);
 }

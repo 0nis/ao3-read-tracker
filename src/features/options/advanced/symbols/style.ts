@@ -82,18 +82,19 @@ export function getStyles(prefix: string): string {
       gap: .4em;
     }
 
-    .${prefix}__block-notification {
+    .${prefix}__block-feedback {
       flex: 1 1 auto;
       width: 0;
       margin: 0;
       font-size: 0.8em;
       font-style: italic;
+      padding-right: .5em;
     }
-    .${prefix}__block-notification--success {
-      color: green;
+    .${prefix}__block-feedback--success {
+      color: #009900;
     }
-    .${prefix}__block-notification--error {
-      color: red;
+    .${prefix}__block-feedback--error {
+      color: #900;
     }
 
     @media (max-width: 600px) {

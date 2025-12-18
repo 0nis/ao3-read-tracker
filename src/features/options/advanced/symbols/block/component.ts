@@ -1,8 +1,7 @@
-import { BlockField } from "./types";
+import { BlockContext, BlockField, State } from "./types";
 import { buildField, getFields } from "./fields";
 import { getSaveElement, onSave } from "./actions/save";
 import { getResetElement, onReset } from "./actions/reset";
-
 import { getClass } from "../section";
 
 import { el } from "../../../../../utils/ui/dom";
@@ -10,41 +9,39 @@ import { renderSymbolContent } from "../../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../../enums/symbols";
 import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
-export type State = {
-  file?: Blob;
-};
-
 export async function buildBlock(
   id: SymbolId,
   record: SymbolRecord,
   symbols: SymbolData
 ): Promise<HTMLElement> {
   const state: State = {};
+  const context: BlockContext = { id, record, state, symbols };
 
-  const header = el("header", {}, [
+  const headerEl = el("header", {}, [
     el("h4", { className: `${getClass()}__block-title` }, [
       ...(record.emoji ? [renderSymbolContent(record)] : []),
       el("span", {}, [record.label]),
     ]),
   ]);
 
-  const fields: BlockField[] = getFields(id, record, symbols, state);
+  context.feedbackEl = el("p", {
+    className: `${getClass()}__block-feedback`,
+    attrs: { "aria-live": "polite" },
+  });
+
+  const fields: BlockField[] = getFields(context);
+  context.fields = fields;
   const fieldsWrapper = el(
     "ul",
     { className: `${getClass()}__block-fields` },
     fields.map((field) => buildField(field))
   );
 
-  const notificationEl = el("p", {
-    className: `${getClass()}__block-notification`,
-    attrs: { "aria-live": "polite" },
-  });
-
-  const bottom = el("div", { className: `${getClass()}__block-bottom` }, [
-    notificationEl,
+  const bottomEl = el("div", { className: `${getClass()}__block-bottom` }, [
+    context.feedbackEl,
     el("ul", { className: `${getClass()}__block-actions` }, [
-      getResetElement(() => onReset({ id, fields, state, notificationEl })),
-      getSaveElement(() => onSave({ id, fields, state, notificationEl })),
+      getResetElement(() => onReset(context)),
+      getSaveElement(() => onSave(context)),
     ]),
   ]);
 
@@ -54,6 +51,6 @@ export async function buildBlock(
       id: `symbol-${id}`,
       className: `${getClass()}__block`,
     },
-    [header, fieldsWrapper, bottom]
+    [headerEl, fieldsWrapper, bottomEl]
   );
 }

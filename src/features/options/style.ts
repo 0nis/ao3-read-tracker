@@ -32,11 +32,15 @@ export function getStyles(prefix: string): string {
       opacity: 0.8;
       font-size: 0.95em;
     }
+
+    .${prefix}__section-description ul {
+      list-style: initial; 
+      margin: 0.5em 0 0.5em 1.5em;
+    }
       
     .${prefix}__section-description li {
       list-style: initial;
-      list-style-position: outside;
-      margin: .5em 0 0 1.1em;
+      margin: 0.25em 0;
     }
 
     .${prefix}__header {

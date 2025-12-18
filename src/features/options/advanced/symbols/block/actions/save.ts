@@ -1,14 +1,11 @@
-import { State } from "../component";
-import { BlockField } from "../types";
-import { modifyNotification } from "../helpers";
+import { BlockContext } from "../types";
+import { setFeedback } from "../helpers";
 import { getClass } from "../../section";
 
 import { StorageService } from "../../../../../../services/storage";
 import { el } from "../../../../../../utils/ui/dom";
 import { handleStorageWrite } from "../../../../../../utils/storage";
 import { getInputValue } from "../../../../../../utils/ui/forms";
-
-import { SymbolId } from "../../../../../../enums/symbols";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 import { SymbolRecord } from "../../../../../../types/symbols";
 
@@ -26,15 +23,10 @@ export async function onSave({
   id,
   fields,
   state,
-  notificationEl,
+  feedbackEl,
   successMsg,
-}: {
-  id: SymbolId;
-  fields: BlockField[];
-  state: State;
-  notificationEl?: HTMLElement;
-  successMsg?: string;
-}) {
+}: BlockContext & { successMsg?: string }) {
+  if (!fields) return;
   const data: Partial<SymbolRecord> = { id };
   fields.forEach((field) => {
     data[field.type] = getInputValue(field.element);
@@ -46,12 +38,10 @@ export async function onSave({
       successMsg: successMsg || "Changes saved successfully",
       errorMsg: "Failed to save changes",
       onSuccess(message) {
-        if (notificationEl)
-          modifyNotification("success", message, notificationEl);
+        if (feedbackEl) setFeedback("success", message, feedbackEl);
       },
       onError(message) {
-        if (notificationEl)
-          modifyNotification("error", message, notificationEl);
+        if (feedbackEl) setFeedback("error", message, feedbackEl);
       },
     }
   );

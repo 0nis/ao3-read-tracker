@@ -9,10 +9,10 @@ import { el, injectStyles } from "../../../../utils/ui/dom";
 import { SymbolId } from "../../../../enums/symbols";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { extractImageTypeNames, formatBytes } from "../../../../utils/file";
-import { IMAGE_PIXEL_HEIGHT, MAX_GIF_SIZE } from "../../../../constants/global";
+import { MAX_GIF_SIZE } from "../../../../constants/global";
 
 export const ACCEPTED_IMAGE_TYPES =
-  "image/png,image/jpeg,image/webp,image/svg+xml,image/gif,image/x-icon,image/vnd.microsoft.icon,image/cur";
+  "image/png,image/jpeg,image/webp,image/svg+xml,image/gif,image/x-icon,image/vnd.microsoft.icon";
 
 export const getClass = () => `${CLASS_PREFIX}__symbol-section`;
 
@@ -24,7 +24,7 @@ export async function buildSymbolsSection(): Promise<HTMLElement> {
 
   const section = createSectionWrapper({
     id: SectionId.SYMBOLS,
-    title: "Symbol Modification",
+    title: "Modify Extension Symbols",
     // prettier-ignore
     description: `
       This section allows you to modify the icons or emojis used for symbols throughout the extension.<br> 
