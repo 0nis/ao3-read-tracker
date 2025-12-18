@@ -61,6 +61,7 @@ export function getStyles(prefix: string): string {
       display: flex;
       flex-direction: row;
       gap: 0.5em;
+      align-items: center;
     }
 
     .${prefix}__block__field-input--upload button {

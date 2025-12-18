@@ -1,6 +1,7 @@
 import { el } from "./dom";
 import { symbolsCache } from "../../services/cache";
 import { SymbolId } from "../../enums/symbols";
+import { CLASS_PREFIX } from "../../constants/classes";
 import { SymbolRecord } from "../../types/symbols";
 
 /** Gets a symbol element (image or text) by its ID. */
@@ -28,22 +29,24 @@ export function renderSymbolContent(
   symbol: SymbolRecord,
   suffix?: string
 ): HTMLElement {
+  const children: HTMLElement[] = [];
+
   if (symbol.imgBlob) {
-    const img = el("img", {
-      src: URL.createObjectURL(symbol.imgBlob),
-      alt: symbol.label,
-      attrs: { "aria-hidden": "true", role: "img" },
-    });
-    if (suffix)
-      return el("span", { attrs: { "aria-hidden": "true", role: "img" } }, [
-        img,
-        el("span", { textContent: suffix }),
-      ]);
-    return img;
+    const url = URL.createObjectURL(symbol.imgBlob);
+    children.push(
+      el("img", {
+        src: url,
+        alt: symbol.label,
+        className: `${CLASS_PREFIX}__inline-image`,
+        onload: () => URL.revokeObjectURL(url), // Cleanup
+        onerror: () => URL.revokeObjectURL(url), // Cleanup
+      })
+    );
+  } else {
+    children.push(el("span", { textContent: symbol.emoji || symbol.label }));
   }
 
-  return el("span", {
-    textContent: (symbol.emoji || symbol.label) + (suffix ?? ""),
-    attrs: { "aria-hidden": "true", role: "img" },
-  });
+  if (suffix) children.push(el("span", { textContent: suffix }));
+
+  return el("div", { attrs: { role: "presentation" } }, children);
 }

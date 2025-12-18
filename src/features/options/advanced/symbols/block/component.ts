@@ -10,9 +10,6 @@ import { renderSymbolContent } from "../../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../../enums/symbols";
 import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
-// TODO: Ensure all symbols (the images) use the inline-image class
-// TODO: Make sure SVG display works
-
 export type State = {
   file?: Blob;
 };

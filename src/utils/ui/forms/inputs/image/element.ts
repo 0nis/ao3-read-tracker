@@ -21,14 +21,16 @@ export type ImageOptions = {
     onClick?: () => void;
   };
   defaultImg?: Blob;
+  accept?: string;
   onChange?: (value: Blob | null) => void;
 };
 
 export function getImageSelectorElements({
   upload,
-  onChange,
-  defaultImg,
   clear,
+  defaultImg,
+  onChange,
+  accept = "image/png,image/jpeg,image/webp,image/svg+xml",
 }: ImageOptions): {
   uploadBtn: HTMLButtonElement;
   clearBtn: HTMLButtonElement;
@@ -52,7 +54,7 @@ export function getImageSelectorElements({
 
   const preview = buildPreviewElement(defaultImg, state);
 
-  const input = buildInputElement(async (file) => {
+  const input = buildInputElement(accept, async (file) => {
     if (!file || !file.type.startsWith("image/")) return;
     const processed = await resizeImage(file, 128);
     if (onChange) onChange(processed);

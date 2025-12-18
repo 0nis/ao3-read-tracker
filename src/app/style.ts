@@ -34,7 +34,7 @@ export function getGlobalStyles(prefix: string): string {
 
     .${prefix}__inline-image {
       display: inline-block;
-      height: 1.15em;
+      height: 1.2em;
       vertical-align: -0.25em;
       object-fit: contain;
     }

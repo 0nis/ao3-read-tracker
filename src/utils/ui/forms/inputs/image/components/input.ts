@@ -3,11 +3,12 @@ import { el } from "../../../../dom";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 
 export function buildInputElement(
+  accept: string,
   onChange: (value: File) => void
 ): HTMLInputElement {
   const input = el("input", {
     type: "file",
-    accept: "image/png,image/jpeg,image/webp,image/svg+xml",
+    accept,
     multiple: false,
     className: `${CLASS_PREFIX}__hidden ${getClass()}-input`,
     tabIndex: -1,

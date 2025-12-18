@@ -8,7 +8,7 @@ export function buildPreviewElement(
 ): HTMLImageElement {
   const preview = el("img", {
     className: `${getClass()}-preview ${CLASS_PREFIX}__inline-image`,
-    attrs: { role: "img", "aria-label": "Symbol image preview" },
+    alt: "Symbol preview",
   });
 
   if (defaultImg) {
