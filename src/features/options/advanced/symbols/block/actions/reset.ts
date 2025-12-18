@@ -22,11 +22,17 @@ export function getResetElement(onReset: () => void) {
   return resetEl;
 }
 
-export async function onReset(
-  id: SymbolId,
-  fields: BlockField[],
-  state: State
-) {
+export async function onReset({
+  id,
+  fields,
+  state,
+  notificationEl,
+}: {
+  id: SymbolId;
+  fields: BlockField[];
+  state: State;
+  notificationEl?: HTMLElement;
+}) {
   const confirmed = confirm(
     "Are you sure you want to reset this symbol to its default values?"
   );
@@ -36,7 +42,13 @@ export async function onReset(
       setInputValue(field.element, defaultValue[field.type]);
     });
     state.file = defaultValue.imgBlob;
-    await onSave(id, fields, state);
+    await onSave({
+      id,
+      fields,
+      state,
+      notificationEl,
+      successMsg: "Successfully reset to default values.",
+    });
     document.dispatchEvent(
       new CustomEvent(`${ABBREVIATION}:symbol-record-updated`, {
         detail: {

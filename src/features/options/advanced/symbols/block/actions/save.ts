@@ -1,5 +1,6 @@
-import { BlockField } from "../types";
 import { State } from "../component";
+import { BlockField } from "../types";
+import { modifyNotification } from "../helpers";
 import { getClass } from "../../section";
 
 import { StorageService } from "../../../../../../services/storage";
@@ -21,7 +22,19 @@ export function getSaveElement(onSave: () => void) {
   return saveEl;
 }
 
-export async function onSave(id: SymbolId, fields: BlockField[], state: State) {
+export async function onSave({
+  id,
+  fields,
+  state,
+  notificationEl,
+  successMsg,
+}: {
+  id: SymbolId;
+  fields: BlockField[];
+  state: State;
+  notificationEl?: HTMLElement;
+  successMsg?: string;
+}) {
   const data: Partial<SymbolRecord> = { id };
   fields.forEach((field) => {
     data[field.type] = getInputValue(field.element);
@@ -30,8 +43,16 @@ export async function onSave(id: SymbolId, fields: BlockField[], state: State) {
   await handleStorageWrite(
     StorageService.symbolRecords.put(data as SymbolRecord),
     {
-      successMsg: "Changes saved successfully.",
+      successMsg: successMsg || "Changes saved successfully.",
       errorMsg: "Failed to save changes.",
+      onSuccess(message) {
+        if (notificationEl)
+          modifyNotification("success", message, notificationEl);
+      },
+      onError(message) {
+        if (notificationEl)
+          modifyNotification("error", message, notificationEl);
+      },
     }
   );
 }

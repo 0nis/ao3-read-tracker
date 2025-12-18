@@ -39,14 +39,18 @@ export async function buildBlock(
     fields.map((field) => buildField(field))
   );
 
-  const actionsWrapper = el(
-    "ul",
-    { className: `${getClass()}__block-actions` },
-    [
-      getResetElement(() => onReset(id, fields, state)),
-      getSaveElement(() => onSave(id, fields, state)),
-    ]
-  );
+  const notificationEl = el("p", {
+    className: `${getClass()}__block-notification`,
+    attrs: { "aria-live": "polite" },
+  });
+
+  const bottom = el("div", { className: `${getClass()}__block-bottom` }, [
+    notificationEl,
+    el("ul", { className: `${getClass()}__block-actions` }, [
+      getResetElement(() => onReset({ id, fields, state, notificationEl })),
+      getSaveElement(() => onSave({ id, fields, state, notificationEl })),
+    ]),
+  ]);
 
   return el(
     "li",
@@ -54,6 +58,6 @@ export async function buildBlock(
       id: `symbol-${id}`,
       className: `${getClass()}__block`,
     },
-    [header, fieldsWrapper, actionsWrapper]
+    [header, fieldsWrapper, bottom]
   );
 }

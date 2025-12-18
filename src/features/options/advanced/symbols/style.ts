@@ -67,11 +67,32 @@ export function getStyles(prefix: string): string {
       background: transparent;
     }
 
+    .${prefix}__block-bottom {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .${prefix}__block-actions {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
       gap: .4em;
+    }
+
+    .${prefix}__block-notification {
+      flex: 1 1 auto;
+      width: 0;
+      margin: 0;
+      font-size: 0.8em;
+      font-style: italic;
+    }
+    .${prefix}__block-notification--success {
+      color: green;
+    }
+    .${prefix}__block-notification--error {
+      color: red;
     }
 
     @media (max-width: 600px) {

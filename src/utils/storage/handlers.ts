@@ -62,6 +62,7 @@ export interface StorageWriteOptions {
   enforceMinDelay?: boolean;
   minDelayMs?: number;
   onSuccess?: (message: string) => void;
+  onError?: (message: string) => void;
 }
 
 /**
@@ -85,6 +86,7 @@ export async function handleStorageWrite<T>(
     enforceMinDelay = false,
     minDelayMs = 300,
     onSuccess = createFlashNotice,
+    onError = createFlashNotice,
   } = options;
 
   let result: StorageResult<T>;
@@ -106,6 +108,7 @@ export async function handleStorageWrite<T>(
     onSuccess(successMsg);
     return Promise.resolve();
   } else {
+    onError(errorMsg);
     reportExtensionFailure(errorMsg);
     return;
   }
