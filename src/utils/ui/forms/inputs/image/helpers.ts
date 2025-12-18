@@ -1,5 +1,7 @@
+import { isResizableWithCanvas } from "../../../../file";
+
 export async function resizeImage(file: File, maxSize = 128): Promise<Blob> {
-  if (file.type === "image/svg+xml") return file;
+  if (!isResizableWithCanvas(file)) return file;
 
   const img = new Image();
   const url = URL.createObjectURL(file);

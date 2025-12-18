@@ -8,12 +8,14 @@ export function buildPreviewElement(
 ): HTMLImageElement {
   const preview = el("img", {
     className: `${getClass()}-preview ${CLASS_PREFIX}__inline-image`,
-    alt: "Symbol preview",
+    alt: "preview",
   });
 
   if (defaultImg) {
     state.currentUrl = URL.createObjectURL(defaultImg);
     preview.src = state.currentUrl;
+  } else {
+    preview.classList.add(`${CLASS_PREFIX}__hidden`);
   }
 
   return preview;

@@ -1,7 +1,7 @@
 import { State } from "./component";
 import { getLabelFromType } from "./helpers";
 import { BlockField } from "./types";
-import { getClass } from "../section";
+import { getClass, ACCEPTED_IMAGE_TYPES } from "../section";
 
 import { el } from "../../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../../utils/ui/symbols";
@@ -12,8 +12,8 @@ import {
   text,
 } from "../../../../../utils/ui/forms";
 import { SymbolId } from "../../../../../enums/symbols";
-import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 import { ABBREVIATION } from "../../../../../constants/global";
+import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
 export function getFields(
   id: SymbolId,
@@ -30,6 +30,7 @@ export function getFields(
       label: renderSymbolContent(symbols[SymbolId.CLEAR]),
     },
     onChange: (blob) => (state.file = blob ?? undefined),
+    accept: ACCEPTED_IMAGE_TYPES,
   });
 
   state.file = record.imgBlob;
@@ -37,7 +38,7 @@ export function getFields(
     const details = (e as CustomEvent).detail;
     if (details.id !== id) return;
     state.file = details.imgBlob;
-    imgSelectorEls.updateCurrentUrl(details.imgBlob);
+    imgSelectorEls.update(details.imgBlob);
   });
 
   return [

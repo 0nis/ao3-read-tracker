@@ -48,5 +48,5 @@ export function renderSymbolContent(
 
   if (suffix) children.push(el("span", { textContent: suffix }));
 
-  return el("div", { attrs: { role: "presentation" } }, children);
+  return el("span", { attrs: { role: "presentation" } }, children);
 }

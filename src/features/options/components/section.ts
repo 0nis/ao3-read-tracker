@@ -57,14 +57,11 @@ function createSectionDescriptionEl(
 } {
   const descId = `section-${id}-description`;
   return {
-    el: el(
-      "p",
-      {
-        id: descId,
-        className: `${CLASS_PREFIX}__section-description`,
-      },
-      [description]
-    ),
+    el: el("p", {
+      id: descId,
+      className: `${CLASS_PREFIX}__section-description`,
+      innerHTML: description,
+    }),
     id: descId,
   };
 }

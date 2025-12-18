@@ -43,8 +43,8 @@ export async function onSave({
   await handleStorageWrite(
     StorageService.symbolRecords.put(data as SymbolRecord),
     {
-      successMsg: successMsg || "Changes saved successfully.",
-      errorMsg: "Failed to save changes.",
+      successMsg: successMsg || "Changes saved successfully",
+      errorMsg: "Failed to save changes",
       onSuccess(message) {
         if (notificationEl)
           modifyNotification("success", message, notificationEl);
