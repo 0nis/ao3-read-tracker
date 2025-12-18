@@ -32,6 +32,8 @@ export async function onSave({
   fields.forEach((field) => {
     data[field.type] = getInputValue(field.element);
   });
+  if (!data.priority) data.priority = 0; // Otherwise it'll disappear from the UI lol
+
   data["imgBlob"] = state.file ?? undefined;
   await handleStorageWrite(
     StorageService.symbolRecords.put(data as SymbolRecord),

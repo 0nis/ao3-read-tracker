@@ -19,23 +19,17 @@ export async function buildBlock(
   const context: BlockContext = { id, record, state, symbols };
 
   const headerEl = el("header", {}, [
-    el("h4", { className: `${getClass()}__block-title` }, [
-      ...(record.emoji || record.imgBlob ? [renderSymbolContent(record)] : []),
-      el("span", {}, [record.label]),
-    ]),
+    el(
+      "h4",
+      { className: `${getClass()}__block-title` },
+      getTitleChildren(record)
+    ),
   ]);
 
   document.addEventListener(`${ABBREVIATION}:symbol-updated`, (e) => {
     const record = (e as CustomEvent).detail.record;
     if (record.id !== id) return;
-    headerEl
-      .querySelector("h4")
-      ?.replaceChildren(
-        ...(record.emoji || record.imgBlob
-          ? [renderSymbolContent(record)]
-          : []),
-        el("span", {}, [record.label])
-      );
+    headerEl.querySelector("h4")?.replaceChildren(...getTitleChildren(record));
   });
 
   context.feedbackEl = el("p", {
@@ -67,4 +61,18 @@ export async function buildBlock(
     },
     [headerEl, fieldsWrapper, bottomEl]
   );
+}
+
+function getTitleChildren(record: SymbolRecord) {
+  const children: HTMLElement[] = [];
+
+  if (record.emoji || record.imgBlob)
+    children.push(renderSymbolContent(record));
+  if (record.label) children.push(el("span", {}, [record.label]));
+
+  // In case someone just deletes everything from the record
+  if (!record.emoji && !record.imgBlob && !record.label)
+    children.push(el("span", {}, [`ID: ${record.id}`]));
+
+  return children;
 }
