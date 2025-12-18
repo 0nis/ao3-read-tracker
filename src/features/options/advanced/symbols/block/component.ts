@@ -12,7 +12,6 @@ import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
 // TODO: Ensure all symbols (the images) use the inline-image class
 // TODO: Make sure SVG display works
-// TODO: Ensure success messages are displayed within the block itself, not outside, for user friendliness
 
 export type State = {
   file?: Blob;
