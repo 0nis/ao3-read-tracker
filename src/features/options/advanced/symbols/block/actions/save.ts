@@ -7,6 +7,7 @@ import { el } from "../../../../../../utils/ui/dom";
 import { handleStorageWrite } from "../../../../../../utils/storage";
 import { getInputValue } from "../../../../../../utils/ui/forms";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
+import { ABBREVIATION } from "../../../../../../constants/global";
 import { SymbolRecord } from "../../../../../../types/symbols";
 
 export function getSaveElement(onSave: () => void) {
@@ -44,5 +45,12 @@ export async function onSave({
         if (feedbackEl) setFeedback("error", message, feedbackEl);
       },
     }
+  );
+  document.dispatchEvent(
+    new CustomEvent(`${ABBREVIATION}:symbol-updated`, {
+      detail: {
+        record: data as SymbolRecord,
+      },
+    })
   );
 }

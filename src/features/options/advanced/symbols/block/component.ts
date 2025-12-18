@@ -7,6 +7,7 @@ import { getClass } from "../section";
 import { el } from "../../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../../enums/symbols";
+import { ABBREVIATION } from "../../../../../constants/global";
 import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
 
 export async function buildBlock(
@@ -19,10 +20,23 @@ export async function buildBlock(
 
   const headerEl = el("header", {}, [
     el("h4", { className: `${getClass()}__block-title` }, [
-      ...(record.emoji ? [renderSymbolContent(record)] : []),
+      ...(record.emoji || record.imgBlob ? [renderSymbolContent(record)] : []),
       el("span", {}, [record.label]),
     ]),
   ]);
+
+  document.addEventListener(`${ABBREVIATION}:symbol-updated`, (e) => {
+    const record = (e as CustomEvent).detail.record;
+    if (record.id !== id) return;
+    headerEl
+      .querySelector("h4")
+      ?.replaceChildren(
+        ...(record.emoji || record.imgBlob
+          ? [renderSymbolContent(record)]
+          : []),
+        el("span", {}, [record.label])
+      );
+  });
 
   context.feedbackEl = el("p", {
     className: `${getClass()}__block-feedback`,

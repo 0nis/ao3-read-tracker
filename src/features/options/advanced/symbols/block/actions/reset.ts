@@ -37,13 +37,5 @@ export async function onReset(context: BlockContext) {
       ...context,
       successMsg: "Successfully reset to default values.",
     });
-    document.dispatchEvent(
-      new CustomEvent(`${ABBREVIATION}:symbol-record-updated`, {
-        detail: {
-          id: context.id,
-          imgBlob: defaultValue.imgBlob,
-        },
-      })
-    );
   }
 }

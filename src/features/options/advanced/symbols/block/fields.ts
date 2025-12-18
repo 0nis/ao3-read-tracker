@@ -36,11 +36,10 @@ export function getFields({
   });
 
   state.file = record.imgBlob;
-  document.addEventListener(`${ABBREVIATION}:symbol-record-updated`, (e) => {
-    const details = (e as CustomEvent).detail;
-    if (details.id !== id) return;
-    state.file = details.imgBlob;
-    imgSelectorEls.update(details.imgBlob);
+  document.addEventListener(`${ABBREVIATION}:symbol-updated`, (e) => {
+    const record = (e as CustomEvent).detail.record;
+    if (record.id !== id) return;
+    imgSelectorEls.update(record.imgBlob);
   });
 
   return [
