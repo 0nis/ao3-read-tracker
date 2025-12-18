@@ -17,11 +17,9 @@ import { SettingsData } from "../../../types/settings";
 export async function setupButtons() {
   const settings = await settingsCache.get();
 
-  if (settings.generalSettings?.replaceMarkForLaterLabel) {
-    modifyMarkForLaterButton(
-      settings.generalSettings?.markForLaterReplacementLabel
-    );
-  }
+  modifyMarkForLaterButton(
+    settings.generalSettings?.nativeMarkAsReadReplacementLabel
+  );
 
   const workId = getIdFromUrl();
   const navs = getWorkNavBars();
@@ -73,6 +71,7 @@ async function setupUpdateReadProgressButton(
 }
 
 function modifyMarkForLaterButton(label: string) {
+  if (!label) return;
   const nav = document.querySelector("ul.work.navigation.actions");
   if (!nav) return;
   const button = nav.querySelector<HTMLButtonElement>("li.mark button");

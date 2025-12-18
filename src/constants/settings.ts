@@ -40,6 +40,5 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   hideSymbols: false,
   buttonPlacement: VerticalPlacement.TOP,
-  replaceMarkForLaterLabel: true,
-  markForLaterReplacementLabel: "Finished",
+  nativeMarkAsReadReplacementLabel: "",
 };

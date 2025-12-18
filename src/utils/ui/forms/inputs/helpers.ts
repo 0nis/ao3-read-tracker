@@ -3,11 +3,13 @@ import { getLocalDateTimeString } from "../../../date";
 
 export const text = (
   defaultValue?: string,
+  placeholder?: string,
   disabled: boolean = false
 ): HTMLInputElement => {
   return el("input", {
     type: "text",
     defaultValue,
+    placeholder,
     disabled,
   }) as HTMLInputElement;
 };

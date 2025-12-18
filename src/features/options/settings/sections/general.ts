@@ -30,20 +30,11 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
   {
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
-    label: "Replace 'Mark as Read' Button Label?",
-    input: toggleSwitch(),
-    dataField: "replaceMarkForLaterLabel",
+    label: "AO3 'Mark as Read' Button Text",
+    input: text("", "e.g., Finished"),
+    dataField: "nativeMarkAsReadReplacementLabel",
     description:
-      "Whether to replace the text within AO3's default 'Mark as Read' button (the one that appears when you mark a work for later, not the one the extension adds) with custom text.",
-  },
-  {
-    type: FormItemType.FIELD,
-    sectionId: SectionId.GENERAL_SETTINGS,
-    label: "'Mark as Read' Custom Label",
-    input: text("e.g., Finished"),
-    dataField: "markForLaterReplacementLabel",
-    description:
-      "The custom label to use for AO3's default 'Mark as Read' button, if you have chosen to replace it above.",
+      "Changes the text shown on AO3's built-in 'Mark as Read' button on the work page. This affects AO3's own button - the one that appears after marking the work for later. Leave blank to use AO3's default text.",
   },
 ];
 
