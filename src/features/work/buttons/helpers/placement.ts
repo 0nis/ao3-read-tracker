@@ -1,6 +1,6 @@
-import { VerticalPlacement } from "../../../../enums/settings";
 import { warn } from "../../../../utils/extension";
-import { el } from "../../../../utils/ui/dom";
+import { el, setButtonOrigin } from "../../../../utils/ui/dom";
+import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function placeButtons(
   placement: VerticalPlacement,
@@ -67,12 +67,12 @@ function getButtonParents(
 
 function insertButtonIntoParent(parent: Parent, button: HTMLElement) {
   if (parent.placement === VerticalPlacement.TOP) {
-    button.setAttribute("data-origin", VerticalPlacement.TOP);
+    setButtonOrigin(button, VerticalPlacement.TOP);
     const li = el("li", {}, button);
     parent.el.appendChild(li);
   }
   if (parent.placement === VerticalPlacement.BOTTOM) {
-    button.setAttribute("data-origin", VerticalPlacement.BOTTOM);
+    setButtonOrigin(button, VerticalPlacement.BOTTOM);
     const li = el("li", {}, button);
     const beforeEl = parent.el.querySelector("li#show_comments_link");
     if (beforeEl) parent.el.insertBefore(li, beforeEl);

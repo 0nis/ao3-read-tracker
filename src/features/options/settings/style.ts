@@ -75,7 +75,7 @@ export function getStyles(prefix: string): string {
       flex-wrap: nowrap;
     }
 
-    .${prefix}__actions {
+    .${prefix}__actions-bottom {
       display: flex;
       justify-content: flex-end;
       align-items: center;

@@ -1,15 +1,16 @@
 import { getStyles } from "./style";
 import { SettingsSectionConfig } from "./types";
 import { SettingsSectionTypeMap } from "./config";
-import { saveSettingsData } from "./helpers/save";
+import { saveSettingsData } from "./handlers/save";
 import { createSettingsSectionContent } from "./components/items";
 import { createSettingsSectionSaveButton } from "./components/submit";
 import { createSectionWrapper } from "../components/section/component";
 
-import { CLASS_PREFIX } from "../../../constants/classes";
 import { settingsCache } from "../../../services/cache";
-import { el, injectStyles } from "../../../utils/ui/dom";
+import { el, injectStyles, setButtonOrigin } from "../../../utils/ui/dom";
 import { populateFormValues } from "../../../utils/ui/forms";
+import { VerticalPlacement } from "../../../enums/settings";
+import { CLASS_PREFIX } from "../../../constants/classes";
 
 export const SETTINGS_CLASS = `${CLASS_PREFIX}__settings`;
 
@@ -21,25 +22,57 @@ export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
     getStyles(SETTINGS_CLASS)
   );
 
-  const section = createSectionWrapper(cfg);
-  section.appendChild(createSettingsSectionContent(cfg.items));
+  const section = createSectionWrapper({
+    ...cfg,
+    headerChildren: [
+      createActionsElement({
+        cfg,
+        pos: VerticalPlacement.TOP,
+        className: "actions-top",
+      }),
+    ],
+  });
 
+  section.appendChild(createSettingsSectionContent(cfg.items));
+  section.appendChild(
+    createActionsElement({
+      cfg,
+      pos: VerticalPlacement.BOTTOM,
+      className: "actions-bottom",
+    })
+  );
+
+  populateFormValues(cfg.items, cfg.data);
+
+  return section;
+}
+
+function createActionsElement<K extends keyof SettingsSectionTypeMap>({
+  cfg,
+  pos,
+  className,
+}: {
+  cfg: SettingsSectionConfig<SettingsSectionTypeMap[K]> & { id: K };
+  pos: VerticalPlacement;
+  className: string;
+}): HTMLElement {
   const saveEl = createSettingsSectionSaveButton(cfg.title);
+  setButtonOrigin(saveEl, pos);
   saveEl.addEventListener("click", async (e) => {
     e.preventDefault();
-    // TODO: Either show the notification below the save button or scroll to the top to show it
-    await saveSettingsData(cfg, saveEl);
+    await saveSettingsData({
+      cfg,
+      btn: saveEl,
+    });
+    window.scrollTo(0, 0);
     settingsCache.clear();
   });
 
   const actions = el(
     "div",
-    { className: `actions ${SETTINGS_CLASS}__actions` },
+    { className: `actions ${SETTINGS_CLASS}__${className}` },
     [saveEl]
   );
-  section.appendChild(actions);
 
-  populateFormValues(cfg.items, cfg.data);
-
-  return section;
+  return actions;
 }

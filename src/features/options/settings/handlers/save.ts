@@ -2,12 +2,20 @@ import { SETTINGS_SAVE_MAP, SettingsSectionTypeMap } from "../config";
 import { SettingsSectionConfig } from "../types";
 
 import { handleStorageWrite } from "../../../../utils/storage";
-import { extractFormValues } from "../../../../utils/ui/forms";
+import {
+  createFlashNotice,
+  extractFormValues,
+} from "../../../../utils/ui/forms";
+import { getButtonOrigin } from "../../../../utils/ui/dom";
+import { VerticalPlacement } from "../../../../enums/settings";
 
-export async function saveSettingsData<K extends keyof SettingsSectionTypeMap>(
-  cfg: SettingsSectionConfig<SettingsSectionTypeMap[K]> & { id: K },
-  saveBtn: HTMLButtonElement
-): Promise<void> {
+export async function saveSettingsData<K extends keyof SettingsSectionTypeMap>({
+  cfg,
+  btn,
+}: {
+  cfg: SettingsSectionConfig<SettingsSectionTypeMap[K]> & { id: K };
+  btn: HTMLButtonElement;
+}): Promise<void> {
   try {
     const saveInfo = SETTINGS_SAVE_MAP[cfg.id];
     if (!saveInfo)
@@ -26,7 +34,7 @@ export async function saveSettingsData<K extends keyof SettingsSectionTypeMap>(
         saveInfo.label.charAt(0).toUpperCase() + saveInfo.label.slice(1)
       } updated successfully.`,
       errorMsg: `Failed to update ${saveInfo.label} settings.`,
-      loadingEl: saveBtn || undefined,
+      loadingEl: btn || undefined,
       enforceMinDelay: false,
     });
   } catch (err) {

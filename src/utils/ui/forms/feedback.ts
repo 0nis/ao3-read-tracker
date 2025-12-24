@@ -31,13 +31,23 @@ export function showFormMessage(
   container.appendChild(msg);
 }
 
-/** Adds an AO3-style flash notice to the top of the main content area */
+/**
+ * Creates an AO3-style flash notice and either prepends it to #main or uses custom append logic
+ *
+ * @param msg The message to display
+ * @param appendNotice Optional append logic to run instead of prepending to #main
+ */
 export function createFlashNotice(
   msg: string,
-  position: VerticalPlacement = VerticalPlacement.TOP
+  options?: {
+    appendNotice?: (notice: HTMLElement, main: HTMLElement) => void;
+    positionId: string;
+  }
 ): void {
   const main = document.getElementById("main");
   if (!main) return;
+
+  const posId = options?.positionId || "top";
 
   const existing = main.querySelector(
     `#${CLASS_PREFIX}__flash-notice`
@@ -48,7 +58,7 @@ export function createFlashNotice(
   if (
     existing &&
     existing.childNodes[0]?.textContent?.trim() === msg &&
-    existing.getAttribute("position") === position
+    existing.getAttribute("position") === posId
   ) {
     existing.dataset.count = String(++counter);
     const count = ensureChild({
@@ -72,7 +82,7 @@ export function createFlashNotice(
       className: "flash notice",
       attrs: {
         role: "status",
-        position: position,
+        position: posId,
       },
     },
     msg
@@ -80,16 +90,6 @@ export function createFlashNotice(
 
   reportSrLive(msg);
 
-  if (position === VerticalPlacement.BOTTOM) {
-    const el = main.querySelector("#feedback")?.querySelector("ul.actions");
-    if (el) el.after(notice);
-    else {
-      warn(
-        "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead."
-      );
-      main.prepend(notice);
-    }
-    return;
-  }
+  if (options?.appendNotice) return options?.appendNotice(main, notice);
   main.prepend(notice);
 }

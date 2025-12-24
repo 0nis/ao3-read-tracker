@@ -1,7 +1,7 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
-import { getWorkTitleForNotifications } from "../../helpers";
+import { getWorkTitleForNotifications, placeNotice } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../utils/storage";
 import { VerticalPlacement } from "../../../../enums/settings";
@@ -29,7 +29,12 @@ export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
     errorMsg: msgMap.error.delete.replace("%title%", title),
     loadingEl: deleteBtn,
     onSuccess(message) {
-      createFlashNotice(message, origin);
+      createFlashNotice(message, {
+        appendNotice: (main: HTMLElement, notice: HTMLElement) => {
+          placeNotice(main, notice, origin || VerticalPlacement.TOP);
+        },
+        positionId: origin || VerticalPlacement.TOP,
+      });
     },
   });
 }

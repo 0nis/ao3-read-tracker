@@ -5,7 +5,11 @@ import {
   WorkActionState,
   WorkActionTypeMap,
 } from "../config";
-import { getDefaultPayload, getWorkTitleForNotifications } from "../helpers";
+import {
+  getDefaultPayload,
+  getWorkTitleForNotifications,
+  placeNotice,
+} from "../helpers";
 import { FormRegistry } from "../forms/registry";
 
 import {
@@ -62,7 +66,12 @@ export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
     successMsg: msgs.success.save.replace("%title%", title),
     errorMsg: msgs.error.save.replace("%title%", title),
     onSuccess(message) {
-      createFlashNotice(message, getBtnOrigin(btn));
+      createFlashNotice(message, {
+        appendNotice: (main: HTMLElement, notice: HTMLElement) => {
+          placeNotice(main, notice, getBtnOrigin(btn));
+        },
+        positionId: getBtnOrigin(btn),
+      });
     },
   });
 
@@ -92,7 +101,12 @@ export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
     successMsg: msgs.success.delete.replace("%title%", title),
     errorMsg: msgs.error.delete.replace("%title%", title),
     onSuccess(message) {
-      createFlashNotice(message, getBtnOrigin(btn));
+      createFlashNotice(message, {
+        appendNotice: (main: HTMLElement, notice: HTMLElement) => {
+          placeNotice(main, notice, getBtnOrigin(btn));
+        },
+        positionId: getBtnOrigin(btn),
+      });
     },
   });
 
@@ -146,7 +160,12 @@ export async function handleUpdateInProgressInfo(
       errorMsg: "Failed to update read progress.",
       loadingEl: btn,
       onSuccess(message) {
-        createFlashNotice(message, getBtnOrigin(btn));
+        createFlashNotice(message, {
+          appendNotice: (main: HTMLElement, notice: HTMLElement) => {
+            placeNotice(main, notice, getBtnOrigin(btn));
+          },
+          positionId: getBtnOrigin(btn),
+        });
       },
     }
   );

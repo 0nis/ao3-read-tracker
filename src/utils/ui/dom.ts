@@ -112,3 +112,7 @@ export function getButtonOrigin(btn: HTMLElement | null): VerticalPlacement {
     ? VerticalPlacement.BOTTOM
     : VerticalPlacement.TOP;
 }
+
+export function setButtonOrigin(btn: HTMLElement, origin: VerticalPlacement) {
+  btn.setAttribute("data-origin", origin);
+}

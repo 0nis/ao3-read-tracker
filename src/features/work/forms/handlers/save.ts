@@ -1,7 +1,11 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
-import { getDefaultPayload, getWorkTitleForNotifications } from "../../helpers";
+import {
+  getDefaultPayload,
+  getWorkTitleForNotifications,
+  placeNotice,
+} from "../../helpers";
 
 import {
   createFlashNotice,
@@ -40,7 +44,12 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
       errorMsg: error.replace("%title%", title),
       loadingEl: saveBtn,
       onSuccess(message) {
-        createFlashNotice(message, origin);
+        createFlashNotice(message, {
+          appendNotice: (main: HTMLElement, notice: HTMLElement) => {
+            placeNotice(main, notice, origin || VerticalPlacement.TOP);
+          },
+          positionId: origin || VerticalPlacement.TOP,
+        });
       },
       enforceMinDelay: true,
     });
