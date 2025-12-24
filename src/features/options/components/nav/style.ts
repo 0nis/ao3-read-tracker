@@ -6,10 +6,17 @@ export function getStyles(prefix: string): string {
       padding-right: 3em;
     }
 
+    .${prefix}__header {
+      display: none;
+      font-size: 1.6em;
+      margin: .8em 0;
+    }
+
     .${prefix}__groups {
       display: flex;
       flex-direction: column;
       gap: 1.5em;
+      padding: .5em 0;
     }
 
     .${prefix}__group-label {
@@ -55,6 +62,8 @@ export function getStyles(prefix: string): string {
       font-size: 1.6em;
       cursor: pointer;
       padding: 0.25em 0.5em;
+      margin-top: 0.429em;
+      align-self: start;
     }
 
     @media (max-width: 600px) {
@@ -73,9 +82,13 @@ export function getStyles(prefix: string): string {
         box-shadow: 2px 0 8px rgba(0,0,0,0.15);
 
         border: none;
-        padding: 1.5em;
+        padding: 0 1.5em 1.5em 1.5em;
 
         z-index: 1000;
+      }
+
+      .${prefix}__header {
+        display: block;
       }
 
       .${prefix}-toggle {

@@ -15,17 +15,24 @@ export async function buildNav(groups: NavGroup[]): Promise<{
 }> {
   injectStyles(`${CLASS_PREFIX}__styles--options-nav`, getStyles(getClass()));
 
-  const nav = el("aside", {
-    className: `${getClass()}`,
-    attrs: { role: "navigation", "aria-label": "Settings navigation" },
-  });
+  const nav = el(
+    "aside",
+    {
+      className: `${getClass()}`,
+      attrs: { role: "navigation", "aria-label": "Settings navigation" },
+    },
+    el("h3", {
+      className: `${getClass()}__header`,
+      textContent: "Navigation",
+    })
+  );
 
   const container = el("div", { className: `${getClass()}__groups` });
 
   groups.forEach((group) => {
     const section = el("div", { className: `${getClass()}__group` });
 
-    const heading = el("h3", { className: `${getClass()}__group-label` }, [
+    const heading = el("h4", { className: `${getClass()}__group-label` }, [
       group.label,
     ]);
 
