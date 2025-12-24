@@ -5,6 +5,7 @@ export function getStyles(prefix: string): string {
       grid-template-rows: auto 1fr;
       grid-template-columns: 200px 1fr;
       gap: 24px;
+      min-height: inherit;
     }
 
     .${prefix}__header {

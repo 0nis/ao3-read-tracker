@@ -69,20 +69,22 @@ export function getStyles(prefix: string): string {
     @media (max-width: 600px) {
       .${prefix} {
         position: absolute;
-        top: 0;
+        top: -1.5em;
         right: -3.5%;
 
-        height: 100vh;
-        width: 14em;
+        height: calc(100% + 2em);
+        min-height: inherit;
+        width: max-content;
+        min-width: 14em;
 
         transform: translateX(100%);
         transition: transform 0.25s ease;
 
         background: #fff;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+        box-shadow: 0 0 1em rgba(0,0,0,0.15);
 
         border: none;
-        padding: 0 1.5em 1.5em 1.5em;
+        padding: 1.5em;
 
         z-index: 1000;
       }
