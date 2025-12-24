@@ -5,16 +5,23 @@ export function getStyles(prefix: string): string {
     }
 
     .${prefix}__field {
+      display: grid;
+      grid-template-columns: auto 12em;
+      grid-template-rows: 1fr;
+      
       padding: 8px 0;
-      display: flex;
-      gap: 12px;
+      gap: 1em;
       align-items: center;
-      justify-content: space-between;
       border-bottom: 1px solid #eee;
     }
 
     .${prefix}__field-label-wrapper {
       max-width: 70%;
+    }
+
+    .${prefix}__field-input-wrapper {
+      display: flex;
+      justify-content: flex-end;
     }
 
     .${prefix}__field label {
@@ -24,7 +31,7 @@ export function getStyles(prefix: string): string {
     .${prefix}__field input, 
     .${prefix}__field select, 
     .${prefix}__field textarea {
-      width: auto !important;
+      width: 100%;
     }
 
     .${prefix}__field-description {
@@ -76,25 +83,35 @@ export function getStyles(prefix: string): string {
       gap: 8px;
     }
 
-    @media (max-width: 600px) {
-      .${prefix}__field-label-wrapper--short {
-        max-width: 80% !important;
+    @media (max-width: 900px) {
+      .${prefix}__field {
+        grid-template-columns: auto 10em;
       }
 
       .${prefix}__field-label-wrapper {
         max-width: 100%;
       }
+    }
 
+    @media (max-width: 350px) {
       .${prefix}__field {
-        flex-wrap: wrap;
-        align-items: center;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
         gap: 0;
       }
 
+      .${prefix}__field--checkbox {
+        grid-template-columns: auto auto;
+      }
+
       .${prefix}__group .${prefix}__field {
-        flex-direction: row;
-        align-items: center;
-        gap: 12px;
+        grid-template-columns: auto 10em;
+      }
+
+      .${prefix}__field--checkbox,
+      .${prefix}__group .${prefix}__field {
+        grid-template-rows: 1fr;
+        gap: .5em;
       }
     }
     `;

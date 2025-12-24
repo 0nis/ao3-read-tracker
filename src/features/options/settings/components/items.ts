@@ -98,18 +98,22 @@ function createSettingsSectionField({
   const isCheckbox =
     inputEl instanceof HTMLInputElement && inputEl.type === "checkbox";
 
-  const field = el("div", { className: `${SETTINGS_CLASS}__field ` }, [
-    el(
-      "div",
-      {
-        className: `${SETTINGS_CLASS}__field-label-wrapper ${
-          isCheckbox ? `${SETTINGS_CLASS}__field-label-wrapper--short` : ""
-        }`,
-      },
-      children
-    ),
-    input,
-  ]);
+  const field = el(
+    "div",
+    {
+      className: `${SETTINGS_CLASS}__field ${
+        isCheckbox ? `${SETTINGS_CLASS}__field--checkbox` : ""
+      }`,
+    },
+    [
+      el(
+        "div",
+        { className: `${SETTINGS_CLASS}__field-label-wrapper` },
+        children
+      ),
+      el("div", { className: `${SETTINGS_CLASS}__field-input-wrapper` }, input),
+    ]
+  );
 
   return field;
 }
