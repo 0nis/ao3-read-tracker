@@ -85,7 +85,7 @@ export function getStyles(prefix: string): string {
 
         border: none;
         padding: 1.5em;
-
+        overflow-y: auto;
         z-index: 1000;
       }
 
