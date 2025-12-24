@@ -6,10 +6,17 @@ export function getStyles(prefix: string): string {
       padding-right: 3em;
     }
 
+    .${prefix}__header {
+      display: none;
+      font-size: 1.6em;
+      margin: .8em 0;
+    }
+
     .${prefix}__groups {
       display: flex;
       flex-direction: column;
       gap: 1.5em;
+      padding: .5em 0;
     }
 
     .${prefix}__group-label {
@@ -55,23 +62,35 @@ export function getStyles(prefix: string): string {
       font-size: 1.6em;
       cursor: pointer;
       padding: 0.25em 0.5em;
-    }
-
-    @media (max-width: 800px) {
-      .${prefix} {
-        width: max-content;
-        border-right: 1px solid #ddd;
-        padding-right: 3em;
-      }
+      margin-top: 0.429em;
+      align-self: start;
     }
 
     @media (max-width: 600px) {
-
       .${prefix} {
         position: absolute;
-        width: 100%;
+        top: -1.5em;
+        right: -3.5%;
+
+        height: calc(100% + 2em);
+        min-height: inherit;
+        width: max-content;
+        min-width: 14em;
+
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+
+        background: #fff;
+        box-shadow: 0 0 1em rgba(0,0,0,0.15);
+
         border: none;
-        padding: 0;
+        padding: 1.5em;
+        overflow-y: auto;
+        z-index: 1000;
+      }
+
+      .${prefix}__header {
+        display: block;
       }
 
       .${prefix}-toggle {
@@ -80,26 +99,8 @@ export function getStyles(prefix: string): string {
         z-index: 1001;
       }
 
-      .${prefix}--open .${prefix}__groups {
+      .${prefix}--open {
         transform: translateX(0);
-      }
-
-      .${prefix}__groups {
-        position: absolute;
-        top: 100%;
-        right: -3.5%;
-        height: 100vh;
-        width: max-content;
-
-        transform: translateX(100%);
-        transition: transform 0.25s ease;
-
-        z-index: 1000;
-        overflow-y: auto;
-        font-size: 1.1em;
-        background: #fff;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-        padding: 1.5em;
       }
     }
   `;

@@ -8,7 +8,7 @@ import {
 import { getStored } from "../helpers/gen";
 
 import { SectionConfig } from "../../types";
-import { createSectionWrapper } from "../../components/section";
+import { createSectionWrapper } from "../../components/section/component";
 
 import { localMemory } from "../../../../services/memory";
 import { handleStorageRead } from "../../../../utils/storage";

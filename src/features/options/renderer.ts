@@ -1,5 +1,5 @@
 import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
-import { buildHeader } from "./components/header";
+import { buildHeader } from "./components/header/component";
 import { buildNav, buildNavToggleEl } from "./components/nav/component";
 
 import { CLASS_PREFIX } from "../../constants/classes";
@@ -51,6 +51,7 @@ export async function render(): Promise<void> {
   header.appendChild(await buildNavToggleEl(nav));
 
   const wrapper = el("div", { className: `${CLASS_PREFIX}__wrapper` }, [
+    header,
     nav,
     el(
       "div",
@@ -59,7 +60,7 @@ export async function render(): Promise<void> {
     ),
   ]);
 
-  main.append(header, wrapper);
+  main.append(wrapper);
 
   function getCurrentSection() {
     const hash = window.location.hash.slice(1);

@@ -2,7 +2,7 @@ import { buildBlock } from "./block/component";
 import { getStyles } from "./style";
 
 import { SectionId } from "../../config";
-import { createSectionWrapper } from "../../components/section";
+import { createSectionWrapper } from "../../components/section/component";
 
 import { symbolsCache } from "../../../../services/cache";
 import { el, injectStyles } from "../../../../utils/ui/dom";
