@@ -64,6 +64,7 @@ async function renderSymbols(
   const symbols = await symbolsCache.get();
 
   const rules = symbolRuleCollector.getActiveRules({
+    symbols,
     finishedWork: finishedWork,
     inProgressWork: inProgressWork,
     ignoredWork: ignoredWork,

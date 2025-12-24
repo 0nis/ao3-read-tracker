@@ -15,6 +15,7 @@ export async function loadSymbolsAndRules(
   const { finishedSettings, inProgressSettings } = await settingsCache.get();
 
   const rules = symbolRuleCollector.getActiveRules({
+    symbols,
     finishedWork:
       finishedWork ?? (await StorageService.finishedWorks.getById(id))?.data,
     inProgressWork:

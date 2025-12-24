@@ -1,9 +1,7 @@
-import { warn } from "../../extension";
 import { el, ensureChild } from ".././dom";
 import { reportSrLive } from ".././accessibility";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { MessageType } from "../../../enums/messages";
-import { VerticalPlacement } from "../../../enums/settings";
 
 /**
  * Shows a message within a container element, replacing any existing message.
