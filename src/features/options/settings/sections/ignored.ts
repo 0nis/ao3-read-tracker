@@ -5,7 +5,7 @@ import { SectionId } from "../../config";
 import { settingsCache } from "../../../../services/cache";
 import { enumSelect, toggleSwitch } from "../../../../utils/ui/forms";
 import { FormItemType } from "../../../../enums/forms";
-import { DisplayMode } from "../../../../enums/settings";
+import { DisplayMode, VerticalPlacement } from "../../../../enums/settings";
 import { IgnoreSettings } from "../../../../types/settings";
 
 const items: SettingsSectionItem<IgnoreSettings>[] = [
@@ -26,6 +26,14 @@ const items: SettingsSectionItem<IgnoreSettings>[] = [
     dataField: "defaultDisplayMode",
     description:
       "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",
+  },
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.GENERAL_SETTINGS,
+    label: "Button Placement",
+    input: enumSelect(VerticalPlacement),
+    dataField: "buttonPlacement",
+    description: "Choose where the 'Ignore' button appears on work pages.",
   },
 ];
 

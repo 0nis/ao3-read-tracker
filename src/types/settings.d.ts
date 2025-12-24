@@ -10,6 +10,7 @@ export interface FinishedSettings {
   droppedDisplayMode: DisplayMode;
   dormantDisplayMode: DisplayMode;
   symbolDisplayMode: SymbolDisplayMode;
+  buttonPlacement: VerticalPlacement;
 }
 
 export interface InProgressSettings {
@@ -20,6 +21,7 @@ export interface InProgressSettings {
   pausedDisplayMode: DisplayMode;
   waitingDisplayMode: DisplayMode;
   symbolDisplayMode: SymbolDisplayMode;
+  buttonPlacement: VerticalPlacement;
   updateButtonPlacement: VerticalPlacement;
 }
 
@@ -27,12 +29,12 @@ export interface IgnoreSettings {
   id: string;
   simpleModeEnabled: boolean;
   defaultDisplayMode: DisplayMode;
+  buttonPlacement: VerticalPlacement;
 }
 
 export interface GeneralSettings {
   id: string;
   hideSymbols: boolean;
-  buttonPlacement: VerticalPlacement;
   nativeMarkAsReadReplacementLabel: string;
 }
 

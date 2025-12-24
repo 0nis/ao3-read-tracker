@@ -13,6 +13,7 @@ import { settingsCache } from "../../../services/cache";
 import { warn } from "../../../utils/extension";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { SettingsData } from "../../../types/settings";
+import { VerticalPlacement } from "../../../enums/settings";
 
 export async function setupButtons() {
   const settings = await settingsCache.get();
@@ -26,7 +27,11 @@ export async function setupButtons() {
   if (!navs.top && !navs.bottom) return;
 
   await setupAllActionButtons(settings, navs);
-  await setupUpdateReadProgressButton(workId, settings, navs);
+  await setupUpdateReadProgressButton(
+    workId,
+    navs,
+    settings.inProgressSettings.updateButtonPlacement
+  );
 }
 
 async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
@@ -40,7 +45,7 @@ async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
     }
 
     await placeButtons(
-      settings.generalSettings.buttonPlacement,
+      s.buttonPlacement,
       navs,
       async () =>
         await createActionModeButton(
@@ -52,21 +57,18 @@ async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
 
 async function setupUpdateReadProgressButton(
   workId: string | null,
-  settings: SettingsData,
-  navs: ButtonNavs
+  navs: ButtonNavs,
+  placement: VerticalPlacement
 ) {
   if (!workId) return;
   const exists = await handleCheckExistence(workId, WorkAction.IN_PROGRESS);
-  await placeButtons(
-    settings.inProgressSettings.updateButtonPlacement,
-    navs,
-    () =>
-      createUpdateButton(
-        "Update Read Progress",
-        handleUpdateInProgressInfo,
-        handleOnUpdateReadProgressEvent,
-        exists ? false : true
-      )
+  await placeButtons(placement, navs, () =>
+    createUpdateButton(
+      "Update Read Progress",
+      handleUpdateInProgressInfo,
+      handleOnUpdateReadProgressEvent,
+      exists ? false : true
+    )
   );
 }
 

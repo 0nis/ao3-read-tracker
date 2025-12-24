@@ -21,15 +21,6 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
   {
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
-    label: "Button Placement",
-    input: enumSelect(VerticalPlacement),
-    dataField: "buttonPlacement",
-    description:
-      "Choose where the 'Mark as Read' and 'Ignore' buttons appear on work pages.",
-  },
-  {
-    type: FormItemType.FIELD,
-    sectionId: SectionId.GENERAL_SETTINGS,
     label: "AO3 'Mark as Read' Button Text",
     input: text("", "e.g., Finished"),
     dataField: "nativeMarkAsReadReplacementLabel",
