@@ -33,8 +33,7 @@ export interface GeneralSettings {
   id: string;
   hideSymbols: boolean;
   buttonPlacement: VerticalPlacement;
-  replaceMarkForLaterLabel: boolean;
-  markForLaterReplacementLabel: string;
+  nativeMarkAsReadReplacementLabel: string;
 }
 
 export type SettingsData = {
