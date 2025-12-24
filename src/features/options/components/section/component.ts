@@ -1,14 +1,23 @@
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { el } from "../../../utils/ui/dom";
-import { SectionConfig } from "../types";
+import { getStyles } from "./style";
+import { SectionConfig } from "../../types";
+
+import { el, injectStyles } from "../../../../utils/ui/dom";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+
+const getClass = () => `${CLASS_PREFIX}__section`;
 
 export function createSectionWrapper(config: SectionConfig): HTMLElement {
+  injectStyles(
+    `${CLASS_PREFIX}__styles--options-section`,
+    getStyles(getClass())
+  );
+
   const header = createSectionHeaderEl(config);
 
   const section = el(
     "section",
     {
-      className: `${CLASS_PREFIX}__section`,
+      className: `${getClass()}`,
       id: `section-${config.id}`,
       attrs: {
         role: "region",
@@ -33,11 +42,11 @@ function createSectionHeaderEl({ id, title, headerChildren }: SectionConfig): {
 } {
   const titleId = `section-${id}-title`;
   return {
-    el: el("div", { className: `${CLASS_PREFIX}__section-header` }, [
+    el: el("div", { className: `${getClass()}-header` }, [
       el(
         "h3",
         {
-          className: `${CLASS_PREFIX}__section-title`,
+          className: `${getClass()}-title`,
           id: titleId,
         },
         [title]
@@ -59,7 +68,7 @@ function createSectionDescriptionEl(
   return {
     el: el("p", {
       id: descId,
-      className: `${CLASS_PREFIX}__section-description`,
+      className: `${getClass()}-description`,
       innerHTML: description,
     }),
     id: descId,

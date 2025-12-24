@@ -1,33 +1,31 @@
+import { getStyles } from "./style";
 import { NavGroup } from "../../types";
 
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { el, ensureChild, injectStyles } from "../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../utils/ui/dom";
 import { reportSrLive } from "../../../../utils/ui/accessibility";
 import { getSymbolElement } from "../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../enums/symbols";
-import { getStyles } from "./style";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 
-const NAV_CLASS = `${CLASS_PREFIX}__nav`;
-
-// TODO: Improve responsiveness for mobile
+const getClass = () => `${CLASS_PREFIX}__nav`;
 
 export async function buildNav(groups: NavGroup[]): Promise<{
   nav: HTMLElement;
   updateSelected: (id: string) => void;
 }> {
-  injectStyles(`${CLASS_PREFIX}__styles--nav`, getStyles(NAV_CLASS));
+  injectStyles(`${CLASS_PREFIX}__styles--options-nav`, getStyles(getClass()));
 
   const nav = el("aside", {
-    className: `${NAV_CLASS}`,
+    className: `${getClass()}`,
     attrs: { role: "navigation", "aria-label": "Settings navigation" },
   });
 
-  const container = el("div", { className: `${NAV_CLASS}__groups` });
+  const container = el("div", { className: `${getClass()}__groups` });
 
   groups.forEach((group) => {
-    const section = el("div", { className: `${NAV_CLASS}__group` });
+    const section = el("div", { className: `${getClass()}__group` });
 
-    const heading = el("h3", { className: `${NAV_CLASS}__group-label` }, [
+    const heading = el("h3", { className: `${getClass()}__group-label` }, [
       group.label,
     ]);
 
@@ -79,7 +77,7 @@ export async function buildNavToggleEl(nav: HTMLElement): Promise<HTMLElement> {
   const toggleBtn = el(
     "button",
     {
-      className: `${NAV_CLASS}-toggle`,
+      className: `${getClass()}-toggle`,
       attrs: {
         "aria-label": "Toggle navigation menu",
         "aria-expanded": "false",
@@ -89,7 +87,7 @@ export async function buildNavToggleEl(nav: HTMLElement): Promise<HTMLElement> {
   );
 
   toggleBtn.addEventListener("click", () => {
-    const isOpen = nav.classList.toggle(`${NAV_CLASS}--open`);
+    const isOpen = nav.classList.toggle(`${getClass()}--open`);
     toggleBtn.setAttribute("aria-expanded", String(isOpen));
 
     toggleBtn.textContent = "";

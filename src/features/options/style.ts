@@ -1,80 +1,30 @@
 export function getStyles(prefix: string): string {
   return `
     .${prefix}__wrapper {
-      display: flex;
-      align-items: flex-start;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: 200px 1fr;
       gap: 24px;
       margin-top: 12px;
     }
 
-    .${prefix}__content {
-      flex: 1;
-      width: 100%;
-    }
-
-    .${prefix}__section {
-      background: transparent;
-      padding: 0 0 10px 0;
-    }
-
-    .${prefix}__section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .${prefix}__section-title {
-      margin: 0;
-    }
-
-    .${prefix}__section-description {
-      opacity: 0.8;
-      font-size: 0.95em;
-    }
-
-    .${prefix}__section-description ul {
-      list-style: initial; 
-      margin: 0.5em 0 0.5em 1.5em;
-    }
-      
-    .${prefix}__section-description li {
-      list-style: initial;
-      margin: 0.25em 0;
-    }
-
     .${prefix}__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
+      grid-column: 1 / -1;
     }
 
-    .${prefix}__header-actions {
-      display: flex;
-      gap: 8px;
+    .${prefix}__nav {
+      grid-row: 2 / 3;
     }
 
-    .${prefix}__header-actions li {
-      position: relative;
-      display: inline-block;
-      margin: 0;
-      padding: 0;
-    }
-
-    .${prefix}__header-actions li button {
-      margin: 0;
+    .${prefix}__content {
+      grid-row: 2 / 3;
+      grid-column: 2 / 3;
     }
 
     @media (max-width: 600px) {
       .${prefix}__wrapper {
         flex-direction: column;
         position: relative;
-      }
-
-      .${prefix}__header-actions {
-        display: none;
       }
     }
   `;

@@ -4,7 +4,7 @@ import { SettingsSectionTypeMap } from "./config";
 import { saveSettingsData } from "./helpers/save";
 import { createSettingsSectionContent } from "./components/items";
 import { createSettingsSectionSaveButton } from "./components/submit";
-import { createSectionWrapper } from "../components/section";
+import { createSectionWrapper } from "../components/section/component";
 
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { settingsCache } from "../../../services/cache";
