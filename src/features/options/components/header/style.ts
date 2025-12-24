@@ -5,7 +5,6 @@ export function getStyles(prefix: string): string {
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      margin-bottom: 12px;
     }
 
     .${prefix}-actions {
