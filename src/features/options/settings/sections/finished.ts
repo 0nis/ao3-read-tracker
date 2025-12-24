@@ -4,7 +4,7 @@ import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
 import { enumSelect, toggleSwitch } from "../../../../utils/ui/forms";
-import { DisplayMode } from "../../../../enums/settings";
+import { DisplayMode, VerticalPlacement } from "../../../../enums/settings";
 import { SymbolDisplayMode } from "../../../../enums/symbols";
 import { FormItemType } from "../../../../enums/forms";
 import { FinishedSettings } from "../../../../types/settings";
@@ -72,6 +72,15 @@ const items: SettingsSectionItem<FinishedSettings>[] = [
     dataField: "symbolDisplayMode",
     description:
       "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means completed, dropped, paused, etc.",
+  },
+  {
+    type: FormItemType.FIELD,
+    sectionId: SectionId.GENERAL_SETTINGS,
+    label: "Button Placement",
+    input: enumSelect(VerticalPlacement),
+    dataField: "buttonPlacement",
+    description:
+      "Choose where the 'Mark as Read' button appears on work pages.",
   },
 ];
 

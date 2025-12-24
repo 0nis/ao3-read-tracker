@@ -39,10 +39,12 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__group {
       margin: 1em 0;
-      padding: 1em 1.25em;
-      border-radius: 8px;
+      padding: 1em 0;
       background: transparent;
       box-shadow: none;
+      border-radius: 8px;
+      border-left: 0;
+      border-right: 0;
     }
 
     .${prefix}__group .${prefix}__field-description {
@@ -55,6 +57,15 @@ export function getStyles(prefix: string): string {
       font-size: 1.1em;
       font-weight: 700;
       opacity: 1;
+      padding-right: .5em;
+    }
+
+    .${prefix}__group label {
+      font-weight: 500;
+    }
+
+    .${prefix}__group .${prefix}__field {
+      flex-wrap: nowrap;
     }
 
     .${prefix}__actions {

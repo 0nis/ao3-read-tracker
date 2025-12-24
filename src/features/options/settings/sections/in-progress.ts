@@ -67,13 +67,27 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
       "Controls how symbols are displayed next to the title of the works in lists. 'State' means finished or in progress, 'status' means completed, dropped, paused, etc.",
   },
   {
-    type: FormItemType.FIELD,
+    type: FormItemType.GROUP,
+    id: "buttonPlacements",
     sectionId: SectionId.IN_PROGRESS_SETTINGS,
-    label: "'Update' Button Placement",
-    input: enumSelect(VerticalPlacement),
-    dataField: "updateButtonPlacement",
-    description:
-      "Whether the 'Update Read Progress' button appears at the top or the bottom of the work page.",
+    label: "Button Placement",
+    description: "Choose where the In Progress buttons appear on work pages.",
+    fields: [
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.IN_PROGRESS_SETTINGS,
+        label: "Start Reading Button",
+        input: enumSelect(VerticalPlacement),
+        dataField: "buttonPlacement",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.IN_PROGRESS_SETTINGS,
+        label: "Update Read Progress Button",
+        input: enumSelect(VerticalPlacement),
+        dataField: "updateButtonPlacement",
+      },
+    ],
   },
 ];
 

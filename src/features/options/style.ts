@@ -3,7 +3,7 @@ export function getStyles(prefix: string): string {
     .${prefix}__wrapper {
       display: grid;
       grid-template-rows: auto 1fr;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 14.5em 1fr;
       gap: 24px;
       min-height: inherit;
     }
