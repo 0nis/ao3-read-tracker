@@ -5,7 +5,6 @@ export function getStyles(prefix: string): string {
       grid-template-rows: auto 1fr;
       grid-template-columns: 200px 1fr;
       gap: 24px;
-      margin-top: 12px;
     }
 
     .${prefix}__header {
@@ -23,6 +22,7 @@ export function getStyles(prefix: string): string {
 
     @media (max-width: 600px) {
       .${prefix}__wrapper {
+        position: relative;
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
       }

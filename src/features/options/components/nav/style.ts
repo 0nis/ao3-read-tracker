@@ -60,9 +60,22 @@ export function getStyles(prefix: string): string {
     @media (max-width: 600px) {
       .${prefix} {
         position: absolute;
-        width: 100%;
+        top: 0;
+        right: -3.5%;
+
+        height: 100vh;
+        width: 14em;
+
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+
+        background: #fff;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+
         border: none;
-        padding: 0;
+        padding: 1.5em;
+
+        z-index: 1000;
       }
 
       .${prefix}-toggle {
@@ -71,26 +84,8 @@ export function getStyles(prefix: string): string {
         z-index: 1001;
       }
 
-      .${prefix}--open .${prefix}__groups {
+      .${prefix}--open {
         transform: translateX(0);
-      }
-
-      .${prefix}__groups {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100vh;
-        width: max-content;
-
-        transform: translateX(100%);
-        transition: transform 0.25s ease;
-
-        z-index: 1000;
-        overflow-y: auto;
-        font-size: 1.1em;
-        background: #fff;
-        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
-        padding: 1.5em;
       }
     }
   `;
