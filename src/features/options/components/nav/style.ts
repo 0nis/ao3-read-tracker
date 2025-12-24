@@ -57,16 +57,7 @@ export function getStyles(prefix: string): string {
       padding: 0.25em 0.5em;
     }
 
-    @media (max-width: 800px) {
-      .${prefix} {
-        width: max-content;
-        border-right: 1px solid #ddd;
-        padding-right: 3em;
-      }
-    }
-
     @media (max-width: 600px) {
-
       .${prefix} {
         position: absolute;
         width: 100%;
@@ -86,8 +77,8 @@ export function getStyles(prefix: string): string {
 
       .${prefix}__groups {
         position: absolute;
-        top: 100%;
-        right: -3.5%;
+        top: 0;
+        right: 0;
         height: 100vh;
         width: max-content;
 

@@ -24,12 +24,15 @@ export function getStyles(prefix: string): string {
     @media (max-width: 600px) {
       .${prefix}__wrapper {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto 1fr;
+        grid-template-rows: auto 1fr;
       }
 
-      .${prefix}__nav,
       .${prefix}__content {
         grid-column: 1 / -1;
+      }
+
+      .${prefix}__nav {
+        grid-row: auto;
       }
     }
   `;
