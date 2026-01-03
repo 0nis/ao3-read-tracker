@@ -1,14 +1,14 @@
+import { reportExtensionFailure } from "../ui/dialogs";
+import { StorageService } from "../../services/storage";
 import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_IN_PROGRESS_SETTINGS,
   DEFAULT_FINISHED_SETTINGS,
+  DEFAULT_SYMBOL_SETTINGS,
 } from "../../constants/settings";
 import { StorageResult } from "../../types/storage";
 import { SettingsData } from "../../types/settings";
-import { StorageService } from "../../services/storage";
-import { reportExtensionFailure } from "../ui/dialogs";
-import { error } from "../extension";
 
 const SETTINGS_LOADERS: Record<
   keyof SettingsData,
@@ -18,6 +18,7 @@ const SETTINGS_LOADERS: Record<
   inProgressSettings: StorageService.inProgressSettings.get,
   ignoreSettings: StorageService.ignoreSettings.get,
   generalSettings: StorageService.generalSettings.get,
+  symbolSettings: StorageService.symbolSettings.get,
 };
 
 const SETTINGS_DEFAULTS: SettingsData = {
@@ -25,6 +26,7 @@ const SETTINGS_DEFAULTS: SettingsData = {
   inProgressSettings: DEFAULT_IN_PROGRESS_SETTINGS,
   ignoreSettings: DEFAULT_IGNORE_SETTINGS,
   generalSettings: DEFAULT_GENERAL_SETTINGS,
+  symbolSettings: DEFAULT_SYMBOL_SETTINGS,
 };
 
 const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
@@ -32,6 +34,7 @@ const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
   inProgressSettings: "in progress",
   ignoreSettings: "ignore",
   generalSettings: "general",
+  symbolSettings: "symbols",
 };
 
 /** Retrieves all settings from storage, applying default values for any that fail to load. */

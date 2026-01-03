@@ -7,9 +7,10 @@ import {
   IgnoreSettings,
   GeneralSettings,
   InProgressSettings,
+  SymbolSettings,
 } from "../types/settings";
 import { FinishedWork, IgnoredWork, InProgressWork } from "../types/works";
-import { SymbolRecord, SymbolSettings } from "../types/symbols";
+import { SymbolRecord } from "../types/symbols";
 import { DATABASE_NAME } from "../constants/global";
 import { populateDb } from "./populate";
 

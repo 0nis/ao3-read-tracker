@@ -1,5 +1,10 @@
 import { VerticalPlacement, DisplayMode } from "../enums/settings";
-import { SymbolDisplayMode } from "../enums/symbols";
+import {
+  SymbolId,
+  SymbolDisplayMode,
+  SymbolRenderMode,
+  SymbolFallback,
+} from "../enums/symbols";
 
 export interface FinishedSettings {
   id: string;
@@ -38,9 +43,18 @@ export interface GeneralSettings {
   nativeMarkAsReadReplacementLabel: string;
 }
 
+export interface SymbolSettings {
+  id: string;
+  enabled: boolean;
+  renderMode: SymbolRenderMode;
+  fallback: SymbolFallback;
+  size: string;
+}
+
 export type SettingsData = {
   finishedSettings: FinishedSettings;
   inProgressSettings: InProgressSettings;
   ignoreSettings: IgnoreSettings;
   generalSettings: GeneralSettings;
+  symbolSettings: SymbolSettings;
 };

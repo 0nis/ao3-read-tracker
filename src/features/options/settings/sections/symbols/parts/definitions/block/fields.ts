@@ -1,17 +1,17 @@
 import { getLabelFromType, setFeedback } from "./helpers";
 import { BlockContext, BlockField } from "./types";
-import { getClass, ACCEPTED_IMAGE_TYPES } from "../section";
+import { getClass, ACCEPTED_IMAGE_TYPES } from "../../../section";
 
-import { el } from "../../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../../utils/ui/symbols";
+import { el } from "../../../../../../../../utils/ui/dom";
+import { renderSymbolContent } from "../../../../../../../../utils/ui/symbols";
 import {
   getImageSelectorElements,
   getInputElement,
   number,
   text,
-} from "../../../../../utils/ui/forms";
-import { SymbolId } from "../../../../../enums/symbols";
-import { ABBREVIATION } from "../../../../../constants/global";
+} from "../../../../../../../../utils/ui/forms";
+import { SymbolId } from "../../../../../../../../enums/symbols";
+import { ABBREVIATION } from "../../../../../../../../constants/global";
 
 export function getFields({
   id,

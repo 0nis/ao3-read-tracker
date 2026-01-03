@@ -22,25 +22,36 @@ export function createSettingsSection<K extends keyof SettingsSectionTypeMap>(
     getStyles(SETTINGS_CLASS)
   );
 
+  const saveBtnPlacement = cfg.saveButtonPlacement ?? VerticalPlacement.BOTH;
+
   const section = createSectionWrapper({
     ...cfg,
-    headerChildren: [
-      createActionsElement({
-        cfg,
-        pos: VerticalPlacement.TOP,
-        className: "actions-top",
-      }),
-    ],
+    headerChildren:
+      saveBtnPlacement === VerticalPlacement.TOP ||
+      saveBtnPlacement === VerticalPlacement.BOTH
+        ? [
+            createActionsElement({
+              cfg,
+              pos: VerticalPlacement.TOP,
+              className: "actions-top",
+            }),
+          ]
+        : [],
   });
 
   section.appendChild(createSettingsSectionContent(cfg.items));
-  section.appendChild(
-    createActionsElement({
-      cfg,
-      pos: VerticalPlacement.BOTTOM,
-      className: "actions-bottom",
-    })
-  );
+
+  if (
+    saveBtnPlacement === VerticalPlacement.BOTTOM ||
+    saveBtnPlacement === VerticalPlacement.BOTH
+  )
+    section.appendChild(
+      createActionsElement({
+        cfg,
+        pos: VerticalPlacement.BOTTOM,
+        className: "actions-bottom",
+      })
+    );
 
   populateFormValues(cfg.items, cfg.data);
 

@@ -5,6 +5,7 @@ import {
   DEFAULT_IGNORE_SETTINGS,
   DEFAULT_IN_PROGRESS_SETTINGS,
   DEFAULT_FINISHED_SETTINGS,
+  DEFAULT_SYMBOL_SETTINGS,
 } from "../../../constants/settings";
 import type { StorageResult } from "../../../types/storage";
 import type {
@@ -12,6 +13,7 @@ import type {
   IgnoreSettings,
   InProgressSettings,
   FinishedSettings,
+  SymbolSettings,
 } from "../../../types/settings";
 
 export interface SettingsSectionTypeMap {
@@ -19,6 +21,7 @@ export interface SettingsSectionTypeMap {
   [SectionId.IN_PROGRESS_SETTINGS]: InProgressSettings;
   [SectionId.IGNORE_SETTINGS]: IgnoreSettings;
   [SectionId.GENERAL_SETTINGS]: GeneralSettings;
+  [SectionId.SYMBOL_SETTINGS]: SymbolSettings;
 }
 
 export interface SaveMapEntry<T> {
@@ -49,5 +52,10 @@ export const SETTINGS_SAVE_MAP: {
     defaults: DEFAULT_GENERAL_SETTINGS,
     setter: StorageService.generalSettings.set,
     label: "general settings",
+  },
+  [SectionId.SYMBOL_SETTINGS]: {
+    defaults: DEFAULT_SYMBOL_SETTINGS,
+    setter: StorageService.symbolSettings.set,
+    label: "symbol settings",
   },
 };

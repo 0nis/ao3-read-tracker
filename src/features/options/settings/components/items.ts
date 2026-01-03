@@ -5,12 +5,10 @@ import {
   SettingsSectionItem,
 } from "../types";
 
-import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
-import { FormItemType } from "../../../../enums/forms";
-import { ABBREVIATION } from "../../../../constants/global";
-import { CustomInputType } from "../../../../enums/ui";
 import { getInputElement } from "../../../../utils/ui/forms";
+import { FormItemType } from "../../../../enums/forms";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 
 export function createSettingsSectionContent(
   items: SettingsSectionItem<any>[]
@@ -51,7 +49,8 @@ function createSettingsSectionGroup({
     children.push(el("p", {
       id: `${id}-description`,
       className: `${SETTINGS_CLASS}__field-description`,
-    }, [description]));
+      innerHTML: description
+    }));
 
   // prettier-ignore
   const fieldsWrapper = el("div", { className: `${SETTINGS_CLASS}__group-fields` }, []);
@@ -93,7 +92,8 @@ function createSettingsSectionField({
     children.push(el("p", {
       id: `${id}-description`,
       className: `${SETTINGS_CLASS}__field-description`,
-    }, [description]));
+      innerHTML: description
+    }));
 
   const isCheckbox =
     inputEl instanceof HTMLInputElement && inputEl.type === "checkbox";

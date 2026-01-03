@@ -2,13 +2,16 @@ import { BlockContext, BlockField, State } from "./types";
 import { buildField, getFields } from "./fields";
 import { getSaveElement, onSave } from "./actions/save";
 import { getResetElement, onReset } from "./actions/reset";
-import { getClass } from "../section";
+import { getClass } from "../../../section";
 
-import { el } from "../../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../../utils/ui/symbols";
-import { SymbolId } from "../../../../../enums/symbols";
-import { ABBREVIATION } from "../../../../../constants/global";
-import { SymbolData, SymbolRecord } from "../../../../../types/symbols";
+import { el } from "../../../../../../../../utils/ui/dom";
+import { renderSymbolContent } from "../../../../../../../../utils/ui/symbols";
+import { SymbolId } from "../../../../../../../../enums/symbols";
+import { ABBREVIATION } from "../../../../../../../../constants/global";
+import {
+  SymbolData,
+  SymbolRecord,
+} from "../../../../../../../../types/symbols";
 
 export async function buildBlock(
   id: SymbolId,

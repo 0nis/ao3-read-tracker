@@ -10,8 +10,8 @@ import {
   IgnoreSettings,
   InProgressSettings,
   FinishedSettings,
+  SymbolSettings,
 } from "../types/settings";
-import { SymbolSettings } from "../types/symbols";
 
 export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
   id: SettingsType.FINISHED,

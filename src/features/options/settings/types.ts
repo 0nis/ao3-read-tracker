@@ -6,6 +6,7 @@ import type {
   FormGroup,
   FormItem,
 } from "../../../types/forms";
+import { VerticalPlacement } from "../../../enums/settings";
 
 export interface SettingsSectionBaseItem<T> {
   sectionId: SectionId;
@@ -31,4 +32,6 @@ export type SettingsSectionItem<T> = FormItem<
 
 export interface SettingsSectionConfig<T>
   extends SectionConfig,
-    FormConfig<T, SettingsSectionField<T>, SettingsSectionGroup<T>> {}
+    FormConfig<T, SettingsSectionField<T>, SettingsSectionGroup<T>> {
+  saveButtonPlacement?: VerticalPlacement;
+}
