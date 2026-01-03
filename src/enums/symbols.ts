@@ -18,8 +18,9 @@ export enum SymbolId {
   CLEAR = "clear",
 }
 
-export enum SymbolType {
-  TEXT = "text",
+export enum SymbolRenderMode {
+  AUTO = "auto",
+  EMOJI = "emoji",
   IMAGE = "image",
 }
 
@@ -28,4 +29,10 @@ export enum SymbolDisplayMode {
   STATUS_ONLY = "status_only",
   BOTH = "both",
   NONE = "none",
+}
+
+export enum SymbolFallback {
+  LABEL = "label",
+  QUESTION_MARK = "question_mark",
+  HIDDEN = "hidden",
 }

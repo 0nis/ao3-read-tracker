@@ -1,4 +1,4 @@
-import { SymbolId, SymbolType } from "../enums/symbols";
+import { SymbolId, SymbolRenderMode, SymbolFallback } from "../enums/symbols";
 
 export interface SymbolRecord {
   id: string;
@@ -9,3 +9,11 @@ export interface SymbolRecord {
 }
 
 export type SymbolData = Record<SymbolId, SymbolRecord>;
+
+export interface SymbolSettings {
+  id: string;
+  enabled: boolean;
+  renderMode: SymbolRenderMode;
+  fallback: SymbolFallback;
+  size: string;
+}

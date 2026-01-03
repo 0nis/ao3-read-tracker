@@ -9,7 +9,7 @@ import {
   InProgressSettings,
 } from "../types/settings";
 import { FinishedWork, IgnoredWork, InProgressWork } from "../types/works";
-import { SymbolRecord } from "../types/symbols";
+import { SymbolRecord, SymbolSettings } from "../types/symbols";
 import { DATABASE_NAME } from "../constants/global";
 import { populateDb } from "./populate";
 
@@ -21,6 +21,7 @@ export class Ao3ReadTrackerDb extends Dexie {
   inProgressSettings!: Table<InProgressSettings>;
   ignoreSettings!: Table<IgnoreSettings>;
   generalSettings!: Table<GeneralSettings>;
+  symbolSettings!: Table<SymbolSettings>;
   symbolRecords!: Table<SymbolRecord>;
 
   constructor() {
@@ -34,6 +35,7 @@ export class Ao3ReadTrackerDb extends Dexie {
       inProgressSettings: "id",
       ignoreSettings: "id",
       generalSettings: "id",
+      symbolSettings: "id",
       symbolRecords: "id, priority",
     });
 

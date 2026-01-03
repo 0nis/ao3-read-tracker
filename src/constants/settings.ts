@@ -1,12 +1,17 @@
 import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SettingsType } from "../enums/settings";
-import { SymbolDisplayMode } from "../enums/symbols";
+import {
+  SymbolDisplayMode,
+  SymbolFallback,
+  SymbolRenderMode,
+} from "../enums/symbols";
 import {
   GeneralSettings,
   IgnoreSettings,
   InProgressSettings,
   FinishedSettings,
 } from "../types/settings";
+import { SymbolSettings } from "../types/symbols";
 
 export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
   id: SettingsType.FINISHED,
@@ -43,4 +48,12 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   hideSymbols: false,
   nativeMarkAsReadReplacementLabel: "",
+};
+
+export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
+  id: SettingsType.SYMBOLS,
+  enabled: true,
+  renderMode: SymbolRenderMode.AUTO,
+  fallback: SymbolFallback.HIDDEN,
+  size: "1.2em",
 };
