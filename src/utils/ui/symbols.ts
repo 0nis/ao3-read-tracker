@@ -6,6 +6,7 @@ import {
   SymbolRenderMode,
 } from "../../enums/symbols";
 import { CLASS_PREFIX } from "../../constants/classes";
+import { EMOJI_SCALE } from "../../constants/global";
 import { SymbolRecord } from "../../types/symbols";
 
 /** Gets a symbol element (image or text) by its ID. */
@@ -118,7 +119,7 @@ const renderSymbolEmoji = (
   if (!symbol.emoji) return null;
   return el("span", {
     textContent: symbol.emoji,
-    style: { fontSize: `${size - 0.2}em` },
+    style: { fontSize: `${size * EMOJI_SCALE}em` },
   });
 };
 
