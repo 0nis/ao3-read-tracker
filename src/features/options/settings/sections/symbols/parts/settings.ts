@@ -16,11 +16,7 @@ import {
 import { VerticalPlacement } from "../../../../../../enums/settings";
 import { SymbolSettings } from "../../../../../../types/settings";
 
-// TODO: Actually apply these settings throughout the application
-// enabled: DONE
-// size: DONE
-// renderMode: DONE
-// fallback: DONE
+// TODO: TEST THE SETTINGS AND THEIR IMPLEMENTATIONS
 const items: SettingsSectionItem<SymbolSettings>[] = [
   {
     type: FormItemType.FIELD,
