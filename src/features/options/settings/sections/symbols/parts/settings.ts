@@ -10,7 +10,7 @@ import {
 } from "../../../../../../utils/ui/forms";
 import { FormItemType } from "../../../../../../enums/forms";
 import {
-  SymbolFallback,
+  SymbolFallbackType,
   SymbolRenderMode,
 } from "../../../../../../enums/symbols";
 import { VerticalPlacement } from "../../../../../../enums/settings";
@@ -53,8 +53,8 @@ const items: SettingsSectionItem<SymbolSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.SYMBOL_SETTINGS,
     label: "Fallback",
-    input: enumSelect(SymbolFallback),
-    dataField: "fallback",
+    input: enumSelect(SymbolFallbackType),
+    dataField: "fallbackType",
     description: "What to display in case a symbol is missing.",
   },
 ];

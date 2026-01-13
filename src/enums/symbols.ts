@@ -31,7 +31,7 @@ export enum SymbolDisplayMode {
   NONE = "none",
 }
 
-export enum SymbolFallback {
+export enum SymbolFallbackType {
   LABEL = "label",
   QUESTION_MARK = "question_mark",
   HIDDEN = "hidden",

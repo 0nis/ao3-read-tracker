@@ -3,7 +3,7 @@ import {
   SymbolId,
   SymbolDisplayMode,
   SymbolRenderMode,
-  SymbolFallback,
+  SymbolFallbackType,
 } from "../enums/symbols";
 
 export interface FinishedSettings {
@@ -46,7 +46,7 @@ export interface SymbolSettings {
   id: string;
   enabled: boolean;
   renderMode: SymbolRenderMode;
-  fallback: SymbolFallback;
+  fallbackType: SymbolFallback;
   size: string;
 }
 

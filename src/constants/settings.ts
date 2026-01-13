@@ -2,7 +2,7 @@ import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SettingsType } from "../enums/settings";
 import {
   SymbolDisplayMode,
-  SymbolFallback,
+  SymbolFallbackType,
   SymbolRenderMode,
 } from "../enums/symbols";
 import {
@@ -53,6 +53,6 @@ export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
   id: SettingsType.SYMBOLS,
   enabled: true,
   renderMode: SymbolRenderMode.AUTO,
-  fallback: SymbolFallback.HIDDEN,
+  fallbackType: SymbolFallbackType.HIDDEN,
   size: "1.2em",
 };

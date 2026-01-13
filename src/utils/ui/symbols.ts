@@ -2,11 +2,12 @@ import { el } from "./dom";
 import { settingsCache, symbolsCache } from "../../services/cache";
 import {
   SymbolId,
-  SymbolFallback,
+  SymbolFallbackType,
   SymbolRenderMode,
 } from "../../enums/symbols";
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SymbolRecord } from "../../types/symbols";
+import { SymbolSettings } from "../../types/settings";
 
 /** Gets a symbol element (image or text) by its ID. */
 export async function getSymbolElement(
@@ -20,8 +21,9 @@ export async function getSymbolElement(
 
   if (symbol) return renderSymbolContent(symbol);
   else {
-    if (fallback) return renderSymbolFallback(SymbolFallback.LABEL, fallback);
-    else return renderSymbolFallback(symbolSettings.fallback);
+    if (fallback)
+      return renderSymbolFallback(SymbolFallbackType.LABEL, fallback);
+    else return renderSymbolFallback(symbolSettings.fallbackType);
   }
 }
 
@@ -37,9 +39,13 @@ export async function getSymbolElement(
 export function renderSymbolContent(
   symbol: SymbolRecord,
   suffix?: string,
-  renderMode: SymbolRenderMode = SymbolRenderMode.AUTO,
-  fallbackType: SymbolFallback = SymbolFallback.LABEL
+  settings?: SymbolSettings
 ): HTMLElement {
+  const {
+    renderMode = SymbolRenderMode.AUTO,
+    fallbackType = SymbolFallbackType.LABEL,
+  } = settings || {};
+
   const rm =
     renderMode === SymbolRenderMode.AUTO
       ? determineRenderMode(symbol)
@@ -101,19 +107,19 @@ const renderSymbolEmoji = (symbol: SymbolRecord): HTMLElement | null => {
 };
 
 const renderSymbolFallback = (
-  fallback: SymbolFallback,
+  fallback: SymbolFallbackType,
   label?: string,
   suffix?: string
 ): HTMLElement => {
   switch (fallback) {
-    case SymbolFallback.LABEL:
+    case SymbolFallbackType.LABEL:
       return buildSymbolContent(
         el("span", { textContent: label || "404" }),
         suffix
       );
-    case SymbolFallback.QUESTION_MARK:
+    case SymbolFallbackType.QUESTION_MARK:
       return buildSymbolContent(el("span", { textContent: "❔" }), suffix);
-    case SymbolFallback.HIDDEN:
+    case SymbolFallbackType.HIDDEN:
       return buildSymbolContent(el("span", { textContent: "" }));
   }
 };
