@@ -25,14 +25,16 @@ export async function buildBlock(
     el(
       "h4",
       { className: `${getClass()}__block-title` },
-      getTitleChildren(record)
+      await getTitleChildren(record)
     ),
   ]);
 
-  document.addEventListener(`${ABBREVIATION}:symbol-updated`, (e) => {
+  document.addEventListener(`${ABBREVIATION}:symbol-updated`, async (e) => {
     const record = (e as CustomEvent).detail.record;
     if (record.id !== id) return;
-    headerEl.querySelector("h4")?.replaceChildren(...getTitleChildren(record));
+    headerEl
+      .querySelector("h4")
+      ?.replaceChildren(...(await getTitleChildren(record)));
   });
 
   context.feedbackEl = el("p", {
@@ -40,7 +42,7 @@ export async function buildBlock(
     attrs: { "aria-live": "polite" },
   });
 
-  const fields: BlockField[] = getFields(context);
+  const fields: BlockField[] = await getFields(context);
   context.fields = fields;
   const fieldsWrapper = el(
     "ul",
@@ -66,11 +68,11 @@ export async function buildBlock(
   );
 }
 
-function getTitleChildren(record: SymbolRecord) {
+async function getTitleChildren(record: SymbolRecord) {
   const children: HTMLElement[] = [];
 
   if (record.emoji || record.imgBlob)
-    children.push(renderSymbolContent(record));
+    children.push(await renderSymbolContent({ symbol: record }));
   if (record.label) children.push(el("span", {}, [record.label]));
 
   // In case someone just deletes everything from the record

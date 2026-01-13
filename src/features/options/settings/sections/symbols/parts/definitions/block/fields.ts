@@ -3,7 +3,7 @@ import { BlockContext, BlockField } from "./types";
 import { getClass, ACCEPTED_IMAGE_TYPES } from "../../../section";
 
 import { el } from "../../../../../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../../../../../utils/ui/symbols";
+import { renderSymbolContentById } from "../../../../../../../../utils/ui/symbols";
 import {
   getImageSelectorElements,
   getInputElement,
@@ -13,20 +13,20 @@ import {
 import { SymbolId } from "../../../../../../../../enums/symbols";
 import { ABBREVIATION } from "../../../../../../../../constants/global";
 
-export function getFields({
+export async function getFields({
   id,
   record,
   symbols,
   state,
   feedbackEl,
-}: BlockContext): BlockField[] {
+}: BlockContext): Promise<BlockField[]> {
   const imgSelectorEls = getImageSelectorElements({
     defaultImg: record.imgBlob,
     upload: {
       label: "Upload",
     },
     clear: {
-      label: symbols ? renderSymbolContent(symbols[SymbolId.CLEAR]) : "Clear",
+      label: await renderSymbolContentById(SymbolId.CLEAR, "Clear"),
     },
     onChange: (blob) => (state.file = blob ?? undefined),
     onError: (message) => {

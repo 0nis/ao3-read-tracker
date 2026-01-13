@@ -1,12 +1,12 @@
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { SymbolId } from "../../../../../enums/symbols";
 import { el } from "../../../../../utils/ui/dom";
-import { getSymbolElement } from "../../../../../utils/ui/symbols";
+import { renderSymbolContentById } from "../../../../../utils/ui/symbols";
 
 export async function createDeleteBtn(
   onDelete: () => void
 ): Promise<HTMLButtonElement> {
-  let innerEl = await getSymbolElement(SymbolId.DELETE, "🗑︎");
+  let innerEl = await renderSymbolContentById(SymbolId.DELETE, "🗑︎");
   const deleteBtn = el(
     "button",
     {
@@ -23,7 +23,7 @@ export async function createDeleteBtn(
 }
 
 export async function createLinkBtn(href: string): Promise<HTMLAnchorElement> {
-  let innerEl = await getSymbolElement(SymbolId.LINK, "↗");
+  let innerEl = await renderSymbolContentById(SymbolId.LINK, "↗");
   const linkBtn = el(
     "a",
     {

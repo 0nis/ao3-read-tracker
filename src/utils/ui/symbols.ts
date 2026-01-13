@@ -7,10 +7,9 @@ import {
 } from "../../enums/symbols";
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SymbolRecord } from "../../types/symbols";
-import { SymbolSettings } from "../../types/settings";
 
 /** Gets a symbol element (image or text) by its ID. */
-export async function getSymbolElement(
+export async function renderSymbolContentById(
   id: SymbolId,
   fallback?: string
 ): Promise<HTMLElement> {
@@ -19,7 +18,10 @@ export async function getSymbolElement(
 
   const symbol = symbols[id];
 
-  if (symbol) return renderSymbolContent(symbol);
+  if (symbol)
+    return await renderSymbolContent({
+      symbol,
+    });
   else {
     if (fallback)
       return renderSymbolFallback(SymbolFallbackType.LABEL, fallback);
@@ -36,16 +38,18 @@ export async function getSymbolElement(
  * @param suffix Optional suffix to append to text symbols
  * @returns The rendered symbol element
  */
-export function renderSymbolContent(
-  symbol: SymbolRecord,
-  suffix?: string,
-  settings?: SymbolSettings
-): HTMLElement {
+export async function renderSymbolContent({
+  symbol,
+  suffix,
+}: {
+  symbol: SymbolRecord;
+  suffix?: string;
+}): Promise<HTMLElement> {
   const {
     renderMode = SymbolRenderMode.AUTO,
     fallbackType = SymbolFallbackType.LABEL,
     size = 1.2,
-  } = settings || {};
+  } = (await settingsCache.get()).symbolSettings || {};
 
   const rm =
     renderMode === SymbolRenderMode.AUTO
