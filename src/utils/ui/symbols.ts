@@ -44,6 +44,7 @@ export function renderSymbolContent(
   const {
     renderMode = SymbolRenderMode.AUTO,
     fallbackType = SymbolFallbackType.LABEL,
+    size = 1.2,
   } = settings || {};
 
   const rm =
@@ -52,13 +53,13 @@ export function renderSymbolContent(
       : renderMode;
 
   if (rm === SymbolRenderMode.IMAGE) {
-    const img = renderSymbolImgBlob(symbol);
+    const img = renderSymbolImgBlob(symbol, size);
     if (img) return buildSymbolContent(img, suffix);
     else return renderSymbolFallback(fallbackType, symbol.label);
   }
 
   if (rm === SymbolRenderMode.EMOJI) {
-    const emoji = renderSymbolEmoji(symbol);
+    const emoji = renderSymbolEmoji(symbol, size);
     if (emoji) return buildSymbolContent(emoji, suffix);
     else return renderSymbolFallback(fallbackType, symbol.label);
   }
@@ -89,21 +90,32 @@ const buildSymbolContent = (
   ]);
 };
 
-const renderSymbolImgBlob = (symbol: SymbolRecord): HTMLImageElement | null => {
+const renderSymbolImgBlob = (
+  symbol: SymbolRecord,
+  size: number
+): HTMLImageElement | null => {
   if (!symbol.imgBlob) return null;
   const url = URL.createObjectURL(symbol.imgBlob);
-  return el("img", {
+  const img = el("img", {
     src: url,
     alt: symbol.label,
     className: `${CLASS_PREFIX}__inline-image`,
+    style: { height: `${size}em` },
     onload: () => URL.revokeObjectURL(url), // Cleanup
     onerror: () => URL.revokeObjectURL(url), // Cleanup
   });
+  return img;
 };
 
-const renderSymbolEmoji = (symbol: SymbolRecord): HTMLElement | null => {
+const renderSymbolEmoji = (
+  symbol: SymbolRecord,
+  size: number
+): HTMLElement | null => {
   if (!symbol.emoji) return null;
-  return el("span", { textContent: symbol.emoji });
+  return el("span", {
+    textContent: symbol.emoji,
+    style: { fontSize: `${size - 0.2}em` },
+  });
 };
 
 const renderSymbolFallback = (

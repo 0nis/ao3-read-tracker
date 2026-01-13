@@ -242,7 +242,10 @@ export abstract class PaginatedListSectionBase<T> {
 
       pageSize: {
         label: "Page Size",
-        input: number("1", String(this.paginationOptions.pageSize)),
+        input: number({
+          min: 1,
+          defaultValue: this.paginationOptions.pageSize,
+        }),
         onChange: (value: number) => {
           const newSize = Number(value);
           if (!Number.isNaN(newSize)) {

@@ -2,12 +2,7 @@ import { SETTINGS_SAVE_MAP, SettingsSectionTypeMap } from "../config";
 import { SettingsSectionConfig } from "../types";
 
 import { handleStorageWrite } from "../../../../utils/storage";
-import {
-  createFlashNotice,
-  extractFormValues,
-} from "../../../../utils/ui/forms";
-import { getButtonOrigin } from "../../../../utils/ui/dom";
-import { VerticalPlacement } from "../../../../enums/settings";
+import { extractFormValues } from "../../../../utils/ui/forms";
 
 export async function saveSettingsData<K extends keyof SettingsSectionTypeMap>({
   cfg,

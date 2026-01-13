@@ -43,7 +43,7 @@ export function getFields({
   });
 
   return [
-    { id, type: "label", element: text(record.label) },
+    { id, type: "label", element: text({ defaultValue: record.label }) },
     {
       id,
       type: "imgBlob",
@@ -61,8 +61,12 @@ export function getFields({
         ]
       ),
     },
-    { id, type: "emoji", element: text(record.emoji ?? "") },
-    { id, type: "priority", element: number("0", record.priority.toString()) },
+    { id, type: "emoji", element: text({ defaultValue: record.emoji ?? "" }) },
+    {
+      id,
+      type: "priority",
+      element: number({ defaultValue: record.priority }),
+    },
   ];
 }
 

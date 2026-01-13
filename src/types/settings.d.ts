@@ -47,7 +47,7 @@ export interface SymbolSettings {
   enabled: boolean;
   renderMode: SymbolRenderMode;
   fallbackType: SymbolFallback;
-  size: string;
+  size: number;
 }
 
 export type SettingsData = {

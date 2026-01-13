@@ -5,7 +5,7 @@ import { SectionId } from "../../../../config";
 import { settingsCache } from "../../../../../../services/cache";
 import {
   enumSelect,
-  text,
+  number,
   toggleSwitch,
 } from "../../../../../../utils/ui/forms";
 import { FormItemType } from "../../../../../../enums/forms";
@@ -18,7 +18,7 @@ import { SymbolSettings } from "../../../../../../types/settings";
 
 // TODO: Actually apply these settings throughout the application
 // enabled: DONE
-// size: todo
+// size: DONE
 // renderMode: DONE
 // fallback: DONE
 const items: SettingsSectionItem<SymbolSettings>[] = [
@@ -35,10 +35,10 @@ const items: SettingsSectionItem<SymbolSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.SYMBOL_SETTINGS,
     label: "Size",
-    input: text("", "e.g., 1.2em"),
+    input: number({ defaultValue: 1.2 }),
     dataField: "size",
     description:
-      "Takes a <a href='https://www.w3schools.com/cssref/css_units.php' target='_blank'>CSS unit value</a> and applies it to the size of the symbols.",
+      "Takes a size value in the CSS unit <code>em</code>. 1 em equals the current font size. For example, 1.2 em would be 20% larger than the size of the text.",
   },
   {
     type: FormItemType.FIELD,

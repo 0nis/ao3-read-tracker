@@ -54,5 +54,5 @@ export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
   enabled: true,
   renderMode: SymbolRenderMode.AUTO,
   fallbackType: SymbolFallbackType.HIDDEN,
-  size: "1.2em",
+  size: 1.2,
 };

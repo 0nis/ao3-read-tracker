@@ -22,7 +22,7 @@ const items: WorkFormItem<FinishedWork>[] = [
     label: "Notes",
     description:
       "Private notes that will appear in the work summary block for this work.",
-    input: textarea(3),
+    input: textarea({ rows: 3 }),
   },
   {
     type: FormItemType.GROUP,
@@ -36,7 +36,7 @@ const items: WorkFormItem<FinishedWork>[] = [
             type: FormItemType.FIELD,
             dataField: "finishedAt",
             label: "Finished at",
-            input: datetime(new Date()),
+            input: datetime({ defaultValue: new Date() }),
           },
           {
             type: FormItemType.FIELD,
@@ -54,7 +54,7 @@ const items: WorkFormItem<FinishedWork>[] = [
             type: FormItemType.FIELD,
             dataField: "timesRead",
             label: "Times read",
-            input: number("1", "1"),
+            input: number({ min: 1, defaultValue: 1 }),
           },
           {
             type: FormItemType.FIELD,

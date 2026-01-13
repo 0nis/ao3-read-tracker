@@ -22,7 +22,7 @@ const items: WorkFormItem<InProgressWork>[] = [
     label: "Notes",
     description:
       "Private notes that will appear in the work summary block for this work.",
-    input: textarea(3),
+    input: textarea({ rows: 3 }),
   },
   {
     type: FormItemType.GROUP,
@@ -42,12 +42,13 @@ const items: WorkFormItem<InProgressWork>[] = [
             type: FormItemType.FIELD,
             dataField: "lastReadChapter",
             label: "Last Chapter Read",
-            input: number(
-              "1",
-              getCurrentChapterFromWorkPage({
-                suppressWarnings: true,
-              })?.toString() || "1"
-            ),
+            input: number({
+              min: 1,
+              defaultValue:
+                getCurrentChapterFromWorkPage({
+                  suppressWarnings: true,
+                }) || 1,
+            }),
           },
         ],
       },
@@ -59,13 +60,13 @@ const items: WorkFormItem<InProgressWork>[] = [
             type: FormItemType.FIELD,
             dataField: "startedAt",
             label: "Started Reading On",
-            input: datetime(new Date()),
+            input: datetime({ defaultValue: new Date() }),
           },
           {
             type: FormItemType.FIELD,
             dataField: "lastReadAt",
             label: "Last Read On",
-            input: datetime(new Date()),
+            input: datetime({ defaultValue: new Date() }),
           },
         ],
       },
