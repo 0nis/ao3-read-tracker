@@ -19,8 +19,8 @@ import { SymbolSettings } from "../../../../../../types/settings";
 // TODO: Actually apply these settings throughout the application
 // enabled: DONE
 // size: todo
-// renderMode: todo
-// fallback: todo
+// renderMode: DONE
+// fallback: DONE
 const items: SettingsSectionItem<SymbolSettings>[] = [
   {
     type: FormItemType.FIELD,

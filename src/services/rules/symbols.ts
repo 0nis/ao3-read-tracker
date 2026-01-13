@@ -10,14 +10,18 @@ export interface SymbolRuleParams extends WorkStateData {
   details?: {
     latestChapter?: number;
   };
+  /** State/status settings for specific symbol types */
   displayMode?: {
     finished?: SymbolDisplayMode;
     inProgress?: SymbolDisplayMode;
   };
   options?: {
+    /** If false, no rule will match */
+    enabled?: boolean;
+
+    /** Optionally overwrite displayMode */
     showState?: boolean;
     showStatus?: boolean;
-    enabled?: boolean;
   };
 }
 

@@ -1,19 +1,28 @@
 import { el } from "./dom";
-import { symbolsCache } from "../../services/cache";
-import { SymbolId } from "../../enums/symbols";
+import { settingsCache, symbolsCache } from "../../services/cache";
+import {
+  SymbolId,
+  SymbolFallback,
+  SymbolRenderMode,
+} from "../../enums/symbols";
 import { CLASS_PREFIX } from "../../constants/classes";
 import { SymbolRecord } from "../../types/symbols";
 
 /** Gets a symbol element (image or text) by its ID. */
 export async function getSymbolElement(
   id: SymbolId,
-  fallback: string = "❔"
+  fallback?: string
 ): Promise<HTMLElement> {
   const symbols = await symbolsCache.get();
+  const { symbolSettings } = await settingsCache.get();
+
   const symbol = symbols[id];
-  return symbol
-    ? renderSymbolContent(symbol)
-    : el("span", { textContent: fallback });
+
+  if (symbol) return renderSymbolContent(symbol);
+  else {
+    if (fallback) return renderSymbolFallback(SymbolFallback.LABEL, fallback);
+    else return renderSymbolFallback(symbolSettings.fallback);
+  }
 }
 
 /**
@@ -27,32 +36,84 @@ export async function getSymbolElement(
  */
 export function renderSymbolContent(
   symbol: SymbolRecord,
-  suffix?: string
+  suffix?: string,
+  renderMode: SymbolRenderMode = SymbolRenderMode.AUTO,
+  fallbackType: SymbolFallback = SymbolFallback.LABEL
 ): HTMLElement {
-  const children: HTMLElement[] = [];
+  const rm =
+    renderMode === SymbolRenderMode.AUTO
+      ? determineRenderMode(symbol)
+      : renderMode;
 
-  if (symbol.imgBlob) {
-    const url = URL.createObjectURL(symbol.imgBlob);
-    children.push(
-      el("img", {
-        src: url,
-        alt: symbol.label,
-        className: `${CLASS_PREFIX}__inline-image`,
-        onload: () => URL.revokeObjectURL(url), // Cleanup
-        onerror: () => URL.revokeObjectURL(url), // Cleanup
-      })
-    );
-  } else {
-    children.push(el("span", { textContent: symbol.emoji || symbol.label }));
+  if (rm === SymbolRenderMode.IMAGE) {
+    const img = renderSymbolImgBlob(symbol);
+    if (img) return buildSymbolContent(img, suffix);
+    else return renderSymbolFallback(fallbackType, symbol.label);
   }
 
-  if (suffix)
-    children.push(
-      el("span", {
-        className: `${CLASS_PREFIX}__suffix`,
-        textContent: suffix,
-      })
-    );
+  if (rm === SymbolRenderMode.EMOJI) {
+    const emoji = renderSymbolEmoji(symbol);
+    if (emoji) return buildSymbolContent(emoji, suffix);
+    else return renderSymbolFallback(fallbackType, symbol.label);
+  }
 
-  return el("span", { attrs: { role: "presentation" } }, children);
+  return renderSymbolFallback(fallbackType, symbol.label);
 }
+
+const determineRenderMode = (symbol: SymbolRecord): SymbolRenderMode | null => {
+  if (symbol.imgBlob) return SymbolRenderMode.IMAGE;
+  if (symbol.emoji) return SymbolRenderMode.EMOJI;
+  return null;
+};
+
+const buildSymbolContent = (
+  symbolEl: HTMLElement,
+  suffix?: string
+): HTMLElement => {
+  return el("span", { attrs: { role: "presentation" } }, [
+    symbolEl,
+    ...(suffix
+      ? [
+          el("span", {
+            className: `${CLASS_PREFIX}__suffix`,
+            textContent: suffix,
+          }),
+        ]
+      : []),
+  ]);
+};
+
+const renderSymbolImgBlob = (symbol: SymbolRecord): HTMLImageElement | null => {
+  if (!symbol.imgBlob) return null;
+  const url = URL.createObjectURL(symbol.imgBlob);
+  return el("img", {
+    src: url,
+    alt: symbol.label,
+    className: `${CLASS_PREFIX}__inline-image`,
+    onload: () => URL.revokeObjectURL(url), // Cleanup
+    onerror: () => URL.revokeObjectURL(url), // Cleanup
+  });
+};
+
+const renderSymbolEmoji = (symbol: SymbolRecord): HTMLElement | null => {
+  if (!symbol.emoji) return null;
+  return el("span", { textContent: symbol.emoji });
+};
+
+const renderSymbolFallback = (
+  fallback: SymbolFallback,
+  label?: string,
+  suffix?: string
+): HTMLElement => {
+  switch (fallback) {
+    case SymbolFallback.LABEL:
+      return buildSymbolContent(
+        el("span", { textContent: label || "404" }),
+        suffix
+      );
+    case SymbolFallback.QUESTION_MARK:
+      return buildSymbolContent(el("span", { textContent: "❔" }), suffix);
+    case SymbolFallback.HIDDEN:
+      return buildSymbolContent(el("span", { textContent: "" }));
+  }
+};
