@@ -46,7 +46,6 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
-  hideSymbols: false,
   nativeMarkAsReadReplacementLabel: "",
 };
 

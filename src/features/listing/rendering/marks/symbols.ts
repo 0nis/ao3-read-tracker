@@ -76,7 +76,7 @@ async function renderSymbols(
       inProgress: settings.inProgressSettings.symbolDisplayMode,
     },
     options: {
-      hideSymbols: settings.generalSettings.hideSymbols,
+      enabled: settings.symbolSettings.enabled,
     },
   });
 

@@ -17,7 +17,7 @@ export interface SymbolRuleParams extends WorkStateData {
   options?: {
     showState?: boolean;
     showStatus?: boolean;
-    hideSymbols?: boolean;
+    enabled?: boolean;
   };
 }
 
@@ -40,7 +40,7 @@ class SymbolRuleCollector extends BaseRuleCollector<
     displayMode,
     options,
   }: SymbolRuleParams): SymbolRule[] {
-    if (options?.hideSymbols) return [];
+    if (options?.enabled === false) return [];
 
     const getShowState = (mode?: SymbolDisplayMode) =>
       options?.showState ??

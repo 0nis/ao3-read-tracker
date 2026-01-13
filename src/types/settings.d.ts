@@ -39,7 +39,6 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
-  hideSymbols: boolean;
   nativeMarkAsReadReplacementLabel: string;
 }
 

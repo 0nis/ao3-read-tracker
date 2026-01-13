@@ -3,21 +3,11 @@ import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { enumSelect, text, toggleSwitch } from "../../../../utils/ui/forms";
-import { VerticalPlacement } from "../../../../enums/settings";
+import { text } from "../../../../utils/ui/forms";
 import { FormItemType } from "../../../../enums/forms";
 import { GeneralSettings } from "../../../../types/settings";
 
 const items: SettingsSectionItem<GeneralSettings>[] = [
-  {
-    type: FormItemType.FIELD,
-    sectionId: SectionId.GENERAL_SETTINGS,
-    label: "Hide Symbols",
-    input: toggleSwitch(),
-    dataField: "hideSymbols",
-    description:
-      "Whether to hide all symbols next to the title of the works in lists.",
-  },
   {
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
