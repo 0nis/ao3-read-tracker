@@ -15,9 +15,9 @@ import {
 } from "../../../../../../enums/symbols";
 import { VerticalPlacement } from "../../../../../../enums/settings";
 import { SymbolSettings } from "../../../../../../types/settings";
+import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../../constants/global";
 
 // TODO: TEST THE SETTINGS AND THEIR IMPLEMENTATIONS
-// in fn add ignore size settings (for things like symbol inputs)
 // test emoji sizing across browsers (and fonts?). Maybe allow disabling of emoji scaling in advanced
 const items: SettingsSectionItem<SymbolSettings>[] = [
   {
@@ -33,7 +33,7 @@ const items: SettingsSectionItem<SymbolSettings>[] = [
     type: FormItemType.FIELD,
     sectionId: SectionId.SYMBOL_SETTINGS,
     label: "Size",
-    input: number({ defaultValue: 1.2 }),
+    input: number({ defaultValue: DEFAULT_SYMBOL_SIZE_EM }),
     dataField: "size",
     description:
       "Takes a size value in the CSS unit <code>em</code>. 1 em equals the current font size. For example, 1.2 em would be 20% larger than the size of the text.",

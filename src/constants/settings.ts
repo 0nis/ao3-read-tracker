@@ -1,3 +1,4 @@
+import { DEFAULT_SYMBOL_SIZE_EM } from "./global";
 import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SettingsType } from "../enums/settings";
 import {
@@ -54,5 +55,5 @@ export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
   enabled: true,
   renderMode: SymbolRenderMode.AUTO,
   fallbackType: SymbolFallbackType.HIDDEN,
-  size: 1.2,
+  size: DEFAULT_SYMBOL_SIZE_EM,
 };

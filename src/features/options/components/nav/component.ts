@@ -6,6 +6,7 @@ import { reportSrLive } from "../../../../utils/ui/accessibility";
 import { renderSymbolContentById } from "../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../enums/symbols";
 import { CLASS_PREFIX } from "../../../../constants/classes";
+import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../constants/global";
 
 const getClass = () => `${CLASS_PREFIX}__nav`;
 
@@ -78,8 +79,12 @@ export async function buildNav(groups: NavGroup[]): Promise<{
 }
 
 export async function buildNavToggleEl(nav: HTMLElement): Promise<HTMLElement> {
-  const hamburgerEl = await renderSymbolContentById(SymbolId.HAMBURGER, "☰");
-  const closeEl = await renderSymbolContentById(SymbolId.CLOSE, "✕");
+  const hamburgerEl = await renderSymbolContentById(SymbolId.HAMBURGER, "☰", {
+    sizeOverride: DEFAULT_SYMBOL_SIZE_EM,
+  });
+  const closeEl = await renderSymbolContentById(SymbolId.CLOSE, "✕", {
+    sizeOverride: DEFAULT_SYMBOL_SIZE_EM,
+  });
 
   const toggleBtn = el(
     "button",

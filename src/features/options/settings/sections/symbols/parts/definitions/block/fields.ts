@@ -11,7 +11,10 @@ import {
   text,
 } from "../../../../../../../../utils/ui/forms";
 import { SymbolId } from "../../../../../../../../enums/symbols";
-import { ABBREVIATION } from "../../../../../../../../constants/global";
+import {
+  ABBREVIATION,
+  DEFAULT_SYMBOL_SIZE_EM,
+} from "../../../../../../../../constants/global";
 
 export async function getFields({
   id,
@@ -26,7 +29,9 @@ export async function getFields({
       label: "Upload",
     },
     clear: {
-      label: await renderSymbolContentById(SymbolId.CLEAR, "Clear"),
+      label: await renderSymbolContentById(SymbolId.CLEAR, "Clear", {
+        sizeOverride: DEFAULT_SYMBOL_SIZE_EM,
+      }),
     },
     onChange: (blob) => (state.file = blob ?? undefined),
     onError: (message) => {

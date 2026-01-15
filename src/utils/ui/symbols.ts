@@ -6,13 +6,30 @@ import {
   SymbolRenderMode,
 } from "../../enums/symbols";
 import { CLASS_PREFIX } from "../../constants/classes";
-import { EMOJI_SCALE } from "../../constants/global";
+import { DEFAULT_SYMBOL_SIZE_EM, EMOJI_SCALE } from "../../constants/global";
 import { SymbolRecord } from "../../types/symbols";
 
-/** Gets a symbol element (image or text) by its ID. */
+export interface SymbolDevOptions {
+  sizeOverride?: number;
+  fallbackTypeOverride?: SymbolFallbackType;
+  disableEmojiScaling?: boolean;
+}
+
+/**
+ * Gets a symbol element by its ID by calling {@link renderSymbolContent}.
+ * To be used for usecases where a specific symbol is always needed (e.g., hamburger menu icon).
+ * This is merely the *content* of the symbol, it still needs to be wrapped in a container.
+ * The content will have role presentation, it is up to the caller to give it an appropriate label in the wrapper.
+ *
+ * @param id The ID of the symbol
+ * @param fallback Optional fallback text or emoji to use if the symbol is not found (overrides user-selected fallback)
+ * @param sizeOverride Optional size (in em) of the symbol (overrides user-selected size)
+ * @returns The rendered symbol element.
+ */
 export async function renderSymbolContentById(
   id: SymbolId,
-  fallback?: string
+  fallback?: string,
+  options?: SymbolDevOptions
 ): Promise<HTMLElement> {
   const symbols = await symbolsCache.get();
   const { symbolSettings } = await settingsCache.get();
@@ -22,10 +39,14 @@ export async function renderSymbolContentById(
   if (symbol)
     return await renderSymbolContent({
       symbol,
+      ...options,
     });
   else {
     if (fallback)
-      return renderSymbolFallback(SymbolFallbackType.LABEL, fallback);
+      return renderSymbolFallback({
+        fallbackType: SymbolFallbackType.LABEL,
+        label: fallback,
+      });
     else return renderSymbolFallback(symbolSettings.fallbackType);
   }
 }
@@ -37,20 +58,28 @@ export async function renderSymbolContentById(
  *
  * @param symbol The symbol record to render
  * @param suffix Optional suffix to append to text symbols
+ * @param sizeOverride Optional size (in em) of the symbol (overrides user-selected size)
+ * @param fallbackTypeOverride Optional fallback type (overrides user-selected fallback)
  * @returns The rendered symbol element
  */
 export async function renderSymbolContent({
   symbol,
   suffix,
+  sizeOverride,
+  fallbackTypeOverride,
+  disableEmojiScaling,
 }: {
   symbol: SymbolRecord;
   suffix?: string;
-}): Promise<HTMLElement> {
-  const {
+} & SymbolDevOptions): Promise<HTMLElement> {
+  let {
     renderMode = SymbolRenderMode.AUTO,
     fallbackType = SymbolFallbackType.LABEL,
-    size = 1.2,
+    size = DEFAULT_SYMBOL_SIZE_EM,
   } = (await settingsCache.get()).symbolSettings || {};
+
+  if (sizeOverride) size = sizeOverride;
+  if (fallbackTypeOverride) fallbackType = fallbackTypeOverride;
 
   const rm =
     renderMode === SymbolRenderMode.AUTO
@@ -59,17 +88,17 @@ export async function renderSymbolContent({
 
   if (rm === SymbolRenderMode.IMAGE) {
     const img = renderSymbolImgBlob(symbol, size);
-    if (img) return buildSymbolContent(img, suffix);
-    else return renderSymbolFallback(fallbackType, symbol.label);
+    if (img) return buildSymbolContent(img, suffix, size);
+    else return renderSymbolFallback({ fallbackType, label: symbol.label });
   }
 
   if (rm === SymbolRenderMode.EMOJI) {
-    const emoji = renderSymbolEmoji(symbol, size);
-    if (emoji) return buildSymbolContent(emoji, suffix);
-    else return renderSymbolFallback(fallbackType, symbol.label);
+    const emoji = renderSymbolEmoji(symbol, size, disableEmojiScaling);
+    if (emoji) return buildSymbolContent(emoji, suffix, size);
+    else return renderSymbolFallback({ fallbackType, label: symbol.label });
   }
 
-  return renderSymbolFallback(fallbackType, symbol.label);
+  return renderSymbolFallback({ fallbackType, label: symbol.label });
 }
 
 const determineRenderMode = (symbol: SymbolRecord): SymbolRenderMode | null => {
@@ -80,7 +109,8 @@ const determineRenderMode = (symbol: SymbolRecord): SymbolRenderMode | null => {
 
 const buildSymbolContent = (
   symbolEl: HTMLElement,
-  suffix?: string
+  suffix?: string,
+  size?: number
 ): HTMLElement => {
   return el("span", { attrs: { role: "presentation" } }, [
     symbolEl,
@@ -89,6 +119,7 @@ const buildSymbolContent = (
           el("span", {
             className: `${CLASS_PREFIX}__suffix`,
             textContent: suffix,
+            style: { fontSize: `${size}em` },
           }),
         ]
       : []),
@@ -114,21 +145,27 @@ const renderSymbolImgBlob = (
 
 const renderSymbolEmoji = (
   symbol: SymbolRecord,
-  size: number
+  size: number,
+  disableEmojiScaling?: boolean
 ): HTMLElement | null => {
   if (!symbol.emoji) return null;
+  const scale = disableEmojiScaling ? 1 : EMOJI_SCALE;
   return el("span", {
     textContent: symbol.emoji,
-    style: { fontSize: `${size * EMOJI_SCALE}em` },
+    style: { fontSize: `${size * scale}em` },
   });
 };
 
-const renderSymbolFallback = (
-  fallback: SymbolFallbackType,
-  label?: string,
-  suffix?: string
-): HTMLElement => {
-  switch (fallback) {
+const renderSymbolFallback = ({
+  fallbackType,
+  label,
+  suffix,
+}: {
+  fallbackType: SymbolFallbackType;
+  label?: string;
+  suffix?: string;
+}): HTMLElement => {
+  switch (fallbackType) {
     case SymbolFallbackType.LABEL:
       return buildSymbolContent(
         el("span", { textContent: label || "404" }),
