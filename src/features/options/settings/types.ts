@@ -22,6 +22,8 @@ export interface SettingsSectionGroup<T>
   id: string;
   label: string;
   description?: string;
+  collapsible?: boolean;
+  collapsedByDefault?: boolean;
 }
 
 export type SettingsSectionItem<T> = FormItem<
