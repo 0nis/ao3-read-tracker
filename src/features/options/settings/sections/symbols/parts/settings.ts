@@ -17,8 +17,6 @@ import { VerticalPlacement } from "../../../../../../enums/settings";
 import { SymbolSettings } from "../../../../../../types/settings";
 import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../../constants/global";
 
-// TODO: TEST THE SETTINGS AND THEIR IMPLEMENTATIONS
-// test emoji sizing across browsers (and fonts?). Maybe allow disabling of emoji scaling in advanced
 const items: SettingsSectionItem<SymbolSettings>[] = [
   {
     type: FormItemType.FIELD,
