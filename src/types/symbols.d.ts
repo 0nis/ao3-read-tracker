@@ -1,4 +1,4 @@
-import { SymbolId, SymbolType } from "../enums/symbols";
+import { SymbolId } from "../enums/symbols";
 
 export interface SymbolRecord {
   id: string;

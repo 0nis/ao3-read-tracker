@@ -77,7 +77,7 @@ export function getInputValue(element: HTMLElement): any {
         case "checkbox":
           return el.checked;
         case "number":
-          return parseInt(el.value, 10);
+          return Number.isNaN(el.valueAsNumber) ? undefined : el.valueAsNumber;
         case "datetime-local":
           return new Date(el.value).getTime();
         case "file":

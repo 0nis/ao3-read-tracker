@@ -3,19 +3,25 @@ import { BaseRule, BaseRuleCollector } from "./base";
 import { SymbolDisplayMode, SymbolId } from "../../enums/symbols";
 import { FinishedStatus, ReadingStatus } from "../../enums/works";
 import { WorkStateData } from "../../types/works";
+import { SymbolData } from "../../types/symbols";
 
 export interface SymbolRuleParams extends WorkStateData {
+  symbols: SymbolData;
   details?: {
     latestChapter?: number;
   };
+  /** State/status settings for specific symbol types */
   displayMode?: {
     finished?: SymbolDisplayMode;
     inProgress?: SymbolDisplayMode;
   };
   options?: {
+    /** If false, no rule will match */
+    enabled?: boolean;
+
+    /** Optionally overwrite displayMode */
     showState?: boolean;
     showStatus?: boolean;
-    hideSymbols?: boolean;
   };
 }
 
@@ -30,6 +36,7 @@ class SymbolRuleCollector extends BaseRuleCollector<
   SymbolRule
 > {
   collect({
+    symbols,
     finishedWork,
     ignoredWork,
     inProgressWork,
@@ -37,7 +44,7 @@ class SymbolRuleCollector extends BaseRuleCollector<
     displayMode,
     options,
   }: SymbolRuleParams): SymbolRule[] {
-    if (options?.hideSymbols) return [];
+    if (options?.enabled === false) return [];
 
     const getShowState = (mode?: SymbolDisplayMode) =>
       options?.showState ??
@@ -53,66 +60,66 @@ class SymbolRuleCollector extends BaseRuleCollector<
       {
         id: SymbolId.IGNORED,
         shouldApply: () => !!ignoredWork,
-        priority: 100,
+        priority: symbols[SymbolId.IGNORED].priority,
       },
       {
         id: SymbolId.IN_PROGRESS,
         shouldApply: () =>
           !!inProgressWork && getShowState(displayMode?.inProgress),
-        priority: 90,
+        priority: symbols[SymbolId.IN_PROGRESS].priority,
       },
       {
         id: SymbolId.FINISHED,
         shouldApply: () =>
           !!finishedWork && getShowState(displayMode?.finished),
-        priority: 80,
+        priority: symbols[SymbolId.FINISHED].priority,
       },
       {
         id: SymbolId.REREAD_WORTHY,
         shouldApply: () => !!finishedWork?.rereadWorthy,
-        priority: 70,
+        priority: symbols[SymbolId.REREAD_WORTHY].priority,
       },
       {
         id: SymbolId.STATUS_COMPLETED,
         shouldApply: () =>
           finishedWork?.finishedStatus === FinishedStatus.COMPLETED &&
           getShowStatus(displayMode?.finished),
-        priority: 40,
+        priority: symbols[SymbolId.STATUS_COMPLETED].priority,
       },
       {
         id: SymbolId.STATUS_DROPPED,
         shouldApply: () =>
           finishedWork?.finishedStatus === FinishedStatus.DROPPED &&
           getShowStatus(displayMode?.finished),
-        priority: 40,
+        priority: symbols[SymbolId.STATUS_DROPPED].priority,
       },
       {
         id: SymbolId.STATUS_DORMANT,
         shouldApply: () =>
           finishedWork?.finishedStatus === FinishedStatus.DORMANT &&
           getShowStatus(displayMode?.finished),
-        priority: 40,
+        priority: symbols[SymbolId.STATUS_DORMANT].priority,
       },
       {
         id: SymbolId.STATUS_READING_ACTIVE,
         shouldApply: () =>
           inProgressWork?.readingStatus === ReadingStatus.ACTIVE &&
           getShowStatus(displayMode?.inProgress),
-        priority: 40,
+        priority: symbols[SymbolId.STATUS_READING_ACTIVE].priority,
       },
       {
         id: SymbolId.STATUS_READING_WAITING,
         shouldApply: () =>
           inProgressWork?.readingStatus === ReadingStatus.WAITING &&
           getShowStatus(displayMode?.inProgress),
-        priority: 40,
+        priority: symbols[SymbolId.STATUS_READING_WAITING].priority,
       },
       {
         id: SymbolId.STATUS_READING_PAUSED,
         shouldApply: () =>
           inProgressWork?.readingStatus === ReadingStatus.PAUSED &&
           getShowState(displayMode?.inProgress),
-        priority: 40,
+        priority: symbols[SymbolId.STATUS_READING_PAUSED].priority,
       },
       {
         id: SymbolId.TIMES_READ,
@@ -123,7 +130,7 @@ class SymbolRuleCollector extends BaseRuleCollector<
             ? "Read 1 time"
             : `Read ${finishedWork!.timesRead} times`,
         getSuffix: () => `x${finishedWork!.timesRead}`,
-        priority: 20,
+        priority: symbols[SymbolId.TIMES_READ].priority,
       },
       {
         id: SymbolId.NEW_CHAPTERS_AVAILABLE,
@@ -140,7 +147,7 @@ class SymbolRuleCollector extends BaseRuleCollector<
           `New chapters available! (last read: chapter ${
             inProgressWork?.lastReadChapter || "?"
           })`,
-        priority: 10,
+        priority: symbols[SymbolId.NEW_CHAPTERS_AVAILABLE].priority,
       },
     ];
   }

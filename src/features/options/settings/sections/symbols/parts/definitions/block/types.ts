@@ -1,5 +1,8 @@
-import type { SymbolId } from "../../../../../enums/symbols";
-import type { SymbolData, SymbolRecord } from "../../../../../types/symbols";
+import type { SymbolId } from "../../../../../../../../enums/symbols";
+import type {
+  SymbolData,
+  SymbolRecord,
+} from "../../../../../../../../types/symbols";
 
 export interface BlockField {
   id: SymbolId;

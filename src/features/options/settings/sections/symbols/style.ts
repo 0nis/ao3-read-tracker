@@ -1,9 +1,9 @@
 export function getStyles(prefix: string): string {
   return `
     .${prefix}__grid {
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto;
       gap: 1em;
     }
     
@@ -15,6 +15,7 @@ export function getStyles(prefix: string): string {
       border-radius: 4px;
       padding: .8em;
       margin: 0;
+      min-width: 14em;
     }
 
     .${prefix}__block-title {
@@ -97,15 +98,27 @@ export function getStyles(prefix: string): string {
       color: #900;
     }
 
-    @media (max-width: 600px) {
-      .${prefix}__block {
-        width: 44%;
+    @media (max-width: 1100px) {
+      .${prefix}__grid {
+        grid-template-columns: 1fr 1fr;
       }
     }
-
+    @media (max-width: 800px) {
+      .${prefix}__grid {
+        grid-template-columns: 1fr;
+      }
+      .${prefix}__block__field-label {
+        width: 33%;
+      }
+    }
+    @media (max-width: 600px) {
+      .${prefix}__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
     @media (max-width: 500px) {
-      .${prefix}__block {
-        width: 100%;
+      .${prefix}__grid {
+        grid-template-columns: 1fr;
       }
       .${prefix}__block__field-label {
         width: 33%;

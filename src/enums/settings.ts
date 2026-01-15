@@ -17,4 +17,5 @@ export enum SettingsType {
   IN_PROGRESS = "in_progress_settings",
   IGNORE = "ignore_settings",
   GENERAL = "general_settings",
+  SYMBOLS = "symbols_settings",
 }

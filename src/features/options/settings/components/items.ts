@@ -5,12 +5,10 @@ import {
   SettingsSectionItem,
 } from "../types";
 
-import { CLASS_PREFIX } from "../../../../constants/classes";
 import { el } from "../../../../utils/ui/dom";
-import { FormItemType } from "../../../../enums/forms";
-import { ABBREVIATION } from "../../../../constants/global";
-import { CustomInputType } from "../../../../enums/ui";
 import { getInputElement } from "../../../../utils/ui/forms";
+import { FormItemType } from "../../../../enums/forms";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 
 export function createSettingsSectionContent(
   items: SettingsSectionItem<any>[]
@@ -39,33 +37,97 @@ function createSettingsSectionGroup({
   label,
   fields,
   description,
+  boldFieldLabels,
+  collapsible,
+  collapsedByDefault,
 }: SettingsSectionGroup<any>): HTMLElement {
   const children: HTMLElement[] = [];
 
-  children.push(
-    el("legend", { className: `${SETTINGS_CLASS}__group-label` }, [label])
+  const header = el(
+    "div",
+    {
+      className: `${SETTINGS_CLASS}__group-header`,
+      ...(collapsible && {
+        attrs: {
+          role: "button",
+          tabindex: "0",
+          "aria-controls": `${id}-fields`,
+        },
+      }),
+    },
+    [
+      el("div", { className: `${SETTINGS_CLASS}__group-label` }, [label]),
+      ...(description
+        ? [
+            el("p", {
+              id: `${id}-description`,
+              className: `${SETTINGS_CLASS}__field-description`,
+              innerHTML: description,
+            }),
+          ]
+        : []),
+    ]
   );
+  children.push(header);
 
-  // prettier-ignore
-  if (description)
-    children.push(el("p", {
-      id: `${id}-description`,
-      className: `${SETTINGS_CLASS}__field-description`,
-    }, [description]));
-
-  // prettier-ignore
-  const fieldsWrapper = el("div", { className: `${SETTINGS_CLASS}__group-fields` }, []);
+  const fieldsWrapper = el("div", {
+    id: `${id}-fields`,
+    className: `${SETTINGS_CLASS}__group-fields ${
+      boldFieldLabels
+        ? `${SETTINGS_CLASS}__group-fields-labels--bold`
+        : `${SETTINGS_CLASS}__group-fields-labels--normal`
+    }`,
+  });
   fields.forEach((field) => {
     const fieldElement = createSettingsSectionItem(field);
     if (fieldElement) fieldsWrapper.appendChild(fieldElement);
   });
   children.push(fieldsWrapper);
 
-  const group = el("fieldset", { id, className: `${SETTINGS_CLASS}__group` }, [
-    ...children,
-  ]);
+  const group = el(
+    "fieldset",
+    {
+      id,
+      className: `${SETTINGS_CLASS}__group`,
+      ...(collapsible && {
+        attrs: {
+          "data-collapsible": "true",
+        },
+      }),
+    },
+    children
+  );
+
+  if (collapsible) setupCollapsibleGroup(group, header, collapsedByDefault);
 
   return group;
+}
+
+function setupCollapsibleGroup(
+  group: HTMLElement,
+  header: HTMLElement,
+  collapsedByDefault?: boolean
+) {
+  const isCollapsed = !!collapsedByDefault;
+
+  header.setAttribute("aria-expanded", String(!isCollapsed));
+  if (isCollapsed) {
+    group.setAttribute("data-collapsed", "");
+  }
+
+  const toggle = () => {
+    const collapsed = group.hasAttribute("data-collapsed");
+    group.toggleAttribute("data-collapsed", !collapsed);
+    header.setAttribute("aria-expanded", String(collapsed));
+  };
+
+  header.addEventListener("click", toggle);
+  header.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
+    }
+  });
 }
 
 function createSettingsSectionField({
@@ -93,7 +155,8 @@ function createSettingsSectionField({
     children.push(el("p", {
       id: `${id}-description`,
       className: `${SETTINGS_CLASS}__field-description`,
-    }, [description]));
+      innerHTML: description
+    }));
 
   const isCheckbox =
     inputEl instanceof HTMLInputElement && inputEl.type === "checkbox";

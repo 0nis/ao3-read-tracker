@@ -54,8 +54,37 @@ export function getStyles(prefix: string): string {
       border-right: 0;
     }
 
-    .${prefix}__group .${prefix}__field-description {
-      margin-top: 0;
+    .${prefix}__group[data-collapsible="true"] .${prefix}__group-header {
+      cursor: pointer;
+      user-select: none;
+      border-radius: 8px;
+    }
+
+    .${prefix}__group[data-collapsible="true"] .${prefix}__group-header:hover,
+    .${prefix}__group[data-collapsible="true"] .${prefix}__group-header:focus-visible {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+
+    .${prefix}__group[data-collapsible="true"] .${prefix}__group-fields {
+      padding-left: 1em;
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .${prefix}__group[data-collapsible="true"] .${prefix}__group-label::before {
+      content: "▾";
+      display: inline-flex;
+      margin-right: 0.4em;
+      transform-origin: center;
+      align-items: center;
+      transition: transform 0.2s ease;
+    }
+
+    .${prefix}__group[data-collapsible="true"][data-collapsed] .${prefix}__group-label::before {
+      transform: rotate(-90deg);
+    }
+
+    .${prefix}__group[data-collapsible="true"][data-collapsed] .${prefix}__group-fields {
+      display: none;
     }
 
     .${prefix}__group-label {
@@ -67,7 +96,10 @@ export function getStyles(prefix: string): string {
       padding-right: .5em;
     }
 
-    .${prefix}__group label {
+    .${prefix}__group-fields-labels--bold label {
+      font-weight: 600;
+    }
+    .${prefix}__group-fields-labels--normal label {
       font-weight: 500;
     }
 
@@ -102,10 +134,6 @@ export function getStyles(prefix: string): string {
 
       .${prefix}__field--checkbox {
         grid-template-columns: auto auto;
-      }
-
-      .${prefix}__group .${prefix}__field {
-        grid-template-columns: auto 10em;
       }
 
       .${prefix}__field--checkbox,

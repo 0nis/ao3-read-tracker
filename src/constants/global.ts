@@ -7,6 +7,7 @@ export const SETTINGS_PAGE_URL = "/extensions/read-tracker";
 
 export const MAX_GIF_SIZE = 500_000; // 500kb
 export const IMAGE_PIXEL_HEIGHT = 128;
+export const DEFAULT_SYMBOL_SIZE_EM = 1.2;
 
 export const IS_DEV = process.env.NODE_ENV === "development";
 

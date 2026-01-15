@@ -12,6 +12,7 @@ import { renderSymbolContent } from "../../../../utils/ui/symbols";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { SymbolRecord } from "../../../../types/symbols";
 import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
+import { SymbolSettings } from "../../../../types/settings";
 
 /**
  * Adds symbols to a work element showing information
@@ -64,6 +65,7 @@ async function renderSymbols(
   const symbols = await symbolsCache.get();
 
   const rules = symbolRuleCollector.getActiveRules({
+    symbols,
     finishedWork: finishedWork,
     inProgressWork: inProgressWork,
     ignoredWork: ignoredWork,
@@ -75,7 +77,7 @@ async function renderSymbols(
       inProgress: settings.inProgressSettings.symbolDisplayMode,
     },
     options: {
-      hideSymbols: settings.generalSettings.hideSymbols,
+      enabled: settings.symbolSettings.enabled,
     },
   });
 
@@ -84,7 +86,7 @@ async function renderSymbols(
     if (!symbol) continue;
 
     symbolIndicatorList.appendChild(
-      createSymbolElement(
+      await createSymbolElement(
         symbol,
         rule.getCustomLabel?.() || symbols[rule.id].label,
         rule.getSuffix?.()
@@ -93,12 +95,12 @@ async function renderSymbols(
   }
 }
 
-function createSymbolElement(
+async function createSymbolElement(
   symbol: SymbolRecord,
   customLabel?: string,
   suffix?: string
-): HTMLElement {
-  const content = renderSymbolContent(symbol, suffix);
+): Promise<HTMLElement> {
+  const content = await renderSymbolContent({ symbol, suffix });
   const label = customLabel || symbol.label;
 
   return el(

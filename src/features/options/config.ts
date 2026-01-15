@@ -3,23 +3,24 @@ import {
   buildIgnoreSettingsSection,
   buildReadSettingsSection,
   buildInProgressSettingsSection,
+  buildSymbolsSection,
 } from "./settings";
 import {
   buildIgnoredListSection,
   buildFinishedListSection,
   buildInProgressListSection,
 } from "./lists";
-import { buildDataSection, buildSymbolsSection } from "./advanced";
+import { buildDataSection } from "./advanced";
 
 export enum SectionId {
   FINISHED_SETTINGS = "finished-settings",
   IN_PROGRESS_SETTINGS = "in-progress-settings",
   IGNORE_SETTINGS = "ignore-settings",
   GENERAL_SETTINGS = "general-settings",
+  SYMBOL_SETTINGS = "symbol-settings",
   FINISHED_LIST = "finished-works",
   IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
-  SYMBOLS = "symbols",
   DATA = "data",
 }
 
@@ -64,6 +65,12 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     build: buildGeneralSettingsSection,
   },
   {
+    id: SectionId.SYMBOL_SETTINGS,
+    label: "Settings: Symbols",
+    type: SectionType.SETTINGS,
+    build: buildSymbolsSection,
+  },
+  {
     id: SectionId.FINISHED_LIST,
     label: "List: Finished Works",
     type: SectionType.LIST,
@@ -86,12 +93,6 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     label: "Data & Storage",
     type: SectionType.ADVANCED,
     build: buildDataSection,
-  },
-  {
-    id: SectionId.SYMBOLS,
-    label: "Extension Symbols",
-    type: SectionType.ADVANCED,
-    build: buildSymbolsSection,
   },
 ] as const;
 

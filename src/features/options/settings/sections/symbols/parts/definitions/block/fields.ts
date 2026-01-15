@@ -1,32 +1,37 @@
 import { getLabelFromType, setFeedback } from "./helpers";
 import { BlockContext, BlockField } from "./types";
-import { getClass, ACCEPTED_IMAGE_TYPES } from "../section";
+import { getClass, ACCEPTED_IMAGE_TYPES } from "../../../section";
 
-import { el } from "../../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../../utils/ui/symbols";
+import { el } from "../../../../../../../../utils/ui/dom";
+import { renderSymbolContentById } from "../../../../../../../../utils/ui/symbols";
 import {
   getImageSelectorElements,
   getInputElement,
   number,
   text,
-} from "../../../../../utils/ui/forms";
-import { SymbolId } from "../../../../../enums/symbols";
-import { ABBREVIATION } from "../../../../../constants/global";
+} from "../../../../../../../../utils/ui/forms";
+import { SymbolId } from "../../../../../../../../enums/symbols";
+import {
+  ABBREVIATION,
+  DEFAULT_SYMBOL_SIZE_EM,
+} from "../../../../../../../../constants/global";
 
-export function getFields({
+export async function getFields({
   id,
   record,
   symbols,
   state,
   feedbackEl,
-}: BlockContext): BlockField[] {
+}: BlockContext): Promise<BlockField[]> {
   const imgSelectorEls = getImageSelectorElements({
     defaultImg: record.imgBlob,
     upload: {
       label: "Upload",
     },
     clear: {
-      label: symbols ? renderSymbolContent(symbols[SymbolId.CLEAR]) : "Clear",
+      label: await renderSymbolContentById(SymbolId.CLEAR, "Clear", {
+        sizeOverride: DEFAULT_SYMBOL_SIZE_EM,
+      }),
     },
     onChange: (blob) => (state.file = blob ?? undefined),
     onError: (message) => {
@@ -43,7 +48,7 @@ export function getFields({
   });
 
   return [
-    { id, type: "label", element: text(record.label) },
+    { id, type: "label", element: text({ defaultValue: record.label }) },
     {
       id,
       type: "imgBlob",
@@ -61,8 +66,12 @@ export function getFields({
         ]
       ),
     },
-    { id, type: "emoji", element: text(record.emoji ?? "") },
-    { id, type: "priority", element: number("0", record.priority.toString()) },
+    { id, type: "emoji", element: text({ defaultValue: record.emoji ?? "" }) },
+    {
+      id,
+      type: "priority",
+      element: number({ defaultValue: record.priority }),
+    },
   ];
 }
 

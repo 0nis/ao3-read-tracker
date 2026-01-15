@@ -10,6 +10,7 @@ import {
   IgnoreSettings,
   InProgressSettings,
   FinishedSettings,
+  SymbolSettings,
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
 import { SettingsType } from "../enums/settings";
@@ -34,6 +35,10 @@ export const instances = {
   generalSettings: new SettingsData<GeneralSettings>(
     db.generalSettings,
     SettingsType.GENERAL
+  ),
+  symbolSettings: new SettingsData<SymbolSettings>(
+    db.symbolSettings,
+    SettingsType.SYMBOLS
   ),
 
   symbolRecords: new SymbolsData<SymbolRecord>(db.symbolRecords),

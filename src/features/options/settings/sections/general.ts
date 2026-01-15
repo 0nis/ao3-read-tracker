@@ -3,8 +3,7 @@ import { SettingsSectionItem } from "../types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { enumSelect, text, toggleSwitch } from "../../../../utils/ui/forms";
-import { VerticalPlacement } from "../../../../enums/settings";
+import { text } from "../../../../utils/ui/forms";
 import { FormItemType } from "../../../../enums/forms";
 import { GeneralSettings } from "../../../../types/settings";
 
@@ -12,17 +11,8 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
   {
     type: FormItemType.FIELD,
     sectionId: SectionId.GENERAL_SETTINGS,
-    label: "Hide Symbols",
-    input: toggleSwitch(),
-    dataField: "hideSymbols",
-    description:
-      "Whether to hide all symbols next to the title of the works in lists.",
-  },
-  {
-    type: FormItemType.FIELD,
-    sectionId: SectionId.GENERAL_SETTINGS,
     label: "AO3 'Mark as Read' Button Text",
-    input: text("", "e.g., Finished"),
+    input: text({ placeholder: "e.g., Finished" }),
     dataField: "nativeMarkAsReadReplacementLabel",
     description:
       "Changes the text shown on AO3's built-in 'Mark as Read' button on the work page. This affects AO3's own button - the one that appears after marking the work for later. Leave blank to use AO3's default text.",

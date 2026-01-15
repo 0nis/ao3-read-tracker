@@ -1,11 +1,17 @@
+import { DEFAULT_SYMBOL_SIZE_EM } from "./global";
 import { VerticalPlacement, DisplayMode } from "../enums/settings";
 import { SettingsType } from "../enums/settings";
-import { SymbolDisplayMode } from "../enums/symbols";
+import {
+  SymbolDisplayMode,
+  SymbolFallbackType,
+  SymbolRenderMode,
+} from "../enums/symbols";
 import {
   GeneralSettings,
   IgnoreSettings,
   InProgressSettings,
   FinishedSettings,
+  SymbolSettings,
 } from "../types/settings";
 
 export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
@@ -41,6 +47,15 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
-  hideSymbols: false,
   nativeMarkAsReadReplacementLabel: "",
+};
+
+export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
+  id: SettingsType.SYMBOLS,
+  enabled: true,
+  renderMode: SymbolRenderMode.AUTO,
+  fallbackType: SymbolFallbackType.HIDDEN,
+  size: DEFAULT_SYMBOL_SIZE_EM,
+  emojiScalingEnabled: true,
+  emojiScaleFactor: 0.83,
 };

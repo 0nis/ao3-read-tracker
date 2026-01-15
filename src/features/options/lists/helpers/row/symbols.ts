@@ -6,6 +6,7 @@ import { el } from "../../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../../utils/ui/symbols";
 import { SymbolData } from "../../../../../types/symbols";
 import { WorkStateData } from "../../../../../types/works";
+import { SymbolSettings } from "../../../../../types/settings";
 
 export async function loadSymbolsAndRules(
   id: string,
@@ -15,6 +16,7 @@ export async function loadSymbolsAndRules(
   const { finishedSettings, inProgressSettings } = await settingsCache.get();
 
   const rules = symbolRuleCollector.getActiveRules({
+    symbols,
     finishedWork:
       finishedWork ?? (await StorageService.finishedWorks.getById(id))?.data,
     inProgressWork:
@@ -57,7 +59,7 @@ export async function createSymbolElement(
             title: label,
           },
         },
-        [renderSymbolContent(symbol, rule.getSuffix?.())]
+        [await renderSymbolContent({ symbol, suffix: rule.getSuffix?.() })]
       )
     );
   }

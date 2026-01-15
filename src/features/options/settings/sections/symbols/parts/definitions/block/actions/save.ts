@@ -1,14 +1,14 @@
 import { BlockContext } from "../types";
 import { setFeedback } from "../helpers";
-import { getClass } from "../../section";
+import { getClass } from "../../../../section";
 
-import { StorageService } from "../../../../../../services/storage";
-import { el } from "../../../../../../utils/ui/dom";
-import { handleStorageWrite } from "../../../../../../utils/storage";
-import { getInputValue } from "../../../../../../utils/ui/forms";
-import { CLASS_PREFIX } from "../../../../../../constants/classes";
-import { ABBREVIATION } from "../../../../../../constants/global";
-import { SymbolRecord } from "../../../../../../types/symbols";
+import { StorageService } from "../../../../../../../../../services/storage";
+import { el } from "../../../../../../../../../utils/ui/dom";
+import { handleStorageWrite } from "../../../../../../../../../utils/storage";
+import { getInputValue } from "../../../../../../../../../utils/ui/forms";
+import { CLASS_PREFIX } from "../../../../../../../../../constants/classes";
+import { ABBREVIATION } from "../../../../../../../../../constants/global";
+import { SymbolRecord } from "../../../../../../../../../types/symbols";
 
 export function getSaveElement(onSave: () => void) {
   const saveEl = el(

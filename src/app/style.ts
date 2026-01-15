@@ -1,3 +1,5 @@
+import { DEFAULT_SYMBOL_SIZE_EM } from "../constants/global";
+
 export function getGlobalStyles(prefix: string): string {
   return `
     .${prefix}__hidden {
@@ -34,7 +36,7 @@ export function getGlobalStyles(prefix: string): string {
 
     .${prefix}__inline-image {
       display: inline-block;
-      height: 1.2em;
+      height: ${DEFAULT_SYMBOL_SIZE_EM}em;
       vertical-align: -0.25em;
       object-fit: contain;
     }

@@ -1,5 +1,10 @@
 import { VerticalPlacement, DisplayMode } from "../enums/settings";
-import { SymbolDisplayMode } from "../enums/symbols";
+import {
+  SymbolId,
+  SymbolDisplayMode,
+  SymbolRenderMode,
+  SymbolFallbackType,
+} from "../enums/symbols";
 
 export interface FinishedSettings {
   id: string;
@@ -34,8 +39,17 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
-  hideSymbols: boolean;
   nativeMarkAsReadReplacementLabel: string;
+}
+
+export interface SymbolSettings {
+  id: string;
+  enabled: boolean;
+  renderMode: SymbolRenderMode;
+  fallbackType: SymbolFallback;
+  size: number;
+  emojiScalingEnabled: boolean;
+  emojiScaleFactor: number;
 }
 
 export type SettingsData = {
@@ -43,4 +57,5 @@ export type SettingsData = {
   inProgressSettings: InProgressSettings;
   ignoreSettings: IgnoreSettings;
   generalSettings: GeneralSettings;
+  symbolSettings: SymbolSettings;
 };

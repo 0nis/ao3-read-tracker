@@ -1,12 +1,12 @@
 import { onSave } from "./save";
 import { BlockContext } from "../types";
-import { getClass } from "../../section";
+import { getClass } from "../../../../section";
 
-import { el } from "../../../../../../utils/ui/dom";
-import { setInputValue } from "../../../../../../utils/ui/forms";
-import { CLASS_PREFIX } from "../../../../../../constants/classes";
-import { DEFAULT_SYMBOL_RECORDS } from "../../../../../../constants/symbols";
-import { ABBREVIATION } from "../../../../../../constants/global";
+import { el } from "../../../../../../../../../utils/ui/dom";
+import { setInputValue } from "../../../../../../../../../utils/ui/forms";
+import { CLASS_PREFIX } from "../../../../../../../../../constants/classes";
+import { DEFAULT_SYMBOL_RECORDS } from "../../../../../../../../../constants/symbols";
+import { ABBREVIATION } from "../../../../../../../../../constants/global";
 
 export function getResetElement(onReset: () => void) {
   const resetEl = el(
