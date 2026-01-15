@@ -30,30 +30,42 @@ const items: SettingsSectionItem<SymbolSettings>[] = [
       "If enabled, symbols will be shown next to the title of the works in lists.",
   },
   {
-    type: FormItemType.FIELD,
+    type: FormItemType.GROUP,
+    id: "advancedSymbolSettings",
     sectionId: SectionId.SYMBOL_SETTINGS,
-    label: "Size",
-    input: number({ defaultValue: DEFAULT_SYMBOL_SIZE_EM }),
-    dataField: "size",
-    description:
-      "Takes a size value in the CSS unit <code>em</code>. 1 em equals the current font size. For example, 1.2 em would be 20% larger than the size of the text.",
-  },
-  {
-    type: FormItemType.FIELD,
-    sectionId: SectionId.SYMBOL_SETTINGS,
-    label: "Render Mode",
-    input: enumSelect(SymbolRenderMode),
-    dataField: "renderMode",
-    description:
-      "When 'auto' is selected, the symbol will be rendered using the provided image, if available. Otherwise, the emoji will be used.",
-  },
-  {
-    type: FormItemType.FIELD,
-    sectionId: SectionId.SYMBOL_SETTINGS,
-    label: "Fallback",
-    input: enumSelect(SymbolFallbackType),
-    dataField: "fallbackType",
-    description: "What to display in case a symbol is missing.",
+    label: "Advanced Symbol Settings",
+    description: "Click to expand/collapse.",
+    collapsible: true,
+    collapsedByDefault: true,
+    boldFieldLabels: true,
+    fields: [
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.SYMBOL_SETTINGS,
+        label: "Size",
+        input: number({ defaultValue: DEFAULT_SYMBOL_SIZE_EM }),
+        dataField: "size",
+        description:
+          "Takes a size value in the CSS unit <code>em</code>. 1 em equals the current font size. For example, 1.2 em would be 20% larger than the size of the text.",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.SYMBOL_SETTINGS,
+        label: "Render Mode",
+        input: enumSelect(SymbolRenderMode),
+        dataField: "renderMode",
+        description:
+          "When 'auto' is selected, the symbol will be rendered using the provided image, if available. Otherwise, the emoji will be used.",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.SYMBOL_SETTINGS,
+        label: "Fallback",
+        input: enumSelect(SymbolFallbackType),
+        dataField: "fallbackType",
+        description: "What to display in case a symbol is missing.",
+      },
+    ],
   },
 ];
 

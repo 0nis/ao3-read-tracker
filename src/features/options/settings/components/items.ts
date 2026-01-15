@@ -37,6 +37,7 @@ function createSettingsSectionGroup({
   label,
   fields,
   description,
+  boldFieldLabels,
   collapsible,
   collapsedByDefault,
 }: SettingsSectionGroup<any>): HTMLElement {
@@ -71,7 +72,11 @@ function createSettingsSectionGroup({
 
   const fieldsWrapper = el("div", {
     id: `${id}-fields`,
-    className: `${SETTINGS_CLASS}__group-fields`,
+    className: `${SETTINGS_CLASS}__group-fields ${
+      boldFieldLabels
+        ? `${SETTINGS_CLASS}__group-fields-labels--bold`
+        : `${SETTINGS_CLASS}__group-fields-labels--normal`
+    }`,
   });
   fields.forEach((field) => {
     const fieldElement = createSettingsSectionItem(field);

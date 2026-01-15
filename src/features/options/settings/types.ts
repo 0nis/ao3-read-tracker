@@ -22,6 +22,7 @@ export interface SettingsSectionGroup<T>
   id: string;
   label: string;
   description?: string;
+  boldFieldLabels?: boolean;
   collapsible?: boolean;
   collapsedByDefault?: boolean;
 }
