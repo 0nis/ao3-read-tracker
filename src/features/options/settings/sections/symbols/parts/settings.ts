@@ -61,7 +61,7 @@ const items: SettingsSectionItem<SymbolSettings>[] = [
         label: "Fallback",
         input: enumSelect(SymbolFallbackType),
         dataField: "fallbackType",
-        description: "What to display in case a symbol is missing.",
+        description: "What to display in case a symbol is missing or invalid.",
       },
       {
         type: FormItemType.FIELD,
