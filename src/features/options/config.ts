@@ -10,7 +10,7 @@ import {
   buildFinishedListSection,
   buildInProgressListSection,
 } from "./lists";
-import { buildDataSection } from "./advanced";
+import { buildDataSection, buildDisplayModesSection } from "./advanced";
 
 export enum SectionId {
   FINISHED_SETTINGS = "finished-settings",
@@ -22,6 +22,7 @@ export enum SectionId {
   IN_PROGRESS_LIST = "in-progress-works",
   IGNORE_LIST = "ignored-works",
   DATA = "data",
+  DISPLAY_MODES = "display-modes",
 }
 
 export enum SectionType {
@@ -93,6 +94,12 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     label: "Data & Storage",
     type: SectionType.ADVANCED,
     build: buildDataSection,
+  },
+  {
+    id: SectionId.DISPLAY_MODES,
+    label: "Custom Display Modes",
+    type: SectionType.ADVANCED,
+    build: buildDisplayModesSection,
   },
 ] as const;
 

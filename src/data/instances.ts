@@ -11,6 +11,7 @@ import {
   InProgressSettings,
   FinishedSettings,
   SymbolSettings,
+  DisplayModeSettings,
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
 import { SettingsType } from "../enums/settings";
@@ -42,6 +43,11 @@ export const instances = {
   ),
 
   symbolRecords: new SymbolsData<SymbolRecord>(db.symbolRecords),
+
+  displayModeSettings: new SettingsData<DisplayModeSettings>(
+    db.displayModeSettings,
+    SettingsType.DISPLAY_MODES
+  ),
 };
 
 export type InstanceMap = typeof instances;

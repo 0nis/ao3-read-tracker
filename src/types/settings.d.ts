@@ -42,6 +42,13 @@ export interface GeneralSettings {
   nativeMarkAsReadReplacementLabel: string;
 }
 
+export interface DisplayModeSettings {
+  id: string;
+  priorities: {
+    [id: DisplayMode]: number;
+  };
+}
+
 export interface SymbolSettings {
   id: string;
   enabled: boolean;

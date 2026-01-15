@@ -18,4 +18,5 @@ export enum SettingsType {
   IGNORE = "ignore_settings",
   GENERAL = "general_settings",
   SYMBOLS = "symbols_settings",
+  DISPLAY_MODES = "display_modes_settings",
 }
