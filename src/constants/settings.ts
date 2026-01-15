@@ -56,4 +56,6 @@ export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
   renderMode: SymbolRenderMode.AUTO,
   fallbackType: SymbolFallbackType.HIDDEN,
   size: DEFAULT_SYMBOL_SIZE_EM,
+  emojiScalingEnabled: true,
+  emojiScaleFactor: 0.83,
 };

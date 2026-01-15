@@ -48,6 +48,8 @@ export interface SymbolSettings {
   renderMode: SymbolRenderMode;
   fallbackType: SymbolFallback;
   size: number;
+  emojiScalingEnabled: boolean;
+  emojiScaleFactor: number;
 }
 
 export type SettingsData = {

@@ -34,15 +34,18 @@ export const textarea = ({
 export const number = ({
   defaultValue,
   min = 0,
+  max,
   disabled = false,
 }: {
   defaultValue?: number;
   min?: number;
+  max?: number;
   disabled?: boolean;
 }): HTMLInputElement => {
   return el("input", {
     type: "number",
     min: String(min),
+    max: max ? String(max) : undefined,
     defaultValue: defaultValue ? String(defaultValue) : undefined,
     disabled,
   }) as HTMLInputElement;

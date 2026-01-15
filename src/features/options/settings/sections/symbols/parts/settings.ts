@@ -65,6 +65,24 @@ const items: SettingsSectionItem<SymbolSettings>[] = [
         dataField: "fallbackType",
         description: "What to display in case a symbol is missing.",
       },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.SYMBOL_SETTINGS,
+        label: "Enable Emoji Scaling",
+        input: toggleSwitch(),
+        dataField: "emojiScalingEnabled",
+        description:
+          "Scale emojis down so they visually match inline images. In most fonts, emojis appear slightly larger than text at the same font size.",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.SYMBOL_SETTINGS,
+        label: "Emoji Scale Factor",
+        input: number({ defaultValue: 0.83, min: 0.5, max: 2 }),
+        dataField: "emojiScaleFactor",
+        description:
+          "If emoji scaling is enabled, this multiplier determines the emoji size relative to the symbol size defined in the size field. For example, 0.83 makes the emoji about 17% smaller.",
+      },
     ],
   },
 ];

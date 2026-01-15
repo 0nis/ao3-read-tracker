@@ -6,13 +6,12 @@ import {
   SymbolRenderMode,
 } from "../../enums/symbols";
 import { CLASS_PREFIX } from "../../constants/classes";
-import { DEFAULT_SYMBOL_SIZE_EM, EMOJI_SCALE } from "../../constants/global";
+import { DEFAULT_SYMBOL_SIZE_EM } from "../../constants/global";
 import { SymbolRecord } from "../../types/symbols";
 
 export interface SymbolDevOptions {
   sizeOverride?: number;
   fallbackTypeOverride?: SymbolFallbackType;
-  disableEmojiScaling?: boolean;
 }
 
 /**
@@ -67,7 +66,6 @@ export async function renderSymbolContent({
   suffix,
   sizeOverride,
   fallbackTypeOverride,
-  disableEmojiScaling,
 }: {
   symbol: SymbolRecord;
   suffix?: string;
@@ -76,6 +74,8 @@ export async function renderSymbolContent({
     renderMode = SymbolRenderMode.AUTO,
     fallbackType = SymbolFallbackType.LABEL,
     size = DEFAULT_SYMBOL_SIZE_EM,
+    emojiScaleFactor = 0.83,
+    emojiScalingEnabled = true,
   } = (await settingsCache.get()).symbolSettings || {};
 
   if (sizeOverride) size = sizeOverride;
@@ -87,13 +87,18 @@ export async function renderSymbolContent({
       : renderMode;
 
   if (rm === SymbolRenderMode.IMAGE) {
-    const img = renderSymbolImgBlob(symbol, size);
+    const img = renderSymbolImgBlob({ symbol, size });
     if (img) return buildSymbolContent(img, suffix, size);
     else return renderSymbolFallback({ fallbackType, label: symbol.label });
   }
 
   if (rm === SymbolRenderMode.EMOJI) {
-    const emoji = renderSymbolEmoji(symbol, size, disableEmojiScaling);
+    const emoji = renderSymbolEmoji({
+      symbol,
+      size,
+      scaleFactor: emojiScaleFactor,
+      scalingEnabled: emojiScalingEnabled,
+    });
     if (emoji) return buildSymbolContent(emoji, suffix, size);
     else return renderSymbolFallback({ fallbackType, label: symbol.label });
   }
@@ -126,10 +131,13 @@ const buildSymbolContent = (
   ]);
 };
 
-const renderSymbolImgBlob = (
-  symbol: SymbolRecord,
-  size: number
-): HTMLImageElement | null => {
+const renderSymbolImgBlob = ({
+  symbol,
+  size,
+}: {
+  symbol: SymbolRecord;
+  size: number;
+}): HTMLImageElement | null => {
   if (!symbol.imgBlob) return null;
   const url = URL.createObjectURL(symbol.imgBlob);
   const img = el("img", {
@@ -143,13 +151,19 @@ const renderSymbolImgBlob = (
   return img;
 };
 
-const renderSymbolEmoji = (
-  symbol: SymbolRecord,
-  size: number,
-  disableEmojiScaling?: boolean
-): HTMLElement | null => {
+const renderSymbolEmoji = ({
+  symbol,
+  size,
+  scaleFactor,
+  scalingEnabled,
+}: {
+  symbol: SymbolRecord;
+  size: number;
+  scaleFactor: number;
+  scalingEnabled?: boolean;
+}): HTMLElement | null => {
   if (!symbol.emoji) return null;
-  const scale = disableEmojiScaling ? 1 : EMOJI_SCALE;
+  const scale = scalingEnabled ? scaleFactor : 1;
   return el("span", {
     textContent: symbol.emoji,
     style: { fontSize: `${size * scale}em` },
