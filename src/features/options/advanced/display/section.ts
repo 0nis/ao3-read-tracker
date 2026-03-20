@@ -1,20 +1,16 @@
 import { getStyles } from "./style";
+import { buildDisplayModePrioritesPart } from "./parts/priorities/part";
 
-import { SectionId } from "../../config";
-import { createSectionWrapper } from "../../components/section/component";
-
-import { injectStyles } from "../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../utils/ui/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 
-const DISPLAY_CLASS = `${CLASS_PREFIX}__display-modes`;
+export const getClass = () => `${CLASS_PREFIX}__display-modes-section`;
 
-export function buildDisplayModesSection() {
-  injectStyles(`${CLASS_PREFIX}__styles--data`, getStyles(DISPLAY_CLASS));
+export async function buildDisplayModesSection() {
+  injectStyles(
+    `${CLASS_PREFIX}__styles--custom-display-modes`,
+    getStyles(getClass()),
+  );
 
-  const section = createSectionWrapper({
-    id: SectionId.DISPLAY_MODES,
-    title: "Custom Display Modes",
-  });
-
-  return section;
+  return el("div", {}, [await buildDisplayModePrioritesPart()]);
 }

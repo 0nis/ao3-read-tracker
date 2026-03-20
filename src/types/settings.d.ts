@@ -65,4 +65,5 @@ export type SettingsData = {
   ignoreSettings: IgnoreSettings;
   generalSettings: GeneralSettings;
   symbolSettings: SymbolSettings;
+  displayModeSettings: DisplayModeSettings;
 };
