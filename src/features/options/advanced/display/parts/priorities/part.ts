@@ -1,28 +1,28 @@
-import { DisplayMode } from "../../../../../../enums/settings";
+import { CLASS_PREFIX } from "../../../../../../constants/classes";
 import { settingsCache } from "../../../../../../services/cache";
-import { el } from "../../../../../../utils/ui/dom";
+import { injectStyles } from "../../../../../../utils/ui/dom";
 import { createSectionWrapper } from "../../../../components/section/component";
 import { SectionId } from "../../../../config";
+import { createDisplayModePrioritiesController } from "./controller";
+import { getStyles } from "./style";
+
+export const getClass = () => `${CLASS_PREFIX}__dm-priorities`;
 
 export async function buildDisplayModePrioritesPart(): Promise<HTMLElement> {
+  injectStyles(`${CLASS_PREFIX}__styles--dm-priorities`, getStyles(getClass()));
+
   const section = createSectionWrapper({
     id: SectionId.DISPLAY_MODES,
     title: "Display Mode Priorities",
   });
 
   const { displayModeSettings } = await settingsCache.get();
+  console.log(displayModeSettings); // todo: temp, remove
 
-  // TODO: Transform into a setting and update in database
-  for (const [displayMode, priority] of Object.entries(
+  const controller = createDisplayModePrioritiesController(
     displayModeSettings.priorities,
-  ) as [DisplayMode, number][]) {
-    const option = el(
-      "option",
-      { value: displayMode },
-      `${displayMode}: ${priority}`,
-    );
-    section.appendChild(option);
-  }
+  );
+  section.appendChild(controller.el);
 
   return section;
 }

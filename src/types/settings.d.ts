@@ -44,9 +44,7 @@ export interface GeneralSettings {
 
 export interface DisplayModeSettings {
   id: string;
-  priorities: {
-    [id: DisplayMode]: number;
-  };
+  priorities: Record<DisplayMode, number>;
 }
 
 export interface SymbolSettings {

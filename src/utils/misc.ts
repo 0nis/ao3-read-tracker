@@ -2,7 +2,7 @@
 export const extractKey = (
   buffer: string,
   key: string,
-  type: "string" | "number"
+  type: "string" | "number",
 ) => {
   const regex =
     type === "string"
