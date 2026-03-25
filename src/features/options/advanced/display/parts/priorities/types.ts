@@ -2,6 +2,7 @@ import { DisplayMode } from "../../../../../../enums/settings";
 
 export interface DisplayModeRowOptions {
   mode: DisplayMode;
+  label: string;
   index: number;
   total: number;
   onMoveUp: () => void;
@@ -12,4 +13,5 @@ export interface DisplayModeRow {
   el: HTMLElement;
   setIndex: (index: number) => void;
   setDisabled: (isFirst: boolean, isLast: boolean) => void;
+  setAria: (label: string, index: number, total: number) => void;
 }

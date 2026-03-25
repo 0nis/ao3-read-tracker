@@ -1,11 +1,13 @@
 import { getClass } from "./part";
 import { createDisplayModeRow } from "./row";
 import { toArray } from "./helpers";
+import { animateFLIP, measurePositions } from "./animation";
 import { DisplayModeRow } from "./types";
 
 import { el } from "../../../../../../utils/ui/dom";
+import { reportSrLive } from "../../../../../../utils/ui/accessibility";
+import { toTitleCase } from "../../../../../../utils/string";
 import { DisplayMode } from "../../../../../../enums/settings";
-import { animateFLIP, measurePositions } from "./animation";
 
 const rowMap = new Map<DisplayMode, DisplayModeRow>();
 
@@ -14,18 +16,22 @@ export function createDisplayModePrioritiesController(
 ) {
   let modes = toArray(initialPriorities);
 
-  const listEl = el("div", { className: `${getClass()}__list` });
+  const listEl = el("ol", { className: `${getClass()}__list` });
 
-  function moveUp(index: number) {
-    if (index === 0) return;
-    [modes[index - 1], modes[index]] = [modes[index], modes[index - 1]];
-    render();
-  }
+  function move(
+    index: number,
+    direction: -1 | 1,
+    label: string = modes[index],
+  ) {
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= modes.length) return;
 
-  function moveDown(index: number) {
-    if (index === modes.length - 1) return;
-    [modes[index + 1], modes[index]] = [modes[index], modes[index + 1]];
+    [modes[newIndex], modes[index]] = [modes[index], modes[newIndex]];
+
     render();
+    reportSrLive(
+      `${label} moved ${direction === -1 ? "up" : "down"} to position ${newIndex + 1}`,
+    );
   }
 
   function render() {
@@ -34,21 +40,24 @@ export function createDisplayModePrioritiesController(
     const fragment = document.createDocumentFragment();
 
     modes.forEach((mode, index) => {
+      const label = toTitleCase(mode);
       let row = rowMap.get(mode);
 
       if (!row) {
         row = createDisplayModeRow({
           mode,
+          label,
           index,
           total: modes.length,
-          onMoveUp: () => moveUp(modes.indexOf(mode)),
-          onMoveDown: () => moveDown(modes.indexOf(mode)),
+          onMoveUp: () => move(modes.indexOf(mode), -1, label),
+          onMoveDown: () => move(modes.indexOf(mode), 1, label),
         });
         rowMap.set(mode, row);
       }
 
       row.setIndex(index);
       row.setDisabled(index === 0, index === modes.length - 1);
+      row.setAria(label, index, modes.length);
 
       fragment.appendChild(row.el);
     });

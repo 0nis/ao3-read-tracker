@@ -13,6 +13,7 @@ export function getStyles(prefix: string): string {
       border: 1px solid #ddd;
       border-radius: 4px;
       padding: .6em .8em;
+      margin: 0;
       background: #fff;
       transition: transform 200ms ease;
     }
