@@ -2,22 +2,25 @@ import { getClass } from "./part";
 import { DisplayModeRow, DisplayModeRowOptions } from "./types";
 
 import { el } from "../../../../../../utils/ui/dom";
+import { renderSymbolContentById } from "../../../../../../utils/ui/symbols";
+import { SymbolId } from "../../../../../../enums/symbols";
+import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../../constants/global";
 
-export function createDisplayModeRow({
+export async function createDisplayModeRow({
   label,
   index,
   total,
   onMoveUp,
   onMoveDown,
-}: DisplayModeRowOptions): DisplayModeRow {
-  const upBtn = buildMoveBtn(
+}: DisplayModeRowOptions): Promise<DisplayModeRow> {
+  const upBtn = await buildMoveBtn(
     "up",
     onMoveUp,
     index === 0,
     label,
     getUpTarget(index),
   );
-  const downBtn = buildMoveBtn(
+  const downBtn = await buildMoveBtn(
     "down",
     onMoveDown,
     index === total - 1,
@@ -69,13 +72,22 @@ function buildRowLabel(label: string): HTMLElement {
   return el("span", { className: `${getClass()}__row-label` }, label);
 }
 
-function buildMoveBtn(
+async function buildMoveBtn(
   type: "up" | "down",
   onclick: () => void,
   disabled: boolean,
   parentLabel: string,
   targetIndex: number,
-): HTMLButtonElement {
+): Promise<HTMLButtonElement> {
+  console.log("before renderSymbolContentById");
+  const innerEl = await renderSymbolContentById(
+    type === "up" ? SymbolId.UP : SymbolId.DOWN,
+    type === "up" ? "↑" : "↓",
+    {
+      sizeOverride: DEFAULT_SYMBOL_SIZE_EM,
+    },
+  );
+  console.log("after renderSymbolContentById");
   return el(
     "button",
     {
@@ -86,8 +98,7 @@ function buildMoveBtn(
         "aria-label": `Move ${parentLabel} ${type} to position ${targetIndex + 1}`,
       },
     },
-    // TODO: Use built-in symbol feature instead of hardcoded text
-    type === "up" ? "↑" : "↓",
+    [innerEl],
   );
 }
 

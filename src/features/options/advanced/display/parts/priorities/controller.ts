@@ -11,14 +11,14 @@ import { DisplayMode } from "../../../../../../enums/settings";
 
 const rowMap = new Map<DisplayMode, DisplayModeRow>();
 
-export function createDisplayModePrioritiesController(
+export async function createDisplayModePrioritiesController(
   initialPriorities: Record<DisplayMode, number>,
 ) {
   let modes = toArray(initialPriorities);
 
   const listEl = el("ol", { className: `${getClass()}__list` });
 
-  function move(
+  async function move(
     index: number,
     direction: -1 | 1,
     label: string = modes[index],
@@ -28,29 +28,29 @@ export function createDisplayModePrioritiesController(
 
     [modes[newIndex], modes[index]] = [modes[index], modes[newIndex]];
 
-    render();
+    await render();
     reportSrLive(
       `${label} moved ${direction === -1 ? "up" : "down"} to position ${newIndex + 1}`,
     );
   }
 
-  function render() {
+  async function render() {
     const prevRects = measurePositions(modes, (mode) => rowMap.get(mode)?.el);
 
     const fragment = document.createDocumentFragment();
 
-    modes.forEach((mode, index) => {
+    for (const [index, mode] of modes.entries()) {
       const label = toTitleCase(mode);
       let row = rowMap.get(mode);
 
       if (!row) {
-        row = createDisplayModeRow({
+        row = await createDisplayModeRow({
           mode,
           label,
           index,
           total: modes.length,
-          onMoveUp: () => move(modes.indexOf(mode), -1, label),
-          onMoveDown: () => move(modes.indexOf(mode), 1, label),
+          onMoveUp: async () => await move(modes.indexOf(mode), -1, label),
+          onMoveDown: async () => await move(modes.indexOf(mode), 1, label),
         });
         rowMap.set(mode, row);
       }
@@ -60,7 +60,7 @@ export function createDisplayModePrioritiesController(
       row.setAria(label, index, modes.length);
 
       fragment.appendChild(row.el);
-    });
+    }
 
     listEl.replaceChildren(fragment);
 
@@ -71,14 +71,14 @@ export function createDisplayModePrioritiesController(
     return modes;
   }
 
-  render();
+  await render();
 
   return {
     el: listEl,
     getValue,
-    setValue(newModes: DisplayMode[]) {
+    async setValue(newModes: DisplayMode[]) {
       modes = [...newModes];
-      render();
+      await render();
     },
   };
 }

@@ -16,6 +16,8 @@ export enum SymbolId {
   HAMBURGER = "hamburger",
   CLOSE = "closed",
   CLEAR = "clear",
+  UP = "up",
+  DOWN = "down",
 }
 
 export enum SymbolRenderMode {

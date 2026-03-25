@@ -19,7 +19,7 @@ export async function buildDisplayModePrioritesPart(): Promise<HTMLElement> {
   const { displayModeSettings } = await settingsCache.get();
   console.log(displayModeSettings); // todo: temp, remove
 
-  const controller = createDisplayModePrioritiesController(
+  const controller = await createDisplayModePrioritiesController(
     displayModeSettings.priorities,
   );
   section.appendChild(controller.el);
