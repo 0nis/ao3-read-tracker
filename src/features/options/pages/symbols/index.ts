@@ -1,0 +1,1 @@
+export { buildSymbolsSection } from "./section";
