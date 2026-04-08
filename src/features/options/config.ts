@@ -91,7 +91,7 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
   },
   {
     id: SectionId.DISPLAY_MODES,
-    label: "Custom Display Modes",
+    label: "Display Modes",
     type: SectionType.DISPLAY,
     build: buildDisplayModesSection,
   },

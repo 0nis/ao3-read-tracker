@@ -16,7 +16,7 @@ import { FormField, FormGroup, FormItem } from "../../../types/forms";
 export function extractFormValues<
   T,
   FIELD extends FormField<T>,
-  GROUP extends FormGroup<T, FIELD, GROUP>
+  GROUP extends FormGroup<T, FIELD, GROUP>,
 >(items: Array<FormItem<T, FIELD, GROUP>>): Partial<T> {
   const result: Partial<T> = {};
   walkFormItems<T, FIELD, GROUP>(items, (field) => {
@@ -39,7 +39,7 @@ export function extractFormValues<
 export function populateFormValues<
   T,
   FIELD extends FormField<T>,
-  GROUP extends FormGroup<T, FIELD, GROUP>
+  GROUP extends FormGroup<T, FIELD, GROUP>,
 >(items: Array<FormItem<T, FIELD, GROUP>>, data: Partial<T>) {
   walkFormItems<T, FIELD, GROUP>(items, (field) => {
     const value = data[field.dataField!];
@@ -52,7 +52,7 @@ export function populateFormValues<
  * Otherwise, returns the first input, textarea, or select inside the element.
  */
 export function getInputElement(
-  element: HTMLElement
+  element: HTMLElement,
 ): HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null {
   if (
     element instanceof HTMLInputElement ||
@@ -62,14 +62,25 @@ export function getInputElement(
     return element;
   }
 
-  return element.querySelector<
+  const found = element.querySelector<
     HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
   >("input, textarea, select");
+
+  if (found) return found;
+  return null;
 }
 
 export function getInputValue(element: HTMLElement): any {
+  if (hasController(element)) {
+    switch (element.dataset.inputType) {
+      case "reorderable-list":
+        return getController(element)?.getValue?.();
+    }
+  }
+
   const input = getInputElement(element);
   if (!input) return undefined;
+
   switch (input.constructor) {
     case HTMLInputElement:
       const el = input as HTMLInputElement;
@@ -95,8 +106,17 @@ export function getInputValue(element: HTMLElement): any {
 }
 
 export function setInputValue(element: HTMLElement, value: unknown): void {
+  if (hasController(element)) {
+    switch (element.dataset.inputType) {
+      case "reorderable-list":
+        getController(element)?.setValue?.(value);
+        return;
+    }
+  }
+
   const input = getInputElement(element);
   if (!input) return;
+
   switch (input.constructor) {
     case HTMLInputElement: {
       const el = input as HTMLInputElement;
@@ -131,4 +151,12 @@ export function setInputValue(element: HTMLElement, value: unknown): void {
       break;
     }
   }
+}
+
+function hasController(element: HTMLElement) {
+  return (element as any).__controller !== undefined;
+}
+
+function getController(element: HTMLElement) {
+  return (element as any).__controller;
 }

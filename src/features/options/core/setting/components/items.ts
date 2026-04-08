@@ -136,6 +136,7 @@ function createSettingsSectionField({
   dataField,
   label,
   description,
+  orientation = "horizontal",
 }: SettingsSectionField<any>): HTMLElement {
   const id = `${CLASS_PREFIX}__${sectionId}__${String(dataField)}`;
 
@@ -164,7 +165,7 @@ function createSettingsSectionField({
   const field = el(
     "div",
     {
-      className: `${SETTINGS_CLASS}__field ${
+      className: `${SETTINGS_CLASS}__field ${SETTINGS_CLASS}__field--${orientation} ${
         isCheckbox ? `${SETTINGS_CLASS}__field--checkbox` : ""
       }`,
     },

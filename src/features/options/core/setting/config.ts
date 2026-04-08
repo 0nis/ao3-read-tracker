@@ -14,6 +14,7 @@ import type {
   InProgressSettings,
   FinishedSettings,
   SymbolSettings,
+  DisplayModeSettings,
 } from "../../../../types/settings";
 
 export interface SettingsSectionTypeMap {
@@ -22,6 +23,7 @@ export interface SettingsSectionTypeMap {
   [SectionId.IGNORE_SETTINGS]: IgnoreSettings;
   [SectionId.GENERAL_SETTINGS]: GeneralSettings;
   [SectionId.SYMBOL_SETTINGS]: SymbolSettings;
+  [SectionId.DISPLAY_MODES]: DisplayModeSettings;
 }
 
 export interface SaveMapEntry<T> {
@@ -57,5 +59,10 @@ export const SETTINGS_SAVE_MAP: {
     defaults: DEFAULT_SYMBOL_SETTINGS,
     setter: StorageService.symbolSettings.set,
     label: "symbol settings",
+  },
+  [SectionId.DISPLAY_MODES]: {
+    defaults: {} as DisplayModeSettings,
+    setter: StorageService.displayModeSettings.set,
+    label: "display modes settings",
   },
 };

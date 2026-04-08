@@ -1,26 +1,26 @@
-import { getClass } from "./part";
-import { DisplayModeRow, DisplayModeRowOptions } from "./types";
+import { getClass } from "./element";
+import { ReorderableRow, ReorderableRowOptions } from "./types";
 
-import { el } from "../../../../../../utils/ui/dom";
-import { renderSymbolContentById } from "../../../../../../utils/ui/symbols";
-import { SymbolId } from "../../../../../../enums/symbols";
-import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../../constants/global";
+import { el } from "../../../dom";
+import { renderSymbolContentById } from "../../../symbols";
+import { SymbolId } from "../../../../../enums/symbols";
+import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../constants/global";
 
-export async function createDisplayModeRow({
+export function createReorderableRow<T>({
   label,
   index,
   total,
   onMoveUp,
   onMoveDown,
-}: DisplayModeRowOptions): Promise<DisplayModeRow> {
-  const upBtn = await buildMoveBtn(
+}: ReorderableRowOptions<T>): ReorderableRow {
+  const upBtn = buildMoveBtn(
     "up",
     onMoveUp,
     index === 0,
     label,
     getUpTarget(index),
   );
-  const downBtn = await buildMoveBtn(
+  const downBtn = buildMoveBtn(
     "down",
     onMoveDown,
     index === total - 1,
@@ -72,22 +72,26 @@ function buildRowLabel(label: string): HTMLElement {
   return el("span", { className: `${getClass()}__row-label` }, label);
 }
 
-async function buildMoveBtn(
+function buildMoveBtn(
   type: "up" | "down",
   onclick: () => void,
   disabled: boolean,
   parentLabel: string,
   targetIndex: number,
-): Promise<HTMLButtonElement> {
-  console.log("before renderSymbolContentById");
-  const innerEl = await renderSymbolContentById(
+): HTMLButtonElement {
+  const icon = el("span");
+  icon.textContent = type === "up" ? "↑" : "↓";
+
+  renderSymbolContentById(
     type === "up" ? SymbolId.UP : SymbolId.DOWN,
     type === "up" ? "↑" : "↓",
     {
       sizeOverride: DEFAULT_SYMBOL_SIZE_EM,
     },
-  );
-  console.log("after renderSymbolContentById");
+  ).then((innerEl) => {
+    icon.replaceWith(innerEl);
+  });
+
   return el(
     "button",
     {
@@ -98,7 +102,7 @@ async function buildMoveBtn(
         "aria-label": `Move ${parentLabel} ${type} to position ${targetIndex + 1}`,
       },
     },
-    [innerEl],
+    [icon],
   );
 }
 

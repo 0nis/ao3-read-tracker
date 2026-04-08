@@ -1,5 +1,5 @@
 import { getStyles } from "./style";
-import { buildDisplayModePrioritesPart } from "./parts/priorities/part";
+import { buildDisplayModePrioritesPart } from "./parts/settings";
 
 import { el, injectStyles } from "../../../../utils/ui/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";

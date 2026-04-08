@@ -13,7 +13,9 @@ export interface SettingsSectionBaseItem<T> {
 }
 
 export interface SettingsSectionField<T>
-  extends SettingsSectionBaseItem<T>, FormField<T> {}
+  extends SettingsSectionBaseItem<T>, FormField<T> {
+  orientation?: "vertical" | "horizontal";
+}
 
 export interface SettingsSectionGroup<T>
   extends

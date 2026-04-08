@@ -6,20 +6,28 @@ export function getStyles(prefix: string): string {
 
     .${prefix}__field {
       display: grid;
-      grid-template-columns: auto 12em;
-      grid-template-rows: 1fr;
-      
       padding: 8px 0;
-      gap: 1em;
       align-items: center;
       border-bottom: 1px solid #eee;
+    }
+
+    .${prefix}__field--horizontal {
+      grid-template-columns: auto 12em;
+      grid-template-rows: 1fr;
+      gap: 1em;
+    }
+
+    .${prefix}__field--vertical {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      gap: .5em;
     }
 
     .${prefix}__field-label-wrapper {
       max-width: 70%;
     }
 
-    .${prefix}__field-input-wrapper {
+    .${prefix}__field--horizontal .${prefix}__field-input-wrapper {
       display: flex;
       justify-content: flex-end;
     }
@@ -116,7 +124,7 @@ export function getStyles(prefix: string): string {
     }
 
     @media (max-width: 900px) {
-      .${prefix}__field {
+      .${prefix}__field--horizontal {
         grid-template-columns: auto 10em;
       }
 
@@ -126,7 +134,7 @@ export function getStyles(prefix: string): string {
     }
 
     @media (max-width: 350px) {
-      .${prefix}__field {
+      .${prefix}__field--horizontal {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
         gap: 0;

@@ -1,6 +1,6 @@
 export function getStyles(prefix: string): string {
   return `
-    .${prefix}__list {
+    .${prefix} {
       display: flex;
       flex-direction: column;
       gap: .5em;

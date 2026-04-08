@@ -1,7 +1,5 @@
-import { DisplayMode } from "../../../../../../enums/settings";
-
-export interface DisplayModeRowOptions {
-  mode: DisplayMode;
+export interface ReorderableRowOptions<T> {
+  item: T;
   label: string;
   index: number;
   total: number;
@@ -9,7 +7,7 @@ export interface DisplayModeRowOptions {
   onMoveDown: () => void;
 }
 
-export interface DisplayModeRow {
+export interface ReorderableRow {
   el: HTMLElement;
   setIndex: (index: number) => void;
   setDisabled: (isFirst: boolean, isLast: boolean) => void;
