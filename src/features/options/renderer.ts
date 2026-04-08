@@ -1,6 +1,6 @@
 import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
-import { buildHeader } from "./components/header/component";
-import { buildNav, buildNavToggleEl } from "./components/nav/component";
+import { buildHeader } from "./core/components/header/component";
+import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
 import { CLASS_PREFIX } from "../../constants/classes";
 import { error, addGlobalListener, getManifest } from "../../utils/extension";
@@ -32,13 +32,13 @@ export async function render(): Promise<void> {
     SECTION_CONFIG.map(async ({ id, build, type }) => {
       const element = await build();
       return [id, { element, type }] as const;
-    })
+    }),
   );
   const sections = Object.fromEntries(entries) as SectionElements;
 
   const navGroups: NavGroup[] = NAV_CONFIG.map((group) => {
     const items: NavItem[] = SECTION_CONFIG.filter(
-      (section) => section.type === group.type
+      (section) => section.type === group.type,
     ).map((section) => ({
       id: section.id,
       label: section.label,
@@ -56,7 +56,7 @@ export async function render(): Promise<void> {
     el(
       "div",
       { className: `${CLASS_PREFIX}__content` },
-      Object.values(sections).map((s) => s.element)
+      Object.values(sections).map((s) => s.element),
     ),
   ]);
 

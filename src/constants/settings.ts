@@ -12,6 +12,7 @@ import {
   InProgressSettings,
   FinishedSettings,
   SymbolSettings,
+  DisplayModeSettings,
 } from "../types/settings";
 
 export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
@@ -48,6 +49,16 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   nativeMarkAsReadReplacementLabel: "",
+};
+
+export const DEFAULT_DISPLAYMODE_SETTINGS: DisplayModeSettings = {
+  id: SettingsType.DISPLAY_MODES,
+  priorities: {
+    [DisplayMode.DEFAULT]: 70,
+    [DisplayMode.HIDE]: 100,
+    [DisplayMode.COLLAPSE_GENTLE]: 80,
+    [DisplayMode.COLLAPSE_AGGRESSIVE]: 90,
+  },
 };
 
 export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {

@@ -6,6 +6,7 @@ import {
   DEFAULT_IN_PROGRESS_SETTINGS,
   DEFAULT_FINISHED_SETTINGS,
   DEFAULT_SYMBOL_SETTINGS,
+  DEFAULT_DISPLAYMODE_SETTINGS,
 } from "../../constants/settings";
 import { StorageResult } from "../../types/storage";
 import { SettingsData } from "../../types/settings";
@@ -19,6 +20,7 @@ const SETTINGS_LOADERS: Record<
   ignoreSettings: StorageService.ignoreSettings.get,
   generalSettings: StorageService.generalSettings.get,
   symbolSettings: StorageService.symbolSettings.get,
+  displayModeSettings: StorageService.displayModeSettings.get,
 };
 
 const SETTINGS_DEFAULTS: SettingsData = {
@@ -27,6 +29,7 @@ const SETTINGS_DEFAULTS: SettingsData = {
   ignoreSettings: DEFAULT_IGNORE_SETTINGS,
   generalSettings: DEFAULT_GENERAL_SETTINGS,
   symbolSettings: DEFAULT_SYMBOL_SETTINGS,
+  displayModeSettings: DEFAULT_DISPLAYMODE_SETTINGS,
 };
 
 const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
@@ -35,6 +38,7 @@ const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
   ignoreSettings: "ignore",
   generalSettings: "general",
   symbolSettings: "symbols",
+  displayModeSettings: "display modes",
 };
 
 /** Retrieves all settings from storage, applying default values for any that fail to load. */
@@ -61,7 +65,7 @@ export async function handleGetAllSettings(): Promise<SettingsData> {
     reportExtensionFailure(
       `Failed to retrieve ${failures
         .map((failure) => Object.keys(failure).join(", "))
-        .join(", ")} settings. Default values were applied.`
+        .join(", ")} settings. Default values were applied.`,
     );
   }
 

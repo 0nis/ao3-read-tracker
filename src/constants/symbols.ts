@@ -108,4 +108,16 @@ export const DEFAULT_SYMBOL_RECORDS: SymbolRecord[] = [
     emoji: "✕",
     priority: 6,
   },
+  {
+    id: SymbolId.UP,
+    label: "Up",
+    emoji: "↑",
+    priority: 5,
+  },
+  {
+    id: SymbolId.DOWN,
+    label: "Down",
+    emoji: "↓",
+    priority: 4,
+  },
 ];
