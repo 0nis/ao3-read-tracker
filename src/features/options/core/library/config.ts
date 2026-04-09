@@ -1,4 +1,4 @@
-import { StorageService } from "../../../../services/storage";
+import { StorageService } from "../../../../services/storage/storage";
 import { StorageResult } from "../../../../types/storage";
 import {
   FinishedWork,

@@ -4,7 +4,7 @@ import {
   symbolRuleCollector,
   SymbolRule,
 } from "../../../../../../services/rules";
-import { StorageService } from "../../../../../../services/storage";
+import { StorageService } from "../../../../../../services/storage/storage";
 import { el } from "../../../../../../utils/ui/dom";
 import { renderSymbolContent } from "../../../../../../utils/ui/symbols";
 import { SymbolData } from "../../../../../../types/symbols";

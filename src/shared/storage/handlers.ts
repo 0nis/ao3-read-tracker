@@ -1,9 +1,10 @@
+import { reportExtensionFailure } from "../../utils/ui/dialogs";
+import { createFlashNotice } from "../../utils/ui/forms";
+import { createButtonLoader, withLoadingState } from "../../utils/ui/loaders";
+import { isEmpty } from "../../utils/misc";
+
 import { LoaderType } from "../../enums/ui";
 import { StorageResult } from "../../types/storage";
-import { isEmpty } from "../misc";
-import { reportExtensionFailure } from "../ui/dialogs";
-import { createFlashNotice } from "../ui/forms";
-import { createButtonLoader, withLoadingState } from "../ui/loaders";
 
 export interface StorageReadOptions<T> {
   errorMsg?: string;
@@ -25,15 +26,15 @@ export interface StorageReadOptions<T> {
  */
 export async function handleStorageRead<T>(
   op: Promise<StorageResult<T>>,
-  options: StorageReadOptions<T> & { fallback: T }
+  options: StorageReadOptions<T> & { fallback: T },
 ): Promise<T>;
 export async function handleStorageRead<T>(
   op: Promise<StorageResult<T>>,
-  options?: StorageReadOptions<T>
+  options?: StorageReadOptions<T>,
 ): Promise<T | undefined>;
 export async function handleStorageRead<T>(
   op: Promise<StorageResult<T>>,
-  options?: StorageReadOptions<T>
+  options?: StorageReadOptions<T>,
 ): Promise<T | undefined> {
   const result = await op;
   const {
@@ -77,7 +78,7 @@ export interface StorageWriteOptions {
  */
 export async function handleStorageWrite<T>(
   op: Promise<StorageResult<T>>,
-  options: StorageWriteOptions
+  options: StorageWriteOptions,
 ): Promise<void> {
   const {
     successMsg = "Changes saved successfully.",
@@ -96,7 +97,7 @@ export async function handleStorageWrite<T>(
   } else {
     const controller = createButtonLoader(
       loadingEl as HTMLButtonElement,
-      LoaderType.SPINNER
+      LoaderType.SPINNER,
     );
     result = await withLoadingState(controller, () => op, {
       enforceMinDelay,

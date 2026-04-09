@@ -1,10 +1,9 @@
-import { StorageService } from "../../services/storage";
+import { StorageService } from "../../services/storage/storage";
 import {
   extractWorkIdFromListingId,
   getWorkById,
   getWorksListFromListing,
 } from "../../utils/ao3";
-import { handleStorageRead } from "../../utils/storage";
 import { WorkData } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<

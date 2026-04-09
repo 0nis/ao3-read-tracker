@@ -11,20 +11,20 @@ import {
   createFlashNotice,
   extractFormValues,
 } from "../../../../utils/ui/forms";
-import { handleStorageWrite } from "../../../../utils/storage";
+import { handleStorageWrite } from "../../../../shared/storage/handlers";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
   saveBtn: HTMLButtonElement,
-  origin?: VerticalPlacement
+  origin?: VerticalPlacement,
 ): Promise<void> {
   try {
     const saveMap = FORMS_SAVE_MAP[cfg.id];
     const msgMap = ACTION_MESSAGES_MAP[cfg.id];
     if (!saveMap || !msgMap)
       return Promise.reject(
-        new Error(`No save map or message map for form id: ${cfg.id}`)
+        new Error(`No save map or message map for form id: ${cfg.id}`),
       );
 
     const values = extractFormValues(cfg.items);

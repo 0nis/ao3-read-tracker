@@ -11,7 +11,7 @@ import {
 } from "../../../core/library/helpers/managers/info-visibility";
 import { SectionId } from "../../../config";
 
-import { StorageService } from "../../../../../services/storage";
+import { StorageService } from "../../../../../services/storage/storage";
 import { getDateParts } from "../../../../../utils/date";
 import { SymbolId } from "../../../../../enums/symbols";
 import { BooleanFilterSelect, SortDirection } from "../../../../../enums/ui";

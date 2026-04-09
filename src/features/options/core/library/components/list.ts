@@ -11,7 +11,7 @@ import { SectionConfig } from "../../../types";
 import { createSectionWrapper } from "../../components/section/component";
 
 import { localMemory } from "../../../../../services/memory";
-import { handleStorageRead } from "../../../../../utils/storage";
+import { handleStorageRead } from "../../../../../shared/storage/handlers";
 import { reportSrLive } from "../../../../../utils/ui/accessibility";
 import { el, injectStyles } from "../../../../../utils/ui/dom";
 import { SortDirection } from "../../../../../enums/ui";

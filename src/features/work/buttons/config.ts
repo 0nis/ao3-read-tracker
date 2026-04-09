@@ -5,7 +5,7 @@ import { createIgnoreWorkForm } from "../forms/instances/ignore";
 import { createFinishedWorkForm } from "../forms/instances/finished";
 import { createInProgressWorkForm } from "../forms/instances/in-progress";
 
-import { StorageService } from "../../../services/storage";
+import { StorageService } from "../../../services/storage/storage";
 import {
   IgnoreSettings,
   InProgressSettings,
@@ -76,7 +76,7 @@ export interface WorkActionSettingsMap {
 
 export const ACTION_SETTINGS_MAP: {
   [K in keyof WorkActionSettingsMap]: (
-    s: SettingsData
+    s: SettingsData,
   ) => WorkActionSettingsMap[K];
 } = {
   [WorkAction.FINISHED]: (s) => s.finishedSettings,

@@ -1,5 +1,5 @@
-import { reportExtensionFailure } from "../ui/dialogs";
-import { StorageService } from "../../services/storage";
+import { StorageService } from "./storage";
+import { reportExtensionFailure } from "../../utils/ui/dialogs";
 import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,

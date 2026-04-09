@@ -1,10 +1,5 @@
-import { WorksData } from "../../data/models/works";
-import { SettingsData } from "../../data/models/settings";
-import { SymbolsData } from "../../data/models/symbols";
-
+import { error } from "../../utils/extension";
 import { StorageResult } from "../../types/storage";
-
-import { error } from "../extension";
 
 /**
  * Safely executes an async function and wraps the result in a StorageResult.
@@ -16,7 +11,7 @@ import { error } from "../extension";
  */
 export async function safeExecute<T>(
   fn: () => Promise<T>,
-  context: string
+  context: string,
 ): Promise<StorageResult<T>> {
   try {
     const data = await fn();
@@ -53,14 +48,14 @@ export function createSafeService<D>(name: string, data: D): SafeServiceFor<D> {
   const wrapped = {} as any;
 
   for (const key of Object.getOwnPropertyNames(
-    Object.getPrototypeOf(data)
+    Object.getPrototypeOf(data),
   ) as Array<keyof D>) {
     const value = (data as any)[key];
     if (typeof value === "function" && key !== "constructor") {
       (wrapped as any)[key] = (...args: unknown[]) =>
         safeExecute(
           () => (value as any).apply(data, args),
-          `${name}.${String(key)}`
+          `${name}.${String(key)}`,
         );
     }
   }

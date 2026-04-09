@@ -3,7 +3,7 @@ import { ImportProgress } from "dexie-export-import/dist/import";
 
 import { handleProgressCallback } from "../handlers";
 
-import { IoService } from "../../../../../services/io";
+import { IoService } from "../../../../../services/storage/io";
 import {
   DexieExportDbInfo,
   getDbInfoFromDexieExport,
@@ -21,7 +21,7 @@ export async function handleImport(
   btn: HTMLButtonElement,
   file: Blob,
   options: ImportOptions,
-  successMsg: string = "Successfully imported %rows% rows of data! Enjoy!"
+  successMsg: string = "Successfully imported %rows% rows of data! Enjoy!",
 ) {
   const fileInfo = await getDbInfoFromDexieExport(file);
   if (!validateImportFile(fileInfo)) return;
@@ -34,7 +34,7 @@ export async function handleImport(
       return IoService.import(file, {
         ...options,
         transform: IoService.getMigrationTransformFunc(
-          fileInfo.databaseVersion!
+          fileInfo.databaseVersion!,
         ),
         progressCallback: (progress: ImportProgress) => {
           totalRows ??= progress.totalRows;
@@ -42,7 +42,7 @@ export async function handleImport(
         },
       });
     },
-    { enforceMinDelay: true }
+    { enforceMinDelay: true },
   );
   if (res.success) {
     createFlashNotice(successMsg.replace("%rows%", String(totalRows)));
@@ -50,7 +50,7 @@ export async function handleImport(
     const errorMsg =
       res.error instanceof Error ? res.error.message : String(res.error);
     showNotification(
-      `Something went wrong while importing your data: ${errorMsg}`
+      `Something went wrong while importing your data: ${errorMsg}`,
     ); // Manual to allow showing Dexie errors without reportExtensionFailure
   }
 }
@@ -58,13 +58,13 @@ export async function handleImport(
 function validateImportFile(info: DexieExportDbInfo): boolean {
   if (info.formatName !== "dexie" || info.databaseName !== DATABASE_NAME) {
     showNotification(
-      "The selected file isn't an export from this extension, please select a valid file! Only exports from this extension can be imported."
+      "The selected file isn't an export from this extension, please select a valid file! Only exports from this extension can be imported.",
     );
     return false;
   }
   if (!info.databaseVersion) {
     showNotification(
-      "The selected file seems to be corrupted or incomplete. Please select a valid export file."
+      "The selected file seems to be corrupted or incomplete. Please select a valid export file.",
     );
     return false;
   }

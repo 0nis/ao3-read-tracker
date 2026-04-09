@@ -10,7 +10,7 @@ import {
 import { filtersFromState, getStored } from "../../../core/library/helpers/gen";
 import { SectionId } from "../../../config";
 
-import { StorageService } from "../../../../../services/storage";
+import { StorageService } from "../../../../../services/storage/storage";
 import { getDateParts } from "../../../../../utils/date";
 import { SymbolId } from "../../../../../enums/symbols";
 import { SortDirection } from "../../../../../enums/ui";

@@ -1,6 +1,6 @@
 import { getWorkLinkFromId } from "../../../../../utils/ao3";
 import { capitalizeFirstLetter } from "../../../../../utils/string";
-import { handleStorageWrite } from "../../../../../utils/storage";
+import { handleStorageWrite } from "../../../../../shared/storage/handlers";
 import { showConfirm } from "../../../../../utils/ui/dialogs";
 import { el } from "../../../../../utils/ui/dom";
 import { getWorkTitleForNotifications } from "../../../../work/helpers";

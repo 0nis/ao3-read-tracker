@@ -2,17 +2,17 @@ import {
   createSafeService,
   safeExecute,
   SafeServiceFor,
-} from "../utils/storage/safe";
-import type { WorkData } from "../types/works";
-import type { StorageResult } from "../types/storage";
-import { instances, type InstanceMap } from "../data/instances";
+} from "../../shared/storage/safe";
+import type { WorkData } from "../../types/works";
+import type { StorageResult } from "../../types/storage";
+import { instances, type InstanceMap } from "../../data/instances";
 
 type BaseSafeServices<M extends InstanceMap> = {
   [K in keyof M]: SafeServiceFor<M[K]>;
 };
 
 function typedEntries<T extends object>(
-  obj: T
+  obj: T,
 ): { [K in keyof T]: [K, T[K]] }[keyof T][] {
   return Object.entries(obj) as any;
 }
@@ -25,7 +25,7 @@ function buildStorageService<M extends InstanceMap>(map: M) {
   for (const [key, value] of typedEntries(map)) {
     (result as any)[key] = createSafeService(
       `StorageService.${String(key)}`,
-      value
+      value,
     );
   }
 
@@ -36,7 +36,7 @@ function buildStorageService<M extends InstanceMap>(map: M) {
         inProgressWorks: await map.inProgressWorks.getByIds(ids),
         ignoredWorks: await map.ignoredWorks.getByIds(ids),
       }),
-      "StorageService.getByIds"
+      "StorageService.getByIds",
     );
 
   return result;

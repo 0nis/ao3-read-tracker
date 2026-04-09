@@ -16,7 +16,10 @@ import {
   getCurrentChapterFromWorkPage,
   getTitleFromWorkPage,
 } from "../../../utils/ao3";
-import { handleStorageRead, handleStorageWrite } from "../../../utils/storage";
+import {
+  handleStorageRead,
+  handleStorageWrite,
+} from "../../../shared/storage/handlers";
 import { getFormattedDate, getFormattedTime } from "../../../utils/date";
 import { createFlashNotice } from "../../../utils/ui/forms";
 import { getButtonOrigin } from "../../../utils/ui/dom";
@@ -27,7 +30,7 @@ import { ABBREVIATION } from "../../../constants/global";
 export async function handleEditWork<K extends keyof WorkActionTypeMap>(
   id: string,
   workAction: K,
-  btn?: HTMLElement
+  btn?: HTMLElement,
 ) {
   if (FormRegistry.get(workAction)) {
     FormRegistry.navigate(workAction);
@@ -43,14 +46,14 @@ export async function handleEditWork<K extends keyof WorkActionTypeMap>(
       title: getTitleFromWorkPage() || "Untitled",
     } as Partial<WorkActionTypeMap[K]>,
     !!data,
-    getBtnOrigin(btn)
+    getBtnOrigin(btn),
   );
 }
 
 export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
   id: string,
   workAction: K,
-  btn?: HTMLElement
+  btn?: HTMLElement,
 ) {
   const cfg = ACTION_HANDLER_MAP[workAction];
   const msgs = ACTION_MESSAGES_MAP[workAction];
@@ -82,19 +85,19 @@ export async function handleSaveWork<K extends keyof WorkActionTypeMap>(
         state: WorkActionState.MARKED,
         workActionEvent: WorkActionEvent.SAVE,
       },
-    })
+    }),
   );
 }
 
 export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
   id: string,
   workAction: K,
-  btn?: HTMLElement
+  btn?: HTMLElement,
 ) {
   const cfg = ACTION_HANDLER_MAP[workAction];
   const msgs = ACTION_MESSAGES_MAP[workAction];
   const title = getWorkTitleForNotifications(
-    getTitleFromWorkPage() || undefined
+    getTitleFromWorkPage() || undefined,
   );
 
   await handleStorageWrite(cfg.storage.delete(id), {
@@ -117,13 +120,13 @@ export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
         state: WorkActionState.UNMARKED,
         workActionEvent: WorkActionEvent.DELETE,
       },
-    })
+    }),
   );
 }
 
 export async function handleCheckExistence<K extends keyof WorkActionTypeMap>(
   id: string,
-  workAction: K
+  workAction: K,
 ) {
   const cfg = ACTION_HANDLER_MAP[workAction];
   const exists = (await cfg.storage.exists(id)).data;
@@ -132,12 +135,12 @@ export async function handleCheckExistence<K extends keyof WorkActionTypeMap>(
 
 export async function handleUpdateInProgressInfo(
   id: string,
-  btn?: HTMLElement
+  btn?: HTMLElement,
 ) {
   const chapter = getCurrentChapterFromWorkPage() || undefined;
 
   const data = await handleStorageRead(
-    ACTION_HANDLER_MAP.in_progress.storage.getById(id)
+    ACTION_HANDLER_MAP.in_progress.storage.getById(id),
   );
   if (!data) return;
 
@@ -151,9 +154,9 @@ export async function handleUpdateInProgressInfo(
     ACTION_HANDLER_MAP.in_progress.storage.put(updateData),
     {
       successMsg: `Your read progress for "${getWorkTitleForNotifications(
-        updateData.title
+        updateData.title,
       )}" was updated: Last read at ${getFormattedDate(
-        updateData.lastReadAt
+        updateData.lastReadAt,
       )} ${getFormattedTime(updateData.lastReadAt)}, chapter ${
         updateData.lastReadChapter || "unknown"
       }.`,
@@ -167,7 +170,7 @@ export async function handleUpdateInProgressInfo(
           positionId: getBtnOrigin(btn),
         });
       },
-    }
+    },
   );
 }
 

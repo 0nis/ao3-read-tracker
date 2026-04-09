@@ -2,7 +2,7 @@ import { ExportProgress } from "dexie-export-import";
 
 import { handleProgressCallback } from "../handlers";
 
-import { IoService } from "../../../../../services/io";
+import { IoService } from "../../../../../services/storage/io";
 import { LoaderType } from "../../../../../enums/ui";
 import {
   createButtonLoader,
@@ -25,7 +25,7 @@ export async function handleExport(btn: HTMLButtonElement) {
         },
       });
     },
-    { enforceMinDelay: true }
+    { enforceMinDelay: true },
   );
 
   if (res.success && res.data) {

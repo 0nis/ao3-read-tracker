@@ -1,10 +1,10 @@
 import { ExportOptions, ImportOptions } from "dexie-export-import";
-import { io } from "../data/io";
-import { migrations } from "../data/migrations";
+import { io } from "../../data/io";
+import { migrations } from "../../data/migrations";
 
-import { StorageResult } from "../types/storage";
-import { safeExecute } from "../utils/storage";
-import { DATABASE_VERSION } from "../constants/global";
+import { StorageResult } from "../../types/storage";
+import { safeExecute } from "../../shared/storage/safe";
+import { DATABASE_VERSION } from "../../constants/global";
 
 export const IoService = {
   async export(options: ExportOptions): Promise<StorageResult<Blob>> {
@@ -13,7 +13,7 @@ export const IoService = {
 
   async import(
     blob: Blob,
-    options?: ImportOptions
+    options?: ImportOptions,
   ): Promise<StorageResult<void>> {
     return safeExecute(() => io.import(blob, options), "StorageService.import");
   },
