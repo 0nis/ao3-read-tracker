@@ -1,5 +1,5 @@
 import { warn } from "../../../../shared/extension/logger";
-import { el, setButtonOrigin } from "../../../../utils/ui/dom";
+import { el, getButtonOrigin, setButtonOrigin } from "../../../../utils/ui/dom";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function placeButtons(
@@ -79,3 +79,7 @@ function insertButtonIntoParent(parent: Parent, button: HTMLElement) {
     else parent.el.appendChild(li);
   }
 }
+
+export const getBtnOrigin = (btn: HTMLElement | null | undefined) => {
+  return btn ? getButtonOrigin(btn) : VerticalPlacement.TOP;
+};

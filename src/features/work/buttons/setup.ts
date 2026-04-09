@@ -1,5 +1,6 @@
 import { ACTION_SETTINGS_MAP } from "./config";
-import { handleCheckExistence, handleUpdateInProgressInfo } from "./handlers";
+import { handleCheckExistence } from "./handlers/existence";
+import { handleUpdateInProgressInfo } from "./handlers/update";
 import {
   createActionModeButton,
   handleOnUpdateReadProgressEvent,

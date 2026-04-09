@@ -1,6 +1,9 @@
 import { ACTION_LABELS } from "../config";
+import { handleDeleteWork } from "../handlers/delete";
+import { handleEditWork } from "../handlers/edit";
+import { handleSaveWork } from "../handlers/save";
 import { ButtonAction, ActionButtonMeta, ActionLabelSet } from "../types";
-import { handleDeleteWork, handleEditWork, handleSaveWork } from "../handlers";
+
 import { WorkAction } from "../../config";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
@@ -17,14 +20,14 @@ export function buildActionButtonConfig(): Record<
     Object.entries(ACTION_LABELS).map(([key, labels]) => [
       key,
       makeMeta(key as WorkAction, labels),
-    ])
+    ]),
   ) as Record<WorkAction, ActionButtonMeta>;
   return _cache as Record<WorkAction, ActionButtonMeta>;
 }
 
 function makeMeta(
   action: WorkAction,
-  labels: ActionLabelSet
+  labels: ActionLabelSet,
 ): ActionButtonMeta {
   return {
     simple: {
