@@ -1,6 +1,8 @@
 import { CLASS_PREFIX } from "../constants/classes";
 import { warn } from "../shared/extension/logger";
 
+// TODO: Move file to /shared/
+
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
   if (!match) {
@@ -16,26 +18,7 @@ export const getWorkTitleForNotifications = (
   return String(title) || "this work";
 };
 
-/**
- * Finds the newest chapter from a work listing element
- * When there are 12/? chapters, for example, it returns "12".
- */
-export function getLatestChapterFromWorkListing(
-  work: HTMLElement,
-): number | null {
-  const chapterElement = work.querySelector("dd.chapters");
-  if (!chapterElement || !chapterElement.textContent) {
-    warn("Could not find chapters element in work listing");
-    return null;
-  }
-  const chapterMatch = chapterElement.textContent.match(/(\d+)\/\d+/);
-  if (!chapterMatch || chapterMatch.length <= 0) {
-    warn("Could not parse chapters from work listing");
-    return null;
-  }
-  return parseInt(chapterMatch[1]);
-}
-
+// TODO: Move to relevant feature
 /**
  * "Hijacking" meaning we change the page title and clear the
  * main content area to prepare it for our own content.
@@ -54,24 +37,6 @@ export function hijackAo3Page(
 
 export function getWorkById(id: string): HTMLElement | null {
   return document.getElementById(`work_${id}`) as HTMLElement | null;
-}
-
-export function extractWorkIdFromListingId(id: string): string | null {
-  const match = id.match(/^work_(\d+)/);
-  return match ? match[1] : null;
-}
-
-export function getWorksListFromListing(): HTMLElement | null {
-  const main = document.getElementById("main");
-  if (!main?.classList.contains("works-index")) return null;
-  const worksList = main.querySelector(
-    "ol.work.index.group",
-  ) as HTMLElement | null;
-  if (!worksList) {
-    warn("Could not find works list in listing page");
-    return null;
-  }
-  return worksList;
 }
 
 export function getWorkLinkFromId(id: string): string {
