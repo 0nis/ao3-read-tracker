@@ -1,5 +1,5 @@
 import { Router } from "../../../../app/router";
-import { getExtensionName } from "../../../../utils/extension";
+import { getExtensionName } from "../../../../shared/extension/manifest";
 import { el, ensureChild } from "../../../../utils/ui/dom";
 
 /**

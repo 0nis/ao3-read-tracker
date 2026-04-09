@@ -1,4 +1,4 @@
-import { error } from "../../utils/extension";
+import { error } from "../../shared/extension/logger";
 import { StorageResult } from "../../types/storage";
 
 /**

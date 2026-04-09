@@ -4,7 +4,7 @@ import { removeExtensionMetaFromArea } from "./helpers";
 
 import { StorageService } from "../../../services/storage/storage";
 import { getIdFromUrl } from "../../../utils/ao3";
-import { warn } from "../../../utils/extension";
+import { warn } from "../../../shared/extension/logger";
 import { handleStorageRead } from "../../../shared/storage/handlers";
 import { injectStyles } from "../../../utils/ui/dom";
 

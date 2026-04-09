@@ -20,12 +20,12 @@ import { WorkActionEvent, WorkActionState, WorkActionTypeMap } from "../config";
 
 import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { error } from "../../../utils/extension";
+import { error } from "../../../shared/extension/logger";
 import { ABBREVIATION } from "../../../constants/global";
 import { populateFormValues } from "../../../utils/ui/forms";
 
 export function createWorkForm<K extends keyof WorkActionTypeMap>(
-  cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K }
+  cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
 ): HTMLElement {
   const elId = `${CLASS_PREFIX}__${cfg.id}-form`;
   const prevScrollPos = window.scrollY || document.documentElement.scrollTop;
@@ -46,7 +46,7 @@ export function createWorkForm<K extends keyof WorkActionTypeMap>(
           state,
           workActionEvent: event,
         },
-      })
+      }),
     );
   };
 

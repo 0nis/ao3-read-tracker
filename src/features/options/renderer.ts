@@ -1,13 +1,16 @@
 import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
+import { NavGroup, NavItem } from "./types";
 import { buildHeader } from "./core/components/header/component";
 import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
-import { CLASS_PREFIX } from "../../constants/classes";
-import { error, addGlobalListener, getManifest } from "../../utils/extension";
+import { getManifest } from "../../shared/extension/manifest";
+import { error } from "../../shared/extension/logger";
+import { addGlobalListener } from "../../utils/listeners";
 import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
+
 import { ABBREVIATION } from "../../constants/global";
-import { NavGroup, NavItem } from "./types";
+import { CLASS_PREFIX } from "../../constants/classes";
 
 export type SectionElements = {
   [key in SectionId]: {

@@ -1,18 +1,18 @@
 import { ACTION_DEFAULTS_MAP, WorkActionTypeMap } from "./config";
 
 import { getIdFromUrl, getTitleFromWorkPage } from "../../utils/ao3";
-import { warn } from "../../utils/extension";
+import { warn } from "../../shared/extension/logger";
 import { VerticalPlacement } from "../../enums/settings";
 
 export const getWorkTitleForNotifications = (
-  title: string | undefined
+  title: string | undefined,
 ): string => {
   return String(title) || "this work";
 };
 
 export const getDefaultPayload = <K extends keyof WorkActionTypeMap>(
   action: K,
-  data: Partial<WorkActionTypeMap[K]>
+  data: Partial<WorkActionTypeMap[K]>,
 ): WorkActionTypeMap[K] => {
   const id = data.id || getIdFromUrl();
   const title = getTitleFromWorkPage() ?? undefined;
@@ -30,7 +30,7 @@ export const getDefaultPayload = <K extends keyof WorkActionTypeMap>(
 export function placeNotice(
   main: HTMLElement,
   notice: HTMLElement,
-  placement: VerticalPlacement
+  placement: VerticalPlacement,
 ) {
   if (placement === VerticalPlacement.BOTTOM) {
     const el = main.querySelector("#feedback")?.querySelector("ul.actions");
@@ -40,7 +40,7 @@ export function placeNotice(
     }
 
     warn(
-      "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead."
+      "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead.",
     );
   }
 

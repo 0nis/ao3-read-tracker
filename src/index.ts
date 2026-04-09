@@ -2,10 +2,11 @@ import { App } from "./app";
 import { db } from "./data/db";
 import { localMemory } from "./services/memory";
 
+import { warn } from "./shared/extension/logger";
 import { getFormattedDate } from "./utils/date";
 import { reportExtensionFailure, showNotification } from "./utils/ui/dialogs";
-import { warn } from "./utils/extension";
 import { addReloadButton } from "./utils/ui/footer";
+
 import { EXTENSION_DISABLED_KEY } from "./constants/global";
 import { CLASS_PREFIX } from "./constants/classes";
 import { ExtensionDisabledData } from "./types/memory";
@@ -24,7 +25,7 @@ async function start() {
   } catch (err) {
     reportExtensionFailure(
       "⚠️ Extension %name% (v%version%) failed to start! ⚠️",
-      err
+      err,
     );
     kill("Database failed to open");
     return;
@@ -34,7 +35,7 @@ async function start() {
   } catch (err) {
     reportExtensionFailure(
       "⚠️ An unknown error occurred in extension %name% (v%version%)! The extension may not work as expected. ⚠️",
-      err
+      err,
     );
     return;
   }
@@ -97,7 +98,7 @@ function kill(reason?: string) {
   warn(
     `${
       reason ? `${reason}. ` : ""
-    }To avoid repeatedly showing error messages and disrupting your experience, the extension is temporarily disabled. AO3 will continue to function normally.`
+    }To avoid repeatedly showing error messages and disrupting your experience, the extension is temporarily disabled. AO3 will continue to function normally.`,
   );
 }
 
@@ -114,7 +115,7 @@ async function disable(reason?: string, disabledAt?: number) {
       disabledAt ? ` at ${getFormattedDate(disabledAt)}` : ""
     }${
       reason ? ` for reason: ${reason}` : ""
-    }. Skipping initialization. To attempt to re-enable the extension, click on the reload button located at the bottom of the page (in the footer).`
+    }. Skipping initialization. To attempt to re-enable the extension, click on the reload button located at the bottom of the page (in the footer).`,
   );
   addReloadButton(reload);
   extensionAlive = false;

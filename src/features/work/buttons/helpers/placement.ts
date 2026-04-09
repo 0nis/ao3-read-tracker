@@ -1,11 +1,11 @@
-import { warn } from "../../../../utils/extension";
+import { warn } from "../../../../shared/extension/logger";
 import { el, setButtonOrigin } from "../../../../utils/ui/dom";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function placeButtons(
   placement: VerticalPlacement,
   navs: ButtonNavs,
-  create: () => Promise<HTMLElement | undefined> | HTMLElement
+  create: () => Promise<HTMLElement | undefined> | HTMLElement,
 ) {
   if (!navs.top && !navs.bottom) return;
 
@@ -47,7 +47,7 @@ export function getWorkNavBars(): ButtonNavs {
 
 function getButtonParents(
   placement: VerticalPlacement,
-  nav: ButtonNavs
+  nav: ButtonNavs,
 ): Parent[] {
   const parents: Parent[] = [];
   switch (placement) {

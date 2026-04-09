@@ -1,4 +1,4 @@
-import { addGlobalListener } from "../../utils/extension";
+import { addGlobalListener } from "../../utils/listeners";
 import { markWorksOnPage, updateWorksOnPage } from "./rendering/setup";
 
 export const Listing = {

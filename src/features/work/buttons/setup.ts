@@ -10,7 +10,7 @@ import { createUpdateButton } from "./components/update";
 import { WorkAction } from "../config";
 
 import { settingsCache } from "../../../services/cache";
-import { warn } from "../../../utils/extension";
+import { warn } from "../../../shared/extension/logger";
 import { getIdFromUrl } from "../../../utils/ao3";
 import { SettingsData } from "../../../types/settings";
 import { VerticalPlacement } from "../../../enums/settings";
@@ -19,7 +19,7 @@ export async function setupButtons() {
   const settings = await settingsCache.get();
 
   modifyMarkForLaterButton(
-    settings.generalSettings?.nativeMarkAsReadReplacementLabel
+    settings.generalSettings?.nativeMarkAsReadReplacementLabel,
   );
 
   const workId = getIdFromUrl();
@@ -30,7 +30,7 @@ export async function setupButtons() {
   await setupUpdateReadProgressButton(
     workId,
     navs,
-    settings.inProgressSettings.updateButtonPlacement
+    settings.inProgressSettings.updateButtonPlacement,
   );
 }
 
@@ -49,8 +49,8 @@ async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
       navs,
       async () =>
         await createActionModeButton(
-          s.simpleModeEnabled ? cfg[action].simple : cfg[action].advanced
-        )
+          s.simpleModeEnabled ? cfg[action].simple : cfg[action].advanced,
+        ),
     );
   }
 }
@@ -58,7 +58,7 @@ async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
 async function setupUpdateReadProgressButton(
   workId: string | null,
   navs: ButtonNavs,
-  placement: VerticalPlacement
+  placement: VerticalPlacement,
 ) {
   if (!workId) return;
   const exists = await handleCheckExistence(workId, WorkAction.IN_PROGRESS);
@@ -67,8 +67,8 @@ async function setupUpdateReadProgressButton(
       "Update Read Progress",
       handleUpdateInProgressInfo,
       handleOnUpdateReadProgressEvent,
-      exists ? false : true
-    )
+      exists ? false : true,
+    ),
   );
 }
 

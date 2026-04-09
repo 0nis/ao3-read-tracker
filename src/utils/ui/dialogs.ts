@@ -1,10 +1,8 @@
+import { error, info, createExtensionMsg } from "../../shared/extension/logger";
 import {
   getManifest,
   replaceManifestPlaceholders,
-  error,
-  info,
-  createExtensionMsg,
-} from "../extension";
+} from "../../shared/extension/manifest";
 
 /**
  * Displays a critical message that requires user attention.
@@ -32,12 +30,12 @@ export function showConfirm(message: string): boolean {
  */
 export function confirmDestructiveAction(
   message: string,
-  confirmPhrase: string
+  confirmPhrase: string,
 ): boolean {
   const userInput = prompt(
     createExtensionMsg(
-      `${message}\n\nPlease type "${confirmPhrase}" to confirm.`
-    )
+      `${message}\n\nPlease type "${confirmPhrase}" to confirm.`,
+    ),
   );
   return userInput?.toUpperCase() === confirmPhrase.toUpperCase();
 }
@@ -60,6 +58,6 @@ export function reportExtensionFailure(msg: string, err?: unknown): void {
     `${message}\n\n` +
       `To help fix this, please report the issue at:\n` +
       `${url}\n\n` +
-      `Thank you!`
+      `Thank you!`,
   );
 }

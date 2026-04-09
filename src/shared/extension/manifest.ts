@@ -1,5 +1,5 @@
 import { StorageResult } from "../../types/storage";
-import { error } from "./console";
+import { error } from "./logger";
 
 interface ExtensionManifest {
   name: string;
@@ -45,7 +45,7 @@ export function getManifest(): StorageResult<ExtensionManifest> {
     };
   } catch (err) {
     const msg = getCriticalManifestError(
-      err instanceof Error ? err.message : String(err)
+      err instanceof Error ? err.message : String(err),
     );
     error("Failed to access manifest:", msg, err);
 
@@ -78,7 +78,7 @@ export function replaceManifestPlaceholders(template: string): string {
 
   return Object.entries(fields).reduce(
     (result, [key, value]) => result.split(`%${key}%`).join(value),
-    template
+    template,
   );
 }
 

@@ -5,12 +5,12 @@ import { addClasses } from "./marks/classes";
 import { DISPLAY_MODE_MAP } from "../config";
 
 import { displayRuleCollector } from "../../../services/rules";
+import { settingsCache } from "../../../services/cache";
+import { getManifest } from "../../../shared/extension/manifest";
 import { ensureChild } from "../../../utils/ui/dom";
-import { getManifest } from "../../../utils/extension";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
 import { WorkStateData } from "../../../types/works";
-import { settingsCache } from "../../../services/cache";
 
 export interface ApplyMarksParams extends WorkStateData {
   element: HTMLElement;

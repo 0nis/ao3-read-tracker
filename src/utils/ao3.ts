@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../constants/classes";
-import { warn } from "./extension";
+import { warn } from "../shared/extension/logger";
 
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
@@ -37,7 +37,7 @@ export function getCurrentChapterFromWorkPage(options?: {
  * When there are 12/? chapters, for example, it returns "12".
  */
 export function getLatestChapterFromWorkListing(
-  work: HTMLElement
+  work: HTMLElement,
 ): number | null {
   const chapterElement = work.querySelector("dd.chapters");
   if (!chapterElement || !chapterElement.textContent) {
@@ -58,7 +58,7 @@ export function getLatestChapterFromWorkListing(
  */
 export function hijackAo3Page(
   title: string,
-  className: string
+  className: string,
 ): HTMLElement | null {
   document.title = title;
   const main = document.getElementById("main");
@@ -81,7 +81,7 @@ export function getWorksListFromListing(): HTMLElement | null {
   const main = document.getElementById("main");
   if (!main?.classList.contains("works-index")) return null;
   const worksList = main.querySelector(
-    "ol.work.index.group"
+    "ol.work.index.group",
   ) as HTMLElement | null;
   if (!worksList) {
     warn("Could not find works list in listing page");

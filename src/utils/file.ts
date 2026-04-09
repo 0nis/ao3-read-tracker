@@ -1,8 +1,8 @@
 import { getFormattedDateTimeForFilename } from "./date";
-import { getManifest } from "./extension";
 import { extractKey } from "./misc";
 import { toKebabCase } from "./string";
 import { el } from "./ui/dom";
+import { getManifest } from "../shared/extension/manifest";
 
 /** True if the file type starts with "image/", aka the simple way of checking */
 export const isImageFile = (file: File): boolean =>
@@ -62,7 +62,7 @@ export function downloadFile(data: Blob, type: string): void {
 
   a.href = url;
   a.download = `${extName}_${type}_${getFormattedDateTimeForFilename(
-    Date.now()
+    Date.now(),
   )}.json`;
   document.body.appendChild(a);
   a.click();
@@ -83,7 +83,7 @@ export interface DexieExportDbInfo {
  */
 export async function getDbInfoFromDexieExport(
   blob: Blob,
-  chunkSizeInKb: number = 2
+  chunkSizeInKb: number = 2,
 ): Promise<DexieExportDbInfo> {
   const chunkSize = 1024 * chunkSizeInKb;
   let offset = 0;

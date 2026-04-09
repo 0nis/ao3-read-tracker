@@ -1,6 +1,6 @@
-import { CLASS_PREFIX } from "../../constants/classes";
-import { warn } from "../extension";
 import { el } from "./dom";
+import { warn } from "../../shared/extension/logger";
+import { CLASS_PREFIX } from "../../constants/classes";
 
 let srLive: HTMLElement | null = null;
 

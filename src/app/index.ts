@@ -5,18 +5,18 @@ import { Listing } from "../features/listing";
 import { Options } from "../features/options";
 import { Work } from "../features/work";
 
+import { error } from "../shared/extension/logger";
 import { injectStyles } from "../utils/ui/dom";
+import { initSrLive } from "../utils/ui/accessibility";
 
 import { CLASS_PREFIX } from "../constants/classes";
-import { initSrLive } from "../utils/ui/accessibility";
-import { error } from "../utils/extension";
 
 export const App = {
   async init() {
     const main = document.getElementById("main");
     if (!main) {
       error(
-        "Could not find #main element. The extension will not run on this page."
+        "Could not find #main element. The extension will not run on this page.",
       );
 
       return;
@@ -24,7 +24,7 @@ export const App = {
 
     injectStyles(
       `${CLASS_PREFIX}__styles--global`,
-      getGlobalStyles(CLASS_PREFIX)
+      getGlobalStyles(CLASS_PREFIX),
     );
     initSrLive();
 
