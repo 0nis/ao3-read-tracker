@@ -7,7 +7,7 @@ import { IoService } from "../../../../../services/storage/io";
 import {
   DexieExportDbInfo,
   getDbInfoFromDexieExport,
-} from "../../../../../utils/file";
+} from "../../../../../utils/dexie";
 import {
   createButtonLoader,
   withLoadingState,
