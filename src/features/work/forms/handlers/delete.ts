@@ -1,11 +1,12 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
-import { getWorkTitleForNotifications, placeNotice } from "../../helpers";
+import { placeNotice } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
-import { VerticalPlacement } from "../../../../enums/settings";
+import { getWorkTitleForNotifications } from "../../../../utils/ao3";
 import { createFlashNotice } from "../../../../utils/ui/forms";
+import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]>,

@@ -1,6 +1,7 @@
 import { createWorkForm } from "../base";
 import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
+import { getCurrentChapterFromWorkPage } from "../../helpers";
 
 import {
   datetime,
@@ -8,7 +9,6 @@ import {
   enumSelect,
   textarea,
 } from "../../../../utils/ui/forms";
-import { getCurrentChapterFromWorkPage } from "../../../../utils/ao3";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { ReadingStatus } from "../../../../enums/works";
 import { FormItemType } from "../../../../enums/forms";
@@ -77,7 +77,7 @@ const items: WorkFormItem<InProgressWork>[] = [
 export function createInProgressWorkForm(
   data: Partial<InProgressWork>,
   editing: boolean,
-  origin?: VerticalPlacement
+  origin?: VerticalPlacement,
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.IN_PROGRESS,

@@ -1,31 +1,27 @@
-import { ACTION_DEFAULTS_MAP, WorkActionTypeMap } from "./config";
-
-import { getIdFromUrl, getTitleFromWorkPage } from "../../utils/ao3";
 import { warn } from "../../shared/extension/logger";
 import { VerticalPlacement } from "../../enums/settings";
 
-export const getWorkTitleForNotifications = (
-  title: string | undefined,
-): string => {
-  return String(title) || "this work";
-};
+export function getTitleFromWorkPage(): string | null {
+  const titleElement = document.querySelector("h2.title.heading");
+  if (!titleElement || !titleElement.textContent) {
+    warn("Could not find work title element");
+    return null;
+  }
+  return titleElement.textContent.trim();
+}
 
-export const getDefaultPayload = <K extends keyof WorkActionTypeMap>(
-  action: K,
-  data: Partial<WorkActionTypeMap[K]>,
-): WorkActionTypeMap[K] => {
-  const id = data.id || getIdFromUrl();
-  const title = getTitleFromWorkPage() ?? undefined;
-  if (!id) throw new Error("No id found for work");
-
-  const defaults = ACTION_DEFAULTS_MAP[action](data);
-  return {
-    ...defaults,
-    ...data,
-    id,
-    title: title || data.title || "Untitled",
-  } as WorkActionTypeMap[K];
-};
+export function getCurrentChapterFromWorkPage(options?: {
+  suppressWarnings?: boolean;
+}): number | null {
+  const titleElement = document.querySelector("h3.title");
+  if (!titleElement) {
+    if (!options?.suppressWarnings)
+      warn("Could not find chapter title element");
+    return null;
+  }
+  const chapterMatch = titleElement.textContent?.match(/Chapter (\d+)/);
+  return chapterMatch ? parseInt(chapterMatch[1]) : null;
+}
 
 export function placeNotice(
   main: HTMLElement,

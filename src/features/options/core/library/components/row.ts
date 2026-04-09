@@ -1,9 +1,11 @@
-import { getWorkLinkFromId } from "../../../../../utils/ao3";
+import {
+  getWorkLinkFromId,
+  getWorkTitleForNotifications,
+} from "../../../../../utils/ao3";
 import { capitalizeFirstLetter } from "../../../../../utils/string";
 import { handleStorageWrite } from "../../../../../shared/storage/handlers";
 import { showConfirm } from "../../../../../utils/ui/dialogs";
 import { el } from "../../../../../utils/ui/dom";
-import { getWorkTitleForNotifications } from "../../../../work/helpers";
 import {
   LIST_ROW_MESSAGES_MAP,
   LIST_ROW_TYPE_SERVICE_MAP,
