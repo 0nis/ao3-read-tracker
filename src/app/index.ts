@@ -16,15 +16,14 @@ export const App = {
     const main = document.getElementById("main");
     if (!main) {
       error(
-        "Could not find #main element. The extension will not run on this page."
+        "Could not find #main element. The extension will not run on this page.",
       );
-
       return;
     }
 
     injectStyles(
       `${CLASS_PREFIX}__styles--global`,
-      getGlobalStyles(CLASS_PREFIX)
+      getGlobalStyles(CLASS_PREFIX),
     );
     initSrLive();
 

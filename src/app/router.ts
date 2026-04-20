@@ -1,3 +1,5 @@
+import { addGlobalListener } from "../utils/extension";
+
 type Route = {
   path: string;
   render: () => void;
@@ -7,11 +9,14 @@ export const Router = {
   routes: [] as Route[],
 
   setup() {
+    addGlobalListener(window, "popstate", () => this.resolve());
     this.resolve();
   },
 
   navigate(path: string) {
-    window.location.href = path;
+    // TODO: Fix navigation issue
+    window.history.pushState({}, "", path);
+    this.resolve();
   },
 
   back() {
