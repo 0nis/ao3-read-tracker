@@ -1,5 +1,8 @@
 import { warn } from "../../shared/extension/logger";
-import { getWorkById } from "../../utils/ao3";
+
+export function getWorkById(id: string): HTMLElement | null {
+  return document.getElementById(`work_${id}`) as HTMLElement | null;
+}
 
 export function getWorkElement(
   workOrId: HTMLElement | string,

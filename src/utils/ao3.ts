@@ -34,11 +34,3 @@ export function hijackAo3Page(
   main.className = `${CLASS_PREFIX}__${className}`;
   return main;
 }
-
-export function getWorkById(id: string): HTMLElement | null {
-  return document.getElementById(`work_${id}`) as HTMLElement | null;
-}
-
-export function getWorkLinkFromId(id: string): string {
-  return `https://archiveofourown.org/works/${id}`;
-}

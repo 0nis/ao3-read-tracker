@@ -5,6 +5,8 @@ export const DATABASE_VERSION = VERSION;
 
 export const SETTINGS_PAGE_URL = "/extensions/read-tracker";
 
+export const AO3_WORK_BASE_URL = "https://archiveofourown.org/works";
+
 export const MAX_GIF_SIZE = 500_000; // 500kb
 export const IMAGE_PIXEL_HEIGHT = 128;
 export const DEFAULT_SYMBOL_SIZE_EM = 1.2;
