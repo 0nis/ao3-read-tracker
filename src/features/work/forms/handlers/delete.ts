@@ -1,11 +1,11 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
+
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
-import { placeNotice } from "../../helpers";
+import { createNoticeHandler } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
 import { getWorkTitleForNotifications } from "../../../../shared/ao3";
-import { createFlashNotice } from "../../../../utils/ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
@@ -29,13 +29,6 @@ export async function deleteWorkFormData<K extends keyof WorkActionTypeMap>(
     successMsg: msgMap.success.delete.replace("%title%", title),
     errorMsg: msgMap.error.delete.replace("%title%", title),
     loadingEl: deleteBtn,
-    onSuccess(message) {
-      createFlashNotice(message, {
-        appendNotice: (main: HTMLElement, notice: HTMLElement) => {
-          placeNotice(main, notice, origin || VerticalPlacement.TOP);
-        },
-        positionId: origin || VerticalPlacement.TOP,
-      });
-    },
+    onSuccess: createNoticeHandler(deleteBtn),
   });
 }

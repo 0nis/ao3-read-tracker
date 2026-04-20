@@ -1,16 +1,14 @@
 import { ACTION_HANDLER_MAP } from "../config";
-import { getBtnOrigin } from "../helpers/placement";
 import {
   ACTION_MESSAGES_MAP,
   WorkActionEvent,
   WorkActionState,
   WorkActionTypeMap,
 } from "../../config";
-import { placeNotice, getTitleFromWorkPage } from "../../helpers";
+import { getTitleFromWorkPage, createNoticeHandler } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
 import { getWorkTitleForNotifications } from "../../../../shared/ao3";
-import { createFlashNotice } from "../../../../utils/ui/forms";
 import { ABBREVIATION } from "../../../../constants/global";
 
 export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
@@ -27,14 +25,7 @@ export async function handleDeleteWork<K extends keyof WorkActionTypeMap>(
   await handleStorageWrite(cfg.storage.delete(id), {
     successMsg: msgs.success.delete.replace("%title%", title),
     errorMsg: msgs.error.delete.replace("%title%", title),
-    onSuccess(message) {
-      createFlashNotice(message, {
-        appendNotice: (main: HTMLElement, notice: HTMLElement) => {
-          placeNotice(main, notice, getBtnOrigin(btn));
-        },
-        positionId: getBtnOrigin(btn),
-      });
-    },
+    onSuccess: createNoticeHandler(btn),
   });
 
   document.dispatchEvent(

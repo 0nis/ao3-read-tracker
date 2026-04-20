@@ -1,6 +1,8 @@
 import { ACTION_HANDLER_MAP } from "../config";
-import { getBtnOrigin } from "../helpers/placement";
-import { placeNotice, getCurrentChapterFromWorkPage } from "../../helpers";
+import {
+  getCurrentChapterFromWorkPage,
+  createNoticeHandler,
+} from "../../helpers";
 
 import {
   handleStorageRead,
@@ -8,7 +10,6 @@ import {
 } from "../../../../shared/storage/handlers";
 import { getWorkTitleForNotifications } from "../../../../shared/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../../utils/date";
-import { createFlashNotice } from "../../../../utils/ui/forms";
 import { InProgressWork } from "../../../../types/works";
 
 export async function handleUpdateInProgressInfo(
@@ -40,14 +41,7 @@ export async function handleUpdateInProgressInfo(
       }.`,
       errorMsg: "Failed to update read progress.",
       loadingEl: btn,
-      onSuccess(message) {
-        createFlashNotice(message, {
-          appendNotice: (main: HTMLElement, notice: HTMLElement) => {
-            placeNotice(main, notice, getBtnOrigin(btn));
-          },
-          positionId: getBtnOrigin(btn),
-        });
-      },
+      onSuccess: createNoticeHandler(btn),
     },
   );
 }

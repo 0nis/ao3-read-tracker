@@ -1,15 +1,13 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
+
 import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
-import { placeNotice } from "../../helpers";
+import { createNoticeHandler } from "../../helpers";
 import { getDefaultPayload } from "../../payload";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
 import { getWorkTitleForNotifications } from "../../../../shared/ao3";
-import {
-  createFlashNotice,
-  extractFormValues,
-} from "../../../../utils/ui/forms";
+import { extractFormValues } from "../../../../utils/ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
@@ -41,14 +39,7 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
       successMsg: success.replace("%title%", title),
       errorMsg: error.replace("%title%", title),
       loadingEl: saveBtn,
-      onSuccess(message) {
-        createFlashNotice(message, {
-          appendNotice: (main: HTMLElement, notice: HTMLElement) => {
-            placeNotice(main, notice, origin || VerticalPlacement.TOP);
-          },
-          positionId: origin || VerticalPlacement.TOP,
-        });
-      },
+      onSuccess: createNoticeHandler(saveBtn),
       enforceMinDelay: true,
     });
   } catch (err) {

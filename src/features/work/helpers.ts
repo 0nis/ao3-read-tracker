@@ -1,5 +1,7 @@
 import { warn } from "../../shared/extension/logger";
 import { VerticalPlacement } from "../../enums/settings";
+import { createFlashNotice } from "../../utils/ui/forms";
+import { getButtonOrigin } from "../../utils/ui/dom";
 
 export function getTitleFromWorkPage(): string | null {
   const titleElement = document.querySelector("h2.title.heading");
@@ -41,4 +43,17 @@ export function placeNotice(
   }
 
   main.prepend(notice);
+}
+
+export function createNoticeHandler(btn?: HTMLElement) {
+  const origin = btn ? getButtonOrigin(btn) : VerticalPlacement.TOP;
+
+  return (message: string) => {
+    createFlashNotice(message, {
+      appendNotice: (main, notice) => {
+        placeNotice(main, notice, origin);
+      },
+      positionId: origin,
+    });
+  };
 }
