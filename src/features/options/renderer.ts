@@ -3,7 +3,7 @@ import { NavGroup, NavItem } from "./types";
 import { buildHeader } from "./core/components/header/component";
 import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
-import { getManifest } from "../../shared/extension/manifest";
+import { getExtensionName } from "../../shared/extension/manifest";
 import { error } from "../../shared/extension/logger";
 import { addGlobalListener } from "../../utils/listeners";
 import { hijackAo3Page } from "../../utils/ao3";
@@ -20,9 +20,8 @@ export type SectionElements = {
 };
 
 export async function render(): Promise<void> {
-  const extensionName =
-    getManifest().data?.name?.replace(/^AO3\s+/i, "") || "Read Tracker";
-  const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
+  const extensionName = getExtensionName();
+  const main = hijackAo3Page(`Options - ${extensionName}`, "options-page");
   if (!main) {
     error("Failed to render options page: #main element not found");
     return;

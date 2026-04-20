@@ -6,7 +6,7 @@ import { DISPLAY_MODE_MAP } from "../config";
 
 import { displayRuleCollector } from "../../../services/rules";
 import { settingsCache } from "../../../services/cache";
-import { getManifest } from "../../../shared/extension/manifest";
+import { getExtensionName } from "../../../shared/extension/manifest";
 import { ensureChild } from "../../../utils/ui/dom";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
@@ -72,9 +72,7 @@ function ensureLandmarkHeadingPresent(element: HTMLElement) {
     tag: "h6",
     createProps: {
       className: "landmark heading",
-      textContent: `${
-        getManifest().data?.name || "Read Tracker"
-      } Extension Information`,
+      textContent: `${getExtensionName()} Extension Information`,
     },
   });
 }

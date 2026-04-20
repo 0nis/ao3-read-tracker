@@ -1,5 +1,5 @@
 import { el, ensureChild } from "./dom";
-import { getManifest } from "../../shared/extension/manifest";
+import { getExtensionName, getManifest } from "../../shared/extension/manifest";
 
 /**
  * Adds a reload button to the extension footer.
@@ -13,7 +13,7 @@ export function addReloadButton(fn: () => void): void {
 }
 
 function createReloadButton(reload: () => void): HTMLElement {
-  const name = getManifest().data?.name ?? "AO3 Read Tracker";
+  const name = `${getExtensionName()} Extension`;
   const btn = el("button", { className: "button" }, [`Reload ${name}`]);
   btn.onclick = () => reload();
   return btn;
