@@ -6,8 +6,8 @@ import { VALID_BROWSERS } from "./constants.js";
 const __dirname = path.resolve();
 const outDir = path.resolve(__dirname, "build");
 const distDir = path.resolve(__dirname, "dist");
-const entry = path.resolve(__dirname, "src/index.js");
-const loaderEntry = path.resolve(__dirname, "src/loader/bootstrap/index.js");
+const entry = path.resolve(__dirname, "src/entrypoints/content.js");
+const loaderEntry = path.resolve(__dirname, "src/entrypoints/bootstrap.js");
 
 const pkg = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf8"),

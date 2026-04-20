@@ -7,7 +7,7 @@ import { LoaderType } from "../../../../../enums/ui";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../../utils/ui/loaders";
+} from "../../../../../utils/ui/loaders/element";
 import { downloadFile } from "../../../../../utils/file";
 import {
   reportExtensionFailure,
@@ -25,7 +25,7 @@ export async function handleExport(btn: HTMLButtonElement) {
         },
       });
     },
-    { enforceMinDelay: true }
+    { enforceMinDelay: true },
   );
 
   if (res.success && res.data) {

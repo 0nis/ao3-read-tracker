@@ -13,7 +13,6 @@ export const DEFAULT_SYMBOL_SIZE_EM = 1.2;
 
 export const LOADED_EVENT = `${ABBREVIATION}:loaded`;
 export const LOADER_STORAGE_KEYS = {
-  ACTIVE: `${ABBREVIATION}:loader-active`,
   ORIGINAL_PATH: `${ABBREVIATION}:original-path`,
 };
 

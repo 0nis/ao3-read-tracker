@@ -9,12 +9,12 @@ import { createFlashNotice } from "../../../../../utils/ui/forms";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../../utils/ui/loaders";
+} from "../../../../../utils/ui/loaders/element";
 
 export async function handleClearData(btn: HTMLButtonElement) {
   const confirmed = confirmDestructiveAction(
     "Are you sure you want to clear all stored data? This will reset the extension to its default state. YOUR DATA WILL BE LOST. PERMANENTLY. NO TAKE-BACKSIES. Do you want to proceed?",
-    "I UNDERSTAND, DELETE ALL OF MY DATA"
+    "I UNDERSTAND, DELETE ALL OF MY DATA",
   );
   if (!confirmed) {
     showNotification("Clear data action cancelled.");
@@ -25,17 +25,17 @@ export async function handleClearData(btn: HTMLButtonElement) {
   const res = await withLoadingState(
     controller,
     async () => await IoService.clear(),
-    { enforceMinDelay: true }
+    { enforceMinDelay: true },
   );
 
   if (res.success) {
     createFlashNotice(
-      "All stored data has been cleared successfully, and your settings have been reset to their default values."
+      "All stored data has been cleared successfully, and your settings have been reset to their default values.",
     );
   } else {
     reportExtensionFailure(
       "Something went wrong while clearing your data!",
-      res.error
+      res.error,
     );
   }
 }
