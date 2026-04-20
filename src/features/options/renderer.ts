@@ -3,10 +3,10 @@ import { NavGroup, NavItem } from "./types";
 import { buildHeader } from "./core/components/header/component";
 import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
+import { hijackAo3Page } from "../../shared/ao3";
 import { getExtensionName } from "../../shared/extension/manifest";
 import { error } from "../../shared/extension/logger";
 import { addGlobalListener } from "../../utils/listeners";
-import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
 
 import { ABBREVIATION } from "../../constants/global";

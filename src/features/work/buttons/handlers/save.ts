@@ -10,7 +10,7 @@ import { placeNotice } from "../../helpers";
 import { getDefaultPayload } from "../../payload";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
-import { getWorkTitleForNotifications } from "../../../../utils/ao3";
+import { getWorkTitleForNotifications } from "../../../../shared/ao3";
 import { createFlashNotice } from "../../../../utils/ui/forms";
 import { ABBREVIATION } from "../../../../constants/global";
 

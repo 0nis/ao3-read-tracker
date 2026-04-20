@@ -4,7 +4,7 @@ import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
 import { placeNotice } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
-import { getWorkTitleForNotifications } from "../../../../utils/ao3";
+import { getWorkTitleForNotifications } from "../../../../shared/ao3";
 import { createFlashNotice } from "../../../../utils/ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 

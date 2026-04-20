@@ -9,7 +9,7 @@ import {
 import { placeNotice, getTitleFromWorkPage } from "../../helpers";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
-import { getWorkTitleForNotifications } from "../../../../utils/ao3";
+import { getWorkTitleForNotifications } from "../../../../shared/ao3";
 import { createFlashNotice } from "../../../../utils/ui/forms";
 import { ABBREVIATION } from "../../../../constants/global";
 

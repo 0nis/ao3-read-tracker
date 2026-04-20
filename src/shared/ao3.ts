@@ -1,8 +1,7 @@
 import { CLASS_PREFIX } from "../constants/classes";
-import { warn } from "../shared/extension/logger";
+import { warn } from "./extension/logger";
 
-// TODO: Move file to /shared/
-
+/** @returns Work ID from URL */
 export function getIdFromUrl(): string | null {
   const match = window.location.pathname.match(/\/works\/(\d+)/);
   if (!match) {
@@ -12,16 +11,19 @@ export function getIdFromUrl(): string | null {
   return match[1];
 }
 
+/** @returns Your title or "this work" */
 export const getWorkTitleForNotifications = (
   title: string | undefined,
 ): string => {
   return String(title) || "this work";
 };
 
-// TODO: Move to relevant feature
 /**
- * "Hijacking" meaning we change the page title and clear the
- * main content area to prepare it for our own content.
+ * Politely evicts the existing content so ours can move in.
+ * Nothing sinister, promise ;)
+ * @param title New document title (overwrites existing)
+ * @param className New classname of the main element (overwrites existing)
+ * @returns <main> element
  */
 export function hijackAo3Page(
   title: string,

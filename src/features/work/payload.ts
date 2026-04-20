@@ -1,6 +1,6 @@
 import { ACTION_DEFAULTS_MAP, WorkActionTypeMap } from "./config";
 import { getTitleFromWorkPage } from "./helpers";
-import { getIdFromUrl } from "../../utils/ao3";
+import { getIdFromUrl } from "../../shared/ao3";
 
 export const getDefaultPayload = <K extends keyof WorkActionTypeMap>(
   action: K,

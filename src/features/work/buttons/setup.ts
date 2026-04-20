@@ -12,7 +12,7 @@ import { WorkAction } from "../config";
 
 import { settingsCache } from "../../../services/cache";
 import { warn } from "../../../shared/extension/logger";
-import { getIdFromUrl } from "../../../utils/ao3";
+import { getIdFromUrl } from "../../../shared/ao3";
 import { SettingsData } from "../../../types/settings";
 import { VerticalPlacement } from "../../../enums/settings";
 

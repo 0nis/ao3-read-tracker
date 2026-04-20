@@ -15,7 +15,7 @@ import { createSymbolElement } from "../helpers/row/symbols";
 import { SupplementaryRowInformation } from "../types";
 
 import { handleStorageWrite } from "../../../../../shared/storage/handlers";
-import { getWorkTitleForNotifications } from "../../../../../utils/ao3";
+import { getWorkTitleForNotifications } from "../../../../../shared/ao3";
 import { capitalizeFirstLetter } from "../../../../../utils/string";
 import { showConfirm } from "../../../../../utils/ui/dialogs";
 import { el } from "../../../../../utils/ui/dom";

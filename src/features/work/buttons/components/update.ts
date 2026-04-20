@@ -1,6 +1,6 @@
 import { WorkAction, WorkActionEvent } from "../../config";
 
-import { getIdFromUrl } from "../../../../utils/ao3";
+import { getIdFromUrl } from "../../../../shared/ao3";
 import { el } from "../../../../utils/ui/dom";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
@@ -12,10 +12,10 @@ export function createUpdateButton(
   onUpdate?: (
     btn: HTMLButtonElement,
     workAction: WorkAction,
-    workActionEvent: WorkActionEvent
+    workActionEvent: WorkActionEvent,
   ) => void,
   hidden: boolean = false,
-  attrs: Record<string, string> = {}
+  attrs: Record<string, string> = {},
 ): HTMLButtonElement {
   const button = el("button", {
     textContent: label,

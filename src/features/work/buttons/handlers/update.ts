@@ -6,7 +6,7 @@ import {
   handleStorageRead,
   handleStorageWrite,
 } from "../../../../shared/storage/handlers";
-import { getWorkTitleForNotifications } from "../../../../utils/ao3";
+import { getWorkTitleForNotifications } from "../../../../shared/ao3";
 import { getFormattedDate, getFormattedTime } from "../../../../utils/date";
 import { createFlashNotice } from "../../../../utils/ui/forms";
 import { InProgressWork } from "../../../../types/works";
