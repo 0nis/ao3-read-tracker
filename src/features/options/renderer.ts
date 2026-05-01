@@ -1,13 +1,13 @@
 import { NAV_CONFIG, SECTION_CONFIG, SectionId, SectionType } from "./config";
+import { NavGroup, NavItem } from "./types";
 import { buildHeader } from "./core/components/header/component";
 import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
-import { CLASS_PREFIX } from "../../constants/classes";
 import { error, addGlobalListener, getManifest } from "../../utils/extension";
 import { hijackAo3Page } from "../../utils/ao3";
 import { el } from "../../utils/ui/dom";
-import { ABBREVIATION } from "../../constants/global";
-import { NavGroup, NavItem } from "./types";
+import { CLASS_PREFIX } from "../../constants/classes";
+import { LOADED_EVENT } from "../../constants/global";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -83,5 +83,5 @@ export async function render(): Promise<void> {
   location.replace(location.pathname + location.search + "#" + hash);
   showSection(hash);
 
-  document.dispatchEvent(new CustomEvent(`${ABBREVIATION}:loaded`));
+  document.dispatchEvent(new CustomEvent(LOADED_EVENT));
 }

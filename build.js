@@ -1,16 +1,16 @@
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
-import { VALID_BROWSERS, LOADER_URLS } from "./constants.js";
+import { VALID_BROWSERS } from "./constants.js";
 
 const __dirname = path.resolve();
 const outDir = path.resolve(__dirname, "build");
 const distDir = path.resolve(__dirname, "dist");
-const entry = path.resolve(__dirname, "src/index.js");
-const loaderEntry = path.resolve(__dirname, "src/loader.js");
+const entry = path.resolve(__dirname, "src/entrypoints/content.js");
+const loaderEntry = path.resolve(__dirname, "src/entrypoints/bootstrap.js");
 
 const pkg = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "package.json"), "utf8")
+  fs.readFileSync(path.join(__dirname, "package.json"), "utf8"),
 );
 const baseFields = {
   name: pkg.displayName || pkg.name,
@@ -37,8 +37,8 @@ const browser = args.browser || "all";
 if (!VALID_BROWSERS.includes(browser)) {
   throw new Error(
     `Invalid browser: ${browser}. Valid options are: ${VALID_BROWSERS.join(
-      ", "
-    )}`
+      ", ",
+    )}`,
   );
 }
 
@@ -47,25 +47,12 @@ function copyFileSync(src, dest) {
   fs.copyFileSync(src, dest);
 }
 
-function injectLoaderUrlsIntoManifest(manifest) {
-  manifest.content_scripts = manifest.content_scripts.map((script) => {
-    if (script.js.includes("loader.js")) {
-      return {
-        ...script,
-        matches: LOADER_URLS,
-      };
-    }
-    return script;
-  });
-}
-
 function createManifest(templatePath, destPath) {
   const template = JSON.parse(fs.readFileSync(templatePath, "utf8"));
   const merged = {
     ...template,
     ...baseFields,
   };
-  injectLoaderUrlsIntoManifest(merged);
   fs.writeFileSync(destPath, JSON.stringify(merged, null, 2));
 }
 
@@ -90,7 +77,7 @@ async function buildForBrowser(targetBrowser, isDev) {
     define: {
       __BROWSER__: JSON.stringify(targetBrowser),
       "process.env.NODE_ENV": JSON.stringify(
-        isDev ? "development" : "production"
+        isDev ? "development" : "production",
       ),
     },
   });
@@ -110,13 +97,13 @@ async function buildForBrowser(targetBrowser, isDev) {
 
   const manifestSrc = path.resolve(
     __dirname,
-    `templates/manifest.${targetBrowser}.json`
+    `templates/manifest.${targetBrowser}.json`,
   );
   const manifestDest = path.join(distPath, "manifest.json");
 
   if (!fs.existsSync(manifestSrc))
     throw new Error(
-      `Manifest file for ${targetBrowser} not found: ${manifestSrc}`
+      `Manifest file for ${targetBrowser} not found: ${manifestSrc}`,
     );
 
   if (fs.existsSync(distPath))
@@ -125,11 +112,11 @@ async function buildForBrowser(targetBrowser, isDev) {
 
   copyFileSync(
     path.join(outDir, "content.js"),
-    path.join(distPath, "content.js")
+    path.join(distPath, "content.js"),
   );
   copyFileSync(
     path.join(outDir, "loader.js"),
-    path.join(distPath, "loader.js")
+    path.join(distPath, "loader.js"),
   );
   createManifest(manifestSrc, manifestDest);
 

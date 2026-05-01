@@ -1,7 +1,7 @@
 import { db } from "./db";
 import { seedDatabase } from "./seed";
 
-import { Extension } from "..";
+import { Extension } from "../entrypoints/content";
 
 import { reportExtensionFailure } from "../utils/ui/dialogs";
 import { IS_DEV } from "../constants/global";
