@@ -18,7 +18,6 @@ export const App = {
       error(
         "Could not find #main element. The extension will not run on this page.",
       );
-
       return;
     }
 

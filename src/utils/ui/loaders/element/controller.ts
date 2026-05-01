@@ -1,4 +1,4 @@
-import { LoaderType } from "../../../enums/ui";
+import { LoaderType } from "../../../../enums/ui";
 import { createProgressLoader } from "./progress/element";
 import { createSpinnerLoader } from "./spinner/element";
 
@@ -25,7 +25,7 @@ export interface LoadingOperationOptions {
 export async function withLoadingState<T>(
   controller: LoaderController | null | undefined,
   op: (progress?: (value: number) => void) => Promise<T>,
-  options: LoadingOperationOptions = {}
+  options: LoadingOperationOptions = {},
 ): Promise<T> {
   if (!controller) return await op();
 
@@ -56,7 +56,7 @@ export async function withLoadingState<T>(
  */
 export function createButtonLoader(
   btn: HTMLButtonElement,
-  type: LoaderType
+  type: LoaderType,
 ): LoaderController {
   const originalDisabled = btn.disabled || false;
   const originalContent = Array.from(btn.childNodes);

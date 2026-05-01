@@ -1,15 +1,14 @@
-import { App } from "./app";
-import { db } from "./data/db";
-import { localMemory } from "./services/memory";
+import { App } from "../app";
+import { db } from "../data/db";
+import { localMemory } from "../services/memory";
 
-import { warn } from "./shared/extension/logger";
-import { getFormattedDate } from "./utils/date";
-import { reportExtensionFailure, showNotification } from "./utils/ui/dialogs";
-import { addReloadButton } from "./utils/ui/footer";
-
-import { EXTENSION_DISABLED_KEY } from "./constants/global";
-import { CLASS_PREFIX } from "./constants/classes";
-import { ExtensionDisabledData } from "./types/memory";
+import { warn } from "../shared/extension/logger";
+import { getFormattedDate } from "../utils/date";
+import { reportExtensionFailure, showNotification } from "../utils/ui/dialogs";
+import { addReloadButton } from "../utils/ui/footer";
+import { EXTENSION_DISABLED_KEY } from "../constants/global";
+import { CLASS_PREFIX } from "../constants/classes";
+import { ExtensionDisabledData } from "../types/memory";
 
 let extensionAlive = true;
 

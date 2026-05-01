@@ -6,12 +6,12 @@ import { Router } from "../../app/router";
 import { injectStyles } from "../../utils/ui/dom";
 
 import { CLASS_PREFIX } from "../../constants/classes";
-import { SETTINGS_PAGE_URL } from "../../constants/global";
+import { SETTINGS_PAGE_PATH } from "../../constants/global";
 
 export const Options = {
   async init() {
     injectStyles(`${CLASS_PREFIX}__styles--options`, getStyles(CLASS_PREFIX));
-    await addOptionsLinkToAo3Nav(SETTINGS_PAGE_URL);
-    Router.register(SETTINGS_PAGE_URL, render);
+    await addOptionsLinkToAo3Nav(SETTINGS_PAGE_PATH);
+    Router.register(SETTINGS_PAGE_PATH, render);
   },
 };

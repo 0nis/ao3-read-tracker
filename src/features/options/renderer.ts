@@ -9,7 +9,7 @@ import { error } from "../../shared/extension/logger";
 import { addGlobalListener } from "../../utils/listeners";
 import { el } from "../../utils/ui/dom";
 
-import { ABBREVIATION } from "../../constants/global";
+import { LOADED_EVENT } from "../../constants/global";
 import { CLASS_PREFIX } from "../../constants/classes";
 
 export type SectionElements = {
@@ -85,5 +85,5 @@ export async function render(): Promise<void> {
   location.replace(location.pathname + location.search + "#" + hash);
   showSection(hash);
 
-  document.dispatchEvent(new CustomEvent(`${ABBREVIATION}:loaded`));
+  document.dispatchEvent(new CustomEvent(LOADED_EVENT));
 }

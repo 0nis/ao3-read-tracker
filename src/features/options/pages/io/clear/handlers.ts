@@ -9,7 +9,7 @@ import { createFlashNotice } from "../../../../../utils/ui/forms";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../../utils/ui/loaders";
+} from "../../../../../utils/ui/loaders/element";
 
 export async function handleClearData(btn: HTMLButtonElement) {
   const confirmed = confirmDestructiveAction(

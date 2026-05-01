@@ -7,7 +7,7 @@ import { getManifest } from "../../../../../shared/extension/manifest";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../../utils/ui/loaders";
+} from "../../../../../utils/ui/loaders/element";
 import { downloadBlob } from "../../../../../utils/file";
 import {
   reportExtensionFailure,

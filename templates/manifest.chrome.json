@@ -9,7 +9,7 @@
       "run_at": "document_idle"
     },
     {
-      "matches": [],
+      "matches": ["https://archiveofourown.org/*"],
       "js": ["loader.js"],
       "run_at": "document_start"
     }

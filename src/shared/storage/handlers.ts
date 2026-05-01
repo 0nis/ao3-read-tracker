@@ -1,6 +1,9 @@
 import { reportExtensionFailure } from "../../utils/ui/dialogs";
 import { createFlashNotice } from "../../utils/ui/forms";
-import { createButtonLoader, withLoadingState } from "../../utils/ui/loaders";
+import {
+  createButtonLoader,
+  withLoadingState,
+} from "../../utils/ui/loaders/element";
 import { isEmpty } from "../../utils/object";
 
 import { LoaderType } from "../../enums/ui";
