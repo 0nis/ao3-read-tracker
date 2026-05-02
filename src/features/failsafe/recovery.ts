@@ -1,5 +1,5 @@
-import { el, ensureChild } from "../dom";
-import { getExtensionName, getManifest } from "../../shared/extension/manifest";
+import { el, ensureChild } from "../../utils/dom";
+import { getExtensionName } from "../../shared/extension/manifest";
 
 /**
  * Adds a reload button to the extension footer.
