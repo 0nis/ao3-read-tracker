@@ -1,10 +1,10 @@
 import { ToggleButtonConfig } from "../types";
-import { el } from "../../../../utils/ui/dom";
+import { el } from "../../../../utils/dom";
 
 export function createToggleButton(
   id: string,
   config: ToggleButtonConfig,
-  exists?: boolean
+  exists?: boolean,
 ): HTMLButtonElement {
   const button = el("button", {
     textContent: exists ? config.labels.on : config.labels.off,

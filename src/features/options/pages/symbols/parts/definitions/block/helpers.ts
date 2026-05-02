@@ -1,6 +1,6 @@
 import { getClass } from "../../../section";
 import { SymbolRecord } from "../../../../../../../types/symbols";
-import { el } from "../../../../../../../utils/ui/dom";
+import { el } from "../../../../../../../utils/dom";
 
 export function getLabelFromType(type: keyof SymbolRecord): string {
   switch (type) {

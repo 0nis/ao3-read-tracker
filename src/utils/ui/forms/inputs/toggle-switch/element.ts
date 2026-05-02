@@ -1,7 +1,7 @@
 import { getStyles } from "./style";
 
 import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { el, injectStyles } from "../../../dom";
+import { el, injectStyles } from "../../../../dom";
 import { CustomInputType } from "../../../../../enums/ui";
 
 interface ToggleSwitchOptions {
@@ -27,7 +27,7 @@ export function toggleSwitch(options?: ToggleSwitchOptions): HTMLElement {
       checked,
       ...attrs,
     },
-    []
+    [],
   );
   if (onChange)
     input.addEventListener("change", (e) => {
@@ -47,6 +47,6 @@ export function toggleSwitch(options?: ToggleSwitchOptions): HTMLElement {
         "input-type": CustomInputType.TOGGLE_SWITCH,
       },
     },
-    [input, slider]
+    [input, slider],
   );
 }

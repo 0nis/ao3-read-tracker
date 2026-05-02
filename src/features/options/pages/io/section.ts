@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { el, injectStyles } from "../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../utils/dom";
 import { createSectionWrapper } from "../../core/components/section/component";
 import { SectionId } from "../../config";
 import { buildClearDataButton } from "./clear/component";

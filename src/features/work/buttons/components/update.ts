@@ -1,7 +1,7 @@
 import { WorkAction, WorkActionEvent } from "../../config";
 
 import { getIdFromUrl } from "../../../../shared/ao3";
-import { el } from "../../../../utils/ui/dom";
+import { el } from "../../../../utils/dom";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { ABBREVIATION } from "../../../../constants/global";

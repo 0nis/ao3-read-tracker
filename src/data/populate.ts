@@ -3,7 +3,7 @@ import { seedDatabase } from "./seed";
 
 import { Extension } from "../entrypoints/content";
 
-import { reportExtensionFailure } from "../utils/ui/dialogs";
+import { reportExtensionFailure } from "../shared/extension/dialogs";
 import { IS_DEV } from "../constants/global";
 import {
   DEFAULT_GENERAL_SETTINGS,

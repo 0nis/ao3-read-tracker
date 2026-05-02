@@ -6,7 +6,7 @@ import { StorageService } from "../../../services/storage/storage";
 import { getIdFromUrl } from "../../../shared/ao3";
 import { warn } from "../../../shared/extension/logger";
 import { handleStorageRead } from "../../../shared/storage/handlers";
-import { injectStyles } from "../../../utils/ui/dom";
+import { injectStyles } from "../../../utils/dom";
 
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { ABBREVIATION } from "../../../constants/global";

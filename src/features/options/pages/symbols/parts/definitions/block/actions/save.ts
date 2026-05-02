@@ -3,7 +3,7 @@ import { setFeedback } from "../helpers";
 import { getClass } from "../../../../section";
 
 import { StorageService } from "../../../../../../../../services/storage/storage";
-import { el } from "../../../../../../../../utils/ui/dom";
+import { el } from "../../../../../../../../utils/dom";
 import { handleStorageWrite } from "../../../../../../../../shared/storage/handlers";
 import { getInputValue } from "../../../../../../../../utils/ui/forms";
 import { CLASS_PREFIX } from "../../../../../../../../constants/classes";

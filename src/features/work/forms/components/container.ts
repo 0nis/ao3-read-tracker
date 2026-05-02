@@ -1,4 +1,4 @@
-import { el } from "../../../../utils/ui/dom";
+import { el } from "../../../../utils/dom";
 
 export function createFormContainer(id: string, title: string): HTMLDivElement {
   const wrapper = el(
@@ -20,11 +20,11 @@ export function createFormContainer(id: string, title: string): HTMLDivElement {
           el(
             "form",
             { className: `${id}__details`, attrs: { "aria-label": title } },
-            [el("fieldset", {}, [])]
+            [el("fieldset", {}, [])],
           ),
-        ]
+        ],
       ),
-    ]
+    ],
   );
 
   return wrapper;
@@ -32,7 +32,7 @@ export function createFormContainer(id: string, title: string): HTMLDivElement {
 
 export const appendItemsToFormContainer = (
   form: HTMLElement,
-  items: HTMLElement[]
+  items: HTMLElement[],
 ) => {
   const fieldset = form.querySelector("fieldset");
   if (!fieldset) return;

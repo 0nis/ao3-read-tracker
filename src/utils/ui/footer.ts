@@ -1,4 +1,4 @@
-import { el, ensureChild } from "./dom";
+import { el, ensureChild } from "../dom";
 import { getExtensionName, getManifest } from "../../shared/extension/manifest";
 
 /**

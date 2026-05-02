@@ -1,7 +1,7 @@
 import { getStyles } from "./style";
 import { buildDisplayModePrioritesPart } from "./parts/settings";
 
-import { el, injectStyles } from "../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../utils/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 
 export const getClass = () => `${CLASS_PREFIX}__display-modes`;

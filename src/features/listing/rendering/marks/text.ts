@@ -1,5 +1,5 @@
 import { ApplyMarksParams } from "../apply";
-import { getLatestChapterFromWorkListing } from "../../helpers";
+import { getLatestChapterFromWorkListing, getElement } from "../../helpers";
 
 import {
   textIndicatorRuleCollector,
@@ -10,12 +10,7 @@ import {
   getFormattedTime,
   timestampToISOString,
 } from "../../../../utils/date";
-import {
-  el,
-  ensureChild,
-  getElement,
-  injectStyles,
-} from "../../../../utils/ui/dom";
+import { el, ensureChild, injectStyles } from "../../../../utils/dom";
 import { replacePlaceholders } from "../../../../utils/string";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";

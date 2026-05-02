@@ -2,7 +2,7 @@ import { getLabelFromType, setFeedback } from "./helpers";
 import { BlockContext, BlockField } from "./types";
 import { getClass, ACCEPTED_IMAGE_TYPES } from "../../../section";
 
-import { el } from "../../../../../../../utils/ui/dom";
+import { el } from "../../../../../../../utils/dom";
 import { renderSymbolContentById } from "../../../../../../../utils/ui/symbols";
 import {
   getImageSelectorElements,

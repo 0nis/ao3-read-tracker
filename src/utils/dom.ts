@@ -1,5 +1,3 @@
-import { VerticalPlacement } from "../../enums/settings";
-
 /**
  * Helper to create new elements quickly
  *
@@ -15,7 +13,7 @@ export function el<K extends keyof HTMLElementTagNameMap>(
     html?: string;
     style?: Partial<CSSStyleDeclaration>;
   },
-  children?: HTMLElement | string | Array<HTMLElement | string>
+  children?: HTMLElement | string | Array<HTMLElement | string>,
 ): HTMLElementTagNameMap[K] {
   const node = document.createElement(tag);
   if (props) {
@@ -72,7 +70,7 @@ export function ensureChild<K extends keyof HTMLElementTagNameMap>({
   createProps?: Parameters<typeof el>[1];
 }): HTMLElementTagNameMap[K] {
   const existing = parent.querySelector<HTMLElementTagNameMap[K]>(
-    `.${className}`
+    `.${className}`,
   );
   if (existing) return existing;
 
@@ -98,21 +96,4 @@ export function injectStyles(id: string, css: string): void {
     attrs: { type: "text/css" },
   });
   document.head.appendChild(style);
-}
-
-/** Gets an element by selector within a parent element. */
-export const getElement = (
-  parent: HTMLElement,
-  selector: string
-): HTMLElement | null => parent.querySelector(selector);
-
-export function getButtonOrigin(btn: HTMLElement | null): VerticalPlacement {
-  const origin = btn?.getAttribute("data-origin");
-  return origin === VerticalPlacement.BOTTOM
-    ? VerticalPlacement.BOTTOM
-    : VerticalPlacement.TOP;
-}
-
-export function setButtonOrigin(btn: HTMLElement, origin: VerticalPlacement) {
-  btn.setAttribute("data-origin", origin);
 }

@@ -2,12 +2,12 @@ import { WorkActionState } from "../../config";
 import { OpenFormButtonConfig } from "../types";
 
 import { ABBREVIATION } from "../../../../constants/global";
-import { el } from "../../../../utils/ui/dom";
+import { el } from "../../../../utils/dom";
 
 export function createOpenFormButton(
   id: string,
   config: OpenFormButtonConfig,
-  exists?: boolean
+  exists?: boolean,
 ): HTMLAnchorElement {
   const button = el("a", {
     href: "#",

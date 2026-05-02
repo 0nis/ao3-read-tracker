@@ -4,7 +4,7 @@ import {
   confirmDestructiveAction,
   reportExtensionFailure,
   showNotification,
-} from "../../../../../utils/ui/dialogs";
+} from "../../../../../shared/extension/dialogs";
 import { createFlashNotice } from "../../../../../utils/ui/forms";
 import {
   createButtonLoader,

@@ -1,6 +1,6 @@
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { toTitleCase } from "../../../string";
-import { el } from "../../dom";
+import { el } from "../../../dom";
 
 export type SelectOptions = {
   options: string[];
@@ -31,7 +31,7 @@ export function select({
         value: String(v),
         textContent: toTitleCase(String(v)),
       });
-    })
+    }),
   );
   element.value = defaultOption ? String(defaultOption) : String(options[0]);
   return element;

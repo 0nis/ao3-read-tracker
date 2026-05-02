@@ -17,8 +17,8 @@ import { SupplementaryRowInformation } from "../types";
 import { handleStorageWrite } from "../../../../../shared/storage/handlers";
 import { getWorkTitleForNotifications } from "../../../../../shared/ao3";
 import { capitalizeFirstLetter } from "../../../../../utils/string";
-import { showConfirm } from "../../../../../utils/ui/dialogs";
-import { el } from "../../../../../utils/ui/dom";
+import { showConfirm } from "../../../../../shared/extension/dialogs";
+import { el } from "../../../../../utils/dom";
 import { AO3_WORK_BASE_URL } from "../../../../../constants/global";
 
 export interface ListRow<T extends keyof ListRowTypeMap> {

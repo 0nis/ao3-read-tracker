@@ -1,5 +1,5 @@
 import { getStyles } from "./style";
-import { injectStyles } from "../../dom";
+import { injectStyles } from "../../../dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 
 export interface ExpandableParams {
@@ -64,7 +64,7 @@ export function makeExpandable({
 
   injectStyles(
     `${CLASS_PREFIX}__styles--expandable`,
-    getStyles(EXPANDABLE_CLASS)
+    getStyles(EXPANDABLE_CLASS),
   );
 
   if (parent) parent.classList.add(`${EXPANDABLE_CLASS}-wrapper`);

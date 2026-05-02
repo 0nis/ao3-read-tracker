@@ -5,7 +5,7 @@ import {
   SymbolRule,
 } from "../../../../../../services/rules";
 import { StorageService } from "../../../../../../services/storage/storage";
-import { el } from "../../../../../../utils/ui/dom";
+import { el } from "../../../../../../utils/dom";
 import { renderSymbolContent } from "../../../../../../utils/ui/symbols";
 import { SymbolData } from "../../../../../../types/symbols";
 import { WorkStateData } from "../../../../../../types/works";

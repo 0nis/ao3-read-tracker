@@ -1,5 +1,5 @@
 import { getStyles } from "./styles";
-import { el } from "../../dom";
+import { el } from "../../../dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 
 const PREFIX = `${CLASS_PREFIX}__loader`;

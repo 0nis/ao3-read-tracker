@@ -1,9 +1,9 @@
-import { el } from "../../../../utils/ui/dom";
+import { el } from "../../../../utils/dom";
 
 export function createFormHeaderElements(
   title: string,
   heading: string,
-  cancelBtn: HTMLAnchorElement
+  cancelBtn: HTMLAnchorElement,
 ): HTMLElement[] {
   return [
     el("legend", {}, [title]),
@@ -19,6 +19,6 @@ export function createFormCancelElement(id: string): HTMLAnchorElement {
       id: `${id}__close`,
       attrs: { "aria-label": "cancel" },
     },
-    ["×"]
+    ["×"],
   );
 }

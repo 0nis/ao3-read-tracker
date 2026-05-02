@@ -1,6 +1,6 @@
 import { SettingsSectionConfig } from "../types";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { el } from "../../../../../utils/ui/dom";
+import { el } from "../../../../../utils/dom";
 
 export function createSettingsSectionSaveButton(
   title: SettingsSectionConfig<any>["title"],

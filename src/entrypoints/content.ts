@@ -4,7 +4,10 @@ import { localMemory } from "../services/memory";
 
 import { warn } from "../shared/extension/logger";
 import { getFormattedDate } from "../utils/date";
-import { reportExtensionFailure, showNotification } from "../utils/ui/dialogs";
+import {
+  reportExtensionFailure,
+  showNotification,
+} from "../shared/extension/dialogs";
 import { addReloadButton } from "../utils/ui/footer";
 import { EXTENSION_DISABLED_KEY } from "../constants/global";
 import { CLASS_PREFIX } from "../constants/classes";

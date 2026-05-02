@@ -2,7 +2,7 @@ import { onSave } from "./save";
 import { BlockContext } from "../types";
 import { getClass } from "../../../../section";
 
-import { el } from "../../../../../../../../utils/ui/dom";
+import { el } from "../../../../../../../../utils/dom";
 import { setInputValue } from "../../../../../../../../utils/ui/forms";
 import { CLASS_PREFIX } from "../../../../../../../../constants/classes";
 import { DEFAULT_SYMBOL_RECORDS } from "../../../../../../../../constants/symbols";

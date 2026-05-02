@@ -1,8 +1,5 @@
-import { error, info, createExtensionMsg } from "../../shared/extension/logger";
-import {
-  getManifest,
-  replaceManifestPlaceholders,
-} from "../../shared/extension/manifest";
+import { error, info, createExtensionMsg } from "./logger";
+import { getManifest, replaceManifestPlaceholders } from "./manifest";
 
 /**
  * Displays a critical message that requires user attention.

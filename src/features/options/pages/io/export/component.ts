@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { el } from "../../../../../utils/ui/dom";
+import { el } from "../../../../../utils/dom";
 import { handleExport } from "./handlers";
 
 export function buildExportButton() {

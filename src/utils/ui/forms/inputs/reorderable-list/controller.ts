@@ -3,7 +3,7 @@ import { createReorderableRow } from "./row";
 import { toArray, toPriorities } from "./helpers";
 import { animateFLIP, measurePositions } from "./animation";
 import { ReorderableRow } from "./types";
-import { el } from "../../../dom";
+import { el } from "../../../../dom";
 
 export function createReorderableListController(
   initialItems: Record<string, number>,

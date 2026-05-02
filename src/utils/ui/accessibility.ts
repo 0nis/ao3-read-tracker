@@ -1,4 +1,4 @@
-import { el } from "./dom";
+import { el } from "../dom";
 import { warn } from "../../shared/extension/logger";
 import { CLASS_PREFIX } from "../../constants/classes";
 

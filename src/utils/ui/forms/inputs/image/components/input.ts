@@ -1,10 +1,10 @@
 import { getClass } from "../element";
-import { el } from "../../../../dom";
+import { el } from "../../../../../dom";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 
 export function buildInputElement(
   accept: string,
-  onChange: (value: File) => void
+  onChange: (value: File) => void,
 ): HTMLInputElement {
   const input = el("input", {
     type: "file",

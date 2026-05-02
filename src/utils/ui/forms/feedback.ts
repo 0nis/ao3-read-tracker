@@ -1,4 +1,4 @@
-import { el, ensureChild } from ".././dom";
+import { el, ensureChild } from "../../dom";
 import { reportSrLive } from ".././accessibility";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { MessageType } from "../../../enums/messages";
@@ -15,7 +15,7 @@ export function showFormMessage(
   container: HTMLElement,
   type: MessageType,
   message: string,
-  className: string = `${CLASS_PREFIX}__msg`
+  className: string = `${CLASS_PREFIX}__msg`,
 ): void {
   const oldMsg = container.querySelector(`.${className}`);
   if (oldMsg) oldMsg.remove();
@@ -40,7 +40,7 @@ export function createFlashNotice(
   options?: {
     appendNotice?: (notice: HTMLElement, main: HTMLElement) => void;
     positionId: string;
-  }
+  },
 ): void {
   const main = document.getElementById("main");
   if (!main) return;
@@ -48,7 +48,7 @@ export function createFlashNotice(
   const posId = options?.positionId || "top";
 
   const existing = main.querySelector(
-    `#${CLASS_PREFIX}__flash-notice`
+    `#${CLASS_PREFIX}__flash-notice`,
   ) as HTMLElement | null;
 
   let counter = Number(existing?.dataset.count ?? 1);
@@ -83,7 +83,7 @@ export function createFlashNotice(
         position: posId,
       },
     },
-    msg
+    msg,
   );
 
   reportSrLive(msg);

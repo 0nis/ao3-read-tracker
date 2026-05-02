@@ -1,10 +1,10 @@
 import { getClass } from "../element";
-import { el } from "../../../../dom";
+import { el } from "../../../../../dom";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 
 export function buildUploadButton(
   label: HTMLElement | string,
-  onClick: () => void
+  onClick: () => void,
 ): HTMLButtonElement {
   const btn = el(
     "button",
@@ -14,7 +14,7 @@ export function buildUploadButton(
       title: "Click to select a file",
       attrs: { "aria-label": "Click to select a file" },
     },
-    [label]
+    [label],
   );
   btn.addEventListener("click", onClick);
   return btn;
@@ -22,7 +22,7 @@ export function buildUploadButton(
 
 export function buildClearButton(
   label: HTMLElement | string = "Clear",
-  onClick: () => void
+  onClick: () => void,
 ): HTMLButtonElement {
   const btn = el(
     "button",
@@ -31,7 +31,7 @@ export function buildClearButton(
       title: "Clear image selection",
       attrs: { "aria-label": "Clear image selection" },
     },
-    [label]
+    [label],
   );
   btn.addEventListener("click", onClick);
   return btn;

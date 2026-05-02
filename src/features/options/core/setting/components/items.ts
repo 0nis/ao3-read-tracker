@@ -5,7 +5,7 @@ import {
   SettingsSectionItem,
 } from "../types";
 
-import { el } from "../../../../../utils/ui/dom";
+import { el } from "../../../../../utils/dom";
 import { getInputElement } from "../../../../../utils/ui/forms";
 import { FormItemType } from "../../../../../enums/forms";
 import { CLASS_PREFIX } from "../../../../../constants/classes";

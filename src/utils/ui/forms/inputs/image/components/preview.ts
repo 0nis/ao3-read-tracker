@@ -1,10 +1,10 @@
 import { getClass, State } from "../element";
-import { el } from "../../../../dom";
+import { el } from "../../../../../dom";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 
 export function buildPreviewElement(
   defaultImg: Blob | undefined,
-  state: State
+  state: State,
 ): HTMLImageElement {
   const preview = el("img", {
     className: `${getClass()}-preview ${CLASS_PREFIX}__inline-image`,

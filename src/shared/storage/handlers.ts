@@ -1,4 +1,4 @@
-import { reportExtensionFailure } from "../../utils/ui/dialogs";
+import { reportExtensionFailure } from "../extension/dialogs";
 import { createFlashNotice } from "../../utils/ui/forms";
 import {
   createButtonLoader,

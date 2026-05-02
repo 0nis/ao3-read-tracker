@@ -1,5 +1,5 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
 import { getWorkElement } from "../../helpers";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 
 /**
  * Completely hides a work from the listing.

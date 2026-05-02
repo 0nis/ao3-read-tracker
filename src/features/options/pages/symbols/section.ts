@@ -1,7 +1,7 @@
 import { getStyles } from "./style";
 import { buildSymbolDefinitionsPart } from "./parts/definitions/part";
 
-import { el, injectStyles } from "../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../utils/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { buildSymbolSettingsPart } from "./parts/settings";
 

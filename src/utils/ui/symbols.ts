@@ -1,4 +1,4 @@
-import { el } from "./dom";
+import { el } from "../dom";
 import { settingsCache, symbolsCache } from "../../services/cache";
 import {
   SymbolId,
@@ -28,7 +28,7 @@ export interface SymbolDevOptions {
 export async function renderSymbolContentById(
   id: SymbolId,
   fallback?: string,
-  options?: SymbolDevOptions
+  options?: SymbolDevOptions,
 ): Promise<HTMLElement> {
   const symbols = await symbolsCache.get();
   const { symbolSettings } = await settingsCache.get();
@@ -115,7 +115,7 @@ const determineRenderMode = (symbol: SymbolRecord): SymbolRenderMode | null => {
 const buildSymbolContent = (
   symbolEl: HTMLElement,
   suffix?: string,
-  size?: number
+  size?: number,
 ): HTMLElement => {
   return el("span", { attrs: { role: "presentation" } }, [
     symbolEl,
@@ -183,7 +183,7 @@ const renderSymbolFallback = ({
     case SymbolFallbackType.LABEL:
       return buildSymbolContent(
         el("span", { textContent: label || "404" }),
-        suffix
+        suffix,
       );
     case SymbolFallbackType.QUESTION_MARK:
       return buildSymbolContent(el("span", { textContent: "❔" }), suffix);

@@ -1,19 +1,13 @@
 import { ApplyMarksParams } from "../apply";
-import { getLatestChapterFromWorkListing } from "../../helpers";
+import { getLatestChapterFromWorkListing, getElement } from "../../helpers";
 
 import { symbolsCache } from "../../../../services/cache";
 import { symbolRuleCollector } from "../../../../services/rules";
-import {
-  el,
-  ensureChild,
-  getElement,
-  injectStyles,
-} from "../../../../utils/ui/dom";
+import { el, ensureChild, injectStyles } from "../../../../utils/dom";
 import { renderSymbolContent } from "../../../../utils/ui/symbols";
-import { CLASS_PREFIX } from "../../../../constants/classes";
 import { SymbolRecord } from "../../../../types/symbols";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
-import { SymbolSettings } from "../../../../types/settings";
 
 /**
  * Adds symbols to a work element showing information

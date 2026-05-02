@@ -1,6 +1,6 @@
 import { Router } from "../../../../app/router";
 import { getExtensionName } from "../../../../shared/extension/manifest";
-import { el, ensureChild } from "../../../../utils/ui/dom";
+import { el, ensureChild } from "../../../../utils/dom";
 
 /**
  * This function creates the "Extensions" dropdown if it doesn't exist already,

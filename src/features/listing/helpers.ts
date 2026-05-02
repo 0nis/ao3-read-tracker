@@ -1,5 +1,10 @@
 import { warn } from "../../shared/extension/logger";
 
+export const getElement = (
+  parent: HTMLElement,
+  selector: string,
+): HTMLElement | null => parent.querySelector(selector);
+
 export function getWorkById(id: string): HTMLElement | null {
   return document.getElementById(`work_${id}`) as HTMLElement | null;
 }

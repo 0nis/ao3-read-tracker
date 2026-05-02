@@ -1,4 +1,4 @@
-import { el } from "../../dom";
+import { el } from "../../../dom";
 import { getLocalDateTimeString } from "../../../date";
 
 export const text = ({

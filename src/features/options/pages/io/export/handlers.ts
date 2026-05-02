@@ -12,7 +12,7 @@ import { downloadBlob } from "../../../../../utils/file";
 import {
   reportExtensionFailure,
   showNotification,
-} from "../../../../../utils/ui/dialogs";
+} from "../../../../../shared/extension/dialogs";
 import { toKebabCase } from "../../../../../utils/string";
 import { getFormattedDateTimeForFilename } from "../../../../../utils/date";
 import { LoaderType } from "../../../../../enums/ui";

@@ -3,7 +3,7 @@ import Dexie, { Table } from "dexie";
 import { populateDb } from "./populate";
 
 import { createExtensionMsg } from "../shared/extension/logger";
-import { showNotification } from "../utils/ui/dialogs";
+import { showNotification } from "../shared/extension/dialogs";
 import {
   FinishedSettings,
   IgnoreSettings,

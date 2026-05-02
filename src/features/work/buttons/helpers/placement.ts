@@ -1,5 +1,9 @@
 import { warn } from "../../../../shared/extension/logger";
-import { el, getButtonOrigin, setButtonOrigin } from "../../../../utils/ui/dom";
+import {
+  getButtonOrigin,
+  setButtonOrigin,
+} from "../../../../shared/attributes";
+import { el } from "../../../../utils/dom";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function placeButtons(

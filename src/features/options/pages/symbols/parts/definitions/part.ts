@@ -8,7 +8,7 @@ import {
   extractImageTypeNames,
   formatBytes,
 } from "../../../../../../utils/file";
-import { el } from "../../../../../../utils/ui/dom";
+import { el } from "../../../../../../utils/dom";
 import { SymbolId } from "../../../../../../enums/symbols";
 import { MAX_GIF_SIZE } from "../../../../../../constants/global";
 

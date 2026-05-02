@@ -6,7 +6,7 @@ import { Options } from "../features/options";
 import { Work } from "../features/work";
 
 import { error } from "../shared/extension/logger";
-import { injectStyles } from "../utils/ui/dom";
+import { injectStyles } from "../utils/dom";
 import { initSrLive } from "../utils/ui/accessibility";
 
 import { CLASS_PREFIX } from "../constants/classes";

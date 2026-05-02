@@ -7,7 +7,7 @@ import { hijackAo3Page } from "../../shared/ao3";
 import { getExtensionName } from "../../shared/extension/manifest";
 import { error } from "../../shared/extension/logger";
 import { addGlobalListener } from "../../utils/listeners";
-import { el } from "../../utils/ui/dom";
+import { el } from "../../utils/dom";
 
 import { LOADED_EVENT } from "../../constants/global";
 import { CLASS_PREFIX } from "../../constants/classes";

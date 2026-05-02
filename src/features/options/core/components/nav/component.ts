@@ -1,7 +1,7 @@
 import { getStyles } from "./style";
 import { NavGroup } from "../../../types";
 
-import { el, injectStyles } from "../../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../../utils/dom";
 import { reportSrLive } from "../../../../../utils/ui/accessibility";
 import { renderSymbolContentById } from "../../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../../enums/symbols";

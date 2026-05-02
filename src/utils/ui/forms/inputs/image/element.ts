@@ -4,7 +4,7 @@ import { buildPreviewElement } from "./components/preview";
 import { buildInputElement } from "./components/input";
 import { buildClearButton, buildUploadButton } from "./components/buttons";
 
-import { injectStyles } from "../../../dom";
+import { injectStyles } from "../../../../dom";
 import {
   extractImageTypeNames,
   formatBytes,
@@ -58,7 +58,7 @@ export function getImageSelectorElements({
 
   injectStyles(
     `${CLASS_PREFIX}__styles--image-selector`,
-    getStyles(getClass())
+    getStyles(getClass()),
   );
 
   const preview = buildPreviewElement(defaultImg, state);
@@ -78,8 +78,8 @@ export function getImageSelectorElements({
       if (onError)
         onError(
           `Error: File type must be one of the following: ${extractImageTypeNames(
-            accept
-          ).join(", ")}.`
+            accept,
+          ).join(", ")}.`,
         );
       return;
     }
@@ -87,8 +87,8 @@ export function getImageSelectorElements({
       if (onError)
         onError(
           `Error: GIF files must be less than ${formatBytes(
-            MAX_GIF_SIZE
-          )}. Current size: ${formatBytes(file.size)}.`
+            MAX_GIF_SIZE,
+          )}. Current size: ${formatBytes(file.size)}.`,
         );
       return;
     }

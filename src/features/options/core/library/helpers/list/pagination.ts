@@ -1,7 +1,7 @@
 import { getListClass } from "../../components/list";
 import { State } from "../../types";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
-import { el } from "../../../../../../utils/ui/dom";
+import { el } from "../../../../../../utils/dom";
 
 export interface PaginationControls {
   prevBtn: HTMLButtonElement;

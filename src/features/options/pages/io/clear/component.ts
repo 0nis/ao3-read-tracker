@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { el } from "../../../../../utils/ui/dom";
+import { el } from "../../../../../utils/dom";
 import { handleClearData } from "./handlers";
 
 export function buildClearDataButton() {
@@ -8,7 +8,7 @@ export function buildClearDataButton() {
     {
       className: `button ${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--danger`,
     },
-    ["Clear All Data"]
+    ["Clear All Data"],
   );
   btn.onclick = async () => await handleClearData(btn);
 

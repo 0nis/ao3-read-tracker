@@ -1,4 +1,4 @@
-import { el } from "./ui/dom";
+import { el } from "./dom";
 
 /** True if the file type starts with "image/", aka the simple way of checking */
 export const isImageFile = (file: File): boolean =>

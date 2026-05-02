@@ -7,7 +7,7 @@ import { DISPLAY_MODE_MAP } from "../config";
 import { displayRuleCollector } from "../../../services/rules";
 import { settingsCache } from "../../../services/cache";
 import { getExtensionName } from "../../../shared/extension/manifest";
-import { ensureChild } from "../../../utils/ui/dom";
+import { ensureChild } from "../../../utils/dom";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
 import { WorkStateData } from "../../../types/works";
