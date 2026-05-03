@@ -4,7 +4,7 @@ import { getLatestChapterFromWorkListing, getElement } from "../../helpers";
 import { symbolsCache } from "../../../../services/cache";
 import { symbolRuleCollector } from "../../../../services/rules";
 import { el, ensureChild, injectStyles } from "../../../../utils/dom";
-import { renderSymbolContent } from "../../../../utils/ui/symbols";
+import { renderSymbolContent } from "../../../../ui/components/symbols";
 import { SymbolRecord } from "../../../../types/symbols";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";

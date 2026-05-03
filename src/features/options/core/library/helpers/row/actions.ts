@@ -2,7 +2,7 @@ import { CLASS_PREFIX } from "../../../../../../constants/classes";
 import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../../constants/global";
 import { SymbolId } from "../../../../../../enums/symbols";
 import { el } from "../../../../../../utils/dom";
-import { renderSymbolContentById } from "../../../../../../utils/ui/symbols";
+import { renderSymbolContentById } from "../../../../../../ui/components/symbols";
 
 export async function createDeleteBtn(
   onDelete: () => void,

@@ -6,7 +6,7 @@ import {
 } from "../../../../../../services/rules";
 import { StorageService } from "../../../../../../services/storage/storage";
 import { el } from "../../../../../../utils/dom";
-import { renderSymbolContent } from "../../../../../../utils/ui/symbols";
+import { renderSymbolContent } from "../../../../../../ui/components/symbols";
 import { SymbolData } from "../../../../../../types/symbols";
 import { WorkStateData } from "../../../../../../types/works";
 import { SymbolSettings } from "../../../../../../types/settings";

@@ -1,4 +1,4 @@
-import { el } from "../dom";
+import { el } from "../../utils/dom";
 import { settingsCache, symbolsCache } from "../../services/cache";
 import {
   SymbolId,

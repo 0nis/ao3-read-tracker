@@ -5,7 +5,7 @@ import { getResetElement, onReset } from "./actions/reset";
 import { getClass } from "../../../section";
 
 import { el } from "../../../../../../../utils/dom";
-import { renderSymbolContent } from "../../../../../../../utils/ui/symbols";
+import { renderSymbolContent } from "../../../../../../../ui/components/symbols";
 import { SymbolId } from "../../../../../../../enums/symbols";
 import { ABBREVIATION } from "../../../../../../../constants/global";
 import { SymbolData, SymbolRecord } from "../../../../../../../types/symbols";

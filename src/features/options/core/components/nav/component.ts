@@ -3,7 +3,7 @@ import { NavGroup } from "../../../types";
 
 import { el, injectStyles } from "../../../../../utils/dom";
 import { reportSrLive } from "../../../../../utils/srLive";
-import { renderSymbolContentById } from "../../../../../utils/ui/symbols";
+import { renderSymbolContentById } from "../../../../../ui/components/symbols";
 import { SymbolId } from "../../../../../enums/symbols";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../constants/global";

@@ -3,7 +3,7 @@ import { BlockContext, BlockField } from "./types";
 import { getClass, ACCEPTED_IMAGE_TYPES } from "../../../section";
 
 import { el } from "../../../../../../../utils/dom";
-import { renderSymbolContentById } from "../../../../../../../utils/ui/symbols";
+import { renderSymbolContentById } from "../../../../../../../ui/components/symbols";
 import {
   getImageSelectorElements,
   getInputElement,

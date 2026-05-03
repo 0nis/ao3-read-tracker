@@ -2,7 +2,7 @@ import { getClass } from "./element";
 import { ReorderableRow, ReorderableRowOptions } from "./types";
 
 import { el } from "../../../../dom";
-import { renderSymbolContentById } from "../../../symbols";
+import { renderSymbolContentById } from "../../../../../ui/components/symbols";
 import { SymbolId } from "../../../../../enums/symbols";
 import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../constants/global";
 
