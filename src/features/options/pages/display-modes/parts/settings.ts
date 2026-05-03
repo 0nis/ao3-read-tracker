@@ -3,7 +3,7 @@ import { createSettingsSection } from "../../../core/setting/base";
 import { SettingsSectionItem } from "../../../core/setting/types";
 
 import { settingsCache } from "../../../../../services/cache";
-import { reorderableList } from "../../../../../utils/ui/forms/inputs/reorderable-list";
+import { reorderableList } from "../../../../../ui/forms/inputs/reorderable-list";
 import { toTitleCase } from "../../../../../utils/string";
 
 import { VerticalPlacement } from "../../../../../enums/settings";

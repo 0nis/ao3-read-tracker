@@ -6,7 +6,7 @@ import {
 } from "../types";
 
 import { el } from "../../../../../utils/dom";
-import { getInputElement } from "../../../../../utils/ui/forms";
+import { getInputElement } from "../../../../../ui/forms";
 import { FormItemType } from "../../../../../enums/forms";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 

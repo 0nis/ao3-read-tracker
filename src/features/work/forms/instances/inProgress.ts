@@ -3,12 +3,7 @@ import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 import { getCurrentChapterFromWorkPage } from "../../helpers";
 
-import {
-  datetime,
-  number,
-  enumSelect,
-  textarea,
-} from "../../../../utils/ui/forms";
+import { datetime, number, enumSelect, textarea } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { ReadingStatus } from "../../../../enums/works";
 import { FormItemType } from "../../../../enums/forms";

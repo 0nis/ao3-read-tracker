@@ -22,7 +22,7 @@ import { Router } from "../../../app/router";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { error } from "../../../shared/extension/logger";
 import { ABBREVIATION } from "../../../constants/global";
-import { populateFormValues } from "../../../utils/ui/forms";
+import { populateFormValues } from "../../../ui/forms";
 
 export function createWorkForm<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },

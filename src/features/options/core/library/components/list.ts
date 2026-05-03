@@ -22,7 +22,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../../types/storage";
-import { enumSelect, number, select } from "../../../../../utils/ui/forms";
+import { enumSelect, number, select } from "../../../../../ui/forms";
 
 export const getListClass = () => `${CLASS_PREFIX}__list`;
 

@@ -1,7 +1,7 @@
-import { el, ensureChild } from "../../dom";
-import { reportSrLive } from "../../srLive";
-import { CLASS_PREFIX } from "../../../constants/classes";
-import { MessageType } from "../../../enums/messages";
+import { el, ensureChild } from "../../utils/dom";
+import { reportSrLive } from "../../utils/srLive";
+import { CLASS_PREFIX } from "../../constants/classes";
+import { MessageType } from "../../enums/messages";
 
 /**
  * Shows a message within a container element, replacing any existing message.

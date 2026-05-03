@@ -9,7 +9,7 @@ import {
   getInputElement,
   number,
   text,
-} from "../../../../../../../utils/ui/forms";
+} from "../../../../../../../ui/forms";
 import { SymbolId } from "../../../../../../../enums/symbols";
 import {
   ABBREVIATION,

@@ -23,7 +23,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../../types/storage";
-import { enumSelect } from "../../../../../utils/ui/forms";
+import { enumSelect } from "../../../../../ui/forms";
 import { FinishedStatus } from "../../../../../enums/works";
 import { localMemory } from "../../../../../services/memory";
 

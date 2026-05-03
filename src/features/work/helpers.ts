@@ -1,7 +1,7 @@
 import { warn } from "../../shared/extension/logger";
 import { getButtonOrigin } from "../../shared/attributes";
 import { VerticalPlacement } from "../../enums/settings";
-import { createFlashNotice } from "../../utils/ui/forms";
+import { createFlashNotice } from "../../ui/forms";
 
 export function getTitleFromWorkPage(): string | null {
   const titleElement = document.querySelector("h2.title.heading");

@@ -3,10 +3,7 @@ import { UserOption } from "../../types";
 
 import { el } from "../../../../../../utils/dom";
 import { makeExpandable } from "../../../../../../ui/behaviors/expandable";
-import {
-  getInputValue,
-  getInputElement,
-} from "../../../../../../utils/ui/forms";
+import { getInputValue, getInputElement } from "../../../../../../ui/forms";
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
 import { toKebabCase } from "../../../../../../utils/string";
 

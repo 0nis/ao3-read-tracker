@@ -1,6 +1,6 @@
 import { getClass, State } from "../element";
-import { el } from "../../../../../dom";
-import { CLASS_PREFIX } from "../../../../../../constants/classes";
+import { el } from "../../../../../utils/dom";
+import { CLASS_PREFIX } from "../../../../../constants/classes";
 
 export function buildPreviewElement(
   defaultImg: Blob | undefined,

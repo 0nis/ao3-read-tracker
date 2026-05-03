@@ -2,7 +2,7 @@ import { createWorkForm } from "../base";
 import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 
-import { textarea } from "../../../../utils/ui/forms";
+import { textarea } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { FormItemType } from "../../../../enums/forms";
 import { IgnoredWork } from "../../../../types/works";
@@ -21,7 +21,7 @@ const items: WorkFormItem<IgnoredWork>[] = [
 export function createIgnoreWorkForm(
   data: Partial<IgnoredWork>,
   editing: boolean,
-  origin?: VerticalPlacement
+  origin?: VerticalPlacement,
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.IGNORE,

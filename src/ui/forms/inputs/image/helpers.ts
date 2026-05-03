@@ -1,4 +1,4 @@
-import { isResizableWithCanvas } from "../../../../file";
+import { isResizableWithCanvas } from "../../../../utils/file";
 
 export async function resizeImage(file: File, maxSize = 128): Promise<Blob> {
   if (!isResizableWithCanvas(file)) return file;

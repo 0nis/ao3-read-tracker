@@ -1,8 +1,8 @@
 import { getStyles } from "./style";
 
-import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { el, injectStyles } from "../../../../dom";
-import { CustomInputType } from "../../../../../enums/ui";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { el, injectStyles } from "../../../../utils/dom";
+import { CustomInputType } from "../../../../enums/ui";
 
 interface ToggleSwitchOptions {
   id?: string;

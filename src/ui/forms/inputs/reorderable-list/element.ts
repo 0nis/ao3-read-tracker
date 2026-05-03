@@ -1,7 +1,7 @@
 import { createReorderableListController } from "./controller";
 import { getStyles } from "./style";
-import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { injectStyles } from "../../../../dom";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { injectStyles } from "../../../../utils/dom";
 
 export type ReorderableListOptions = {
   items?: Record<string, number>;

@@ -1,6 +1,6 @@
-import { CLASS_PREFIX } from "../../../../constants/classes";
-import { toTitleCase } from "../../../string";
-import { el } from "../../../dom";
+import { CLASS_PREFIX } from "../../../constants/classes";
+import { toTitleCase } from "../../../utils/string";
+import { el } from "../../../utils/dom";
 
 export type SelectOptions = {
   options: string[];

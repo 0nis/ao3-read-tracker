@@ -5,7 +5,7 @@ import {
   reportExtensionFailure,
   showNotification,
 } from "../../../../../shared/extension/dialogs";
-import { createFlashNotice } from "../../../../../utils/ui/forms";
+import { createFlashNotice } from "../../../../../ui/forms";
 import {
   createButtonLoader,
   withLoadingState,

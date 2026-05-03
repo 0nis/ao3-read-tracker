@@ -1,6 +1,6 @@
 import { UserOption } from "../../types";
 import { localMemory } from "../../../../../../services/memory";
-import { toggleSwitch } from "../../../../../../utils/ui/forms";
+import { toggleSwitch } from "../../../../../../ui/forms";
 
 export interface InfoVisibilityOptions {
   showSymbols?: boolean;

@@ -3,7 +3,7 @@ import { SettingsSectionItem } from "../../core/setting/types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { text } from "../../../../utils/ui/forms";
+import { text } from "../../../../ui/forms";
 import { FormItemType } from "../../../../enums/forms";
 import { GeneralSettings } from "../../../../types/settings";
 

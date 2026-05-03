@@ -1,5 +1,5 @@
-import { el } from "../../../dom";
-import { getLocalDateTimeString } from "../../../date";
+import { el } from "../../../utils/dom";
+import { getLocalDateTimeString } from "../../../utils/date";
 
 export const text = ({
   defaultValue,

@@ -7,7 +7,7 @@ import { getDefaultPayload } from "../../payload";
 
 import { handleStorageWrite } from "../../../../shared/storage/handlers";
 import { getWorkTitleForNotifications } from "../../../../shared/ao3";
-import { extractFormValues } from "../../../../utils/ui/forms";
+import { extractFormValues } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(

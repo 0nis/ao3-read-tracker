@@ -1,10 +1,10 @@
 import { getClass } from "./element";
 import { ReorderableRow, ReorderableRowOptions } from "./types";
 
-import { el } from "../../../../dom";
-import { renderSymbolContentById } from "../../../../../ui/components/symbols";
-import { SymbolId } from "../../../../../enums/symbols";
-import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../../constants/global";
+import { el } from "../../../../utils/dom";
+import { renderSymbolContentById } from "../../../components/symbols";
+import { SymbolId } from "../../../../enums/symbols";
+import { DEFAULT_SYMBOL_SIZE_EM } from "../../../../constants/global";
 
 export function createReorderableRow<T>({
   label,

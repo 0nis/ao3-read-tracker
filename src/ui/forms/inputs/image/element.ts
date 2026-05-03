@@ -4,17 +4,14 @@ import { buildPreviewElement } from "./components/preview";
 import { buildInputElement } from "./components/input";
 import { buildClearButton, buildUploadButton } from "./components/buttons";
 
-import { injectStyles } from "../../../../dom";
+import { injectStyles } from "../../../../utils/dom";
 import {
   extractImageTypeNames,
   formatBytes,
   isImageFile,
-} from "../../../../file";
-import { CLASS_PREFIX } from "../../../../../constants/classes";
-import {
-  IMAGE_PIXEL_HEIGHT,
-  MAX_GIF_SIZE,
-} from "../../../../../constants/global";
+} from "../../../../utils/file";
+import { CLASS_PREFIX } from "../../../../constants/classes";
+import { IMAGE_PIXEL_HEIGHT, MAX_GIF_SIZE } from "../../../../constants/global";
 
 export const getClass = () => `${CLASS_PREFIX}__image-selector`;
 
