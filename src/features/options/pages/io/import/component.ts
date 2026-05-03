@@ -2,7 +2,7 @@ import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { toKebabCase } from "../../../../../utils/string";
 import { showNotification } from "../../../../../shared/extension/dialogs";
 import { el, injectStyles } from "../../../../../utils/dom";
-import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
+import { makeExpandable } from "../../../../../ui/behaviors/expandable";
 import { ExpandableItemParams, getExpandedImportButtons } from "./config";
 import { getStyles } from "./style";
 

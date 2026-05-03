@@ -2,7 +2,7 @@ import { getListClass } from "../../components/list";
 import { UserOption } from "../../types";
 
 import { el } from "../../../../../../utils/dom";
-import { makeExpandable } from "../../../../../../utils/ui/elements/expandable/element";
+import { makeExpandable } from "../../../../../../ui/behaviors/expandable";
 import {
   getInputValue,
   getInputElement,

@@ -1,6 +1,6 @@
 import { getStyles } from "./style";
-import { injectStyles } from "../../../dom";
-import { CLASS_PREFIX } from "../../../../constants/classes";
+import { injectStyles } from "../../../utils/dom";
+import { CLASS_PREFIX } from "../../../constants/classes";
 
 export interface ExpandableParams {
   trigger: HTMLElement;
