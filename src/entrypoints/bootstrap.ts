@@ -1,5 +1,5 @@
 import { SessionStorage } from "../services/session";
-import { Loader } from "../utils/ui/loaders/page/loader";
+import { Loader } from "../ui/components/loaders/page/loader";
 import {
   CUSTOM_PATHS,
   FALLBACK_PATH,

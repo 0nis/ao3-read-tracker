@@ -11,7 +11,7 @@ import {
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../../utils/ui/loaders/element";
+} from "../../../../../ui/components/loaders/element";
 import { createFlashNotice } from "../../../../../utils/ui/forms";
 import { showNotification } from "../../../../../shared/extension/dialogs";
 import { LoaderType } from "../../../../../enums/ui";

@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../../constants/classes";
-import { el, injectStyles } from "../../../../dom";
+import { el, injectStyles } from "../../../../../utils/dom";
 import { getStyles } from "./style";
 
 export function createSpinnerLoader(): HTMLElement {
