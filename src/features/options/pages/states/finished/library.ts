@@ -8,7 +8,7 @@ import { filtersFromState, getStored } from "../../../core/library/helpers/gen";
 import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
-} from "../../../core/library/helpers/managers/info-visibility";
+} from "../../../core/library/helpers/managers/infoVisibility";
 import { SectionId } from "../../../config";
 
 import { StorageService } from "../../../../../services/storage/storage";

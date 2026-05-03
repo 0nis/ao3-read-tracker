@@ -2,7 +2,7 @@ import { getStyles } from "./style";
 import { NavGroup } from "../../../types";
 
 import { el, injectStyles } from "../../../../../utils/dom";
-import { reportSrLive } from "../../../../../utils/ui/accessibility";
+import { reportSrLive } from "../../../../../utils/srLive";
 import { renderSymbolContentById } from "../../../../../utils/ui/symbols";
 import { SymbolId } from "../../../../../enums/symbols";
 import { CLASS_PREFIX } from "../../../../../constants/classes";

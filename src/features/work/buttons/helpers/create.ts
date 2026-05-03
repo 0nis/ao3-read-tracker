@@ -1,7 +1,7 @@
 import { ACTION_HANDLER_MAP } from "../config";
 import { ButtonConfig, ButtonAction } from "../types";
 import { createToggleButton } from "../components/toggle";
-import { createOpenFormButton } from "../components/open-form";
+import { createOpenFormButton } from "../components/openForm";
 import { WorkAction, WorkActionEvent } from "../../config";
 
 import { getIdFromUrl } from "../../../../shared/ao3";

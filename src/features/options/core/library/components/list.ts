@@ -12,7 +12,7 @@ import { createSectionWrapper } from "../../components/section/component";
 
 import { localMemory } from "../../../../../services/memory";
 import { handleStorageRead } from "../../../../../shared/storage/handlers";
-import { reportSrLive } from "../../../../../utils/ui/accessibility";
+import { reportSrLive } from "../../../../../utils/srLive";
 import { el, injectStyles } from "../../../../../utils/dom";
 import { SortDirection } from "../../../../../enums/ui";
 import { CLASS_PREFIX } from "../../../../../constants/classes";

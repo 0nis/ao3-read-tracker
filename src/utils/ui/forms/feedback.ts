@@ -1,5 +1,5 @@
 import { el, ensureChild } from "../../dom";
-import { reportSrLive } from ".././accessibility";
+import { reportSrLive } from "../../srLive";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { MessageType } from "../../../enums/messages";
 

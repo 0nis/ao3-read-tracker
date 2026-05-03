@@ -1,5 +1,5 @@
 import { CLASS_PREFIX } from "../../../../../../constants/classes";
-import { reportSrLive } from "../../../../../../utils/ui/accessibility";
+import { reportSrLive } from "../../../../../../utils/srLive";
 import { el } from "../../../../../../utils/dom";
 import { SupplementaryRowInformation } from "../../types";
 

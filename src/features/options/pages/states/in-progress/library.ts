@@ -6,7 +6,7 @@ import { loadSymbolsAndRules } from "../../../core/library/helpers/row/symbols";
 import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
-} from "../../../core/library/helpers/managers/info-visibility";
+} from "../../../core/library/helpers/managers/infoVisibility";
 import { filtersFromState, getStored } from "../../../core/library/helpers/gen";
 import { SectionId } from "../../../config";
 

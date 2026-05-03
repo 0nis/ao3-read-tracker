@@ -1,6 +1,6 @@
 import { render } from "./renderer";
 import { getStyles } from "./style";
-import { addOptionsLinkToAo3Nav } from "./core/components/ao3-nav-link";
+import { addOptionsLinkToAo3Nav } from "./core/components/ao3NavLink";
 
 import { Router } from "../../app/router";
 import { injectStyles } from "../../utils/dom";

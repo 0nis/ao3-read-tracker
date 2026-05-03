@@ -3,7 +3,7 @@ import { WorkAction, WorkActionTypeMap } from "../config";
 
 import { createIgnoreWorkForm } from "../forms/instances/ignore";
 import { createFinishedWorkForm } from "../forms/instances/finished";
-import { createInProgressWorkForm } from "../forms/instances/in-progress";
+import { createInProgressWorkForm } from "../forms/instances/inProgress";
 
 import { StorageService } from "../../../services/storage/storage";
 import {
