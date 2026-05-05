@@ -2,7 +2,7 @@ import type { WorkFormField, WorkFormFieldGroup, WorkFormItem } from "../types";
 
 import { el } from "../../../../utils/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 
 export function createFormContent(items: WorkFormItem<any>[]): HTMLElement {
   const dl = el("dl", {}, []);

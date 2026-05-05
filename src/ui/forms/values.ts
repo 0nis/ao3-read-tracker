@@ -1,6 +1,7 @@
 import { walkFormItems } from "./items";
+import { FormField, FormGroup, FormItem } from "./types";
+
 import { getLocalDateTimeString } from "../../utils/date";
-import { FormField, FormGroup, FormItem } from "../../types/forms";
 
 /**
  * Extracts values from form inputs in a section using data-field attributes.

@@ -4,7 +4,7 @@ import { SectionId } from "../../../config";
 
 import { settingsCache } from "../../../../../services/cache";
 import { enumSelect, number, toggleSwitch } from "../../../../../ui/forms";
-import { FormItemType } from "../../../../../enums/forms";
+import { FormItemType } from "../../../../../ui/forms/enums";
 import {
   SymbolFallbackType,
   SymbolRenderMode,

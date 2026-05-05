@@ -6,7 +6,7 @@ import { getCurrentChapterFromWorkPage } from "../../helpers";
 import { datetime, number, enumSelect, textarea } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { ReadingStatus } from "../../../../enums/works";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { InProgressWork } from "../../../../types/works";
 

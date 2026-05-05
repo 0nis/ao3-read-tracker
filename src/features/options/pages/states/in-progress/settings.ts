@@ -6,7 +6,7 @@ import { settingsCache } from "../../../../../services/cache";
 import { enumSelect, toggleSwitch } from "../../../../../ui/forms";
 import { DisplayMode, VerticalPlacement } from "../../../../../enums/settings";
 import { SymbolDisplayMode } from "../../../../../enums/symbols";
-import { FormItemType } from "../../../../../enums/forms";
+import { FormItemType } from "../../../../../ui/forms/enums";
 import { InProgressSettings } from "../../../../../types/settings";
 
 const items: SettingsSectionItem<InProgressSettings>[] = [

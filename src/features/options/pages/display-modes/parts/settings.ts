@@ -7,7 +7,7 @@ import { reorderableList } from "../../../../../ui/forms/inputs/reorderable-list
 import { toTitleCase } from "../../../../../utils/string";
 
 import { VerticalPlacement } from "../../../../../enums/settings";
-import { FormItemType } from "../../../../../enums/forms";
+import { FormItemType } from "../../../../../ui/forms/enums";
 import { DisplayModeSettings } from "../../../../../types/settings";
 
 const items: SettingsSectionItem<DisplayModeSettings>[] = [

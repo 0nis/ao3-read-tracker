@@ -1,5 +1,5 @@
-import { FormItemType } from "../../enums/forms";
-import { FormField, FormGroup, FormItem } from "../../types/forms";
+import { FormItemType } from "./enums";
+import { FormField, FormGroup, FormItem } from "./types";
 
 /**
  * Walks through form items recursively and applies a callback to each form field.

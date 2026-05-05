@@ -4,7 +4,7 @@ import { WorkAction } from "../../config";
 
 import { textarea } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { IgnoredWork } from "../../../../types/works";
 
 const items: WorkFormItem<IgnoredWork>[] = [
@@ -14,7 +14,7 @@ const items: WorkFormItem<IgnoredWork>[] = [
     label: "Reason for ignoring",
     description:
       "A private reason that will appear in the work summary block for this work.",
-    input: textarea(3),
+    input: textarea({ rows: 3 }),
   },
 ];
 

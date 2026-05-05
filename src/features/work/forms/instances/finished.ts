@@ -11,7 +11,7 @@ import {
 } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { FinishedStatus } from "../../../../enums/works";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { FinishedWork } from "../../../../types/works";
 

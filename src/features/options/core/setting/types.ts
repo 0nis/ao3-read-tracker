@@ -5,7 +5,7 @@ import type {
   FormField,
   FormGroup,
   FormItem,
-} from "../../../../types/forms";
+} from "../../../../ui/forms/types";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export interface SettingsSectionBaseItem<T> {
