@@ -8,6 +8,9 @@ import { localMemory } from "../../services/memory";
 import { reportExtensionFailure } from "../../shared/extension/dialogs";
 import { ExtensionDisabledData } from "../../types/memory";
 import { EXTENSION_DISABLED_KEY } from "../../constants/global";
+import { addGlobalListener } from "../../utils/listeners";
+import { add } from "dexie";
+import { createExtensionMsg } from "../extension/logger";
 
 export async function boot() {
   const res = localMemory.get<ExtensionDisabledData>(EXTENSION_DISABLED_KEY);
@@ -25,6 +28,12 @@ export async function boot() {
  */
 export async function start() {
   if (!isAlive()) return;
+  installGlobalErrorHandlers();
+  await openDb();
+  await initApp();
+}
+
+async function openDb() {
   try {
     await db.open();
   } catch (err) {
@@ -33,15 +42,28 @@ export async function start() {
       err,
     );
     kill("Database failed to open");
-    return;
   }
+}
+
+async function initApp() {
   try {
     await App.init();
   } catch (err) {
+    throw new Error(createExtensionMsg(`Failed to initialize app: ${err}`));
+  }
+}
+
+function installGlobalErrorHandlers() {
+  addGlobalListener(window, "unhandledrejection", (err) => {
     reportExtensionFailure(
-      "⚠️ An unknown error occurred in extension %name% (v%version%)! The extension may not work as expected. ⚠️",
+      "⚠️ An unhandled promise rejection occurred in extension %name% (v%version%)! The extension may not work as expected. ⚠️",
       err,
     );
-    return;
-  }
+  });
+  addGlobalListener(window, "error", (err) => {
+    reportExtensionFailure(
+      "⚠️ An error occurred in extension %name% (v%version%)! The extension may not work as expected. ⚠️",
+      err,
+    );
+  });
 }

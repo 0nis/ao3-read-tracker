@@ -50,11 +50,7 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
-  activeModules: {
-    [ExtensionModule.FINISHED]: boolean;
-    [ExtensionModule.IN_PROGRESS]: boolean;
-    [ExtensionModule.IGNORED]: boolean;
-  };
+  activeModules: Record<ExtensionModule, boolean>;
   nativeMarkAsReadReplacementLabel: string;
 }
 

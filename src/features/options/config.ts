@@ -10,6 +10,7 @@ import {
   buildDataSection,
   buildDisplayModesSection,
 } from "./pages";
+import { ExtensionModule } from "../../enums/settings";
 
 export enum SectionId {
   FINISHED_SETTINGS = "finished-settings",
@@ -35,6 +36,7 @@ export type SectionBuilder = () => Promise<HTMLElement> | HTMLElement;
 
 export interface SectionConfigItem {
   id: SectionId;
+  module?: ExtensionModule;
   label: string;
   type: SectionType;
   build: SectionBuilder;
@@ -43,18 +45,21 @@ export interface SectionConfigItem {
 export const SECTION_CONFIG: readonly SectionConfigItem[] = [
   {
     id: SectionId.FINISHED_SETTINGS,
+    module: ExtensionModule.FINISHED,
     label: "Finished Settings",
     type: SectionType.SETTINGS,
     build: buildFinishedSettingsSection,
   },
   {
     id: SectionId.IN_PROGRESS_SETTINGS,
+    module: ExtensionModule.IN_PROGRESS,
     label: "In Progress Settings",
     type: SectionType.SETTINGS,
     build: buildInProgressSettingsSection,
   },
   {
     id: SectionId.IGNORE_SETTINGS,
+    module: ExtensionModule.IGNORED,
     label: "Ignored Settings",
     type: SectionType.SETTINGS,
     build: buildIgnoreSettingsSection,
@@ -67,18 +72,21 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
   },
   {
     id: SectionId.FINISHED_LIBRARY,
+    module: ExtensionModule.FINISHED,
     label: "Finished Works Library",
     type: SectionType.LIST,
     build: buildFinishedListSection,
   },
   {
     id: SectionId.IN_PROGRESS_LIBRARY,
+    module: ExtensionModule.IN_PROGRESS,
     label: "In Progress Works Library",
     type: SectionType.LIST,
     build: buildInProgressListSection,
   },
   {
     id: SectionId.IGNORE_LIBRARY,
+    module: ExtensionModule.IGNORED,
     label: "Ignored Works Library",
     type: SectionType.LIST,
     build: buildIgnoredListSection,
