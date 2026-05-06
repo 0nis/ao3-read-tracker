@@ -3,17 +3,17 @@ import { ImportProgress } from "dexie-export-import/dist/import";
 
 import { handleProgressCallback } from "../handlers";
 
-import { IoService } from "../../../../../services/io";
+import { IoService } from "../../../../../services/storage/io";
 import {
   DexieExportDbInfo,
   getDbInfoFromDexieExport,
-} from "../../../../../utils/file";
+} from "../../../../../utils/dexie";
 import {
   createButtonLoader,
   withLoadingState,
-} from "../../../../../utils/ui/loaders/element";
-import { createFlashNotice } from "../../../../../utils/ui/forms";
-import { showNotification } from "../../../../../utils/ui/dialogs";
+} from "../../../../../ui/components/loaders/element";
+import { createFlashNotice } from "../../../../../ui/forms";
+import { showNotification } from "../../../../../shared/extension/dialogs";
 import { LoaderType } from "../../../../../enums/ui";
 import { DATABASE_NAME } from "../../../../../constants/global";
 

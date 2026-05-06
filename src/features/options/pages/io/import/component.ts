@@ -1,8 +1,8 @@
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 import { toKebabCase } from "../../../../../utils/string";
-import { showNotification } from "../../../../../utils/ui/dialogs";
-import { el, injectStyles } from "../../../../../utils/ui/dom";
-import { makeExpandable } from "../../../../../utils/ui/elements/expandable/element";
+import { showNotification } from "../../../../../shared/extension/dialogs";
+import { el, injectStyles } from "../../../../../utils/dom";
+import { makeExpandable } from "../../../../../ui/behaviors/expandable";
 import { ExpandableItemParams, getExpandedImportButtons } from "./config";
 import { getStyles } from "./style";
 
@@ -13,7 +13,7 @@ export function buildImportButton() {
 
   const btnConfigs = getExpandedImportButtons();
   const items = btnConfigs.map((cfg) =>
-    createImportExpandableSecondaryItem(cfg)
+    createImportExpandableSecondaryItem(cfg),
   );
 
   const importBtn = createImportExpandableButton();
@@ -27,7 +27,7 @@ export function buildImportButton() {
         "aria-label": "Import your data for this extension from a file",
       },
     },
-    [importBtn, importSecondary]
+    [importBtn, importSecondary],
   );
 
   makeExpandable({ trigger: importBtn, panel: importSecondary, parent: li });
@@ -41,19 +41,19 @@ function createImportExpandableButton(): HTMLElement {
     {
       className: `${CLASS_PREFIX}__button ${CLASS_PREFIX}__button--danger collapsed`,
     },
-    ["Import"]
+    ["Import"],
   );
 }
 
 function createImportExpandableSecondary(
-  items: HTMLElement[] = []
+  items: HTMLElement[] = [],
 ): HTMLElement {
   return el(
     "ul",
     {
       className: `${IMPORT_CLASS}__expandable-secondary expandable secondary hidden`,
     },
-    [...items]
+    [...items],
   );
 }
 
@@ -74,7 +74,7 @@ function createImportExpandableSecondaryItem({
         "aria-label": `${label}. Click to select a file to import.`,
       },
     },
-    [label]
+    [label],
   );
   const input = el("input", {
     id: `${IMPORT_CLASS}__file-input--${toKebabCase(label)}`,

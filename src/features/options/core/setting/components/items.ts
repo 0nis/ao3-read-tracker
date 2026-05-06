@@ -5,9 +5,9 @@ import {
   SettingsSectionItem,
 } from "../types";
 
-import { el } from "../../../../../utils/ui/dom";
-import { getInputElement } from "../../../../../utils/ui/forms";
-import { FormItemType } from "../../../../../enums/forms";
+import { el } from "../../../../../utils/dom";
+import { getInputElement } from "../../../../../ui/forms";
+import { FormItemType } from "../../../../../ui/forms/enums";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 
 export function createSettingsSectionContent(

@@ -1,6 +1,5 @@
 import { AsyncCache } from "./abstract";
-
-import { handleGetAllSettings } from "../../utils/storage";
+import { handleGetAllSettings } from "../storage/settings";
 import { SettingsData } from "../../types/settings";
 
 export class SettingsCache extends AsyncCache<SettingsData> {

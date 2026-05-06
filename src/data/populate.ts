@@ -1,9 +1,9 @@
 import { db } from "./db";
 import { seedDatabase } from "./seed";
 
-import { Extension } from "../entrypoints/content";
+import { ExtensionRuntime } from "../shared/runtime";
 
-import { reportExtensionFailure } from "../utils/ui/dialogs";
+import { reportExtensionFailure } from "../shared/extension/dialogs";
 import { IS_DEV } from "../constants/global";
 import {
   DEFAULT_GENERAL_SETTINGS,
@@ -31,6 +31,6 @@ export async function populateDb() {
       `⚠️ Failed to populate the database! ⚠️ The extension has been disabled.`,
       err,
     );
-    Extension.kill("Failed to populate the database");
+    ExtensionRuntime.kill("Failed to populate the database");
   }
 }

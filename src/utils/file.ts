@@ -1,8 +1,4 @@
-import { getFormattedDateTimeForFilename } from "./date";
-import { getManifest } from "./extension";
-import { extractKey } from "./misc";
-import { toKebabCase } from "./string";
-import { el } from "./ui/dom";
+import { el } from "./dom";
 
 /** True if the file type starts with "image/", aka the simple way of checking */
 export const isImageFile = (file: File): boolean =>
@@ -51,75 +47,17 @@ export function formatBytes(bytes: number): string {
 }
 
 /**
- * Downloads a JSON file to the user's computer with the extension name, @param type, and a timestamp in the filename
- * @param data The data to download
- * @param type The type of data, to be used in the filename
+ * Downloads the specified blob as a file to the user's computer
+ * @param blob The blob to download
+ * @param filename The name of the file when downloaded, including extension (e.g. "file.txt")
  */
-export function downloadFile(data: Blob, type: string): void {
-  const extName = toKebabCase(getManifest()?.data?.name || "extension");
-  const url = URL.createObjectURL(data);
+export function downloadBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
   const a = el("a");
-
   a.href = url;
-  a.download = `${extName}_${type}_${getFormattedDateTimeForFilename(
-    Date.now()
-  )}.json`;
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-}
-
-export interface DexieExportDbInfo {
-  formatName: string | null;
-  formatVersion: number | null;
-  databaseName: string | null;
-  databaseVersion: number | null;
-}
-
-/**
- * Iterates through a file and tries to extract the format name/version and database name/version.
- * Only use for Dexie.js export files
- */
-export async function getDbInfoFromDexieExport(
-  blob: Blob,
-  chunkSizeInKb: number = 2
-): Promise<DexieExportDbInfo> {
-  const chunkSize = 1024 * chunkSizeInKb;
-  let offset = 0;
-  let buffer = "";
-
-  const result: DexieExportDbInfo = {
-    formatName: null,
-    formatVersion: null,
-    databaseName: null,
-    databaseVersion: null,
-  };
-
-  const keys: { key: string; type: "string" | "number" }[] = [
-    { key: "formatName", type: "string" },
-    { key: "formatVersion", type: "number" },
-    { key: "databaseName", type: "string" },
-    { key: "databaseVersion", type: "number" },
-  ];
-
-  const allKeysFound = () =>
-    Object.values(result).every((value) => value !== null);
-
-  while (offset < blob.size) {
-    const chunk = blob.slice(offset, offset + chunkSize);
-    buffer += await chunk.text();
-
-    for (const { key, type } of keys) {
-      if ((result as any)[key] !== null) continue;
-      const extracted = extractKey(buffer, key, type);
-      if (extracted !== null) (result as any)[key] = extracted;
-    }
-
-    if (allKeysFound()) break;
-
-    offset += chunkSize;
-  }
-
-  return result;
 }

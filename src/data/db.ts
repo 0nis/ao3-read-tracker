@@ -1,7 +1,9 @@
 import Dexie, { Table } from "dexie";
 
-import { showNotification } from "../utils/ui/dialogs";
-import { createExtensionMsg } from "../utils/extension";
+import { populateDb } from "./populate";
+
+import { createExtensionMsg } from "../shared/extension/logger";
+import { showNotification } from "../shared/extension/dialogs";
 import {
   FinishedSettings,
   IgnoreSettings,
@@ -13,7 +15,6 @@ import {
 import { FinishedWork, IgnoredWork, InProgressWork } from "../types/works";
 import { SymbolRecord } from "../types/symbols";
 import { DATABASE_NAME } from "../constants/global";
-import { populateDb } from "./populate";
 
 export class Ao3ReadTrackerDb extends Dexie {
   finishedWorks!: Table<FinishedWork>;
@@ -49,8 +50,8 @@ export class Ao3ReadTrackerDb extends Dexie {
       showNotification(
         createExtensionMsg(
           "Database upgrading was blocked by another window. " +
-            "Please close down any other tabs or windows that has this page open"
-        )
+            "Please close down any other tabs or windows that has this page open",
+        ),
       );
     });
   }

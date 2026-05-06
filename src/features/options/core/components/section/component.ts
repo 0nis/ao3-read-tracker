@@ -1,7 +1,7 @@
 import { getStyles } from "./style";
 import { SectionConfig } from "../../../types";
 
-import { el, injectStyles } from "../../../../../utils/ui/dom";
+import { el, injectStyles } from "../../../../../utils/dom";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 
 const getClass = () => `${CLASS_PREFIX}__section`;

@@ -5,12 +5,15 @@ import type {
   FormField,
   FormGroup,
   FormItem,
-} from "../../../types/forms";
+} from "../../../ui/forms/types";
 
 export interface WorkFormField<T> extends FormField<T> {}
 
-export interface WorkFormFieldGroup<T>
-  extends FormGroup<T, WorkFormField<T>, WorkFormFieldGroup<T>> {
+export interface WorkFormFieldGroup<T> extends FormGroup<
+  T,
+  WorkFormField<T>,
+  WorkFormFieldGroup<T>
+> {
   className?: string;
 }
 
@@ -20,8 +23,11 @@ export type WorkFormItem<T> = FormItem<
   WorkFormFieldGroup<T>
 >;
 
-export interface WorkFormConfig<T>
-  extends FormConfig<T, WorkFormField<T>, WorkFormFieldGroup<T>> {
+export interface WorkFormConfig<T> extends FormConfig<
+  T,
+  WorkFormField<T>,
+  WorkFormFieldGroup<T>
+> {
   id: WorkAction;
   landmark: string;
   heading: string;

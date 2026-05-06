@@ -1,7 +1,8 @@
+import { getWorkElement, getElement } from "../../helpers";
+
+import { el, injectStyles } from "../../../../utils/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { CollapseMode } from "../../../../enums/ui";
-import { el, getElement, injectStyles } from "../../../../utils/ui/dom";
-import { getWork } from "../../handlers";
 
 /**
  * Hides the details of a work in the listing to take up less space.
@@ -11,7 +12,7 @@ import { getWork } from "../../handlers";
  * - {@link CollapseMode.AGGRESSIVE} hides everything except the text indicator and toggle button
  */
 export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
-  const work = getWork(workOrId);
+  const work = getWorkElement(workOrId);
   if (!work) return;
   const isCollapsed = work.classList.contains(`${CLASS_PREFIX}__collapsed`);
   if (isCollapsed) return;
@@ -19,12 +20,12 @@ export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
   work.appendChild(createClearSpacer());
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-collapse`,
-    getStyles(CLASS_PREFIX)
+    getStyles(CLASS_PREFIX),
   );
 
   const header = work.querySelector<HTMLElement>(".header.module");
   const textIndicator = work.querySelector<HTMLElement>(
-    `.${CLASS_PREFIX}__text-indicator`
+    `.${CLASS_PREFIX}__text-indicator`,
   );
 
   const elementsToHide = Array.from(work.children).filter((child) => {
@@ -35,7 +36,7 @@ export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
 
   work.classList.add(
     `${CLASS_PREFIX}__collapsed`,
-    `${CLASS_PREFIX}__collapsed--${mode}`
+    `${CLASS_PREFIX}__collapsed--${mode}`,
   );
   for (const el of elementsToHide) {
     el.classList.add(`${CLASS_PREFIX}__hidden`);
@@ -51,13 +52,13 @@ export function collapse(mode: CollapseMode, workOrId: HTMLElement | string) {
  * NOT USED FOR TOGGLING! {@link createCollapseToggle} is used for that.
  */
 export function unCollapse(workOrId: HTMLElement | string) {
-  const work = getWork(workOrId);
+  const work = getWorkElement(workOrId);
   if (!work) return;
   if (!work.classList.contains(`${CLASS_PREFIX}__collapsed`)) return;
   work.classList.remove(
     `${CLASS_PREFIX}__collapsed`,
     `${CLASS_PREFIX}__collapsed--${CollapseMode.GENTLE}`,
-    `${CLASS_PREFIX}__collapsed--${CollapseMode.AGGRESSIVE}`
+    `${CLASS_PREFIX}__collapsed--${CollapseMode.AGGRESSIVE}`,
   );
   const elementsToRemove = [
     getElement(work, `.${CLASS_PREFIX}__collapsed__toggle`),
@@ -73,7 +74,7 @@ export function unCollapse(workOrId: HTMLElement | string) {
 function createCollapseToggle(
   work: HTMLElement,
   elementsToToggle: Element[],
-  isCollapsed: boolean = true
+  isCollapsed: boolean = true,
 ): HTMLButtonElement {
   const toggle = el("button", {
     type: "button",

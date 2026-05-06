@@ -8,10 +8,10 @@ import { filtersFromState, getStored } from "../../../core/library/helpers/gen";
 import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
-} from "../../../core/library/helpers/managers/info-visibility";
+} from "../../../core/library/helpers/managers/infoVisibility";
 import { SectionId } from "../../../config";
 
-import { StorageService } from "../../../../../services/storage";
+import { StorageService } from "../../../../../services/storage/storage";
 import { getDateParts } from "../../../../../utils/date";
 import { SymbolId } from "../../../../../enums/symbols";
 import { BooleanFilterSelect, SortDirection } from "../../../../../enums/ui";
@@ -23,7 +23,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../../types/storage";
-import { enumSelect } from "../../../../../utils/ui/forms";
+import { enumSelect } from "../../../../../ui/forms";
 import { FinishedStatus } from "../../../../../enums/works";
 import { localMemory } from "../../../../../services/memory";
 

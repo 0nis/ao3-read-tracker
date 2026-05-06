@@ -1,18 +1,13 @@
 import { ApplyMarksParams } from "../apply";
+import { getLatestChapterFromWorkListing, getElement } from "../../helpers";
+
 import { symbolsCache } from "../../../../services/cache";
 import { symbolRuleCollector } from "../../../../services/rules";
-import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
-import {
-  el,
-  ensureChild,
-  getElement,
-  injectStyles,
-} from "../../../../utils/ui/dom";
-import { renderSymbolContent } from "../../../../utils/ui/symbols";
-import { CLASS_PREFIX } from "../../../../constants/classes";
+import { el, ensureChild, injectStyles } from "../../../../utils/dom";
+import { renderSymbolContent } from "../../../../ui/components/symbols";
 import { SymbolRecord } from "../../../../types/symbols";
+import { CLASS_PREFIX } from "../../../../constants/classes";
 import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
-import { SymbolSettings } from "../../../../types/settings";
 
 /**
  * Adds symbols to a work element showing information
@@ -26,7 +21,7 @@ export async function addSymbols(params: ApplyMarksParams) {
 
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-symbols`,
-    getStyles(CLASS_PREFIX)
+    getStyles(CLASS_PREFIX),
   );
 
   const symbolIndicatorList = ensureChild({
@@ -60,7 +55,7 @@ async function renderSymbols(
     ignoredWork,
     settings,
   }: ApplyMarksParams,
-  symbolIndicatorList: HTMLElement
+  symbolIndicatorList: HTMLElement,
 ) {
   const symbols = await symbolsCache.get();
 
@@ -89,8 +84,8 @@ async function renderSymbols(
       await createSymbolElement(
         symbol,
         rule.getCustomLabel?.() || symbols[rule.id].label,
-        rule.getSuffix?.()
-      )
+        rule.getSuffix?.(),
+      ),
     );
   }
 }
@@ -98,7 +93,7 @@ async function renderSymbols(
 async function createSymbolElement(
   symbol: SymbolRecord,
   customLabel?: string,
-  suffix?: string
+  suffix?: string,
 ): Promise<HTMLElement> {
   const content = await renderSymbolContent({ symbol, suffix });
   const label = customLabel || symbol.label;
@@ -115,7 +110,7 @@ async function createSymbolElement(
         title: label,
       },
     },
-    [content]
+    [content],
   );
 }
 

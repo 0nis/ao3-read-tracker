@@ -1,5 +1,5 @@
 import { SectionId } from "../../config";
-import { StorageService } from "../../../../services/storage";
+import { StorageService } from "../../../../services/storage/storage";
 import {
   DEFAULT_GENERAL_SETTINGS,
   DEFAULT_IGNORE_SETTINGS,

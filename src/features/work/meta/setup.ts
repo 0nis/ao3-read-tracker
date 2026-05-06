@@ -2,11 +2,11 @@ import { getStyles } from "./style";
 import { addDetails, addStates, addNotes } from "./instances";
 import { removeExtensionMetaFromArea } from "./helpers";
 
-import { StorageService } from "../../../services/storage";
-import { getIdFromUrl } from "../../../utils/ao3";
-import { warn } from "../../../utils/extension";
-import { handleStorageRead } from "../../../utils/storage";
-import { injectStyles } from "../../../utils/ui/dom";
+import { StorageService } from "../../../services/storage/storage";
+import { getIdFromUrl } from "../../../shared/ao3";
+import { warn } from "../../../shared/extension/logger";
+import { handleStorageRead } from "../../../shared/storage/handlers";
+import { injectStyles } from "../../../utils/dom";
 
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { ABBREVIATION } from "../../../constants/global";
@@ -40,7 +40,7 @@ export async function setupWorkMetaAreas(): Promise<void> {
 
 async function addExtensionMetaToArea(
   id: string,
-  workMetaArea: HTMLElement
+  workMetaArea: HTMLElement,
 ): Promise<void> {
   const data = await getWorkStateData(id);
 

@@ -3,10 +3,10 @@ import { SettingsSectionItem } from "../../../core/setting/types";
 import { SectionId } from "../../../config";
 
 import { settingsCache } from "../../../../../services/cache";
-import { enumSelect, toggleSwitch } from "../../../../../utils/ui/forms";
+import { enumSelect, toggleSwitch } from "../../../../../ui/forms";
 import { DisplayMode, VerticalPlacement } from "../../../../../enums/settings";
 import { SymbolDisplayMode } from "../../../../../enums/symbols";
-import { FormItemType } from "../../../../../enums/forms";
+import { FormItemType } from "../../../../../ui/forms/enums";
 import { FinishedSettings } from "../../../../../types/settings";
 
 const items: SettingsSectionItem<FinishedSettings>[] = [

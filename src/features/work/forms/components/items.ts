@@ -1,8 +1,8 @@
 import type { WorkFormField, WorkFormFieldGroup, WorkFormItem } from "../types";
 
-import { el } from "../../../../utils/ui/dom";
+import { el } from "../../../../utils/dom";
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 
 export function createFormContent(items: WorkFormItem<any>[]): HTMLElement {
   const dl = el("dl", {}, []);
@@ -39,8 +39,8 @@ function createWorkFormField(field: WorkFormField<any>): HTMLElement {
           id: `${String(field.dataField)}__description`,
           className: `${CLASS_PREFIX}__footnote footnote`,
         },
-        [field.description || ""]
-      )
+        [field.description || ""],
+      ),
     );
 
   const input = field.input;
@@ -49,7 +49,7 @@ function createWorkFormField(field: WorkFormField<any>): HTMLElement {
   if (field.description)
     input.setAttribute(
       "aria-describedby",
-      `${String(field.dataField)}__description`
+      `${String(field.dataField)}__description`,
     );
   dd.push(input);
 
@@ -60,7 +60,7 @@ function createWorkFormField(field: WorkFormField<any>): HTMLElement {
         {
           htmlFor: String(field.dataField),
         },
-        [field.label]
+        [field.label],
       ),
     ]),
     el("dd", {}, dd),

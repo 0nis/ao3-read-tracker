@@ -1,14 +1,14 @@
 import { ACTION_HANDLER_MAP } from "../config";
 import { ButtonConfig, ButtonAction } from "../types";
 import { createToggleButton } from "../components/toggle";
-import { createOpenFormButton } from "../components/open-form";
+import { createOpenFormButton } from "../components/openForm";
 import { WorkAction, WorkActionEvent } from "../../config";
 
-import { getIdFromUrl } from "../../../../utils/ao3";
+import { getIdFromUrl } from "../../../../shared/ao3";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 
 export async function createActionModeButton(
-  config: ButtonConfig
+  config: ButtonConfig,
 ): Promise<HTMLElement | undefined> {
   const workId = getIdFromUrl();
   if (!workId) return;
@@ -27,7 +27,7 @@ export async function createActionModeButton(
 export async function handleOnUpdateReadProgressEvent(
   button: HTMLElement,
   workAction: WorkAction,
-  workActionEvent: WorkActionEvent
+  workActionEvent: WorkActionEvent,
 ) {
   if (workAction === WorkAction.IN_PROGRESS) {
     if (workActionEvent === WorkActionEvent.DELETE) {

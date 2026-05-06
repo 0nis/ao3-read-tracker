@@ -2,7 +2,7 @@ import { ImportOptions } from "dexie-export-import";
 import {
   confirmDestructiveAction,
   showConfirm,
-} from "../../../../../utils/ui/dialogs";
+} from "../../../../../shared/extension/dialogs";
 import { handleImport } from "./handlers";
 import { createExistenceCache } from "../../../../../data/cache/existence";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
@@ -40,12 +40,12 @@ export const getExpandedImportButtons = (): ExpandableItemParams[] => [
             !exists.has(tableName, value.id),
           ...DEFAULT_IMPORT_OPTIONS,
         },
-        "Yay, successfully imported your new data! Enjoy!"
+        "Yay, successfully imported your new data! Enjoy!",
       );
     },
     onConfirm: () => {
       return showConfirm(
-        "Importing data will add only new entries to your existing data. No current data will be overwritten. Do you want to proceed?"
+        "Importing data will add only new entries to your existing data. No current data will be overwritten. Do you want to proceed?",
       );
     },
   },
@@ -64,7 +64,7 @@ export const getExpandedImportButtons = (): ExpandableItemParams[] => [
     onConfirm: () => {
       return confirmDestructiveAction(
         "Importing data will merge with your existing data. CONFLICTING ENTRIES WILL BE OVERWRITTEN. Do you want to proceed?",
-        "MERGE MY DATA"
+        "MERGE MY DATA",
       );
     },
   },
@@ -82,7 +82,7 @@ export const getExpandedImportButtons = (): ExpandableItemParams[] => [
     onConfirm: () => {
       return confirmDestructiveAction(
         "Importing data will overwrite your existing data. That means YOUR CURRENT DATA WILL BE LOST. Do you want to proceed?",
-        "OVERWRITE MY DATA"
+        "OVERWRITE MY DATA",
       );
     },
   },

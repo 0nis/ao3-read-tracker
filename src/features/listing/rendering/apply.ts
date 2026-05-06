@@ -5,12 +5,12 @@ import { addClasses } from "./marks/classes";
 import { DISPLAY_MODE_MAP } from "../config";
 
 import { displayRuleCollector } from "../../../services/rules";
-import { ensureChild } from "../../../utils/ui/dom";
-import { getManifest } from "../../../utils/extension";
+import { settingsCache } from "../../../services/cache";
+import { getExtensionName } from "../../../shared/extension/manifest";
+import { ensureChild } from "../../../utils/dom";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { SettingsData } from "../../../types/settings";
 import { WorkStateData } from "../../../types/works";
-import { settingsCache } from "../../../services/cache";
 
 export interface ApplyMarksParams extends WorkStateData {
   element: HTMLElement;
@@ -72,9 +72,7 @@ function ensureLandmarkHeadingPresent(element: HTMLElement) {
     tag: "h6",
     createProps: {
       className: "landmark heading",
-      textContent: `${
-        getManifest().data?.name || "Read Tracker"
-      } Extension Information`,
+      textContent: `${getExtensionName()} Extension Information`,
     },
   });
 }

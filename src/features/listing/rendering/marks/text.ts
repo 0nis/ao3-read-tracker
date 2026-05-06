@@ -1,21 +1,16 @@
 import { ApplyMarksParams } from "../apply";
+import { getLatestChapterFromWorkListing, getElement } from "../../helpers";
 
 import {
   textIndicatorRuleCollector,
   workNotesRuleCollector,
 } from "../../../../services/rules";
-import { getLatestChapterFromWorkListing } from "../../../../utils/ao3";
 import {
   getFormattedDateAsFullText,
   getFormattedTime,
   timestampToISOString,
 } from "../../../../utils/date";
-import {
-  el,
-  ensureChild,
-  getElement,
-  injectStyles,
-} from "../../../../utils/ui/dom";
+import { el, ensureChild, injectStyles } from "../../../../utils/dom";
 import { replacePlaceholders } from "../../../../utils/string";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
@@ -29,7 +24,7 @@ import { WorkState } from "../../../../enums/works";
 export function addText(params: ApplyMarksParams) {
   injectStyles(
     `${CLASS_PREFIX}__styles--listing-text`,
-    getStyles(CLASS_PREFIX)
+    getStyles(CLASS_PREFIX),
   );
 
   const indicatorList = ensureChild({
@@ -54,7 +49,7 @@ export function removeText(element: HTMLElement) {
 /** Edit indicators in {@link collectTextIndicatorRules} */
 function createIndicators(
   params: ApplyMarksParams,
-  indicatorList: HTMLElement
+  indicatorList: HTMLElement,
 ) {
   for (const rule of textIndicatorRuleCollector.getActiveRules(params)) {
     indicatorList.appendChild(
@@ -62,8 +57,8 @@ function createIndicators(
         rule.workState,
         rule.getTimeStamp(),
         rule.getText(),
-        params.element
-      )
+        params.element,
+      ),
     );
   }
 }
@@ -79,7 +74,7 @@ function addIndicatorText(
   type: WorkState,
   timestamp: number | undefined,
   text: string,
-  element: HTMLElement
+  element: HTMLElement,
 ): HTMLElement {
   const replace = (str: string) => {
     return replacePlaceholders(str, {
@@ -101,7 +96,7 @@ function addIndicatorText(
     {
       className: `${CLASS_PREFIX}__text-indicator--${type}`,
     },
-    [el("p", {}, nodes)]
+    [el("p", {}, nodes)],
   );
 }
 
@@ -117,13 +112,13 @@ function addNotesText(element: HTMLElement, notes: string, className?: string) {
 }
 
 function createTimestampElement(
-  timestamp: number | undefined
+  timestamp: number | undefined,
 ): HTMLElement | string {
   return el("time", {
     dateTime: timestampToISOString(timestamp),
     textContent: `${getFormattedDateAsFullText(
       timestamp,
-      "short"
+      "short",
     )} at ${getFormattedTime(timestamp)}`,
   });
 }

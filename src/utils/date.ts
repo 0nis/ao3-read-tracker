@@ -1,6 +1,6 @@
 /** Extracts year, month, and day from a given date input */
 export const getDateParts = (
-  date: number | Date | undefined
+  date: number | Date | undefined,
 ): { year: number; month: number; day: number } | null => {
   if (date === undefined) return null;
   if (typeof date === "number" && (isNaN(date) || date < 0)) return null;
@@ -19,7 +19,7 @@ export const getDateParts = (
  */
 export const getFormattedDate = (
   timestamp: number | undefined,
-  separator: string = "-"
+  separator: string = "-",
 ): string => {
   return formatDateSafely(timestamp, (ts: number) => {
     return getLocalDateString(new Date(ts), separator);
@@ -32,7 +32,7 @@ export const getFormattedDate = (
  */
 export const getFormattedDateAsFullText = (
   timestamp: number | undefined,
-  monthTextLength: "long" | "short" = "long"
+  monthTextLength: "long" | "short" = "long",
 ): string => {
   return formatDateSafely(timestamp, (ts: number) => {
     const date = new Date(ts);
@@ -55,7 +55,7 @@ export const getFormattedTime = (timestamp: number | undefined): string => {
         minute: "2-digit",
       });
     },
-    "[Invalid Time]"
+    "[Invalid Time]",
   );
 };
 
@@ -69,7 +69,7 @@ export const timestampToISOString = (timestamp: number | undefined): string => {
     (ts: number) => {
       return new Date(ts).toISOString();
     },
-    ""
+    "",
   );
 };
 
@@ -79,7 +79,7 @@ export const timestampToISOString = (timestamp: number | undefined): string => {
  */
 export const getLocalDateString = (
   date: Date,
-  separator: string = "-"
+  separator: string = "-",
 ): string => {
   return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
     .map((part) => String(part).padStart(2, "0"))
@@ -111,16 +111,16 @@ export const getFormattedDateTimeForFilename = (timestamp: number): string => {
       const day = String(date.getDate()).padStart(2, "0");
       const hours = String(date.getHours()).padStart(2, "0");
       const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${year}-${month}-${day}_${hours}-${minutes}`;
+      return `${year}-${month}-${day}_${hours}${minutes}`;
     },
-    "invalid-datetime"
+    "invalid-datetime",
   );
 };
 
 const formatDateSafely = (
   timestamp: number | undefined,
   formatter: (ts: number) => string,
-  fallback: string = "[Invalid Date]"
+  fallback: string = "[Invalid Date]",
 ): string => {
   if (timestamp === undefined || isNaN(timestamp) || timestamp < 0)
     return fallback;

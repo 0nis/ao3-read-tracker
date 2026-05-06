@@ -1,7 +1,5 @@
 import { FinishedStatus, ReadingStatus } from "../enums/works";
 
-// TODO in future issue:
-// Explore the idea of adding multiple "finished at" dates for rereads
 export interface FinishedWork {
   id: string;
   finishedAt: number;

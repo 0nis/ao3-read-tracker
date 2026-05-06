@@ -6,11 +6,11 @@ import { loadSymbolsAndRules } from "../../../core/library/helpers/row/symbols";
 import {
   InfoVisibilityOptions,
   InfoVisibilityOptionsManager,
-} from "../../../core/library/helpers/managers/info-visibility";
+} from "../../../core/library/helpers/managers/infoVisibility";
 import { filtersFromState, getStored } from "../../../core/library/helpers/gen";
 import { SectionId } from "../../../config";
 
-import { StorageService } from "../../../../../services/storage";
+import { StorageService } from "../../../../../services/storage/storage";
 import { getDateParts } from "../../../../../utils/date";
 import { SymbolId } from "../../../../../enums/symbols";
 import { SortDirection } from "../../../../../enums/ui";
@@ -22,7 +22,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../../types/storage";
-import { enumSelect } from "../../../../../utils/ui/forms";
+import { enumSelect } from "../../../../../ui/forms";
 import { ReadingStatus } from "../../../../../enums/works";
 import { localMemory } from "../../../../../services/memory";
 

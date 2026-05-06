@@ -1,6 +1,6 @@
 import type { WorkAction } from "../config";
 import type { WorksData } from "../../../data/models/works";
-import type { SafeServiceFor } from "../../../utils/storage";
+import type { SafeServiceFor } from "../../../shared/storage/safe";
 import type { VerticalPlacement } from "../../../enums/settings";
 
 export enum ButtonAction {
@@ -42,6 +42,6 @@ export interface ActionHandlerEntry<T extends { id: string }> {
   createForm: (
     data: Partial<T>,
     editing: boolean,
-    origin?: VerticalPlacement
+    origin?: VerticalPlacement,
   ) => void;
 }

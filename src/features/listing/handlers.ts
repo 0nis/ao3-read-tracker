@@ -1,10 +1,7 @@
-import { StorageService } from "../../services/storage";
-import {
-  extractWorkIdFromListingId,
-  getWorkById,
-  getWorksListFromListing,
-} from "../../utils/ao3";
-import { handleStorageRead } from "../../utils/storage";
+import { extractWorkIdFromListingId, getWorksListFromListing } from "./helpers";
+
+import { StorageService } from "../../services/storage/storage";
+import { handleStorageRead } from "../../shared/storage/handlers";
 import { WorkData } from "../../types/works";
 
 export async function getWorkStatusData(): Promise<
@@ -35,9 +32,4 @@ export async function getWorkStatusData(): Promise<
     inProgressWorks,
     ignoredWorks,
   };
-}
-
-export function getWork(workOrId: HTMLElement | string): HTMLElement | null {
-  if (typeof workOrId === "string") return getWorkById(workOrId);
-  return workOrId;
 }

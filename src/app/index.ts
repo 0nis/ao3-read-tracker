@@ -5,11 +5,11 @@ import { Listing } from "../features/listing";
 import { Options } from "../features/options";
 import { Work } from "../features/work";
 
-import { injectStyles } from "../utils/ui/dom";
+import { error } from "../shared/extension/logger";
+import { injectStyles } from "../utils/dom";
+import { initSrLive } from "../utils/srLive";
 
 import { CLASS_PREFIX } from "../constants/classes";
-import { initSrLive } from "../utils/ui/accessibility";
-import { error } from "../utils/extension";
 
 export const App = {
   async init() {

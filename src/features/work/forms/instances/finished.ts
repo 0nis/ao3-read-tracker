@@ -8,10 +8,10 @@ import {
   enumSelect,
   textarea,
   toggleSwitch,
-} from "../../../../utils/ui/forms";
+} from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { FinishedStatus } from "../../../../enums/works";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { FinishedWork } from "../../../../types/works";
 
@@ -71,7 +71,7 @@ const items: WorkFormItem<FinishedWork>[] = [
 export function createFinishedWorkForm(
   data: Partial<FinishedWork>,
   editing: boolean,
-  origin?: VerticalPlacement
+  origin?: VerticalPlacement,
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.FINISHED,

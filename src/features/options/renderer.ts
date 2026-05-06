@@ -3,11 +3,14 @@ import { NavGroup, NavItem } from "./types";
 import { buildHeader } from "./core/components/header/component";
 import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
-import { error, addGlobalListener, getManifest } from "../../utils/extension";
-import { hijackAo3Page } from "../../utils/ao3";
-import { el } from "../../utils/ui/dom";
-import { CLASS_PREFIX } from "../../constants/classes";
+import { hijackAo3Page } from "../../shared/ao3";
+import { getExtensionName } from "../../shared/extension/manifest";
+import { error } from "../../shared/extension/logger";
+import { addGlobalListener } from "../../utils/listeners";
+import { el } from "../../utils/dom";
+
 import { LOADED_EVENT } from "../../constants/global";
+import { CLASS_PREFIX } from "../../constants/classes";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -17,9 +20,8 @@ export type SectionElements = {
 };
 
 export async function render(): Promise<void> {
-  const extensionName =
-    getManifest().data?.name?.replace(/^AO3\s+/i, "") || "Read Tracker";
-  const main = hijackAo3Page(`Settings - ${extensionName}`, "settings-page");
+  const extensionName = getExtensionName();
+  const main = hijackAo3Page(`Options - ${extensionName}`, "options-page");
   if (!main) {
     error("Failed to render options page: #main element not found");
     return;

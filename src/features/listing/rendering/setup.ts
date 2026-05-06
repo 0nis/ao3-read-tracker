@@ -4,12 +4,12 @@ import { removeClasses } from "./marks/classes";
 import { unCollapse } from "./display/collapse";
 import { unhide } from "./display/hide";
 
+import { addStatusElement, createHiddenWorksCountEl } from "./status";
 import { applyMarksToWork } from "./apply";
 import { getWorkStatusData } from "../handlers";
+import { extractWorkIdFromListingId } from "../helpers";
 
 import { settingsCache } from "../../../services/cache";
-import { extractWorkIdFromListingId } from "../../../utils/ao3";
-import { addStatusElement, createHiddenWorksCountEl } from "./status";
 
 /**
  * Applies work states visually to all relevant works on the current listing page.

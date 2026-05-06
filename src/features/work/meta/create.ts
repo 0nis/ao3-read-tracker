@@ -1,13 +1,13 @@
 import { getClass } from "./setup";
 import { WorkMetaDetailsList, WorkMetaGroup } from "./types";
-import { el } from "../../../utils/ui/dom";
+import { el } from "../../../utils/dom";
 
 export function addWorkMetaGroupToArea(
   area: HTMLElement,
   group: {
     termEl: HTMLElement;
     descEl: HTMLElement;
-  }
+  },
 ): void {
   area.appendChild(group.termEl);
   area.appendChild(group.descEl);
@@ -30,12 +30,12 @@ export function createWorkMetaGroupElements({
           className || ""
         } ${getClass()} ${getClass()}-label ${getClass()}--${key}`,
       },
-      [`${label}: `]
+      [`${label}: `],
     ),
     descEl: el(
       "dd",
       { className: `${className || ""} ${getClass()} ${getClass()}--${key}` },
-      children
+      children,
     ),
   };
 }
@@ -61,6 +61,6 @@ export function createWorkMetaDetailsList({
   return el(
     "dl",
     { className: `stats ${getClass()}__list ${getClass()}__list--${key}` },
-    dlChildren
+    dlChildren,
   );
 }

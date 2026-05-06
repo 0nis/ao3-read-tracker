@@ -2,9 +2,9 @@ import { createWorkForm } from "../base";
 import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 
-import { textarea } from "../../../../utils/ui/forms";
+import { textarea } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
-import { FormItemType } from "../../../../enums/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { IgnoredWork } from "../../../../types/works";
 
 const items: WorkFormItem<IgnoredWork>[] = [
@@ -14,14 +14,14 @@ const items: WorkFormItem<IgnoredWork>[] = [
     label: "Reason for ignoring",
     description:
       "A private reason that will appear in the work summary block for this work.",
-    input: textarea(3),
+    input: textarea({ rows: 3 }),
   },
 ];
 
 export function createIgnoreWorkForm(
   data: Partial<IgnoredWork>,
   editing: boolean,
-  origin?: VerticalPlacement
+  origin?: VerticalPlacement,
 ): HTMLElement {
   return createWorkForm({
     id: WorkAction.IGNORE,

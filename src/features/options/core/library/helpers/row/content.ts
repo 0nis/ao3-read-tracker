@@ -3,7 +3,7 @@ import { ListRowTypeMap } from "../../config";
 import { SupplementaryRowInformation } from "../../types";
 import { getListClass } from "../../components/list";
 
-import { el } from "../../../../../../utils/ui/dom";
+import { el } from "../../../../../../utils/dom";
 
 export interface InnerElementParams extends SupplementaryRowInformation {
   item: ListRowTypeMap[keyof ListRowTypeMap];

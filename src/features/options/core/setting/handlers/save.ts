@@ -1,8 +1,8 @@
 import { SETTINGS_SAVE_MAP, SettingsSectionTypeMap } from "../config";
 import { SettingsSectionConfig } from "../types";
 
-import { handleStorageWrite } from "../../../../../utils/storage";
-import { extractFormValues } from "../../../../../utils/ui/forms";
+import { handleStorageWrite } from "../../../../../shared/storage/handlers";
+import { extractFormValues } from "../../../../../ui/forms";
 
 export async function saveSettingsData<K extends keyof SettingsSectionTypeMap>({
   cfg,

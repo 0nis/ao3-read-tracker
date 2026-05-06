@@ -1,4 +1,4 @@
-import { warn } from "../utils/extension";
+import { warn } from "../shared/extension/logger";
 
 export class LocalMemoryService {
   /** Persist a value under the given key */

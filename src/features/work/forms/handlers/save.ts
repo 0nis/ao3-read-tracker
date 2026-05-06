@@ -1,30 +1,26 @@
 import { FORMS_SAVE_MAP } from "../config";
 import { WorkFormConfig } from "../types";
-import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
-import {
-  getDefaultPayload,
-  getWorkTitleForNotifications,
-  placeNotice,
-} from "../../helpers";
 
-import {
-  createFlashNotice,
-  extractFormValues,
-} from "../../../../utils/ui/forms";
-import { handleStorageWrite } from "../../../../utils/storage";
+import { ACTION_MESSAGES_MAP, WorkActionTypeMap } from "../../config";
+import { createNoticeHandler } from "../../helpers";
+import { getDefaultPayload } from "../../payload";
+
+import { handleStorageWrite } from "../../../../shared/storage/handlers";
+import { getWorkTitleForNotifications } from "../../../../shared/ao3";
+import { extractFormValues } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 
 export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
   cfg: WorkFormConfig<WorkActionTypeMap[K]> & { id: K },
   saveBtn: HTMLButtonElement,
-  origin?: VerticalPlacement
+  origin?: VerticalPlacement,
 ): Promise<void> {
   try {
     const saveMap = FORMS_SAVE_MAP[cfg.id];
     const msgMap = ACTION_MESSAGES_MAP[cfg.id];
     if (!saveMap || !msgMap)
       return Promise.reject(
-        new Error(`No save map or message map for form id: ${cfg.id}`)
+        new Error(`No save map or message map for form id: ${cfg.id}`),
       );
 
     const values = extractFormValues(cfg.items);
@@ -43,14 +39,7 @@ export async function saveWorkFormData<K extends keyof WorkActionTypeMap>(
       successMsg: success.replace("%title%", title),
       errorMsg: error.replace("%title%", title),
       loadingEl: saveBtn,
-      onSuccess(message) {
-        createFlashNotice(message, {
-          appendNotice: (main: HTMLElement, notice: HTMLElement) => {
-            placeNotice(main, notice, origin || VerticalPlacement.TOP);
-          },
-          positionId: origin || VerticalPlacement.TOP,
-        });
-      },
+      onSuccess: createNoticeHandler(saveBtn),
       enforceMinDelay: true,
     });
   } catch (err) {

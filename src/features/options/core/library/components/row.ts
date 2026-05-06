@@ -1,9 +1,4 @@
-import { getWorkLinkFromId } from "../../../../../utils/ao3";
-import { capitalizeFirstLetter } from "../../../../../utils/string";
-import { handleStorageWrite } from "../../../../../utils/storage";
-import { showConfirm } from "../../../../../utils/ui/dialogs";
-import { el } from "../../../../../utils/ui/dom";
-import { getWorkTitleForNotifications } from "../../../../work/helpers";
+import { getListClass } from "./list";
 import {
   LIST_ROW_MESSAGES_MAP,
   LIST_ROW_TYPE_SERVICE_MAP,
@@ -18,7 +13,13 @@ import {
 import { createDeleteBtn, createLinkBtn } from "../helpers/row/actions";
 import { createSymbolElement } from "../helpers/row/symbols";
 import { SupplementaryRowInformation } from "../types";
-import { getListClass } from "./list";
+
+import { handleStorageWrite } from "../../../../../shared/storage/handlers";
+import { getWorkTitleForNotifications } from "../../../../../shared/ao3";
+import { capitalizeFirstLetter } from "../../../../../utils/string";
+import { showConfirm } from "../../../../../shared/extension/dialogs";
+import { el } from "../../../../../utils/dom";
+import { AO3_WORK_BASE_URL } from "../../../../../constants/global";
 
 export interface ListRow<T extends keyof ListRowTypeMap> {
   type: T;
@@ -159,7 +160,7 @@ async function createActionButtons(
 ): Promise<HTMLElement[]> {
   const buttonPromises: Promise<HTMLElement>[] = [];
 
-  buttonPromises.push(createLinkBtn(getWorkLinkFromId(itemId)));
+  buttonPromises.push(createLinkBtn(`${AO3_WORK_BASE_URL}/${itemId}`));
 
   const services = LIST_ROW_TYPE_SERVICE_MAP[type];
   const messages = LIST_ROW_MESSAGES_MAP[type];

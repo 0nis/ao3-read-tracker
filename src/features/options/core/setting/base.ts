@@ -7,8 +7,9 @@ import { createSettingsSectionSaveButton } from "./components/submit";
 import { createSectionWrapper } from "../components/section/component";
 
 import { settingsCache } from "../../../../services/cache";
-import { el, injectStyles, setButtonOrigin } from "../../../../utils/ui/dom";
-import { populateFormValues } from "../../../../utils/ui/forms";
+import { setButtonOrigin } from "../../../../shared/attributes";
+import { el, injectStyles } from "../../../../utils/dom";
+import { populateFormValues } from "../../../../ui/forms";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 

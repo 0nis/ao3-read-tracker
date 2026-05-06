@@ -1,5 +1,5 @@
+import { getCurrentChapterFromWorkPage } from "./helpers";
 import { IgnoredWork, InProgressWork, FinishedWork } from "../../types/works";
-import { getCurrentChapterFromWorkPage } from "../../utils/ao3";
 
 export enum WorkAction {
   FINISHED = `finished`,
@@ -26,7 +26,7 @@ export interface WorkActionTypeMap {
 
 export const ACTION_DEFAULTS_MAP: {
   [K in keyof WorkActionTypeMap]: (
-    data: Partial<WorkActionTypeMap[K]>
+    data: Partial<WorkActionTypeMap[K]>,
   ) => Partial<WorkActionTypeMap[K]>;
 } = {
   finished: (data) => ({

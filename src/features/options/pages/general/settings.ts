@@ -3,8 +3,8 @@ import { SettingsSectionItem } from "../../core/setting/types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { text } from "../../../../utils/ui/forms";
-import { FormItemType } from "../../../../enums/forms";
+import { text } from "../../../../ui/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { GeneralSettings } from "../../../../types/settings";
 
 const items: SettingsSectionItem<GeneralSettings>[] = [

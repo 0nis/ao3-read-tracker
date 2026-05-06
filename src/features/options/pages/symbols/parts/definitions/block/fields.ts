@@ -2,14 +2,14 @@ import { getLabelFromType, setFeedback } from "./helpers";
 import { BlockContext, BlockField } from "./types";
 import { getClass, ACCEPTED_IMAGE_TYPES } from "../../../section";
 
-import { el } from "../../../../../../../utils/ui/dom";
-import { renderSymbolContentById } from "../../../../../../../utils/ui/symbols";
+import { el } from "../../../../../../../utils/dom";
+import { renderSymbolContentById } from "../../../../../../../ui/components/symbols";
 import {
   getImageSelectorElements,
   getInputElement,
   number,
   text,
-} from "../../../../../../../utils/ui/forms";
+} from "../../../../../../../ui/forms";
 import { SymbolId } from "../../../../../../../enums/symbols";
 import {
   ABBREVIATION,

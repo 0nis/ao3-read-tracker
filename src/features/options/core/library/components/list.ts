@@ -11,9 +11,9 @@ import { SectionConfig } from "../../../types";
 import { createSectionWrapper } from "../../components/section/component";
 
 import { localMemory } from "../../../../../services/memory";
-import { handleStorageRead } from "../../../../../utils/storage";
-import { reportSrLive } from "../../../../../utils/ui/accessibility";
-import { el, injectStyles } from "../../../../../utils/ui/dom";
+import { handleStorageRead } from "../../../../../shared/storage/handlers";
+import { reportSrLive } from "../../../../../utils/srLive";
+import { el, injectStyles } from "../../../../../utils/dom";
 import { SortDirection } from "../../../../../enums/ui";
 import { CLASS_PREFIX } from "../../../../../constants/classes";
 import {
@@ -22,7 +22,7 @@ import {
   PaginatedResult,
   StorageResult,
 } from "../../../../../types/storage";
-import { enumSelect, number, select } from "../../../../../utils/ui/forms";
+import { enumSelect, number, select } from "../../../../../ui/forms";
 
 export const getListClass = () => `${CLASS_PREFIX}__list`;
 

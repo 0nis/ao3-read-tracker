@@ -1,36 +1,34 @@
-import { ACTION_DEFAULTS_MAP, WorkActionTypeMap } from "./config";
-
-import { getIdFromUrl, getTitleFromWorkPage } from "../../utils/ao3";
-import { warn } from "../../utils/extension";
+import { warn } from "../../shared/extension/logger";
+import { getButtonOrigin } from "../../shared/attributes";
 import { VerticalPlacement } from "../../enums/settings";
+import { createFlashNotice } from "../../ui/forms";
 
-export const getWorkTitleForNotifications = (
-  title: string | undefined
-): string => {
-  return String(title) || "this work";
-};
+export function getTitleFromWorkPage(): string | null {
+  const titleElement = document.querySelector("h2.title.heading");
+  if (!titleElement || !titleElement.textContent) {
+    warn("Could not find work title element");
+    return null;
+  }
+  return titleElement.textContent.trim();
+}
 
-export const getDefaultPayload = <K extends keyof WorkActionTypeMap>(
-  action: K,
-  data: Partial<WorkActionTypeMap[K]>
-): WorkActionTypeMap[K] => {
-  const id = data.id || getIdFromUrl();
-  const title = getTitleFromWorkPage() ?? undefined;
-  if (!id) throw new Error("No id found for work");
-
-  const defaults = ACTION_DEFAULTS_MAP[action](data);
-  return {
-    ...defaults,
-    ...data,
-    id,
-    title: title || data.title || "Untitled",
-  } as WorkActionTypeMap[K];
-};
+export function getCurrentChapterFromWorkPage(options?: {
+  suppressWarnings?: boolean;
+}): number | null {
+  const titleElement = document.querySelector("h3.title");
+  if (!titleElement) {
+    if (!options?.suppressWarnings)
+      warn("Could not find chapter title element");
+    return null;
+  }
+  const chapterMatch = titleElement.textContent?.match(/Chapter (\d+)/);
+  return chapterMatch ? parseInt(chapterMatch[1]) : null;
+}
 
 export function placeNotice(
   main: HTMLElement,
   notice: HTMLElement,
-  placement: VerticalPlacement
+  placement: VerticalPlacement,
 ) {
   if (placement === VerticalPlacement.BOTTOM) {
     const el = main.querySelector("#feedback")?.querySelector("ul.actions");
@@ -40,9 +38,22 @@ export function placeNotice(
     }
 
     warn(
-      "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead."
+      "Could not find #feedback.ul.actions to insert flash notice after. Prepending to main instead.",
     );
   }
 
   main.prepend(notice);
+}
+
+export function createNoticeHandler(btn?: HTMLElement) {
+  const origin = btn ? getButtonOrigin(btn) : VerticalPlacement.TOP;
+
+  return (message: string) => {
+    createFlashNotice(message, {
+      appendNotice: (main, notice) => {
+        placeNotice(main, notice, origin);
+      },
+      positionId: origin,
+    });
+  };
 }

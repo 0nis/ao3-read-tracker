@@ -1,14 +1,14 @@
 import { AsyncCache } from "./abstract";
-import { StorageService } from "../storage";
+import { StorageService } from "../storage/storage";
 
-import { handleStorageRead } from "../../utils/storage";
+import { handleStorageRead } from "../../shared/storage/handlers";
 import { DEFAULT_SYMBOL_RECORDS } from "../../constants/symbols";
 import { SymbolData } from "../../types/symbols";
 
 export class SymbolsCache extends AsyncCache<SymbolData> {
   protected async load(): Promise<SymbolData> {
     const defaultData = Object.fromEntries(
-      DEFAULT_SYMBOL_RECORDS.map((r) => [r.id, r])
+      DEFAULT_SYMBOL_RECORDS.map((r) => [r.id, r]),
     );
 
     return (await handleStorageRead(StorageService.symbolRecords.get(), {

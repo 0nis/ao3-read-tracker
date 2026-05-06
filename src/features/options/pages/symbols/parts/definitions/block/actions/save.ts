@@ -2,10 +2,10 @@ import { BlockContext } from "../types";
 import { setFeedback } from "../helpers";
 import { getClass } from "../../../../section";
 
-import { StorageService } from "../../../../../../../../services/storage";
-import { el } from "../../../../../../../../utils/ui/dom";
-import { handleStorageWrite } from "../../../../../../../../utils/storage";
-import { getInputValue } from "../../../../../../../../utils/ui/forms";
+import { StorageService } from "../../../../../../../../services/storage/storage";
+import { el } from "../../../../../../../../utils/dom";
+import { handleStorageWrite } from "../../../../../../../../shared/storage/handlers";
+import { getInputValue } from "../../../../../../../../ui/forms";
 import { CLASS_PREFIX } from "../../../../../../../../constants/classes";
 import { ABBREVIATION } from "../../../../../../../../constants/global";
 import { SymbolRecord } from "../../../../../../../../types/symbols";
