@@ -18,11 +18,13 @@ import {
 export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
   id: SettingsType.FINISHED,
   simpleModeEnabled: false,
-  defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  rereadWorthyDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  completedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  droppedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  dormantDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  displayModes: {
+    default: DisplayMode.COLLAPSE_GENTLE,
+    rereadWorthy: DisplayMode.DEFAULT,
+    statusCompleted: DisplayMode.COLLAPSE_GENTLE,
+    statusDropped: DisplayMode.COLLAPSE_GENTLE,
+    statusDormant: DisplayMode.COLLAPSE_GENTLE,
+  },
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
   buttonPlacement: VerticalPlacement.TOP,
 };
@@ -30,14 +32,18 @@ export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
 export const DEFAULT_IN_PROGRESS_SETTINGS: InProgressSettings = {
   id: SettingsType.IN_PROGRESS,
   simpleModeEnabled: false,
-  defaultDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  activeDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  pausedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  waitingDisplayMode: DisplayMode.COLLAPSE_GENTLE,
-  newChaptersAvailableDisplayMode: DisplayMode.DEFAULT,
+  displayModes: {
+    default: DisplayMode.COLLAPSE_GENTLE,
+    statusActive: DisplayMode.COLLAPSE_GENTLE,
+    statusPaused: DisplayMode.COLLAPSE_GENTLE,
+    statusWaiting: DisplayMode.COLLAPSE_GENTLE,
+    newChaptersAvailable: DisplayMode.DEFAULT,
+  },
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
-  buttonPlacement: VerticalPlacement.TOP,
-  updateButtonPlacement: VerticalPlacement.BOTTOM,
+  buttonPlacements: {
+    startReading: VerticalPlacement.TOP,
+    updateReadProgress: VerticalPlacement.BOTTOM,
+  },
 };
 
 export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
@@ -55,10 +61,10 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
 export const DEFAULT_DISPLAYMODE_SETTINGS: DisplayModeSettings = {
   id: SettingsType.DISPLAY_MODES,
   priorities: {
-    [DisplayMode.DEFAULT]: 70,
-    [DisplayMode.HIDE]: 100,
-    [DisplayMode.COLLAPSE_GENTLE]: 80,
-    [DisplayMode.COLLAPSE_AGGRESSIVE]: 90,
+    [DisplayMode.DEFAULT]: 100,
+    [DisplayMode.HIDE]: 90,
+    [DisplayMode.COLLAPSE_GENTLE]: 70,
+    [DisplayMode.COLLAPSE_AGGRESSIVE]: 80,
   },
 };
 
