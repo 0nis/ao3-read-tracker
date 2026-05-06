@@ -1,5 +1,5 @@
 import { FormItemType } from "./enums";
-import { FormField, FormGroup, FormItem } from "./types";
+import { FormField, FormGroup, FormItem, LeafPath } from "./types";
 
 /**
  * Walks through form items recursively and applies a callback to each form field.
@@ -39,11 +39,12 @@ export function getFormItemByDataField<
   FIELD extends FormField<T>,
   GROUP extends FormGroup<T, FIELD, GROUP>,
 >(
-  datafield: keyof T,
+  datafield: LeafPath<T>,
   items: Array<FormItem<T, FIELD, GROUP>>,
 ): FIELD | undefined {
-  return items
-    .filter((i) => i.type === FormItemType.GROUP)
-    .flatMap((g) => (g as any).fields)
-    .find((f) => f.dataField === datafield);
+  let found: FIELD | undefined;
+  walkFormItems(items, (field) => {
+    if (field.dataField === datafield) found = field;
+  });
+  return found;
 }

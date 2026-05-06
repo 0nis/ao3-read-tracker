@@ -1,4 +1,5 @@
 import { walkFormItems } from "./items";
+import { getByPath, setByPath } from "./utils";
 import { FormField, FormGroup, FormItem } from "./types";
 
 import { getLocalDateTimeString } from "../../utils/date";
@@ -21,7 +22,11 @@ export function extractFormValues<
 >(items: Array<FormItem<T, FIELD, GROUP>>): Partial<T> {
   const result: Partial<T> = {};
   walkFormItems<T, FIELD, GROUP>(items, (field) => {
-    result[field.dataField!] = getInputValue(field.input!);
+    setByPath(
+      result as Record<string, any>,
+      field.dataField,
+      getInputValue(field.input),
+    );
   });
   return result;
 }
@@ -43,7 +48,7 @@ export function populateFormValues<
   GROUP extends FormGroup<T, FIELD, GROUP>,
 >(items: Array<FormItem<T, FIELD, GROUP>>, data: Partial<T>) {
   walkFormItems<T, FIELD, GROUP>(items, (field) => {
-    const value = data[field.dataField!];
+    const value = getByPath(data, field.dataField);
     setInputValue(field.input!, value);
   });
 }

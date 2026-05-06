@@ -6,7 +6,7 @@ interface FormItemBase<T> {
 
 export interface FormField<T> extends FormItemBase<T> {
   type: FormItemType.FIELD;
-  dataField: keyof T;
+  dataField: LeafPath<T>;
   input: HTMLElement;
   label: string;
   description?: string;
@@ -35,3 +35,19 @@ export interface FormConfig<
   data: Partial<T>;
   items: Array<FormItem<T, FIELD, GROUP>>;
 }
+
+type IsPlainObject<T> = T extends object
+  ? T extends any[]
+    ? false
+    : T extends Function
+      ? false
+      : T extends Date
+        ? false
+        : true
+  : false;
+
+type LeafPath<T> = {
+  [K in keyof T & string]: IsPlainObject<T[K]> extends true
+    ? `${K}.${LeafPath<T[K]>}`
+    : K;
+}[keyof T & string];
