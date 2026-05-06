@@ -22,6 +22,8 @@ export function addClasses(params: ApplyMarksParams) {
 
 /** Removes any classes added by this module from a work element. */
 export function removeClasses(element: HTMLElement) {
-  for (const rule of classRuleCollector.collect({}))
+  for (const rule of classRuleCollector.collect({
+    states: {},
+  }))
     element.classList.remove(rule.className);
 }

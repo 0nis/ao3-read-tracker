@@ -32,9 +32,12 @@ export async function markWorksOnPage(): Promise<void> {
     if (!id) continue;
     await applyMarksToWork({
       element: el,
-      finishedWork: finishedWorks[id],
-      inProgressWork: inProgressWorks[id],
-      ignoredWork: ignoredWorks[id],
+      states: {
+        finishedWork: finishedWorks[id],
+        inProgressWork: inProgressWorks[id],
+        ignoredWork: ignoredWorks[id],
+      },
+      modules: settings.generalSettings.modules,
       settings,
     });
   }
@@ -65,9 +68,12 @@ export async function updateWorksOnPage(): Promise<void> {
 
     await applyMarksToWork({
       element: el,
-      finishedWork: finishedWorks[id],
-      inProgressWork: inProgressWorks[id],
-      ignoredWork: ignoredWorks[id],
+      states: {
+        finishedWork: finishedWorks[id],
+        inProgressWork: inProgressWorks[id],
+        ignoredWork: ignoredWorks[id],
+      },
+      modules: settings.generalSettings.modules,
       settings,
     });
   }

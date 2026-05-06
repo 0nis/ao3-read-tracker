@@ -1,9 +1,14 @@
 import { BaseRule, BaseRuleCollector } from "../base";
+import { cleanStates } from "../helpers";
 
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { WorkStateData } from "../../../types/works";
+import { ModuleStates } from "../../../types/settings";
 
-export interface WorkNotesRuleParams extends WorkStateData {}
+export interface WorkNotesRuleParams {
+  states: WorkStateData;
+  modules?: ModuleStates;
+}
 
 interface WorkNotesTextRule extends BaseRule {
   label: string;
@@ -15,11 +20,11 @@ class WorkNotesRuleCollector extends BaseRuleCollector<
   WorkNotesRuleParams,
   WorkNotesTextRule
 > {
-  collect({
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
-  }: WorkNotesRuleParams): WorkNotesTextRule[] {
+  collect({ states, modules }: WorkNotesRuleParams): WorkNotesTextRule[] {
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
     return [
       {
         label: "Ignored Reason",

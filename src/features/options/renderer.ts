@@ -29,23 +29,23 @@ export async function render(): Promise<void> {
   }
   main.style.overflow = "hidden";
 
-  const { activeModules } = (await settingsCache.get()).generalSettings;
+  const { modules } = (await settingsCache.get()).generalSettings;
 
   const header = buildHeader(extensionName);
 
   const entries = await Promise.all(
-    SECTION_CONFIG.filter(({ module }) => !module || activeModules[module]).map(
-      async ({ id, build, type }) => {
-        const element = await build();
-        return [id, { element, type }] as const;
-      },
-    ),
+    SECTION_CONFIG.filter(
+      ({ module }) => !module || modules[module].enabled,
+    ).map(async ({ id, build, type }) => {
+      const element = await build();
+      return [id, { element, type }] as const;
+    }),
   );
   const sections = Object.fromEntries(entries) as SectionElements;
 
   const navGroups: NavGroup[] = NAV_CONFIG.map((group) => {
     const items: NavItem[] = SECTION_CONFIG.filter(
-      ({ module }) => !module || activeModules[module],
+      ({ module }) => !module || modules[module].enabled,
     )
       .filter((section) => section.type === group.type)
       .map((section) => ({

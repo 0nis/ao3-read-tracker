@@ -10,6 +10,11 @@ import {
   SymbolFallbackType,
 } from "../enums/symbols";
 
+export type ModuleState = {
+  enabled: boolean;
+};
+export type ModuleStates = Record<ExtensionModule, ModuleState>;
+
 export interface FinishedSettings {
   id: string;
   simpleModeEnabled: boolean;
@@ -50,7 +55,7 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
-  activeModules: Record<ExtensionModule, boolean>;
+  modules: ModuleStates;
   nativeMarkAsReadReplacementLabel: string;
 }
 

@@ -1,5 +1,3 @@
-import type { WorkStateData } from "../../types/works";
-
 export interface BaseRule {
   /** Determines if the rule should be applied based on current parameters. */
   shouldApply: () => boolean;
@@ -11,7 +9,7 @@ export interface BaseRule {
  * Implemented by collectors that gather rules based on provided parameters.
  * Subclasses must implement {@link collect} to gather rules.
  *
- * @template Params - The type of parameters used to collect rules. Typically extends {@link WorkStateData}.
+ * @template Params - The type of parameters used to collect rules.
  * @template Rule - The type of rules being collected. Must extend {@link BaseRule}.
  */
 export abstract class BaseRuleCollector<Params, Rule extends BaseRule> {

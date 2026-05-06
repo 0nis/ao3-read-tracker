@@ -1,12 +1,16 @@
 import { BaseRule, BaseRuleCollector } from "./base";
+import { cleanStates } from "./helpers";
 
 import { SymbolDisplayMode, SymbolId } from "../../enums/symbols";
 import { FinishedStatus, ReadingStatus } from "../../enums/works";
 import { WorkStateData } from "../../types/works";
 import { SymbolData } from "../../types/symbols";
+import { ModuleStates } from "../../types/settings";
 
-export interface SymbolRuleParams extends WorkStateData {
+export interface SymbolRuleParams {
   symbols: SymbolData;
+  states: WorkStateData;
+  modules?: ModuleStates;
   details?: {
     latestChapter?: number;
   };
@@ -37,14 +41,18 @@ class SymbolRuleCollector extends BaseRuleCollector<
 > {
   collect({
     symbols,
-    finishedWork,
-    ignoredWork,
-    inProgressWork,
+    states,
+    modules,
     details,
     displayMode,
     options,
   }: SymbolRuleParams): SymbolRule[] {
     if (options?.enabled === false) return [];
+
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
 
     const getShowState = (mode?: SymbolDisplayMode) =>
       options?.showState ??

@@ -1,7 +1,7 @@
 export enum ExtensionModule {
-  FINISHED = "module_finished",
-  IN_PROGRESS = "module_in-progress",
-  IGNORED = "module_ignored",
+  FINISHED = "finishedModule",
+  IN_PROGRESS = "inProgressModule",
+  IGNORED = "ignoredModule",
 }
 
 export enum DisplayMode {

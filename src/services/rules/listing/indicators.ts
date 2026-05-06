@@ -1,9 +1,14 @@
 import { BaseRule, BaseRuleCollector } from "../base";
+import { cleanStates } from "../helpers";
 
 import { WorkState } from "../../../enums/works";
 import { WorkStateData } from "../../../types/works";
+import { ModuleStates } from "../../../types/settings";
 
-export interface TextIndicatorRuleParams extends WorkStateData {}
+export interface TextIndicatorRuleParams {
+  states: WorkStateData;
+  modules?: ModuleStates;
+}
 
 interface TextIndicatorRule extends BaseRule {
   workState: WorkState;
@@ -15,11 +20,11 @@ class TextIndicatorRuleCollector extends BaseRuleCollector<
   TextIndicatorRuleParams,
   TextIndicatorRule
 > {
-  collect({
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
-  }: TextIndicatorRuleParams): TextIndicatorRule[] {
+  collect({ states, modules }: TextIndicatorRuleParams): TextIndicatorRule[] {
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
     return [
       {
         workState: WorkState.IGNORED,

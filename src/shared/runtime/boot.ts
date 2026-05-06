@@ -49,7 +49,10 @@ async function initApp() {
   try {
     await App.init();
   } catch (err) {
-    throw new Error(createExtensionMsg(`Failed to initialize app: ${err}`));
+    reportExtensionFailure(
+      "⚠️ Extension %name% (v%version%) failed to initialize! ⚠️",
+      err,
+    );
   }
 }
 

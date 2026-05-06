@@ -1,7 +1,13 @@
 import { BaseRule, BaseRuleCollector } from "../base";
-import { WorkStateData } from "../../../types/works";
+import { cleanStates } from "../helpers";
 
-export interface StateMetaRuleParams extends WorkStateData {}
+import { WorkStateData } from "../../../types/works";
+import { ModuleStates } from "../../../types/settings";
+
+export interface StateMetaRuleParams {
+  states: WorkStateData;
+  modules?: ModuleStates;
+}
 
 interface StateMetaRule extends BaseRule {
   key: string;
@@ -13,11 +19,11 @@ class StateMetaRuleCollector extends BaseRuleCollector<
   StateMetaRuleParams,
   StateMetaRule
 > {
-  collect({
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
-  }: StateMetaRuleParams): StateMetaRule[] {
+  collect({ states, modules }: StateMetaRuleParams): StateMetaRule[] {
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
     return [
       {
         key: "finished",

@@ -59,10 +59,16 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
-  activeModules: {
-    [ExtensionModule.FINISHED]: true,
-    [ExtensionModule.IN_PROGRESS]: true,
-    [ExtensionModule.IGNORED]: true,
+  modules: {
+    [ExtensionModule.FINISHED]: {
+      enabled: true,
+    },
+    [ExtensionModule.IN_PROGRESS]: {
+      enabled: true,
+    },
+    [ExtensionModule.IGNORED]: {
+      enabled: true,
+    },
   },
   nativeMarkAsReadReplacementLabel: "",
 };

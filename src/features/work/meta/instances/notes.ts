@@ -1,11 +1,11 @@
 import { addWorkMetaGroupToArea, createWorkMetaGroupElements } from "../create";
+import { WorkContext } from "../setup";
 
 import { workNotesRuleCollector } from "../../../../services/rules";
 import { el } from "../../../../utils/dom";
-import { WorkStateData } from "../../../../types/works";
 
-export function addNotes(data: WorkStateData, area: HTMLElement): void {
-  const rules = workNotesRuleCollector.getActiveRules(data);
+export function addNotes(context: WorkContext, area: HTMLElement): void {
+  const rules = workNotesRuleCollector.getActiveRules(context);
   if (rules.length === 0) return;
 
   const noteEls = rules.map((rule) =>

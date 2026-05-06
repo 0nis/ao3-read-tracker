@@ -1,11 +1,14 @@
 import { BaseRule, BaseRuleCollector } from "../base";
+import { cleanStates } from "../helpers";
 
 import { DisplayMode } from "../../../enums/settings";
 import { FinishedStatus, ReadingStatus } from "../../../enums/works";
-import { SettingsData } from "../../../types/settings";
+import { ModuleStates, SettingsData } from "../../../types/settings";
 import { WorkStateData } from "../../../types/works";
 
-export interface DisplayRuleParams extends WorkStateData {
+export interface DisplayRuleParams {
+  states: WorkStateData;
+  modules?: ModuleStates;
   settings: SettingsData;
   details?: {
     latestChapter?: number;
@@ -22,12 +25,15 @@ class DisplayRuleCollector extends BaseRuleCollector<
   DisplayRule
 > {
   collect({
+    states,
+    modules,
     settings,
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
     details,
   }: DisplayRuleParams): DisplayRule[] {
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
     return [
       {
         name: "ignored (default)",
