@@ -1,4 +1,8 @@
-import { VerticalPlacement, DisplayMode, Modules } from "../enums/settings";
+import {
+  VerticalPlacement,
+  DisplayMode,
+  ExtensionModule,
+} from "../enums/settings";
 import {
   SymbolId,
   SymbolDisplayMode,
@@ -47,9 +51,9 @@ export interface IgnoreSettings {
 export interface GeneralSettings {
   id: string;
   activeModules: {
-    [Modules.FINISHED]: boolean;
-    [Modules.IN_PROGRESS]: boolean;
-    [Modules.IGNORED]: boolean;
+    [ExtensionModule.FINISHED]: boolean;
+    [ExtensionModule.IN_PROGRESS]: boolean;
+    [ExtensionModule.IGNORED]: boolean;
   };
   nativeMarkAsReadReplacementLabel: string;
 }

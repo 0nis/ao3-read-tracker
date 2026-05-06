@@ -1,5 +1,9 @@
 import { DEFAULT_SYMBOL_SIZE_EM } from "./global";
-import { VerticalPlacement, DisplayMode, Modules } from "../enums/settings";
+import {
+  VerticalPlacement,
+  DisplayMode,
+  ExtensionModule,
+} from "../enums/settings";
 import { SettingsType } from "../enums/settings";
 import {
   SymbolDisplayMode,
@@ -56,9 +60,9 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
   activeModules: {
-    [Modules.FINISHED]: true,
-    [Modules.IN_PROGRESS]: true,
-    [Modules.IGNORED]: true,
+    [ExtensionModule.FINISHED]: true,
+    [ExtensionModule.IN_PROGRESS]: true,
+    [ExtensionModule.IGNORED]: true,
   },
   nativeMarkAsReadReplacementLabel: "",
 };

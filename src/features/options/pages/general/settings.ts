@@ -6,7 +6,7 @@ import { settingsCache } from "../../../../services/cache";
 import { text, toggleSwitch } from "../../../../ui/forms";
 import { FormItemType } from "../../../../ui/forms/enums";
 import { GeneralSettings } from "../../../../types/settings";
-import { Modules } from "../../../../enums/settings";
+import { ExtensionModule } from "../../../../enums/settings";
 
 const items: SettingsSectionItem<GeneralSettings>[] = [
   {
@@ -21,21 +21,21 @@ const items: SettingsSectionItem<GeneralSettings>[] = [
         sectionId: SectionId.GENERAL_SETTINGS,
         label: "Finished Module",
         input: toggleSwitch(),
-        dataField: `activeModules.${Modules.FINISHED}`,
+        dataField: `activeModules.${ExtensionModule.FINISHED}`,
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.GENERAL_SETTINGS,
         label: "In Progress Module",
         input: toggleSwitch(),
-        dataField: `activeModules.${Modules.IN_PROGRESS}`,
+        dataField: `activeModules.${ExtensionModule.IN_PROGRESS}`,
       },
       {
         type: FormItemType.FIELD,
         sectionId: SectionId.GENERAL_SETTINGS,
         label: "Ignored Module",
         input: toggleSwitch(),
-        dataField: `activeModules.${Modules.IGNORED}`,
+        dataField: `activeModules.${ExtensionModule.IGNORED}`,
       },
     ],
   },
