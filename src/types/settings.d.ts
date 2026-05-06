@@ -40,6 +40,9 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
+  finishedModuleEnabled: boolean;
+  inProgressModuleEnabled: boolean;
+  ignoredModuleEnabled: boolean;
   nativeMarkAsReadReplacementLabel: string;
 }
 

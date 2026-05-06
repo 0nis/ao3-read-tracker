@@ -49,6 +49,9 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
+  finishedModuleEnabled: true,
+  inProgressModuleEnabled: true,
+  ignoredModuleEnabled: true,
   nativeMarkAsReadReplacementLabel: "",
 };
 
