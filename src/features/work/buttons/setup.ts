@@ -28,15 +28,17 @@ export async function setupButtons() {
   if (!navs.top && !navs.bottom) return;
 
   await setupAllActionButtons(settings, navs);
-  await setupUpdateReadProgressButton(
-    workId,
-    navs,
-    settings.inProgressSettings.updateButtonPlacement,
-  );
+  if (settings.generalSettings.modules.inProgressModule.enabled) {
+    await setupUpdateReadProgressButton(
+      workId,
+      navs,
+      settings.inProgressSettings.updateButtonPlacement,
+    );
+  }
 }
 
 async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
-  const cfg = buildActionButtonConfig();
+  const cfg = buildActionButtonConfig(settings.generalSettings.modules);
 
   for (const action of Object.keys(cfg) as WorkAction[]) {
     const s = ACTION_SETTINGS_MAP[action]?.(settings);
