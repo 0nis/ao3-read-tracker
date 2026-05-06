@@ -3,6 +3,7 @@ import { NavGroup, NavItem } from "./types";
 import { buildHeader } from "./core/components/header/component";
 import { buildNav, buildNavToggleEl } from "./core/components/nav/component";
 
+import { settingsCache } from "../../services/cache";
 import { hijackAo3Page } from "../../shared/ao3";
 import { getExtensionName } from "../../shared/extension/manifest";
 import { error } from "../../shared/extension/logger";
@@ -28,10 +29,14 @@ export async function render(): Promise<void> {
   }
   main.style.overflow = "hidden";
 
+  const { modules } = (await settingsCache.get()).generalSettings;
+
   const header = buildHeader(extensionName);
 
   const entries = await Promise.all(
-    SECTION_CONFIG.map(async ({ id, build, type }) => {
+    SECTION_CONFIG.filter(
+      ({ module }) => !module || modules[module].enabled,
+    ).map(async ({ id, build, type }) => {
       const element = await build();
       return [id, { element, type }] as const;
     }),
@@ -40,11 +45,13 @@ export async function render(): Promise<void> {
 
   const navGroups: NavGroup[] = NAV_CONFIG.map((group) => {
     const items: NavItem[] = SECTION_CONFIG.filter(
-      (section) => section.type === group.type,
-    ).map((section) => ({
-      id: section.id,
-      label: section.label,
-    }));
+      ({ module }) => !module || modules[module].enabled,
+    )
+      .filter((section) => section.type === group.type)
+      .map((section) => ({
+        id: section.id,
+        label: section.label,
+      }));
     return items.length ? { label: group.label, items } : null;
   }).filter((g): g is NavGroup => g !== null);
 

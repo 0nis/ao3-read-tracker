@@ -1,10 +1,19 @@
-import { VerticalPlacement, DisplayMode } from "../enums/settings";
+import {
+  VerticalPlacement,
+  DisplayMode,
+  ExtensionModule,
+} from "../enums/settings";
 import {
   SymbolId,
   SymbolDisplayMode,
   SymbolRenderMode,
   SymbolFallbackType,
 } from "../enums/symbols";
+
+export type ModuleState = {
+  enabled: boolean;
+};
+export type ModuleStates = Record<ExtensionModule, ModuleState>;
 
 export interface FinishedSettings {
   id: string;
@@ -31,10 +40,8 @@ export interface InProgressSettings {
     newChaptersAvailable: DisplayMode;
   };
   symbolDisplayMode: SymbolDisplayMode;
-  buttonPlacements: {
-    startReading: VerticalPlacement;
-    updateReadProgress: VerticalPlacement;
-  };
+  buttonPlacement: VerticalPlacement;
+  updateButtonPlacement: VerticalPlacement;
 }
 
 export interface IgnoreSettings {
@@ -46,6 +53,7 @@ export interface IgnoreSettings {
 
 export interface GeneralSettings {
   id: string;
+  modules: ModuleStates;
   nativeMarkAsReadReplacementLabel: string;
 }
 

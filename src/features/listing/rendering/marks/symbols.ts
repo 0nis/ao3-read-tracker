@@ -16,7 +16,11 @@ import type { DEFAULT_SYMBOL_RECORDS } from "../../../../constants/symbols";
  * Symbols are modified in {@link symbolRuleCollector} and {@link DEFAULT_SYMBOL_RECORDS}
  */
 export async function addSymbols(params: ApplyMarksParams) {
-  if (!params.finishedWork && !params.inProgressWork && !params.ignoredWork)
+  if (
+    !params.states.finishedWork &&
+    !params.states.inProgressWork &&
+    !params.states.ignoredWork
+  )
     return;
 
   injectStyles(
@@ -48,22 +52,15 @@ export function removeSymbols(element: HTMLElement) {
 }
 
 async function renderSymbols(
-  {
-    element,
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
-    settings,
-  }: ApplyMarksParams,
+  { element, states, modules, settings }: ApplyMarksParams,
   symbolIndicatorList: HTMLElement,
 ) {
   const symbols = await symbolsCache.get();
 
   const rules = symbolRuleCollector.getActiveRules({
     symbols,
-    finishedWork: finishedWork,
-    inProgressWork: inProgressWork,
-    ignoredWork: ignoredWork,
+    states,
+    modules,
     details: {
       latestChapter: getLatestChapterFromWorkListing(element) || undefined,
     },

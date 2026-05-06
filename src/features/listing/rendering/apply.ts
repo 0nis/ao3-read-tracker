@@ -9,11 +9,13 @@ import { settingsCache } from "../../../services/cache";
 import { getExtensionName } from "../../../shared/extension/manifest";
 import { ensureChild } from "../../../utils/dom";
 import { CLASS_PREFIX } from "../../../constants/classes";
-import { SettingsData } from "../../../types/settings";
+import { ModuleStates, SettingsData } from "../../../types/settings";
 import { WorkStateData } from "../../../types/works";
 
-export interface ApplyMarksParams extends WorkStateData {
+export interface ApplyMarksParams {
   element: HTMLElement;
+  states: WorkStateData;
+  modules: ModuleStates;
   settings: SettingsData;
 }
 
@@ -34,16 +36,14 @@ export async function applyMarksToWork(params: ApplyMarksParams) {
 
 async function adjustWorkDisplay({
   element,
-  finishedWork,
-  inProgressWork,
-  ignoredWork,
+  states,
+  modules,
   settings,
 }: ApplyMarksParams) {
   const rules = displayRuleCollector.collect({
+    states,
+    modules,
     settings,
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
   });
 
   const { displayModeSettings } = await settingsCache.get();

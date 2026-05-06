@@ -3,6 +3,7 @@ import { addDetails, addStates, addNotes } from "./instances";
 import { removeExtensionMetaFromArea } from "./helpers";
 
 import { StorageService } from "../../../services/storage/storage";
+import { settingsCache } from "../../../services/cache";
 import { getIdFromUrl } from "../../../shared/ao3";
 import { warn } from "../../../shared/extension/logger";
 import { handleStorageRead } from "../../../shared/storage/handlers";
@@ -11,8 +12,14 @@ import { injectStyles } from "../../../utils/dom";
 import { CLASS_PREFIX } from "../../../constants/classes";
 import { ABBREVIATION } from "../../../constants/global";
 import { WorkStateData } from "../../../types/works";
+import { ModuleStates } from "../../../types/settings";
 
 export const getClass = () => `${CLASS_PREFIX}__work-meta`;
+
+export type WorkContext = {
+  states: WorkStateData;
+  modules: ModuleStates;
+};
 
 export async function setupWorkMetaAreas(): Promise<void> {
   const id = getIdFromUrl();
@@ -42,11 +49,14 @@ async function addExtensionMetaToArea(
   id: string,
   workMetaArea: HTMLElement,
 ): Promise<void> {
-  const data = await getWorkStateData(id);
+  const context = {
+    states: await getWorkStateData(id),
+    modules: (await settingsCache.get()).generalSettings.modules,
+  };
 
-  addStates(data, workMetaArea);
-  addDetails(data, workMetaArea);
-  addNotes(data, workMetaArea);
+  addStates(context, workMetaArea);
+  addDetails(context, workMetaArea);
+  addNotes(context, workMetaArea);
 }
 
 async function getWorkStateData(id: string): Promise<WorkStateData> {

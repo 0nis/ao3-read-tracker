@@ -1,5 +1,9 @@
 import { DEFAULT_SYMBOL_SIZE_EM } from "./global";
-import { VerticalPlacement, DisplayMode } from "../enums/settings";
+import {
+  VerticalPlacement,
+  DisplayMode,
+  ExtensionModule,
+} from "../enums/settings";
 import { SettingsType } from "../enums/settings";
 import {
   SymbolDisplayMode,
@@ -40,10 +44,8 @@ export const DEFAULT_IN_PROGRESS_SETTINGS: InProgressSettings = {
     newChaptersAvailable: DisplayMode.DEFAULT,
   },
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
-  buttonPlacements: {
-    startReading: VerticalPlacement.TOP,
-    updateReadProgress: VerticalPlacement.BOTTOM,
-  },
+  buttonPlacement: VerticalPlacement.TOP,
+  updateButtonPlacement: VerticalPlacement.BOTTOM,
 };
 
 export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
@@ -55,6 +57,17 @@ export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
 
 export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
   id: SettingsType.GENERAL,
+  modules: {
+    [ExtensionModule.FINISHED]: {
+      enabled: true,
+    },
+    [ExtensionModule.IN_PROGRESS]: {
+      enabled: true,
+    },
+    [ExtensionModule.IGNORED]: {
+      enabled: true,
+    },
+  },
   nativeMarkAsReadReplacementLabel: "",
 };
 

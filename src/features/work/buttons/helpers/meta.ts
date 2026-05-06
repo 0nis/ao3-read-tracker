@@ -4,23 +4,24 @@ import { handleEditWork } from "../handlers/edit";
 import { handleSaveWork } from "../handlers/save";
 import { ButtonAction, ActionButtonMeta, ActionLabelSet } from "../types";
 
-import { WorkAction } from "../../config";
+import { WORK_ACTION_MODULE_MAP, WorkAction } from "../../config";
 
 import { CLASS_PREFIX } from "../../../../constants/classes";
+import { ModuleStates } from "../../../../types/settings";
 
 let _cache: Record<WorkAction, ActionButtonMeta> | null = null;
 
-export function buildActionButtonConfig(): Record<
-  WorkAction,
-  ActionButtonMeta
-> {
+export function buildActionButtonConfig(
+  modules: ModuleStates,
+): Record<WorkAction, ActionButtonMeta> {
   if (_cache) return _cache;
 
   _cache = Object.fromEntries(
-    Object.entries(ACTION_LABELS).map(([key, labels]) => [
-      key,
-      makeMeta(key as WorkAction, labels),
-    ]),
+    Object.entries(ACTION_LABELS)
+      .filter(
+        ([key]) => modules[WORK_ACTION_MODULE_MAP[key as WorkAction]].enabled,
+      )
+      .map(([key, labels]) => [key, makeMeta(key as WorkAction, labels)]),
   ) as Record<WorkAction, ActionButtonMeta>;
   return _cache as Record<WorkAction, ActionButtonMeta>;
 }

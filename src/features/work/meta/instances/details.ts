@@ -4,12 +4,12 @@ import {
   createWorkMetaGroupElements,
 } from "../create";
 import { getItemsFromRules } from "../helpers";
+import { WorkContext } from "../setup";
 
 import { detailsMetaRuleCollector } from "../../../../services/rules";
-import { WorkStateData } from "../../../../types/works";
 
-export function addDetails(data: WorkStateData, area: HTMLElement): void {
-  const rules = detailsMetaRuleCollector.getActiveRules(data);
+export function addDetails(context: WorkContext, area: HTMLElement): void {
+  const rules = detailsMetaRuleCollector.getActiveRules(context);
   if (rules.length === 0) return;
 
   addWorkMetaGroupToArea(
@@ -22,6 +22,6 @@ export function addDetails(data: WorkStateData, area: HTMLElement): void {
         items: getItemsFromRules(rules),
       }),
       className: "stats", // For native AO3 styling
-    })
+    }),
   );
 }

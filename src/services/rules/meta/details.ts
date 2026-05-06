@@ -1,10 +1,15 @@
 import { BaseRule, BaseRuleCollector } from "../base";
+import { cleanStates } from "../helpers";
 
 import { getFormattedDate } from "../../../utils/date";
-import { WorkStateData } from "../../../types/works";
 import { capitalizeFirstLetter } from "../../../utils/string";
+import { WorkStateData } from "../../../types/works";
+import { ModuleStates } from "../../../types/settings";
 
-export interface DetailsMetaRuleParams extends WorkStateData {}
+export interface DetailsMetaRuleParams {
+  states: WorkStateData;
+  modules?: ModuleStates;
+}
 
 interface DetailsMetaRule extends BaseRule {
   key: string;
@@ -16,11 +21,11 @@ class DetailsMetaRuleCollector extends BaseRuleCollector<
   DetailsMetaRuleParams,
   DetailsMetaRule
 > {
-  collect({
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
-  }: DetailsMetaRuleParams): DetailsMetaRule[] {
+  collect({ states, modules }: DetailsMetaRuleParams): DetailsMetaRule[] {
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
     return [
       {
         key: "ignored-at",

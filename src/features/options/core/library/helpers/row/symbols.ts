@@ -9,28 +9,35 @@ import { el } from "../../../../../../utils/dom";
 import { renderSymbolContent } from "../../../../../../ui/components/symbols";
 import { SymbolData } from "../../../../../../types/symbols";
 import { WorkStateData } from "../../../../../../types/works";
-import { SymbolSettings } from "../../../../../../types/settings";
 
 export async function loadSymbolsAndRules(
   id: string,
   { finishedWork, inProgressWork, ignoredWork }: WorkStateData,
 ) {
   const symbols = await symbolsCache.get();
-  const { finishedSettings, inProgressSettings } = await settingsCache.get();
+  const { finishedSettings, inProgressSettings, generalSettings } =
+    await settingsCache.get();
 
   const rules = symbolRuleCollector.getActiveRules({
     symbols,
-    finishedWork:
-      finishedWork ?? (await StorageService.finishedWorks.getById(id))?.data,
-    inProgressWork:
-      inProgressWork ??
-      (await StorageService.inProgressWorks.getById(id))?.data,
-    ignoredWork:
-      ignoredWork ?? (await StorageService.ignoredWorks.getById(id))?.data,
+
+    states: {
+      finishedWork:
+        finishedWork ?? (await StorageService.finishedWorks.getById(id))?.data,
+      inProgressWork:
+        inProgressWork ??
+        (await StorageService.inProgressWorks.getById(id))?.data,
+      ignoredWork:
+        ignoredWork ?? (await StorageService.ignoredWorks.getById(id))?.data,
+    },
+
+    modules: generalSettings.modules,
+
     displayMode: {
       finished: finishedSettings.symbolDisplayMode,
       inProgress: inProgressSettings.symbolDisplayMode,
     },
+
     options: { showState: true, showStatus: true },
   });
 

@@ -1,10 +1,14 @@
 import { BaseRule, BaseRuleCollector } from "../base";
+import { cleanStates } from "../helpers";
 
 import * as Classes from "../../../constants/classes";
 import { FinishedStatus, ReadingStatus } from "../../../enums/works";
 import { WorkStateData } from "../../../types/works";
+import { ModuleStates } from "../../../types/settings";
 
-export interface ClassRuleParams extends WorkStateData {
+export interface ClassRuleParams {
+  states: WorkStateData;
+  modules?: ModuleStates;
   details?: {
     latestChapter?: number;
   };
@@ -15,12 +19,11 @@ interface ClassRule extends BaseRule {
 }
 
 class ClassRuleCollector extends BaseRuleCollector<ClassRuleParams, ClassRule> {
-  collect({
-    finishedWork,
-    inProgressWork,
-    ignoredWork,
-    details,
-  }: ClassRuleParams): ClassRule[] {
+  collect({ states, modules, details }: ClassRuleParams): ClassRule[] {
+    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
+      states,
+      modules,
+    );
     return [
       {
         className: Classes.FINISHED_CLASS,

@@ -1,3 +1,9 @@
+export enum ExtensionModule {
+  FINISHED = "finishedModule",
+  IN_PROGRESS = "inProgressModule",
+  IGNORED = "ignoredModule",
+}
+
 export enum DisplayMode {
   DEFAULT = "default",
   HIDE = "hide",
