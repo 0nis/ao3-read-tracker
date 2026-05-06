@@ -40,10 +40,8 @@ export interface InProgressSettings {
     newChaptersAvailable: DisplayMode;
   };
   symbolDisplayMode: SymbolDisplayMode;
-  buttonPlacements: {
-    startReading: VerticalPlacement;
-    updateReadProgress: VerticalPlacement;
-  };
+  buttonPlacement: VerticalPlacement;
+  updateButtonPlacement: VerticalPlacement;
 }
 
 export interface IgnoreSettings {

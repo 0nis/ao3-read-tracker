@@ -44,10 +44,8 @@ export const DEFAULT_IN_PROGRESS_SETTINGS: InProgressSettings = {
     newChaptersAvailable: DisplayMode.DEFAULT,
   },
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
-  buttonPlacements: {
-    startReading: VerticalPlacement.TOP,
-    updateReadProgress: VerticalPlacement.BOTTOM,
-  },
+  buttonPlacement: VerticalPlacement.TOP,
+  updateButtonPlacement: VerticalPlacement.BOTTOM,
 };
 
 export const DEFAULT_IGNORE_SETTINGS: IgnoreSettings = {
