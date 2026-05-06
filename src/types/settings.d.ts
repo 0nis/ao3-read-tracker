@@ -9,11 +9,13 @@ import {
 export interface FinishedSettings {
   id: string;
   simpleModeEnabled: boolean;
-  defaultDisplayMode: DisplayMode;
-  rereadWorthyDisplayMode: DisplayMode;
-  completedDisplayMode: DisplayMode;
-  droppedDisplayMode: DisplayMode;
-  dormantDisplayMode: DisplayMode;
+  displayModes: {
+    default: DisplayMode;
+    rereadWorthy: DisplayMode;
+    statusCompleted: DisplayMode;
+    statusDropped: DisplayMode;
+    statusDormant: DisplayMode;
+  };
   symbolDisplayMode: SymbolDisplayMode;
   buttonPlacement: VerticalPlacement;
 }
@@ -21,14 +23,18 @@ export interface FinishedSettings {
 export interface InProgressSettings {
   id: string;
   simpleModeEnabled: boolean;
-  defaultDisplayMode: DisplayMode;
-  activeDisplayMode: DisplayMode;
-  pausedDisplayMode: DisplayMode;
-  waitingDisplayMode: DisplayMode;
-  newChaptersAvailableDisplayMode: DisplayMode;
+  displayModes: {
+    default: DisplayMode;
+    statusActive: DisplayMode;
+    statusPaused: DisplayMode;
+    statusWaiting: DisplayMode;
+    newChaptersAvailable: DisplayMode;
+  };
   symbolDisplayMode: SymbolDisplayMode;
-  buttonPlacement: VerticalPlacement;
-  updateButtonPlacement: VerticalPlacement;
+  buttonPlacements: {
+    startReading: VerticalPlacement;
+    updateReadProgress: VerticalPlacement;
+  };
 }
 
 export interface IgnoreSettings {

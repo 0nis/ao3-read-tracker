@@ -16,16 +16,16 @@ const items: SettingsSectionItem<IgnoreSettings>[] = [
     input: toggleSwitch(),
     dataField: "simpleModeEnabled",
     description:
-      "If enabled, the ignore feature will not ask you for a reason first. It will simply mark the work as ignored immediately.",
+      "If enabled, the ignore feature will not ask you for a reason first. It will immediately mark the work as ignored.",
   },
   {
     type: FormItemType.FIELD,
     sectionId: SectionId.IGNORE_SETTINGS,
-    label: "Default Display Mode",
+    label: "Display Mode",
     input: enumSelect(DisplayMode),
     dataField: "defaultDisplayMode",
     description:
-      "What the work listing will look like when you've ignored said work. For example, 'collapse aggressive' will hide all details",
+      "What the work listing will look like when you've ignored said work.",
   },
   {
     type: FormItemType.FIELD,
