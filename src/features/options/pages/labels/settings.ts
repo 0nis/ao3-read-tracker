@@ -197,7 +197,19 @@ const items: SettingsSectionItem<LabelSettings>[] = [
     collapsedByDefault: false,
     boldFieldLabels: true,
     description:
-      "State indicators show up at the bottom of a work listing to indicate the state of the work. Click to expand/collapse.",
+      "State indicators appear at the bottom of a work listing to show the current state. They can include dynamic placeholders that are replaced with actual values.<br><br>" +
+      "Available placeholders:<br>" +
+      "<span style='font-family: monospace;'>%started_at%</span>, " +
+      "<span style='font-family: monospace;'>%finished_at%</span>, " +
+      "<span style='font-family: monospace;'>%last_read_at%</span>, " +
+      "<span style='font-family: monospace;'>%ignored_at%</span>, " +
+      "<span style='font-family: monospace;'>%status%</span>, " +
+      "<span style='font-family: monospace;'>%notes%</span>, " +
+      "<span style='font-family: monospace;'>%last_read_chapter%</span>, " +
+      "<span style='font-family: monospace;'>%latest_chapter%</span>, " +
+      "<span style='font-family: monospace;'>%reread_worthy%</span>, " +
+      "<span style='font-family: monospace;'>%times_read%</span><br><br>" +
+      "Click to expand or collapse the section.",
     fields: [
       {
         type: FormItemType.FIELD,

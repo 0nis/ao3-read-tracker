@@ -129,10 +129,10 @@ export const DEFAULT_LABEL_SETTINGS: LabelSettings = {
     },
   },
   stateIndicators: {
-    [WorkState.FINISHED]: "Marked as read on %date%",
+    [WorkState.FINISHED]: "Marked as read on %finished_at%",
     [WorkState.IN_PROGRESS]:
-      "Still reading as of %date% (chapter %last_read_chapter%/%latest_chapter%)",
-    [WorkState.IGNORED]: "Marked as ignored on %date%",
+      "Still reading as of %started_at% (chapter %last_read_chapter%/%latest_chapter%)",
+    [WorkState.IGNORED]: "Marked as ignored on %ignored_at%",
   },
   misc: {
     nativeMarkAsReadReplacement: "",
