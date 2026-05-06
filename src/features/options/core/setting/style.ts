@@ -62,23 +62,27 @@ export function getStyles(prefix: string): string {
       border-right: 0;
     }
 
-    .${prefix}__group[data-collapsible="true"] .${prefix}__group-header {
+    .${prefix}__group[data-collapsible="true"] 
+     > .${prefix}__group-header {
       cursor: pointer;
       user-select: none;
       border-radius: 8px;
     }
 
-    .${prefix}__group[data-collapsible="true"] .${prefix}__group-header:hover,
-    .${prefix}__group[data-collapsible="true"] .${prefix}__group-header:focus-visible {
+    .${prefix}__group[data-collapsible="true"] > .${prefix}__group-header:hover,
+    .${prefix}__group[data-collapsible="true"] > .${prefix}__group-header:focus-visible {
       background-color: rgba(0, 0, 0, 0.03);
     }
 
-    .${prefix}__group[data-collapsible="true"] .${prefix}__group-fields {
+    .${prefix}__group[data-collapsible="true"] 
+     > .${prefix}__group-fields {
       padding-left: 1em;
       border-left: 1px solid rgba(0, 0, 0, 0.2);
     }
 
-    .${prefix}__group[data-collapsible="true"] .${prefix}__group-label::before {
+    .${prefix}__group[data-collapsible="true"] 
+     > .${prefix}__group-header 
+     > .${prefix}__group-label::before {
       content: "▾";
       display: inline-flex;
       margin-right: 0.4em;
@@ -87,11 +91,14 @@ export function getStyles(prefix: string): string {
       transition: transform 0.2s ease;
     }
 
-    .${prefix}__group[data-collapsible="true"][data-collapsed] .${prefix}__group-label::before {
+    .${prefix}__group[data-collapsible="true"][data-collapsed] 
+     > .${prefix}__group-header 
+     > .${prefix}__group-label::before {
       transform: rotate(-90deg);
     }
 
-    .${prefix}__group[data-collapsible="true"][data-collapsed] .${prefix}__group-fields {
+    .${prefix}__group[data-collapsible="true"][data-collapsed] 
+     > .${prefix}__group-fields {
       display: none;
     }
 

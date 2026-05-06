@@ -3,3 +3,4 @@ export * from "./symbols";
 export * from "./general";
 export * from "./io";
 export * from "./display-modes";
+export * from "./labels";

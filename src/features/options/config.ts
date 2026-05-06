@@ -9,6 +9,7 @@ import {
   buildSymbolsSection,
   buildDataSection,
   buildDisplayModesSection,
+  buildLabelSettingsSection,
 } from "./pages";
 import { ExtensionModule } from "../../enums/settings";
 
@@ -23,6 +24,7 @@ export enum SectionId {
   IGNORE_LIBRARY = "ignored-works",
   DATA = "data",
   DISPLAY_MODES = "display-modes",
+  LABEL_SETTINGS = "label-settings",
 }
 
 export enum SectionType {
@@ -96,6 +98,12 @@ export const SECTION_CONFIG: readonly SectionConfigItem[] = [
     label: "Symbol Modification",
     type: SectionType.DISPLAY,
     build: buildSymbolsSection,
+  },
+  {
+    id: SectionId.LABEL_SETTINGS,
+    label: "Label Modification",
+    type: SectionType.DISPLAY,
+    build: buildLabelSettingsSection,
   },
   {
     id: SectionId.DISPLAY_MODES,
