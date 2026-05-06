@@ -1,4 +1,5 @@
 import { ApplyMarksParams } from "../apply";
+import { getLatestChapterFromWorkListing } from "../../helpers";
 import { classRuleCollector } from "../../../../services/rules";
 import type * as Classes from "../../../../constants/classes";
 
@@ -8,7 +9,13 @@ import type * as Classes from "../../../../constants/classes";
  * Classes are modified in {@link collectClassRules} and {@link Classes}
  */
 export function addClasses(params: ApplyMarksParams) {
-  for (const rule of classRuleCollector.collect(params)) {
+  for (const rule of classRuleCollector.collect({
+    details: {
+      latestChapter:
+        getLatestChapterFromWorkListing(params.element) || undefined,
+    },
+    ...params,
+  })) {
     if (rule.shouldApply()) params.element.classList.add(rule.className);
   }
 }

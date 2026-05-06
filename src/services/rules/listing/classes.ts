@@ -4,7 +4,11 @@ import * as Classes from "../../../constants/classes";
 import { FinishedStatus, ReadingStatus } from "../../../enums/works";
 import { WorkStateData } from "../../../types/works";
 
-export interface ClassRuleParams extends WorkStateData {}
+export interface ClassRuleParams extends WorkStateData {
+  details?: {
+    latestChapter?: number;
+  };
+}
 
 interface ClassRule extends BaseRule {
   className: string;
@@ -15,6 +19,7 @@ class ClassRuleCollector extends BaseRuleCollector<ClassRuleParams, ClassRule> {
     finishedWork,
     inProgressWork,
     ignoredWork,
+    details,
   }: ClassRuleParams): ClassRule[] {
     return [
       {
@@ -62,6 +67,18 @@ class ClassRuleCollector extends BaseRuleCollector<ClassRuleParams, ClassRule> {
         className: Classes.PAUSED_READING_CLASS,
         shouldApply: () =>
           inProgressWork?.readingStatus === ReadingStatus.PAUSED,
+      },
+      {
+        className: Classes.NEW_CHAPTERS_AVAILABLE_CLASS,
+        shouldApply: () => {
+          if (
+            !inProgressWork ||
+            !inProgressWork?.lastReadChapter ||
+            !details?.latestChapter
+          )
+            return false;
+          return inProgressWork.lastReadChapter < (details?.latestChapter || 0);
+        },
       },
     ];
   }

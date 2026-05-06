@@ -55,6 +55,13 @@ const items: SettingsSectionItem<InProgressSettings>[] = [
         input: enumSelect(DisplayMode),
         dataField: "pausedDisplayMode",
       },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.IN_PROGRESS_SETTINGS,
+        label: "New Chapters Available",
+        input: enumSelect(DisplayMode),
+        dataField: "newChaptersAvailableDisplayMode",
+      },
     ],
   },
   {

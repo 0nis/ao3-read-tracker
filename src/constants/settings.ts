@@ -34,6 +34,7 @@ export const DEFAULT_IN_PROGRESS_SETTINGS: InProgressSettings = {
   activeDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   pausedDisplayMode: DisplayMode.COLLAPSE_GENTLE,
   waitingDisplayMode: DisplayMode.COLLAPSE_GENTLE,
+  newChaptersAvailableDisplayMode: DisplayMode.DEFAULT,
   symbolDisplayMode: SymbolDisplayMode.STATE_ONLY,
   buttonPlacement: VerticalPlacement.TOP,
   updateButtonPlacement: VerticalPlacement.BOTTOM,

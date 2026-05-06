@@ -10,7 +10,4 @@ export const DORMANT_CLASS = `${CLASS_PREFIX}__status--dormant`;
 export const ACTIVE_READING_CLASS = `${CLASS_PREFIX}__status--reading-active`;
 export const WAITING_TO_READ_CLASS = `${CLASS_PREFIX}__status--reading-waiting`;
 export const PAUSED_READING_CLASS = `${CLASS_PREFIX}__status--reading-paused`;
-
-export const COLLAPSED_CLASS = `${CLASS_PREFIX}__collapsed`;
-export const TOGGLE_CLASS = `${CLASS_PREFIX}__toggle`;
-export const INDICATOR_CLASS = `${CLASS_PREFIX}__indicator`;
+export const NEW_CHAPTERS_AVAILABLE_CLASS = `${CLASS_PREFIX}__new-chapters-available`;

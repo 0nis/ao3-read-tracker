@@ -25,6 +25,7 @@ export interface InProgressSettings {
   activeDisplayMode: DisplayMode;
   pausedDisplayMode: DisplayMode;
   waitingDisplayMode: DisplayMode;
+  newChaptersAvailableDisplayMode: DisplayMode;
   symbolDisplayMode: SymbolDisplayMode;
   buttonPlacement: VerticalPlacement;
   updateButtonPlacement: VerticalPlacement;
