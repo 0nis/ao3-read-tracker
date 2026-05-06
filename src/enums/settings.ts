@@ -1,3 +1,9 @@
+export enum Modules {
+  FINISHED = "module_finished",
+  IN_PROGRESS = "module_in-progress",
+  IGNORED = "module_ignored",
+}
+
 export enum DisplayMode {
   DEFAULT = "default",
   HIDE = "hide",
