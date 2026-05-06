@@ -7,6 +7,7 @@ import {
   DEFAULT_FINISHED_SETTINGS,
   DEFAULT_SYMBOL_SETTINGS,
   DEFAULT_DISPLAYMODE_SETTINGS,
+  DEFAULT_LABEL_SETTINGS,
 } from "../../constants/settings";
 import { StorageResult } from "../../types/storage";
 import { SettingsData } from "../../types/settings";
@@ -21,6 +22,7 @@ const SETTINGS_LOADERS: Record<
   generalSettings: StorageService.generalSettings.get,
   symbolSettings: StorageService.symbolSettings.get,
   displayModeSettings: StorageService.displayModeSettings.get,
+  labelSettings: StorageService.labelSettings.get,
 };
 
 const SETTINGS_DEFAULTS: SettingsData = {
@@ -30,6 +32,7 @@ const SETTINGS_DEFAULTS: SettingsData = {
   generalSettings: DEFAULT_GENERAL_SETTINGS,
   symbolSettings: DEFAULT_SYMBOL_SETTINGS,
   displayModeSettings: DEFAULT_DISPLAYMODE_SETTINGS,
+  labelSettings: DEFAULT_LABEL_SETTINGS,
 };
 
 const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
@@ -39,6 +42,7 @@ const SETTINGS_LABELS: Record<keyof SettingsData, string> = {
   generalSettings: "general",
   symbolSettings: "symbols",
   displayModeSettings: "display modes",
+  labelSettings: "labels",
 };
 
 /** Retrieves all settings from storage, applying default values for any that fail to load. */

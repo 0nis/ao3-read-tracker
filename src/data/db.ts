@@ -11,6 +11,7 @@ import {
   InProgressSettings,
   SymbolSettings,
   DisplayModeSettings,
+  LabelSettings,
 } from "../types/settings";
 import { FinishedWork, IgnoredWork, InProgressWork } from "../types/works";
 import { SymbolRecord } from "../types/symbols";
@@ -27,6 +28,7 @@ export class Ao3ReadTrackerDb extends Dexie {
   symbolSettings!: Table<SymbolSettings>;
   symbolRecords!: Table<SymbolRecord>;
   displayModeSettings!: Table<DisplayModeSettings>;
+  labelSettings!: Table<LabelSettings>;
 
   constructor() {
     super(DATABASE_NAME);
@@ -42,6 +44,7 @@ export class Ao3ReadTrackerDb extends Dexie {
       symbolSettings: "id",
       symbolRecords: "id, priority",
       displayModeSettings: "id",
+      labelSettings: "id",
     });
 
     this.on("populate", async () => await populateDb());

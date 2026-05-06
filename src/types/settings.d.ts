@@ -9,6 +9,7 @@ import {
   SymbolRenderMode,
   SymbolFallbackType,
 } from "../enums/symbols";
+import { WorkState } from "../enums/works";
 
 export type ModuleState = {
   enabled: boolean;
@@ -72,6 +73,24 @@ export interface SymbolSettings {
   emojiScaleFactor: number;
 }
 
+interface ActionLabelSet {
+  simple: { on: string; off: string };
+  advanced: { on: string; off: string };
+}
+
+export interface LabelSettings {
+  id: string;
+  actions: {
+    [WorkState.FINISHED]: ActionLabelSet;
+    [WorkState.IN_PROGRESS]: ActionLabelSet;
+    [WorkState.IGNORED]: ActionLabelSet;
+  };
+  misc: {
+    updateReadProgress: string;
+    nativeMarkAsReadReplacement: string;
+  };
+}
+
 export type SettingsData = {
   finishedSettings: FinishedSettings;
   inProgressSettings: InProgressSettings;
@@ -79,4 +98,5 @@ export type SettingsData = {
   generalSettings: GeneralSettings;
   symbolSettings: SymbolSettings;
   displayModeSettings: DisplayModeSettings;
+  labelSettings: LabelSettings;
 };

@@ -17,7 +17,9 @@ import {
   FinishedSettings,
   SymbolSettings,
   DisplayModeSettings,
+  LabelSettings,
 } from "../types/settings";
+import { WorkState } from "../enums/works";
 
 export const DEFAULT_FINISHED_SETTINGS: FinishedSettings = {
   id: SettingsType.FINISHED,
@@ -89,4 +91,44 @@ export const DEFAULT_SYMBOL_SETTINGS: SymbolSettings = {
   size: DEFAULT_SYMBOL_SIZE_EM,
   emojiScalingEnabled: true,
   emojiScaleFactor: 0.83,
+};
+
+export const DEFAULT_LABEL_SETTINGS: LabelSettings = {
+  id: SettingsType.LABELS,
+  actions: {
+    [WorkState.FINISHED]: {
+      simple: {
+        off: "Mark as Read",
+        on: "Mark as Unread",
+      },
+      advanced: {
+        off: "Mark as Read",
+        on: "Edit Read Info",
+      },
+    },
+    [WorkState.IN_PROGRESS]: {
+      simple: {
+        off: "Start Reading",
+        on: "Stop Reading",
+      },
+      advanced: {
+        off: "Start Reading",
+        on: "Edit Read Progress",
+      },
+    },
+    [WorkState.IGNORED]: {
+      simple: {
+        off: "Ignore",
+        on: "Unignore",
+      },
+      advanced: {
+        off: "Ignore",
+        on: "Edit Ignore Info",
+      },
+    },
+  },
+  misc: {
+    updateReadProgress: "Update Read Progress",
+    nativeMarkAsReadReplacement: "",
+  },
 };

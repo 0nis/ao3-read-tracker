@@ -12,6 +12,7 @@ import {
   FinishedSettings,
   SymbolSettings,
   DisplayModeSettings,
+  LabelSettings,
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
 import { SettingsType } from "../enums/settings";
@@ -23,31 +24,33 @@ export const instances = {
 
   finishedSettings: new SettingsData<FinishedSettings>(
     db.finishedSettings,
-    SettingsType.FINISHED
+    SettingsType.FINISHED,
   ),
   inProgressSettings: new SettingsData<InProgressSettings>(
     db.inProgressSettings,
-    SettingsType.IN_PROGRESS
+    SettingsType.IN_PROGRESS,
   ),
   ignoreSettings: new SettingsData<IgnoreSettings>(
     db.ignoreSettings,
-    SettingsType.IGNORE
+    SettingsType.IGNORE,
   ),
   generalSettings: new SettingsData<GeneralSettings>(
     db.generalSettings,
-    SettingsType.GENERAL
+    SettingsType.GENERAL,
+  ),
+  displayModeSettings: new SettingsData<DisplayModeSettings>(
+    db.displayModeSettings,
+    SettingsType.DISPLAY_MODES,
+  ),
+  labelSettings: new SettingsData<LabelSettings>(
+    db.labelSettings,
+    SettingsType.LABELS,
   ),
   symbolSettings: new SettingsData<SymbolSettings>(
     db.symbolSettings,
-    SettingsType.SYMBOLS
+    SettingsType.SYMBOLS,
   ),
-
   symbolRecords: new SymbolsData<SymbolRecord>(db.symbolRecords),
-
-  displayModeSettings: new SettingsData<DisplayModeSettings>(
-    db.displayModeSettings,
-    SettingsType.DISPLAY_MODES
-  ),
 };
 
 export type InstanceMap = typeof instances;
