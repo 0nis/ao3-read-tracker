@@ -1,5 +1,6 @@
 import { el } from "../../../utils/dom";
 import { getLocalDateTimeString } from "../../../utils/date";
+import { CLASS_PREFIX } from "../../../constants/classes";
 
 export const text = ({
   defaultValue,
@@ -28,6 +29,7 @@ export const textarea = ({
   return el("textarea", {
     rows,
     disabled,
+    className: `${CLASS_PREFIX}__textarea`,
   }) as HTMLTextAreaElement;
 };
 

@@ -3,7 +3,7 @@ import { SettingsSectionItem } from "../../core/setting/types";
 import { SectionId } from "../../config";
 
 import { settingsCache } from "../../../../services/cache";
-import { text } from "../../../../ui/forms";
+import { text, textarea } from "../../../../ui/forms";
 import { FormItemType } from "../../../../ui/forms/enums";
 import { LabelSettings } from "../../../../types/settings";
 
@@ -127,7 +127,7 @@ const items: SettingsSectionItem<LabelSettings>[] = [
             sectionId: SectionId.LABEL_SETTINGS,
             label: "Update Read Progress",
             input: text({}),
-            dataField: "misc.updateReadProgress",
+            dataField: "actions.in_progress.updateReadProgress",
           },
         ],
       },
@@ -185,6 +185,43 @@ const items: SettingsSectionItem<LabelSettings>[] = [
             dataField: "actions.ignored.advanced.on",
           },
         ],
+      },
+    ],
+  },
+  {
+    type: FormItemType.GROUP,
+    id: "stateIndicators",
+    sectionId: SectionId.LABEL_SETTINGS,
+    label: "State Indicator Labels",
+    collapsible: true,
+    collapsedByDefault: false,
+    boldFieldLabels: true,
+    description:
+      "State indicators show up at the bottom of a work listing to indicate the state of the work. Click to expand/collapse.",
+    fields: [
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.LABEL_SETTINGS,
+        label: "Finished State Indicator",
+        input: textarea({ rows: 2 }),
+        orientation: "vertical",
+        dataField: "stateIndicators.finished",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.LABEL_SETTINGS,
+        label: "In Progress State Indicator",
+        input: textarea({ rows: 2 }),
+        orientation: "vertical",
+        dataField: "stateIndicators.in_progress",
+      },
+      {
+        type: FormItemType.FIELD,
+        sectionId: SectionId.LABEL_SETTINGS,
+        label: "Ignored State Indicator",
+        input: textarea({ rows: 2 }),
+        orientation: "vertical",
+        dataField: "stateIndicators.ignored",
       },
     ],
   },

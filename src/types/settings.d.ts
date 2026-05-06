@@ -82,11 +82,17 @@ export interface LabelSettings {
   id: string;
   actions: {
     [WorkState.FINISHED]: ActionLabelSet;
-    [WorkState.IN_PROGRESS]: ActionLabelSet;
+    [WorkState.IN_PROGRESS]: ActionLabelSet & {
+      updateReadProgress: string;
+    };
     [WorkState.IGNORED]: ActionLabelSet;
   };
+  stateIndicators: {
+    [WorkState.FINISHED]: string;
+    [WorkState.IN_PROGRESS]: string;
+    [WorkState.IGNORED]: string;
+  };
   misc: {
-    updateReadProgress: string;
     nativeMarkAsReadReplacement: string;
   };
 }
