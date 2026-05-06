@@ -18,7 +18,7 @@ export const getClass = () => `${CLASS_PREFIX}__work-meta`;
 
 export type WorkContext = {
   states: WorkStateData;
-  modules?: ModuleStates;
+  modules: ModuleStates;
 };
 
 export async function setupWorkMetaAreas(): Promise<void> {

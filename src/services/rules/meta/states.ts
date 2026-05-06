@@ -1,12 +1,11 @@
 import { BaseRule, BaseRuleCollector } from "../base";
-import { cleanStates } from "../helpers";
 
 import { WorkStateData } from "../../../types/works";
 import { ModuleStates } from "../../../types/settings";
 
 export interface StateMetaRuleParams {
   states: WorkStateData;
-  modules?: ModuleStates;
+  modules: ModuleStates;
 }
 
 interface StateMetaRule extends BaseRule {
@@ -19,31 +18,30 @@ class StateMetaRuleCollector extends BaseRuleCollector<
   StateMetaRuleParams,
   StateMetaRule
 > {
-  collect({ states, modules }: StateMetaRuleParams): StateMetaRule[] {
-    const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
-      states,
-      modules,
-    );
+  collect({
+    states: { finishedWork, inProgressWork, ignoredWork },
+    modules: { finishedModule, inProgressModule, ignoredModule },
+  }: StateMetaRuleParams): StateMetaRule[] {
     return [
       {
         key: "finished",
         label: "Finished",
         getValue: () => (!!finishedWork ? "Yes" : "No"),
-        shouldApply: () => true,
+        shouldApply: () => !!finishedModule.enabled,
         priority: 100,
       },
       {
         key: "in-progress",
         label: "In progress",
         getValue: () => (!!inProgressWork ? "Yes" : "No"),
-        shouldApply: () => true,
+        shouldApply: () => !!inProgressModule.enabled,
         priority: 90,
       },
       {
         key: "ignored",
         label: "Ignored",
         getValue: () => (!!ignoredWork ? "Yes" : "No"),
-        shouldApply: () => true,
+        shouldApply: () => !!ignoredModule.enabled,
         priority: 80,
       },
     ];
