@@ -34,6 +34,11 @@ export function getGlobalStyles(prefix: string): string {
       box-shadow: inset 0 1px 2px #ccc;
     }
 
+    .${prefix}__textarea {
+      min-height: 0 !important;
+      box-sizing: border-box !important;
+    }
+
     .${prefix}__inline-image {
       display: inline-block;
       height: ${DEFAULT_SYMBOL_SIZE_EM}em;

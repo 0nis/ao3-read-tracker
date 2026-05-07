@@ -6,6 +6,8 @@ import {
   DEFAULT_IN_PROGRESS_SETTINGS,
   DEFAULT_FINISHED_SETTINGS,
   DEFAULT_SYMBOL_SETTINGS,
+  DEFAULT_LABEL_SETTINGS,
+  DEFAULT_DISPLAYMODE_SETTINGS,
 } from "../../../../constants/settings";
 import type { StorageResult } from "../../../../types/storage";
 import type {
@@ -15,6 +17,7 @@ import type {
   FinishedSettings,
   SymbolSettings,
   DisplayModeSettings,
+  LabelSettings,
 } from "../../../../types/settings";
 
 export interface SettingsSectionTypeMap {
@@ -24,6 +27,7 @@ export interface SettingsSectionTypeMap {
   [SectionId.GENERAL_SETTINGS]: GeneralSettings;
   [SectionId.SYMBOL_SETTINGS]: SymbolSettings;
   [SectionId.DISPLAY_MODES]: DisplayModeSettings;
+  [SectionId.LABEL_SETTINGS]: LabelSettings;
 }
 
 export interface SaveMapEntry<T> {
@@ -61,8 +65,13 @@ export const SETTINGS_SAVE_MAP: {
     label: "symbol settings",
   },
   [SectionId.DISPLAY_MODES]: {
-    defaults: {} as DisplayModeSettings,
+    defaults: DEFAULT_DISPLAYMODE_SETTINGS,
     setter: StorageService.displayModeSettings.set,
     label: "display modes settings",
+  },
+  [SectionId.LABEL_SETTINGS]: {
+    defaults: DEFAULT_LABEL_SETTINGS,
+    setter: StorageService.labelSettings.set,
+    label: "label settings",
   },
 };

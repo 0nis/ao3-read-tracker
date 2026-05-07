@@ -25,4 +25,5 @@ export enum SettingsType {
   GENERAL = "general_settings",
   SYMBOLS = "symbols_settings",
   DISPLAY_MODES = "display_modes_settings",
+  LABELS = "labels_settings",
 }

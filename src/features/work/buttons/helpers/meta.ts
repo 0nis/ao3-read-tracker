@@ -1,27 +1,31 @@
-import { ACTION_LABELS } from "../config";
 import { handleDeleteWork } from "../handlers/delete";
 import { handleEditWork } from "../handlers/edit";
 import { handleSaveWork } from "../handlers/save";
+
 import { ButtonAction, ActionButtonMeta, ActionLabelSet } from "../types";
+import { WORK_STATE_TO_ACTION_MAP, WorkAction } from "../../config";
 
-import { WORK_ACTION_MODULE_MAP, WorkAction } from "../../config";
-
+import { LabelSettings, ModuleStates } from "../../../../types/settings";
 import { CLASS_PREFIX } from "../../../../constants/classes";
-import { ModuleStates } from "../../../../types/settings";
+import { WORK_STATE_MODULE_MAP, WorkState } from "../../../../enums/works";
 
 let _cache: Record<WorkAction, ActionButtonMeta> | null = null;
 
 export function buildActionButtonConfig(
   modules: ModuleStates,
+  labels: LabelSettings,
 ): Record<WorkAction, ActionButtonMeta> {
   if (_cache) return _cache;
 
   _cache = Object.fromEntries(
-    Object.entries(ACTION_LABELS)
+    Object.entries(labels.actions)
       .filter(
-        ([key]) => modules[WORK_ACTION_MODULE_MAP[key as WorkAction]].enabled,
+        ([key]) => modules[WORK_STATE_MODULE_MAP[key as WorkState]].enabled,
       )
-      .map(([key, labels]) => [key, makeMeta(key as WorkAction, labels)]),
+      .map(([key, labels]) => [
+        WORK_STATE_TO_ACTION_MAP[key as WorkState],
+        makeMeta(WORK_STATE_TO_ACTION_MAP[key as WorkState], labels),
+      ]),
   ) as Record<WorkAction, ActionButtonMeta>;
   return _cache as Record<WorkAction, ActionButtonMeta>;
 }

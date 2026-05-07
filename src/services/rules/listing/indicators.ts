@@ -3,24 +3,30 @@ import { cleanStates } from "../helpers";
 
 import { WorkState } from "../../../enums/works";
 import { WorkStateData } from "../../../types/works";
-import { ModuleStates } from "../../../types/settings";
+import { LabelSettings, ModuleStates } from "../../../types/settings";
 
 export interface TextIndicatorRuleParams {
   states: WorkStateData;
+  labelSettings: LabelSettings;
   modules?: ModuleStates;
 }
 
 interface TextIndicatorRule extends BaseRule {
   workState: WorkState;
-  getTimeStamp: () => number | undefined;
   getText: () => string;
+  getNotes: () => string | undefined;
+  getStatus: () => string | undefined;
 }
 
 class TextIndicatorRuleCollector extends BaseRuleCollector<
   TextIndicatorRuleParams,
   TextIndicatorRule
 > {
-  collect({ states, modules }: TextIndicatorRuleParams): TextIndicatorRule[] {
+  collect({
+    states,
+    modules,
+    labelSettings: { stateIndicators },
+  }: TextIndicatorRuleParams): TextIndicatorRule[] {
     const { finishedWork, inProgressWork, ignoredWork } = cleanStates(
       states,
       modules,
@@ -29,25 +35,25 @@ class TextIndicatorRuleCollector extends BaseRuleCollector<
       {
         workState: WorkState.IGNORED,
         shouldApply: () => !!ignoredWork,
-        getTimeStamp: () => ignoredWork?.ignoredAt,
-        getText: () => `Marked as ignored on %date%`,
+        getText: () => stateIndicators.ignored,
+        getNotes: () => ignoredWork?.reason,
+        getStatus: () => "none",
         priority: 100,
       },
       {
         workState: WorkState.IN_PROGRESS,
         shouldApply: () => !!inProgressWork,
-        getTimeStamp: () => inProgressWork?.startedAt,
-        getText: () =>
-          `Still reading as of %date% (chapter ${
-            inProgressWork?.lastReadChapter || "?"
-          }/%latest_chapter%)`,
+        getText: () => stateIndicators.in_progress,
+        getNotes: () => inProgressWork?.notes,
+        getStatus: () => inProgressWork?.readingStatus,
         priority: 90,
       },
       {
         workState: WorkState.FINISHED,
         shouldApply: () => !!finishedWork,
-        getTimeStamp: () => finishedWork?.finishedAt,
-        getText: () => `Marked as read on %date%`,
+        getText: () => stateIndicators.finished,
+        getNotes: () => finishedWork?.notes,
+        getStatus: () => finishedWork?.finishedStatus,
         priority: 80,
       },
     ];

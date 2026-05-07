@@ -13,58 +13,23 @@ import {
   SettingsData,
 } from "../../../types/settings";
 
-export const ACTION_LABELS: {
-  [K in keyof WorkActionTypeMap]: ActionLabelSet;
-} = {
-  [WorkAction.FINISHED]: {
-    simple: {
-      off: "Mark as Read",
-      on: "Mark as Unread",
-    },
-    advanced: {
-      off: "Mark as Read",
-      on: "Edit Read Info",
-    },
-  },
-  [WorkAction.IN_PROGRESS]: {
-    simple: {
-      off: "Start Reading",
-      on: "Stop Reading",
-    },
-    advanced: {
-      off: "Start Reading",
-      on: "Edit Read Progress",
-    },
-  },
-  [WorkAction.IGNORE]: {
-    simple: {
-      off: "Ignore",
-      on: "Unignore",
-    },
-    advanced: {
-      off: "Ignore",
-      on: "Edit Ignore Info",
-    },
-  },
-} as const;
-
 export const ACTION_HANDLER_MAP: {
   [K in keyof WorkActionTypeMap]: ActionHandlerEntry<WorkActionTypeMap[K]>;
 } = {
   [WorkAction.FINISHED]: {
     storage: StorageService.finishedWorks,
-    createForm: (data, editing, origin) =>
-      createFinishedWorkForm(data, editing, origin),
+    createForm: async (data, editing, origin) =>
+      await createFinishedWorkForm(data, editing, origin),
   },
   [WorkAction.IN_PROGRESS]: {
     storage: StorageService.inProgressWorks,
-    createForm: (data, editing, origin) =>
-      createInProgressWorkForm(data, editing, origin),
+    createForm: async (data, editing, origin) =>
+      await createInProgressWorkForm(data, editing, origin),
   },
   [WorkAction.IGNORE]: {
     storage: StorageService.ignoredWorks,
-    createForm: (data, editing, origin) =>
-      createIgnoreWorkForm(data, editing, origin),
+    createForm: async (data, editing, origin) =>
+      await createIgnoreWorkForm(data, editing, origin),
   },
 };
 

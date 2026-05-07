@@ -29,16 +29,20 @@ export async function setupButtons() {
 
   await setupAllActionButtons(settings, navs);
   if (settings.generalSettings.modules.inProgressModule.enabled) {
-    await setupUpdateReadProgressButton(
+    await setupUpdateReadProgressButton({
       workId,
       navs,
-      settings.inProgressSettings.updateButtonPlacement,
-    );
+      label: settings.labelSettings.actions.in_progress.updateReadProgress,
+      placement: settings.inProgressSettings.updateButtonPlacement,
+    });
   }
 }
 
 async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
-  const cfg = buildActionButtonConfig(settings.generalSettings.modules);
+  const cfg = buildActionButtonConfig(
+    settings.generalSettings.modules,
+    settings.labelSettings,
+  );
 
   for (const action of Object.keys(cfg) as WorkAction[]) {
     const s = ACTION_SETTINGS_MAP[action]?.(settings);
@@ -58,16 +62,22 @@ async function setupAllActionButtons(settings: SettingsData, navs: ButtonNavs) {
   }
 }
 
-async function setupUpdateReadProgressButton(
-  workId: string | null,
-  navs: ButtonNavs,
-  placement: VerticalPlacement,
-) {
+async function setupUpdateReadProgressButton({
+  workId,
+  label,
+  navs,
+  placement,
+}: {
+  workId: string | null;
+  label: string;
+  navs: ButtonNavs;
+  placement: VerticalPlacement;
+}) {
   if (!workId) return;
   const exists = await handleCheckExistence(workId, WorkAction.IN_PROGRESS);
   await placeButtons(placement, navs, () =>
     createUpdateButton(
-      "Update Read Progress",
+      label,
       handleUpdateInProgressInfo,
       handleOnUpdateReadProgressEvent,
       exists ? false : true,

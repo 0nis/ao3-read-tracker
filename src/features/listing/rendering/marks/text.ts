@@ -11,7 +11,6 @@ import {
   timestampToISOString,
 } from "../../../../utils/date";
 import { el, ensureChild, injectStyles } from "../../../../utils/dom";
-import { replacePlaceholders } from "../../../../utils/string";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { WorkState } from "../../../../enums/works";
 
@@ -46,58 +45,11 @@ export function removeText(element: HTMLElement) {
   elementsToRemove.forEach((el) => el.remove());
 }
 
-/** Edit indicators in {@link collectTextIndicatorRules} */
-function createIndicators(
-  params: ApplyMarksParams,
-  indicatorList: HTMLElement,
-) {
-  for (const rule of textIndicatorRuleCollector.getActiveRules(params)) {
-    indicatorList.appendChild(
-      addIndicatorText(
-        rule.workState,
-        rule.getTimeStamp(),
-        rule.getText(),
-        params.element,
-      ),
-    );
-  }
-}
-
 /** Edit notes in {@link collectNotesTextRules} */
 function createNotes(params: ApplyMarksParams) {
   for (const rule of workNotesRuleCollector.getActiveRules(params)) {
     addNotesText(params.element, rule.getText(), rule.className);
   }
-}
-
-function addIndicatorText(
-  type: WorkState,
-  timestamp: number | undefined,
-  text: string,
-  element: HTMLElement,
-): HTMLElement {
-  const replace = (str: string) => {
-    return replacePlaceholders(str, {
-      type: type,
-      latest_chapter:
-        getLatestChapterFromWorkListing(element)?.toString() || "?",
-    });
-  };
-
-  const [before, after] = text.split("%date%");
-  const nodes: (string | HTMLElement)[] = [];
-
-  if (before) nodes.push(replace(before));
-  nodes.push(createTimestampElement(timestamp));
-  if (after) nodes.push(replace(after));
-
-  return el(
-    "li",
-    {
-      className: `${CLASS_PREFIX}__text-indicator--${type}`,
-    },
-    [el("p", {}, nodes)],
-  );
 }
 
 function addNotesText(element: HTMLElement, notes: string, className?: string) {
@@ -111,9 +63,107 @@ function addNotesText(element: HTMLElement, notes: string, className?: string) {
   if (className) section.classList.add(className);
 }
 
-function createTimestampElement(
-  timestamp: number | undefined,
-): HTMLElement | string {
+/** Edit indicators in {@link collectTextIndicatorRules} */
+function createIndicators(
+  params: ApplyMarksParams,
+  indicatorList: HTMLElement,
+) {
+  const { finishedWork, inProgressWork, ignoredWork } = params.states;
+  for (const rule of textIndicatorRuleCollector.getActiveRules({
+    ...params,
+    labelSettings: params.settings.labelSettings,
+  })) {
+    indicatorList.appendChild(
+      addIndicatorText({
+        type: rule.workState,
+        text: rule.getText(),
+        timestamps: {
+          started_at: inProgressWork?.startedAt,
+          last_read_at: inProgressWork?.lastReadAt,
+          ignored_at: ignoredWork?.ignoredAt,
+          finished_at: finishedWork?.finishedAt,
+        },
+        placeholders: {
+          status: rule.getStatus() || "N/A",
+          notes: rule.getNotes() || "N/A",
+          last_read_chapter: inProgressWork?.lastReadChapter?.toString() || "?",
+          latest_chapter:
+            getLatestChapterFromWorkListing(params.element)?.toString() || "?",
+          reread_worthy: finishedWork
+            ? finishedWork?.rereadWorthy
+              ? "yes"
+              : "no"
+            : "N/A",
+          times_read: finishedWork?.timesRead?.toString() || "0",
+        },
+      }),
+    );
+  }
+}
+
+function addIndicatorText({
+  type,
+  text,
+  timestamps,
+  placeholders,
+}: {
+  type: WorkState;
+  text: string;
+  timestamps: Record<string, number | undefined>;
+  placeholders: Record<string, string>;
+}): HTMLElement {
+  const nodes = parseText(text, placeholders, timestamps);
+
+  return el(
+    "li",
+    {
+      className: `${CLASS_PREFIX}__text-indicator--${type}`,
+    },
+    [el("p", {}, nodes)],
+  );
+}
+
+function parseText(
+  text: string,
+  placeholders: Record<string, string>,
+  timestamps: Record<string, number | undefined>,
+): (string | HTMLElement)[] {
+  const parts: (string | HTMLElement)[] = [];
+  const regex = /%([^%]+)%/g;
+
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text))) {
+    const [full, key] = match;
+    if (match.index > lastIndex) parts.push(text.slice(lastIndex, match.index));
+
+    const replacement = resolvePlaceholder(key, placeholders, timestamps);
+    if (replacement !== undefined) parts.push(replacement);
+    else parts.push(full);
+
+    lastIndex = match.index + full.length;
+  }
+
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+
+  return parts;
+}
+
+function resolvePlaceholder(
+  key: string,
+  placeholders: Record<string, string>,
+  timestamps: Record<string, number | undefined>,
+): string | HTMLElement | undefined {
+  if (key in placeholders) return placeholders[key];
+
+  const ts = timestamps[key];
+  if (ts !== undefined) return createTimestampElement(ts);
+
+  return undefined;
+}
+
+function createTimestampElement(timestamp: number): HTMLElement | string {
   return el("time", {
     dateTime: timestampToISOString(timestamp),
     textContent: `${getFormattedDateAsFullText(

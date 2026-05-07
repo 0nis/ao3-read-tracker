@@ -2,6 +2,7 @@ import { createWorkForm } from "../base";
 import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 
+import { settingsCache } from "../../../../services/cache";
 import {
   datetime,
   number,
@@ -9,9 +10,9 @@ import {
   textarea,
   toggleSwitch,
 } from "../../../../ui/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { FinishedStatus } from "../../../../enums/works";
-import { FormItemType } from "../../../../ui/forms/enums";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { FinishedWork } from "../../../../types/works";
 
@@ -35,7 +36,7 @@ const items: WorkFormItem<FinishedWork>[] = [
           {
             type: FormItemType.FIELD,
             dataField: "finishedAt",
-            label: "Finished at",
+            label: "Finished At",
             input: datetime({ defaultValue: new Date() }),
           },
           {
@@ -53,13 +54,13 @@ const items: WorkFormItem<FinishedWork>[] = [
           {
             type: FormItemType.FIELD,
             dataField: "timesRead",
-            label: "Times read",
+            label: "Times Read",
             input: number({ min: 1, defaultValue: 1 }),
           },
           {
             type: FormItemType.FIELD,
             dataField: "rereadWorthy",
-            label: "Reread worthy?",
+            label: "Reread Worthy?",
             input: toggleSwitch(),
           },
         ],
@@ -68,15 +69,16 @@ const items: WorkFormItem<FinishedWork>[] = [
   },
 ];
 
-export function createFinishedWorkForm(
+export async function createFinishedWorkForm(
   data: Partial<FinishedWork>,
   editing: boolean,
   origin?: VerticalPlacement,
-): HTMLElement {
+): Promise<HTMLElement> {
+  const { labelSettings } = await settingsCache.get();
   return createWorkForm({
     id: WorkAction.FINISHED,
-    landmark: "Mark Work as Raed",
-    heading: editing ? "Edit finished work info!" : "Mark this work as read!",
+    landmark: editing ? "Edit Finished Work" : "Mark This Work as Read",
+    heading: editing ? "Edit Finished Work" : "Mark This Work as Read",
     data,
     editing,
     items,
@@ -87,7 +89,7 @@ export function createFinishedWorkForm(
       },
       delete: {
         isDeletable: editing === true,
-        label: "Mark as Unread",
+        label: labelSettings.actions.finished.simple.on,
         ariaLabel: `Remove ${
           data.title || "this work"
         } from your finished list`,

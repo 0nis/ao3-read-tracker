@@ -3,10 +3,11 @@ import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 import { getCurrentChapterFromWorkPage } from "../../helpers";
 
+import { settingsCache } from "../../../../services/cache";
 import { datetime, number, enumSelect, textarea } from "../../../../ui/forms";
+import { FormItemType } from "../../../../ui/forms/enums";
 import { VerticalPlacement } from "../../../../enums/settings";
 import { ReadingStatus } from "../../../../enums/works";
-import { FormItemType } from "../../../../ui/forms/enums";
 import { CLASS_PREFIX } from "../../../../constants/classes";
 import { InProgressWork } from "../../../../types/works";
 
@@ -69,17 +70,16 @@ const items: WorkFormItem<InProgressWork>[] = [
   },
 ];
 
-export function createInProgressWorkForm(
+export async function createInProgressWorkForm(
   data: Partial<InProgressWork>,
   editing: boolean,
   origin?: VerticalPlacement,
-): HTMLElement {
+): Promise<HTMLElement> {
+  const { labelSettings } = await settingsCache.get();
   return createWorkForm({
     id: WorkAction.IN_PROGRESS,
-    landmark: "In Progress Work",
-    heading: editing
-      ? "Edit Read Progress Info"
-      : "Mark this work as In Progress",
+    landmark: editing ? "Edit Read Progress" : "Start Reading",
+    heading: editing ? "Edit Read Progress" : "Start Reading This Work",
     data,
     editing,
     items,
@@ -92,7 +92,7 @@ export function createInProgressWorkForm(
       },
       delete: {
         isDeletable: editing === true,
-        label: "Stop Reading",
+        label: labelSettings.actions.in_progress.simple.on,
         ariaLabel: `Remove ${
           data.title || "this work"
         } from your in progress list`,

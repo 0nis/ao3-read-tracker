@@ -1,6 +1,7 @@
 import { getCurrentChapterFromWorkPage } from "./helpers";
 import { IgnoredWork, InProgressWork, FinishedWork } from "../../types/works";
 import { ExtensionModule } from "../../enums/settings";
+import { WorkState } from "../../enums/works";
 
 export enum WorkAction {
   FINISHED = `finished`,
@@ -25,12 +26,12 @@ export interface WorkActionTypeMap {
   [WorkAction.IGNORE]: IgnoredWork;
 }
 
-export const WORK_ACTION_MODULE_MAP: {
-  [K in keyof WorkActionTypeMap]: ExtensionModule;
+export const WORK_STATE_TO_ACTION_MAP: {
+  [K in WorkState]: WorkAction;
 } = {
-  [WorkAction.FINISHED]: ExtensionModule.FINISHED,
-  [WorkAction.IN_PROGRESS]: ExtensionModule.IN_PROGRESS,
-  [WorkAction.IGNORE]: ExtensionModule.IGNORED,
+  [WorkState.FINISHED]: WorkAction.FINISHED,
+  [WorkState.IN_PROGRESS]: WorkAction.IN_PROGRESS,
+  [WorkState.IGNORED]: WorkAction.IGNORE,
 };
 
 export const ACTION_DEFAULTS_MAP: {

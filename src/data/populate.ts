@@ -12,6 +12,7 @@ import {
   DEFAULT_FINISHED_SETTINGS,
   DEFAULT_SYMBOL_SETTINGS,
   DEFAULT_DISPLAYMODE_SETTINGS,
+  DEFAULT_LABEL_SETTINGS,
 } from "../constants/settings";
 import { DEFAULT_SYMBOL_RECORDS } from "../constants/symbols";
 
@@ -22,6 +23,7 @@ export async function populateDb() {
     await db.ignoreSettings.put(DEFAULT_IGNORE_SETTINGS);
     await db.generalSettings.put(DEFAULT_GENERAL_SETTINGS);
     await db.displayModeSettings.put(DEFAULT_DISPLAYMODE_SETTINGS);
+    await db.labelSettings.put(DEFAULT_LABEL_SETTINGS);
     await db.symbolSettings.put(DEFAULT_SYMBOL_SETTINGS);
     await db.symbolRecords.bulkPut(DEFAULT_SYMBOL_RECORDS);
 
