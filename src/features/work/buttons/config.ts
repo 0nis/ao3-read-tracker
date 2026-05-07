@@ -13,41 +13,6 @@ import {
   SettingsData,
 } from "../../../types/settings";
 
-export const ACTION_LABELS: {
-  [K in keyof WorkActionTypeMap]: ActionLabelSet;
-} = {
-  [WorkAction.FINISHED]: {
-    simple: {
-      off: "Mark as Read",
-      on: "Mark as Unread",
-    },
-    advanced: {
-      off: "Mark as Read",
-      on: "Edit Read Info",
-    },
-  },
-  [WorkAction.IN_PROGRESS]: {
-    simple: {
-      off: "Start Reading",
-      on: "Stop Reading",
-    },
-    advanced: {
-      off: "Start Reading",
-      on: "Edit Read Progress",
-    },
-  },
-  [WorkAction.IGNORE]: {
-    simple: {
-      off: "Ignore",
-      on: "Unignore",
-    },
-    advanced: {
-      off: "Ignore",
-      on: "Edit Ignore Info",
-    },
-  },
-} as const;
-
 export const ACTION_HANDLER_MAP: {
   [K in keyof WorkActionTypeMap]: ActionHandlerEntry<WorkActionTypeMap[K]>;
 } = {
