@@ -5,12 +5,14 @@ import { kill } from "./lifecycle";
 import { App } from "../../app";
 import { db } from "../../data/db";
 import { localMemory } from "../../services/memory";
+import { warn } from "../extension/logger";
 import { reportExtensionFailure } from "../../shared/extension/dialogs";
 import { ExtensionDisabledData } from "../../types/memory";
-import { EXTENSION_DISABLED_KEY } from "../../constants/global";
+import {
+  EXTENSION_DISABLED_KEY,
+  PERSISTENT_STORAGE_KEY,
+} from "../../constants/global";
 import { addGlobalListener } from "../../utils/listeners";
-import { add } from "dexie";
-import { createExtensionMsg } from "../extension/logger";
 
 export async function boot() {
   const res = localMemory.get<ExtensionDisabledData>(EXTENSION_DISABLED_KEY);
@@ -31,6 +33,7 @@ export async function start() {
   installGlobalErrorHandlers();
   await openDb();
   await initApp();
+  await initStoragePersistence();
 }
 
 async function openDb() {
@@ -54,6 +57,21 @@ async function initApp() {
       err,
     );
   }
+}
+
+async function initStoragePersistence() {
+  const granted = await isStoragePersistenceGranted();
+  if (!granted) warn("Persistent storage unavailable in this browser.");
+  localMemory.set(`${PERSISTENT_STORAGE_KEY}.granted`, granted);
+}
+
+async function isStoragePersistenceGranted(): Promise<boolean> {
+  if (!navigator.storage?.persist) return false;
+
+  const already = await navigator.storage.persisted();
+  if (already) return true;
+
+  return await navigator.storage.persist();
 }
 
 function installGlobalErrorHandlers() {

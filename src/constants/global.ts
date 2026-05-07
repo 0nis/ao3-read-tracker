@@ -4,7 +4,9 @@ export const ABBREVIATION: string = "EXT-RT";
 export const DATABASE_NAME = "Ao3ReadTrackerDB";
 export const DATABASE_VERSION = VERSION;
 
-export const EXTENSION_DISABLED_KEY = `${ABBREVIATION}_DISABLED`;
+export const EXTENSION_DISABLED_KEY = `${ABBREVIATION.toLowerCase()}.disabled`;
+export const PERSISTENT_STORAGE_KEY = `${ABBREVIATION.toLowerCase()}.persistent-storage`;
+
 export const IS_DEV = process.env.NODE_ENV === "development";
 
 export const AO3_WORK_BASE_URL = "https://archiveofourown.org/works";

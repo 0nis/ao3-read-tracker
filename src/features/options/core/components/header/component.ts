@@ -8,23 +8,39 @@ import { CLASS_PREFIX } from "../../../../../constants/classes";
 
 const getClass = () => `${CLASS_PREFIX}__header`;
 
-export function buildHeader(extensionName: string) {
+export function buildHeader({
+  extensionName,
+  warnings,
+}: {
+  extensionName: string;
+  warnings?: string[];
+}): { header: HTMLElement; headerContainer: HTMLElement } {
   injectStyles(
     `${CLASS_PREFIX}__styles--options-header`,
     getStyles(getClass()),
   );
-  return el(
+
+  const headerContainer = el("div", { className: `${getClass()}-container` }, [
+    el("h2", { className: `${getClass()}-title` }, [
+      `${extensionName} Extension Options`,
+    ]),
+    el("ul", { className: `actions ${getClass()}-actions` }, [
+      buildExportButton(),
+      buildImportButton(),
+      buildClearDataButton(),
+    ]),
+  ]);
+
+  const header = el(
     "header",
     { className: `${getClass()}`, attrs: { role: "banner" } },
     [
-      el("h2", { className: `${getClass()}-title` }, [
-        `${extensionName} Extension Options`,
-      ]),
-      el("ul", { className: `actions ${getClass()}-actions` }, [
-        buildExportButton(),
-        buildImportButton(),
-        buildClearDataButton(),
-      ]),
+      headerContainer,
+      ...(warnings || []).map((warning) =>
+        el("p", { className: `${getClass()}-warning`, innerHTML: warning }),
+      ),
     ],
   );
+
+  return { header, headerContainer };
 }

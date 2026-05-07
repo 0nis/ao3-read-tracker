@@ -37,7 +37,7 @@ export function buildDataSection() {
       children: [
         el("p", {
           className: `${DATA_CLASS}__category-warning`,
-          innerHTML: `<strong>Warning</strong>: Clearing or overwriting data cannot be undone. Make sure to export your data first if you want a backup.`,
+          innerHTML: `<strong>Warning:</strong> Clearing or overwriting data cannot be undone. Make sure to export your data first if you want a backup.`,
         }),
         el("ul", { className: `actions ${DATA_CLASS}__category-actions` }, [
           buildExportButton(),

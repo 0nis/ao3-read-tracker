@@ -10,8 +10,9 @@ import { error } from "../../shared/extension/logger";
 import { addGlobalListener } from "../../utils/listeners";
 import { el } from "../../utils/dom";
 
-import { LOADED_EVENT } from "../../constants/global";
+import { LOADED_EVENT, PERSISTENT_STORAGE_KEY } from "../../constants/global";
 import { CLASS_PREFIX } from "../../constants/classes";
+import { localMemory } from "../../services/memory";
 
 export type SectionElements = {
   [key in SectionId]: {
@@ -31,7 +32,13 @@ export async function render(): Promise<void> {
 
   const { modules } = (await settingsCache.get()).generalSettings;
 
-  const header = buildHeader(extensionName);
+  const warnings: string[] = [];
+  if (!localMemory.get(`${PERSISTENT_STORAGE_KEY}.granted`))
+    warnings.push(
+      "<strong>Warning:</strong> Your saved data is stored locally, but this browser has not enabled extra storage protection. Regular backups are recommended.",
+    );
+
+  const { header, headerContainer } = buildHeader({ extensionName, warnings });
 
   const entries = await Promise.all(
     SECTION_CONFIG.filter(
@@ -57,7 +64,7 @@ export async function render(): Promise<void> {
 
   const { nav, updateSelected } = await buildNav(navGroups);
 
-  header.appendChild(await buildNavToggleEl(nav));
+  headerContainer.appendChild(await buildNavToggleEl(nav));
 
   const wrapper = el("div", { className: `${CLASS_PREFIX}__wrapper` }, [
     header,

@@ -1,6 +1,6 @@
 export function getStyles(prefix: string): string {
   return `
-    .${prefix} {
+    .${prefix}-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -21,6 +21,15 @@ export function getStyles(prefix: string): string {
 
     .${prefix}-actions li button {
       margin: 0;
+    }
+
+    .${prefix}-warning {
+      margin-top: 0.5em;
+      margin-bottom: 0;
+      opacity: 0.8;
+      font-size: 0.90em;
+      font-style: italic;
+      color: #900;
     }
 
     @media (max-width: 600px) {
