@@ -23,7 +23,7 @@ export function buildActionButtonConfig(
         ([key]) => modules[WORK_STATE_MODULE_MAP[key as WorkState]].enabled,
       )
       .map(([key, labels]) => [
-        key,
+        WORK_STATE_TO_ACTION_MAP[key as WorkState],
         makeMeta(WORK_STATE_TO_ACTION_MAP[key as WorkState], labels),
       ]),
   ) as Record<WorkAction, ActionButtonMeta>;
