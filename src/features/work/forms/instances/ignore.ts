@@ -2,9 +2,10 @@ import { createWorkForm } from "../base";
 import { WorkFormItem } from "../types";
 import { WorkAction } from "../../config";
 
+import { settingsCache } from "../../../../services/cache";
 import { textarea } from "../../../../ui/forms";
-import { VerticalPlacement } from "../../../../enums/settings";
 import { FormItemType } from "../../../../ui/forms/enums";
+import { VerticalPlacement } from "../../../../enums/settings";
 import { IgnoredWork } from "../../../../types/works";
 
 const items: WorkFormItem<IgnoredWork>[] = [
@@ -18,11 +19,12 @@ const items: WorkFormItem<IgnoredWork>[] = [
   },
 ];
 
-export function createIgnoreWorkForm(
+export async function createIgnoreWorkForm(
   data: Partial<IgnoredWork>,
   editing: boolean,
   origin?: VerticalPlacement,
-): HTMLElement {
+): Promise<HTMLElement> {
+  const { labelSettings } = await settingsCache.get();
   return createWorkForm({
     id: WorkAction.IGNORE,
     landmark: "Ignore Work",
@@ -37,7 +39,7 @@ export function createIgnoreWorkForm(
       },
       delete: {
         isDeletable: editing === true,
-        label: "Unignore",
+        label: labelSettings.actions.ignored.simple.on,
         ariaLabel: `Remove ${data.title || "this work"} from your ignored list`,
       },
     },

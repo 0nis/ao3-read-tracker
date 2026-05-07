@@ -43,5 +43,5 @@ export interface ActionHandlerEntry<T extends { id: string }> {
     data: Partial<T>,
     editing: boolean,
     origin?: VerticalPlacement,
-  ) => void;
+  ) => Promise<HTMLElement>;
 }

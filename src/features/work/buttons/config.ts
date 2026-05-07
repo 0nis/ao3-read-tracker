@@ -18,18 +18,18 @@ export const ACTION_HANDLER_MAP: {
 } = {
   [WorkAction.FINISHED]: {
     storage: StorageService.finishedWorks,
-    createForm: (data, editing, origin) =>
-      createFinishedWorkForm(data, editing, origin),
+    createForm: async (data, editing, origin) =>
+      await createFinishedWorkForm(data, editing, origin),
   },
   [WorkAction.IN_PROGRESS]: {
     storage: StorageService.inProgressWorks,
-    createForm: (data, editing, origin) =>
-      createInProgressWorkForm(data, editing, origin),
+    createForm: async (data, editing, origin) =>
+      await createInProgressWorkForm(data, editing, origin),
   },
   [WorkAction.IGNORE]: {
     storage: StorageService.ignoredWorks,
-    createForm: (data, editing, origin) =>
-      createIgnoreWorkForm(data, editing, origin),
+    createForm: async (data, editing, origin) =>
+      await createIgnoreWorkForm(data, editing, origin),
   },
 };
 

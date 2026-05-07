@@ -17,7 +17,7 @@ export async function handleEditWork<K extends keyof WorkActionTypeMap>(
   const cfg = ACTION_HANDLER_MAP[workAction];
   const { data } = await cfg.storage.getById(id);
 
-  cfg.createForm(
+  await cfg.createForm(
     {
       ...(data || {}),
       id,
