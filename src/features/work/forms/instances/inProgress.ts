@@ -78,10 +78,8 @@ export async function createInProgressWorkForm(
   const { labelSettings } = await settingsCache.get();
   return createWorkForm({
     id: WorkAction.IN_PROGRESS,
-    landmark: "In Progress Work",
-    heading: editing
-      ? "Edit Read Progress Info"
-      : "Mark this work as In Progress",
+    landmark: editing ? "Edit Read Progress" : "Start Reading",
+    heading: editing ? "Edit Read Progress" : "Start Reading This Work",
     data,
     editing,
     items,

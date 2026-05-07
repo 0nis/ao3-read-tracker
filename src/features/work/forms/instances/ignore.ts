@@ -12,7 +12,7 @@ const items: WorkFormItem<IgnoredWork>[] = [
   {
     type: FormItemType.FIELD,
     dataField: "reason",
-    label: "Reason for ignoring",
+    label: "Reason for Ignoring",
     description:
       "A private reason that will appear in the work summary block for this work.",
     input: textarea({ rows: 3 }),
@@ -27,8 +27,8 @@ export async function createIgnoreWorkForm(
   const { labelSettings } = await settingsCache.get();
   return createWorkForm({
     id: WorkAction.IGNORE,
-    landmark: "Ignore Work",
-    heading: editing ? "Edit ignore work info" : "Ignore this work",
+    landmark: editing ? "Edit Ignored Work" : "Ignore This Work",
+    heading: editing ? "Edit Ignored Work" : "Ignore This Work",
     data,
     editing,
     items,

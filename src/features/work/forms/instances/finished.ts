@@ -36,7 +36,7 @@ const items: WorkFormItem<FinishedWork>[] = [
           {
             type: FormItemType.FIELD,
             dataField: "finishedAt",
-            label: "Finished at",
+            label: "Finished At",
             input: datetime({ defaultValue: new Date() }),
           },
           {
@@ -54,13 +54,13 @@ const items: WorkFormItem<FinishedWork>[] = [
           {
             type: FormItemType.FIELD,
             dataField: "timesRead",
-            label: "Times read",
+            label: "Times Read",
             input: number({ min: 1, defaultValue: 1 }),
           },
           {
             type: FormItemType.FIELD,
             dataField: "rereadWorthy",
-            label: "Reread worthy?",
+            label: "Reread Worthy?",
             input: toggleSwitch(),
           },
         ],
@@ -77,8 +77,8 @@ export async function createFinishedWorkForm(
   const { labelSettings } = await settingsCache.get();
   return createWorkForm({
     id: WorkAction.FINISHED,
-    landmark: "Mark Work as Read",
-    heading: editing ? "Edit finished work info!" : "Mark this work as read!",
+    landmark: editing ? "Edit Finished Work" : "Mark This Work as Read",
+    heading: editing ? "Edit Finished Work" : "Mark This Work as Read",
     data,
     editing,
     items,
