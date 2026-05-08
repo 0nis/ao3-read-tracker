@@ -55,7 +55,6 @@ export interface IgnoreSettings {
 export interface GeneralSettings {
   id: string;
   modules: ModuleStates;
-  nativeMarkAsReadReplacementLabel: string;
 }
 
 export interface DisplayModeSettings {

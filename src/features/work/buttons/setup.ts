@@ -20,7 +20,7 @@ export async function setupButtons() {
   const settings = await settingsCache.get();
 
   modifyMarkForLaterButton(
-    settings.generalSettings?.nativeMarkAsReadReplacementLabel,
+    settings.labelSettings?.misc.nativeMarkAsReadReplacement,
   );
 
   const workId = getIdFromUrl();

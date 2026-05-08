@@ -70,7 +70,6 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettings = {
       enabled: true,
     },
   },
-  nativeMarkAsReadReplacementLabel: "",
 };
 
 export const DEFAULT_DISPLAYMODE_SETTINGS: DisplayModeSettings = {
