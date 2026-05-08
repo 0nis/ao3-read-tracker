@@ -12,9 +12,14 @@ const loaderEntry = path.resolve(__dirname, "src/entrypoints/bootstrap.js");
 const pkg = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf8"),
 );
+
+function getManifestVersion(version) {
+  return version.split("-")[0];
+}
+
 const baseFields = {
   name: pkg.displayName || pkg.name,
-  version: pkg.version,
+  version: getManifestVersion(pkg.version),
   author: pkg.author,
   description: pkg.description,
   homepage_url: pkg.homepage,
