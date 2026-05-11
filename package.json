@@ -2,7 +2,7 @@
   "name": "ao3-read-tracker",
   "displayName": "AO3 Read Tracker",
   "version": "0.1.0-beta.1",
-  "description": "Never forget which AO3 works you've read - mark them as read or ignored",
+  "description": "An extension to track your reading progress on Archive of Our Own.",
   "author": "0nis",
   "license": "GPL-3.0",
   "main": "index.js",
