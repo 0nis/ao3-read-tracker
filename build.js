@@ -14,7 +14,14 @@ const pkg = JSON.parse(
 );
 
 function getManifestVersion(version) {
-  return version.split("-")[0];
+  const [baseVersion, prerelease] = version.split("-");
+  if (!prerelease) return baseVersion;
+
+  const buildNumber = Number(prerelease.split(".").pop());
+
+  return Number.isInteger(buildNumber)
+    ? `${baseVersion}.${buildNumber}`
+    : baseVersion;
 }
 
 const baseFields = {
