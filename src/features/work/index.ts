@@ -4,7 +4,11 @@ import { setupWorkMetaAreas } from "./meta/setup";
 
 export const Work = {
   async init(main: HTMLElement) {
-    if (!main.classList.contains("chapters-show")) return;
+    if (
+      !main.classList.contains("chapters-show") &&
+      !main.classList.contains("works-show")
+    )
+      return;
 
     await setupForms();
     await setupButtons();
