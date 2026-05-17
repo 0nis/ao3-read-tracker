@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "permissions": ["storage"],
+  "permissions": ["storage", "identity"],
   "host_permissions": ["https://archiveofourown.org/*"],
   "content_scripts": [
     {

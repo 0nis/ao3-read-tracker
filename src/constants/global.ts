@@ -23,3 +23,6 @@ export const LOADER_STORAGE_KEYS = {
 export const SETTINGS_PAGE_PATH = "/extensions/read-tracker";
 export const CUSTOM_PATHS = [SETTINGS_PAGE_PATH];
 export const FALLBACK_PATH = "/";
+
+export const GOOGLE_CLIENT_ID =
+  "89143754080-h9rkqo6c9611r6sqm81ir1ds78tehlkq.apps.googleusercontent.com";
