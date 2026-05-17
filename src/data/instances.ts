@@ -16,6 +16,8 @@ import {
 } from "../types/settings";
 import { SymbolRecord } from "../types/symbols";
 import { SettingsType } from "../enums/settings";
+import { BackupsData } from "./models/backups";
+import { BackupConfig } from "../types/backups";
 
 export const instances = {
   finishedWorks: new WorksData<FinishedWork>(db.finishedWorks),
@@ -51,6 +53,8 @@ export const instances = {
     SettingsType.SYMBOLS,
   ),
   symbolRecords: new SymbolsData<SymbolRecord>(db.symbolRecords),
+
+  backupConfigs: new BackupsData<BackupConfig>(db.backupConfigs),
 };
 
 export type InstanceMap = typeof instances;
