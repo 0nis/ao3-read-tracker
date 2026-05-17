@@ -3,6 +3,17 @@ type MigrationFn = (row: any, tableName: string) => any;
 /**
  * Keyed by the *version being upgraded from*.
  * Add a new entry when a new version needs migration.
+ * 
+ * @example
+ *   1: [
+ *     (row, tableName) => {
+ *       if (tableName === "finishedWorks") {
+ *         if (!("newField" in row)) row.newField = "default";
+ *       }
+ *       return row;
+ *     },
+ *   ],
+ ]
  */
 export const migrations: Record<number, MigrationFn[]> = {
   // Wow, such empty
