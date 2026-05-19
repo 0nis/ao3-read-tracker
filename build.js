@@ -7,7 +7,7 @@ const __dirname = path.resolve();
 const outDir = path.resolve(__dirname, "build");
 const distDir = path.resolve(__dirname, "dist");
 const entry = path.resolve(__dirname, "src/entrypoints/content.js");
-const loaderEntry = path.resolve(__dirname, "src/entrypoints/bootstrap.js");
+const bootstrapEntry = path.resolve(__dirname, "src/entrypoints/bootstrap.js");
 
 const pkg = JSON.parse(
   fs.readFileSync(path.join(__dirname, "package.json"), "utf8"),
@@ -94,10 +94,10 @@ async function buildForBrowser(targetBrowser, isDev) {
     },
   });
 
-  // loader to start at document_start
+  // Bootstrap script to start at document_start
   await esbuild.build({
-    entryPoints: [loaderEntry],
-    outfile: path.join(outDir, "loader.js"),
+    entryPoints: [bootstrapEntry],
+    outfile: path.join(outDir, "bootstrap.js"),
     bundle: true,
     format: "iife",
     sourcemap: true,
@@ -127,8 +127,8 @@ async function buildForBrowser(targetBrowser, isDev) {
     path.join(distPath, "content.js"),
   );
   copyFileSync(
-    path.join(outDir, "loader.js"),
-    path.join(distPath, "loader.js"),
+    path.join(outDir, "bootstrap.js"),
+    path.join(distPath, "bootstrap.js"),
   );
   createManifest(manifestSrc, manifestDest);
 

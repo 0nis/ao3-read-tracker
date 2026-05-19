@@ -10,7 +10,7 @@
     },
     {
       "matches": ["https://archiveofourown.org/*"],
-      "js": ["loader.js"],
+      "js": ["bootstrap.js"],
       "run_at": "document_start"
     }
   ]
