@@ -1,0 +1,55 @@
+@startuml Google Drive Device OAuth Flow
+title Google Drive Device OAuth Flow
+
+actor User
+participant "AO3 UI\n(content script)" as UI
+participant "GoogleDeviceAuth\n(content-side proxy)" as Proxy
+participant "Auth Background\n(message router)" as BG
+participant "GoogleDeviceAuthProvider\n(provider)" as Provider
+participant "DeviceOAuthClient\n(generic OAuth)" as Client
+database "Extension Storage" as Storage
+participant "Google OAuth" as Google
+
+User -> UI: Click "Connect Google Drive"
+UI -> Proxy: startDeviceFlow()
+Proxy -> BG: runtime message\nSTART_DEVICE_FLOW
+BG -> Provider: startDeviceFlow()
+Provider -> Client: requestDeviceCode()
+Client -> Google: POST /device/code\nclient_id + scope
+Google --> Client: device_code + user_code\nverification_url + interval
+Client --> Provider: normalized device code
+Provider -> Storage: store pending device flow
+Provider --> BG: DeviceFlowStartResponse
+BG --> Proxy: DeviceFlowStartResponse
+Proxy --> UI: verificationUrl + userCode
+
+UI -> User: Show code + Google URL
+User -> Google: Open URL and enter code
+Google -> User: Account selection + consent
+
+loop Until approved or expired
+  UI -> Proxy: pollDeviceFlow()
+  Proxy -> BG: runtime message\nPOLL_DEVICE_FLOW
+  BG -> Provider: pollDeviceFlow()
+  Provider -> Storage: read pending device flow
+  Provider -> Client: pollToken(deviceCode)
+  Client -> Google: POST /token\ndevice_code + client credentials
+  alt authorization pending
+    Google --> Client: authorization_pending
+    Client --> Provider: PENDING
+    Provider --> BG: PENDING
+    BG --> Proxy: PENDING
+    Proxy --> UI: PENDING
+  else approved
+    Google --> Client: access_token + refresh_token
+    Client --> Provider: token response
+    Provider -> Storage: store OAuth tokens
+    Provider -> Storage: clear pending device flow
+    Provider --> BG: COMPLETE
+    BG --> Proxy: COMPLETE
+    Proxy --> UI: COMPLETE
+    UI -> User: Show "Connected"
+  end
+end
+
+@enduml
