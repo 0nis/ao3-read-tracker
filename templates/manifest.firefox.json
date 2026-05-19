@@ -1,18 +1,14 @@
 {
   "manifest_version": 2,
-  "permissions": ["storage", "identity"],
-  "content_scripts": [
-    {
-      "matches": ["https://archiveofourown.org/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": ["https://archiveofourown.org/*"],
-      "js": ["bootstrap.js"],
-      "run_at": "document_start"
-    }
+  "permissions": [
+    "storage",
+    "https://archiveofourown.org/*",
+    "https://oauth2.googleapis.com/*",
+    "https://www.googleapis.com/*"
   ],
+  "background": {
+    "scripts": ["background.js"]
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "0nis@ao3-read-tracker",
@@ -20,6 +16,9 @@
       "data_collection_permissions": {
         "required": ["none"]
       }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
     }
   }
 }
