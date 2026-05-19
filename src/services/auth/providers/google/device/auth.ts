@@ -1,25 +1,18 @@
-import { sendRuntimeMessage } from "../helpers";
-import { DeviceAuthService } from "../../shared/service";
+import { sendRuntimeMessage } from "../../helpers";
+import { DeviceAuthService } from "../../../shared/service";
 import {
   AuthMessageType,
   AuthProvider,
   DeviceFlowStatus,
-} from "../../shared/enums";
+} from "../../../shared/enums";
 import {
   AuthDisconnectResponse,
   AuthPollResponse,
   AuthStatusResponse,
-} from "../../shared/types";
-import { DeviceFlowStartResponse } from "../../oauth/device/types";
+} from "../../../shared/types";
+import { DeviceFlowStartResponse } from "../../../oauth/device/types";
 
-export class GoogleAuth implements DeviceAuthService {
-  async authenticate(): Promise<void> {
-    const response = await this.startDeviceFlow();
-    if (!response.ok) throw new Error(response.error);
-
-    window.open(response.verificationUrl, "_blank", "noopener,noreferrer");
-  }
-
+export class GoogleDeviceAuth implements DeviceAuthService {
   async startDeviceFlow(): Promise<DeviceFlowStartResponse> {
     return await sendRuntimeMessage<DeviceFlowStartResponse>({
       type: AuthMessageType.START_DEVICE_FLOW,

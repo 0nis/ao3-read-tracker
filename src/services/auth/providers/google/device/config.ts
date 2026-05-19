@@ -1,9 +1,9 @@
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-} from "../../../../constants/global";
-import { AuthProvider } from "../../shared/enums";
-import { DeviceFlowClientConfig } from "../../oauth/device/types";
+} from "../../../../../constants/global";
+import { AuthProvider } from "../../../shared/enums";
+import { DeviceFlowClientConfig } from "../../../oauth/device/types";
 
 export const GOOGLE_DEVICE_CODE_URL =
   "https://oauth2.googleapis.com/device/code";

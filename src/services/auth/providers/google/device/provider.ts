@@ -1,11 +1,18 @@
 import { GOOGLE_DEVICE_OAUTH_CONFIG, GOOGLE_REVOKE_URL } from "./config";
 
-import { DeviceOAuthClient } from "../../oauth/device/client";
-import { OAuthDeviceFlowStore } from "../../storage/oauth/device-flow";
-import { OAuthTokenStore } from "../../storage/oauth/tokens";
-import { AuthProvider, DeviceFlowStatus } from "../../shared/enums";
-import { DeviceFlowStartResponse } from "../../oauth/device/types";
-import { OAuthStoredState, OAuthTokenResponse } from "../../oauth/token-types";
+import { DeviceOAuthClient } from "../../../oauth/device/client";
+
+import { OAuthDeviceFlowStore } from "../../../storage/oauth/device-flow";
+import { OAuthTokenStore } from "../../../storage/oauth/tokens";
+
+import { DeviceAuthProvider } from "../../../shared/provider";
+import { AuthProvider, DeviceFlowStatus } from "../../../shared/enums";
+
+import { DeviceFlowStartResponse } from "../../../oauth/device/types";
+import {
+  OAuthStoredState,
+  OAuthTokenResponse,
+} from "../../../oauth/token-types";
 
 const REFRESH_BUFFER_MS = 60_000;
 const SLOW_DOWN_INCREMENT_SECONDS = 5;
@@ -26,7 +33,10 @@ function toStoredState(
   };
 }
 
-export class GoogleDeviceOAuth {
+export class GoogleDeviceAuthProvider implements DeviceAuthProvider {
+  readonly provider = AuthProvider.GOOGLE;
+  readonly supportsDeviceFlow = true;
+
   private client = new DeviceOAuthClient(GOOGLE_DEVICE_OAUTH_CONFIG);
   private tokenStore = new OAuthTokenStore(AuthProvider.GOOGLE);
   private deviceFlowStore = new OAuthDeviceFlowStore(AuthProvider.GOOGLE);
@@ -106,10 +116,7 @@ export class GoogleDeviceOAuth {
 
   async getValidAccessToken(): Promise<string | null> {
     const state = await this.tokenStore.get();
-
-    if (!state) {
-      return null;
-    }
+    if (!state) return null;
 
     if (Date.now() < state.expiresAt - REFRESH_BUFFER_MS) {
       return state.accessToken;

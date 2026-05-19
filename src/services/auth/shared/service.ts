@@ -2,7 +2,6 @@ import { DeviceFlowStartResponse } from "../oauth/device/types";
 import { DeviceFlowStatus } from "./enums";
 
 export interface AuthService {
-  authenticate(): Promise<void>;
   isAuthenticated(): Promise<boolean>;
   disconnect(): Promise<void>;
 }
