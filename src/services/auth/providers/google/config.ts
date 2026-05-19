@@ -7,24 +7,15 @@ import { DeviceFlowClientConfig } from "../../oauth/device/types";
 
 export const GOOGLE_DEVICE_CODE_URL =
   "https://oauth2.googleapis.com/device/code";
-
 export const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-
 export const GOOGLE_REVOKE_URL = "https://oauth2.googleapis.com/revoke";
-
-export const GOOGLE_DRIVE_APPDATA_SCOPE =
-  "https://www.googleapis.com/auth/drive.appdata";
-
-function optionalSecret(secret: string | undefined): string | undefined {
-  const trimmed = secret?.trim();
-  return trimmed ? trimmed : undefined;
-}
+export const GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
 
 export const GOOGLE_DEVICE_OAUTH_CONFIG: DeviceFlowClientConfig = {
   provider: AuthProvider.GOOGLE,
   deviceCodeUrl: GOOGLE_DEVICE_CODE_URL,
   tokenUrl: GOOGLE_TOKEN_URL,
   clientId: GOOGLE_CLIENT_ID,
-  clientSecret: optionalSecret(GOOGLE_CLIENT_SECRET),
-  scope: GOOGLE_DRIVE_APPDATA_SCOPE,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  scope: GOOGLE_DRIVE_SCOPE,
 };
