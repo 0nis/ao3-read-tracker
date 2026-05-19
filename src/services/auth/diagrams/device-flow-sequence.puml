@@ -2,13 +2,30 @@
 title Google Drive Device OAuth Flow
 
 actor User
-participant "AO3 UI\n(content script)" as UI
-participant "GoogleDeviceAuth\n(content-side proxy)" as Proxy
-participant "Auth Background\n(message router)" as BG
-participant "GoogleDeviceAuthProvider\n(provider)" as Provider
-participant "DeviceOAuthClient\n(generic OAuth)" as Client
+participant UI [
+    =AO3 UI
+    ""content script""
+]
+participant Proxy [
+    =GoogleDeviceAuth
+    ""content-side proxy""
+]
+participant BG [
+    =Auth Background
+    ""message router""
+]
+participant Provider [
+    =GoogleDeviceAuthProvider
+    ""provider""
+]
+participant Client [
+    =DeviceOAuthClient
+    ""generic OAuth""
+]
 database "Extension Storage" as Storage
-participant "Google OAuth" as Google
+participant Google [
+    =Google OAuth
+]
 
 User -> UI: Click "Connect Google Drive"
 UI -> Proxy: startDeviceFlow()
