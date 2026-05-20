@@ -50,7 +50,7 @@ export class Ao3ReadTrackerDb extends Dexie {
     });
 
     this.version(2).stores({
-      backupConfigs: "id",
+      backupConfigs: "provider",
     });
 
     this.on("populate", async () => await populateDb());

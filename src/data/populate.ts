@@ -15,7 +15,6 @@ import {
   DEFAULT_LABEL_SETTINGS,
 } from "../constants/settings";
 import { DEFAULT_SYMBOL_RECORDS } from "../constants/symbols";
-import { DEFAULT_BACKUP_CONFIGS } from "../constants/backups";
 
 export async function populateDb() {
   try {
@@ -27,7 +26,6 @@ export async function populateDb() {
     await db.labelSettings.put(DEFAULT_LABEL_SETTINGS);
     await db.symbolSettings.put(DEFAULT_SYMBOL_SETTINGS);
     await db.symbolRecords.bulkPut(DEFAULT_SYMBOL_RECORDS);
-    await db.backupConfigs.bulkPut(DEFAULT_BACKUP_CONFIGS);
 
     if (IS_DEV) await seedDatabase(); // test data for development
   } catch (err) {

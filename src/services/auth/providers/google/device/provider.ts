@@ -160,9 +160,7 @@ export class GoogleDeviceAuthProvider implements DeviceAuthProvider {
     try {
       const token = await this.client.refreshAccessToken(refreshToken);
       const state = toStoredState(token, refreshToken);
-
       await this.tokenStore.set(state);
-
       return state;
     } catch (err) {
       await this.tokenStore.clear();
