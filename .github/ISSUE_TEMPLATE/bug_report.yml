@@ -69,6 +69,16 @@ body:
         Usually found in your browser's Settings -> About section. If you can't find it, it's completely okay to leave this blank.
       placeholder: 102.0.5005.61
 
+  - type: dropdown
+    id: ao3_login_status
+    attributes:
+      label: Were you logged into AO3?
+      description: AO3 can behave differently depending on whether you're logged in or not.
+      options:
+        - "Yes"
+        - "No"
+        - "I'm not sure"
+
   - type: input
     id: extension_version
     attributes:
