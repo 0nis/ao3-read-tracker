@@ -1,6 +1,6 @@
 import {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
+  GOOGLE_DEVICE_CLIENT_ID,
+  GOOGLE_DEVICE_CLIENT_SECRET,
 } from "../../../../../constants/global";
 import { AuthProvider } from "../../../shared/enums";
 import { DeviceFlowClientConfig } from "../../../oauth/device/types";
@@ -15,7 +15,7 @@ export const GOOGLE_DEVICE_OAUTH_CONFIG: DeviceFlowClientConfig = {
   provider: AuthProvider.GOOGLE,
   deviceCodeUrl: GOOGLE_DEVICE_CODE_URL,
   tokenUrl: GOOGLE_TOKEN_URL,
-  clientId: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
+  clientId: GOOGLE_DEVICE_CLIENT_ID,
+  clientSecret: GOOGLE_DEVICE_CLIENT_SECRET,
   scope: GOOGLE_DRIVE_SCOPE,
 };

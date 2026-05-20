@@ -24,5 +24,7 @@ export const SETTINGS_PAGE_PATH = "/extensions/read-tracker";
 export const CUSTOM_PATHS = [SETTINGS_PAGE_PATH];
 export const FALLBACK_PATH = "/";
 
-export const GOOGLE_CLIENT_ID = "GOOGLE_CLIENT_ID";
-export const GOOGLE_CLIENT_SECRET = "GOOGLE_CLIENT_SECRET";
+export const GOOGLE_DEVICE_CLIENT_ID =
+  process.env.GOOGLE_DEVICE_CLIENT_ID || "";
+export const GOOGLE_DEVICE_CLIENT_SECRET =
+  process.env.GOOGLE_DEVICE_CLIENT_SECRET || "";

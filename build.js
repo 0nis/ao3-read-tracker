@@ -1,7 +1,10 @@
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
+import dotenv from "dotenv";
 import { VALID_BROWSERS } from "./constants.js";
+
+dotenv.config();
 
 const __dirname = path.resolve();
 const outDir = path.resolve(__dirname, "build");
@@ -29,6 +32,29 @@ const entries = [
     outputName: "background.js",
   },
 ];
+
+/**
+ * Throws an error if a required environment variable is missing
+ * @param {string} name
+ */
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value) throw new Error(`Missing required environment variable: ${name}`);
+  return value;
+}
+
+/**
+ * Environment variable definitions
+ * @type {Record<string, string>}
+ */
+const definitions = {
+  "process.env.GOOGLE_DEVICE_CLIENT_ID": JSON.stringify(
+    requireEnv("GOOGLE_DEVICE_CLIENT_ID"),
+  ),
+  "process.env.GOOGLE_DEVICE_CLIENT_SECRET": JSON.stringify(
+    requireEnv("GOOGLE_DEVICE_CLIENT_SECRET"),
+  ),
+};
 
 /** Parsed package.json */
 const pkg = JSON.parse(
@@ -136,6 +162,7 @@ async function buildForBrowser(targetBrowser, isDev) {
         "process.env.NODE_ENV": JSON.stringify(
           isDev ? "development" : "production",
         ),
+        ...definitions,
       },
       ...buildOptions,
     });
