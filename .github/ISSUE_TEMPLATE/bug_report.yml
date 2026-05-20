@@ -1,30 +1,25 @@
 name: Bug Report
 description: Something not working correctly? Please let me know!
-title: "[Bug]: "
+title: "[🐛]: "
 labels: ["bug"]
 assignees: ["0nis"]
 
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thank you so much for taking your time to report this issue! 💚
-
-        This extension is developed by one person in their spare time, so detailed reports help a lot, but don't worry about making a "perfect" report. If I need more information, I'll just ask you for it!
-
   - type: textarea
     id: problem
     attributes:
-      label: What went wrong?
-      description: Describe the problem in your own words.
+      label: What happened?
+      description: Please describe the problem in as much detail as you can.
+      placeholder: |
+        I tried to do [x], I expected [y], but I got [z]!
     validations:
       required: true
 
   - type: textarea
     id: steps
     attributes:
-      label: How can this be reproduced?
-      description: Step-by-step instructions help a lot.
+      label: What steps led to this issue?
+      description: Please list what you clicked or did before the problem happened.
       placeholder: |
         1. Go to '...'
         2. Click on '...'
@@ -34,33 +29,21 @@ body:
     id: device_type
     attributes:
       label: Device type
+      description: What type of device did you use?
       options:
         - Desktop
         - Phone
         - Tablet
+        - TV
+        - Samsung Smart Fridge
     validations:
       required: true
-
-  - type: input
-    id: browser
-    attributes:
-      label: Browser
-      description: |
-        Examples: Firefox, Firefox Android, Chrome, Edge, Brave, Safari...
-    validations:
-      required: true
-
-  - type: input
-    id: browser_version
-    attributes:
-      label: Browser version
-      description: |
-        Usually found in your browser's Settings -> About section.
 
   - type: dropdown
     id: os
     attributes:
       label: Operating system
+      description: What operating system were you using?
       options:
         - Windows
         - macOS
@@ -69,27 +52,53 @@ body:
         - iPhone/iPad (iOS/iPadOS)
         - Other
 
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser were you using when the problem happened?
+      placeholder: Firefox, Firefox Android, Chrome, Edge, Brave, Safari...
+    validations:
+      required: true
+
+  - type: input
+    id: browser_version
+    attributes:
+      label: Browser version
+      description: |
+        Usually found in your browser's Settings -> About section. If you can't find it, it's completely okay to leave this blank.
+      placeholder: 102.0.5005.61
+
+  - type: input
+    id: extension_version
+    attributes:
+      label: Extension version
+      description: What version of the extension were you on at the time of the problem? If you have no idea, you can leave this blank.
+      placeholder: 0.1.0.2
+
   - type: textarea
     id: modifications
     attributes:
       label: Other extensions, userscripts, or AO3 site skins
       description: |
-        These can sometimes interfere with the extension, so even unrelated ones may be useful to mention.
+        These can sometimes interfere with the extension, so even unrelated ones may be useful to mention. 
+        If it's a relevant but relatively niche script, skin, etc., then please link to it or describe exactly what it does.
       placeholder: |
-        Example:
-        - Tampermonkey
-        - AO3 Savior
-        - uBlock Origin
-        - Custom AO3 site skin
+        - AO3 site skin X
+        - Tampermonkey script Y
+        - Extension Z
 
   - type: textarea
     id: screenshots
     attributes:
-      label: Screenshots or error messages
-      description: Optional, but often very helpful.
+      label: Screenshots, error messages, etc
+      description: |
+        Optional, but often very helpful.
+      placeholder: |
+        Attach images or log files by clicking this area to highlight it and then dragging files in
 
   - type: textarea
     id: additional
     attributes:
-      label: Anything else?
-      description: Add anything else you think might be relevant.
+      label: Do you have anything else to add?
+      description: I appreciate you! 💚
