@@ -1,0 +1,17 @@
+name: Question
+description: Ask a question, get help, or clarify how something works.
+title: "[❓]: "
+labels: ["question"]
+assignees: ["0nis"]
+
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: What's your question?
+      description: |
+        Questions of all kinds are welcome, I'm happy to help!
+      placeholder: |
+        Leave a question
+    validations:
+      required: true

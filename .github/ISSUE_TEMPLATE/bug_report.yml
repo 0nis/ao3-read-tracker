@@ -1,0 +1,104 @@
+name: Bug report
+description: Something not working correctly? Please let me know!
+title: "[🐛]: "
+labels: ["bug"]
+assignees: ["0nis"]
+
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Please describe the problem in as much detail as you can.
+      placeholder: |
+        I tried to do [x], I expected [y], but I got [z]!
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: What steps led to this issue?
+      description: Please list what you clicked or did before the problem happened.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+
+  - type: dropdown
+    id: device_type
+    attributes:
+      label: Device type
+      description: What type of device did you use?
+      options:
+        - Desktop
+        - Phone
+        - Tablet
+        - TV
+        - Samsung Smart Fridge
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      description: What operating system were you using?
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iPhone/iPad (iOS/iPadOS)
+        - Other
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser were you using when the problem happened?
+      placeholder: Firefox, Firefox Android, Chrome, Edge, Brave, Safari...
+    validations:
+      required: true
+
+  - type: input
+    id: browser_version
+    attributes:
+      label: Browser version
+      description: |
+        Usually found in your browser's Settings -> About section. If you can't find it, it's completely okay to leave this blank.
+      placeholder: 102.0.5005.61
+
+  - type: input
+    id: extension_version
+    attributes:
+      label: Extension version
+      description: What version of the extension were you on at the time of the problem? If you have no idea, you can leave this blank.
+      placeholder: 0.1.0.2
+
+  - type: textarea
+    id: modifications
+    attributes:
+      label: Other extensions, userscripts, or AO3 site skins
+      description: |
+        These can sometimes interfere with the extension, so even unrelated ones may be useful to mention. 
+        If it's a relevant but relatively niche script, skin, etc., then please link to it or describe exactly what it does.
+      placeholder: |
+        - AO3 site skin X
+        - Tampermonkey script Y
+        - Extension Z
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots, error messages, etc
+      description: |
+        Optional, but often very helpful.
+      placeholder: |
+        Attach images or log files by clicking this area to highlight it and then dragging files in
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Do you have anything else to add?
+      description: I appreciate you! 💚
