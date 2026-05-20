@@ -1,0 +1,88 @@
+@startuml Google Drive Device OAuth Flow
+title Google Drive Device OAuth Flow
+
+skinparam participant<<external>> {
+    BackgroundColor #F3F3F3
+    BorderColor #888888
+}
+
+actor User
+participant UI [
+    =Options Page UI
+    ""content script""
+]
+participant Manager [
+    =GoogleDeviceAuthManager
+    ""manager""
+]
+participant Proxy [
+    =GoogleDeviceAuth
+    ""content-side proxy""
+]
+participant BG [
+    =Auth Background
+    ""message router""
+]
+participant Provider [
+    =GoogleDeviceAuthProvider
+    ""provider""
+]
+participant Client [
+    =DeviceOAuthClient
+    ""generic OAuth""
+]
+database "Extension Storage" as ExtStorage
+database "IndexedDB Storage" as Storage
+
+participant Google <<external>> [
+    =Google OAuth
+]
+
+User -> UI: Click "Connect Google Drive"
+UI -> Manager: start()
+Manager -> Proxy: startDeviceFlow()
+Proxy -> BG: runtime message\nSTART_DEVICE_FLOW
+BG -> Provider: startDeviceFlow()
+Provider -> Client: requestDeviceCode()
+Client -> Google: POST /device/code\nclient_id + scope
+Google --> Client: device_code + user_code\nverification_url + interval
+Client --> Provider: normalized device code
+Provider -> ExtStorage: store pending device flow
+Provider --> BG: DeviceFlowStartResponse
+BG --> Proxy: DeviceFlowStartResponse
+Proxy --> Manager: DeviceFlowStartResponse
+Manager --> UI: verificationUrl + userCode
+
+UI -> User: Show code + Google URL
+User -> Google: Open URL and enter code
+Google -> User: Account selection + consent
+
+loop Until approved or expired
+  UI -> Manager: poll()
+  Manager -> Proxy: pollDeviceFlow()
+  Proxy -> BG: runtime message\nPOLL_DEVICE_FLOW
+  BG -> Provider: pollDeviceFlow()
+  Provider -> ExtStorage: read pending device flow
+  Provider -> Client: pollToken(deviceCode)
+  Client -> Google: POST /token\ndevice_code + client credentials
+  alt authorization pending
+    Google --> Client: authorization_pending
+    Client --> Provider: PENDING
+    Provider --> BG: PENDING
+    BG --> Proxy: PENDING
+    Proxy --> Manager: PENDING
+  else approved
+    Google --> Client: access_token + refresh_token
+    Client --> Provider: token response
+    Provider -> ExtStorage: store OAuth tokens
+    Provider -> ExtStorage: clear pending device flow
+    Provider --> BG: COMPLETE
+    BG --> Proxy: COMPLETE
+    Proxy --> Manager: COMPLETE
+    Manager -> Storage: store provider connected state
+    Manager --> UI: COMPLETE
+    UI -> User: Show "Connected"
+  end
+end
+
+@enduml

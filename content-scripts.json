@@ -1,0 +1,12 @@
+[
+  {
+    "matches": ["https://archiveofourown.org/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  },
+  {
+    "matches": ["https://archiveofourown.org/*"],
+    "js": ["bootstrap.js"],
+    "run_at": "document_start"
+  }
+]

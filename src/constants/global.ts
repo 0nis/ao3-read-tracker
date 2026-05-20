@@ -1,8 +1,7 @@
-export const VERSION: number = 1;
 export const ABBREVIATION: string = "EXT-RT";
 
 export const DATABASE_NAME = "Ao3ReadTrackerDB";
-export const DATABASE_VERSION = VERSION;
+export const DATABASE_VERSION: number = 2;
 
 export const EXTENSION_DISABLED_KEY = `${ABBREVIATION.toLowerCase()}.disabled`;
 export const PERSISTENT_STORAGE_KEY = `${ABBREVIATION.toLowerCase()}.persistent-storage`;
@@ -23,3 +22,8 @@ export const LOADER_STORAGE_KEYS = {
 export const SETTINGS_PAGE_PATH = "/extensions/read-tracker";
 export const CUSTOM_PATHS = [SETTINGS_PAGE_PATH];
 export const FALLBACK_PATH = "/";
+
+export const GOOGLE_DEVICE_CLIENT_ID =
+  process.env.GOOGLE_DEVICE_CLIENT_ID || "";
+export const GOOGLE_DEVICE_CLIENT_SECRET =
+  process.env.GOOGLE_DEVICE_CLIENT_SECRET || "";

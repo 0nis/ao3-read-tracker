@@ -1,17 +1,12 @@
 {
   "manifest_version": 3,
   "permissions": ["storage"],
-  "host_permissions": ["https://archiveofourown.org/*"],
-  "content_scripts": [
-    {
-      "matches": ["https://archiveofourown.org/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": ["https://archiveofourown.org/*"],
-      "js": ["loader.js"],
-      "run_at": "document_start"
-    }
-  ]
+  "host_permissions": [
+    "https://archiveofourown.org/*",
+    "https://oauth2.googleapis.com/*",
+    "https://www.googleapis.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
 }

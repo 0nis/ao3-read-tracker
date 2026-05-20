@@ -16,7 +16,25 @@ export class BackupsData<T extends BackupConfig> {
 
   async update(provider: BackupProviderType, cfg: Partial<T>): Promise<void> {
     const current = await this.getByProvider(provider);
-    if (!current) throw new Error(`Backup provider ${provider} not found`);
-    await this.table.put({ ...current, ...cfg });
+    if (!current) {
+      await this.create({
+        ...cfg,
+        enabled: cfg.enabled || false,
+        provider,
+      } as T);
+      return;
+    }
+    await this.table.put({ ...current, ...cfg, provider });
+  }
+
+  async create(cfg: T): Promise<void> {
+    if (!cfg.provider)
+      throw new Error("Cannot create backup config without provider.");
+
+    await this.table.add(cfg);
+  }
+
+  async delete(provider: BackupProviderType): Promise<void> {
+    await this.table.delete(provider);
   }
 }
