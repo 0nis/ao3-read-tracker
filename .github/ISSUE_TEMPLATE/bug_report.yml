@@ -1,0 +1,95 @@
+name: Bug Report
+description: Something not working correctly? Please let me know!
+title: "[Bug]: "
+labels: ["bug"]
+assignees: ["0nis"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you so much for taking your time to report this issue! 💚
+
+        This extension is developed by one person in their spare time, so detailed reports help a lot, but don't worry about making a "perfect" report. If I need more information, I'll just ask you for it!
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong?
+      description: Describe the problem in your own words.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can this be reproduced?
+      description: Step-by-step instructions help a lot.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+
+  - type: dropdown
+    id: device_type
+    attributes:
+      label: Device type
+      options:
+        - Desktop
+        - Phone
+        - Tablet
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: |
+        Examples: Firefox, Firefox Android, Chrome, Edge, Brave, Safari...
+    validations:
+      required: true
+
+  - type: input
+    id: browser_version
+    attributes:
+      label: Browser version
+      description: |
+        Usually found in your browser's Settings -> About section.
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iPhone/iPad (iOS/iPadOS)
+        - Other
+
+  - type: textarea
+    id: modifications
+    attributes:
+      label: Other extensions, userscripts, or AO3 site skins
+      description: |
+        These can sometimes interfere with the extension, so even unrelated ones may be useful to mention.
+      placeholder: |
+        Example:
+        - Tampermonkey
+        - AO3 Savior
+        - uBlock Origin
+        - Custom AO3 site skin
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or error messages
+      description: Optional, but often very helpful.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Anything else?
+      description: Add anything else you think might be relevant.
