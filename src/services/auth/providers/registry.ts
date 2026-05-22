@@ -1,7 +1,7 @@
 import { AuthProvider } from "../shared/enums";
 import { AnyAuthProvider } from "../shared/provider";
 
-import { GoogleDeviceAuthProvider } from "../providers/google/device/provider";
+import { GoogleDeviceAuthProvider } from "./google/device/provider";
 
 const authProviders = {
   [AuthProvider.GOOGLE]: new GoogleDeviceAuthProvider(),

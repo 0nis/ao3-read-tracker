@@ -1,4 +1,4 @@
-import { getAuthProvider } from "./provider-registry";
+import { getAuthProvider } from "../providers/provider-registry";
 import { errorMessage, isAuthMessage } from "./helpers";
 
 import {
