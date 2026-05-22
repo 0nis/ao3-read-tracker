@@ -8,7 +8,7 @@ import {
 } from "../../shared/types";
 import { BackupConfig } from "../../../../types/backups";
 
-export interface BackupHandler {
+export interface BackupProvider {
   readonly provider: BackupProviderType;
   readonly capabilities: BackupProviderCapabilities;
 
