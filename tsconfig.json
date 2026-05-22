@@ -11,7 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "types": ["node", "chrome"]
+    "types": ["node", "chrome", "firefox-webext-browser"]
   },
   "include": ["src"]
 }
