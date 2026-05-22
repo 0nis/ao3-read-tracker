@@ -6,7 +6,7 @@ import { OAuthDeviceFlowStore } from "../../../storage/oauth/device-flow";
 import { OAuthTokenStore } from "../../../storage/oauth/tokens";
 
 import { DeviceAuthHandler } from "../../base/handler";
-import { AuthProvider, DeviceFlowStatus } from "../../../shared/enums";
+import { AuthProviderType, DeviceFlowStatus } from "../../../shared/enums";
 
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";
 import {
@@ -34,18 +34,18 @@ function toStoredState(
 }
 
 export class GoogleDeviceAuthHandler implements DeviceAuthHandler {
-  readonly provider = AuthProvider.GOOGLE;
+  readonly provider = AuthProviderType.GOOGLE;
   readonly supportsDeviceFlow = true;
 
   private client = new DeviceOAuthClient(GOOGLE_DEVICE_OAUTH_CONFIG);
-  private tokenStore = new OAuthTokenStore(AuthProvider.GOOGLE);
-  private deviceFlowStore = new OAuthDeviceFlowStore(AuthProvider.GOOGLE);
+  private tokenStore = new OAuthTokenStore(AuthProviderType.GOOGLE);
+  private deviceFlowStore = new OAuthDeviceFlowStore(AuthProviderType.GOOGLE);
 
   async startDeviceFlow(): Promise<DeviceFlowStartResponse> {
     const code = await this.client.requestDeviceCode();
 
     await this.deviceFlowStore.set({
-      provider: AuthProvider.GOOGLE,
+      provider: AuthProviderType.GOOGLE,
       deviceCode: code.deviceCode,
       userCode: code.userCode,
       verificationUrl: code.verificationUrl,
@@ -55,7 +55,7 @@ export class GoogleDeviceAuthHandler implements DeviceAuthHandler {
 
     return {
       ok: true,
-      provider: AuthProvider.GOOGLE,
+      provider: AuthProviderType.GOOGLE,
       verificationUrl: code.verificationUrl,
       userCode: code.userCode,
       expiresIn: code.expiresIn,

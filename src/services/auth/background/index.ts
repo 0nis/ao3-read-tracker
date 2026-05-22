@@ -1,4 +1,4 @@
-import { getAuthProvider } from "../providers/registry";
+import { authHandlerRegistry } from "./registry";
 import { errorMessage, isAuthMessage } from "./helpers";
 
 import {
@@ -20,7 +20,7 @@ function handleAuthMessage(
   let handler: AnyAuthHandler;
 
   try {
-    handler = getAuthProvider(message.provider);
+    handler = authHandlerRegistry.get(message.provider);
   } catch (err) {
     sendResponse({
       ok: false,

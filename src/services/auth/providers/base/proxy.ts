@@ -1,42 +1,41 @@
-import { AuthProviderType, DeviceFlowStatus } from "../../shared/enums";
 import { DeviceFlowStartResponse } from "../../oauth/device/types";
+import { AuthProviderType, DeviceFlowStatus } from "../../shared/enums";
 
-export interface AuthHandlerBase {
+export interface AuthProxyBase {
   readonly provider: AuthProviderType;
 
   isAuthenticated(): Promise<boolean>;
   disconnect(): Promise<void>;
-  getValidAccessToken(): Promise<string | null>;
 }
 
-export interface DeviceAuthHandler extends AuthHandlerBase {
+export interface DeviceAuthProxy extends AuthProxyBase {
   readonly supportsDeviceFlow: true;
 
   startDeviceFlow(): Promise<DeviceFlowStartResponse>;
   pollDeviceFlow(): Promise<DeviceFlowStatus>;
 }
 
-export interface RedirectAuthHandler extends AuthHandlerBase {
+export interface RedirectAuthProxy extends AuthProxyBase {
   readonly supportsRedirectFlow: true;
 
   startRedirectFlow(): Promise<unknown>;
   completeRedirectFlow(callbackUrl: string): Promise<void>;
 }
 
-export type AnyAuthHandler =
-  | DeviceAuthHandler
-  | RedirectAuthHandler
-  | (DeviceAuthHandler & RedirectAuthHandler);
+export type AnyAuthProxy =
+  | DeviceAuthProxy
+  | RedirectAuthProxy
+  | (DeviceAuthProxy & RedirectAuthProxy);
 
 export function supportsDeviceFlow(
-  handler: AnyAuthHandler,
-): handler is DeviceAuthHandler {
+  handler: AnyAuthProxy,
+): handler is DeviceAuthProxy {
   return "supportsDeviceFlow" in handler && handler.supportsDeviceFlow === true;
 }
 
 export function supportsRedirectFlow(
-  provider: AnyAuthHandler,
-): provider is RedirectAuthHandler {
+  provider: AnyAuthProxy,
+): provider is RedirectAuthProxy {
   return (
     "supportsRedirectFlow" in provider && provider.supportsRedirectFlow === true
   );

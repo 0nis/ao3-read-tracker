@@ -1,7 +1,7 @@
-import { DeviceAuthProxy } from "../../base/service";
+import { DeviceAuthProxy } from "../../base/proxy";
 import {
   AuthMessageType,
-  AuthProvider,
+  AuthProviderType,
   DeviceFlowStatus,
 } from "../../../shared/enums";
 import {
@@ -13,17 +13,20 @@ import { DeviceFlowStartResponse } from "../../../oauth/device/types";
 import { sendRuntimeMessage } from "../../../../../utils/runtime";
 
 export class GoogleDeviceAuthProxy implements DeviceAuthProxy {
+  readonly provider = AuthProviderType.GOOGLE;
+  readonly supportsDeviceFlow = true;
+
   async startDeviceFlow(): Promise<DeviceFlowStartResponse> {
     return await sendRuntimeMessage<DeviceFlowStartResponse>({
       type: AuthMessageType.START_DEVICE_FLOW,
-      provider: AuthProvider.GOOGLE,
+      provider: AuthProviderType.GOOGLE,
     });
   }
 
   async pollDeviceFlow(): Promise<DeviceFlowStatus> {
     const response = await sendRuntimeMessage<AuthPollResponse>({
       type: AuthMessageType.POLL_DEVICE_FLOW,
-      provider: AuthProvider.GOOGLE,
+      provider: AuthProviderType.GOOGLE,
     });
     if (!response.ok) throw new Error(response.error);
 
@@ -33,7 +36,7 @@ export class GoogleDeviceAuthProxy implements DeviceAuthProxy {
   async isAuthenticated(): Promise<boolean> {
     const response = await sendRuntimeMessage<AuthStatusResponse>({
       type: AuthMessageType.STATUS,
-      provider: AuthProvider.GOOGLE,
+      provider: AuthProviderType.GOOGLE,
     });
     if (!response.ok) throw new Error(response.error);
 
@@ -43,7 +46,7 @@ export class GoogleDeviceAuthProxy implements DeviceAuthProxy {
   async disconnect(): Promise<void> {
     const response = await sendRuntimeMessage<AuthDisconnectResponse>({
       type: AuthMessageType.DISCONNECT,
-      provider: AuthProvider.GOOGLE,
+      provider: AuthProviderType.GOOGLE,
     });
     if (!response.ok) throw new Error(response.error);
   }

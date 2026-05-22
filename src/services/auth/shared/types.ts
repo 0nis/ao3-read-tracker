@@ -1,8 +1,8 @@
-import { AuthMessageType, AuthProvider, DeviceFlowStatus } from "./enums";
+import { AuthMessageType, AuthProviderType, DeviceFlowStatus } from "./enums";
 
 export type AuthMessage = {
   type: AuthMessageType;
-  provider: AuthProvider;
+  provider: AuthProviderType;
 };
 
 export type AuthStatusResponse =

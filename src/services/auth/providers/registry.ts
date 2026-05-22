@@ -1,4 +1,4 @@
-import { AuthProvider } from "../shared/enums";
+import { AuthProviderType } from "../shared/enums";
 import { AnyAuthHandler } from "./base/handler";
 
 import { GoogleDeviceAuthHandler } from "./google/device/handler";
@@ -6,20 +6,20 @@ import { GoogleDeviceAuthHandler } from "./google/device/handler";
 // TODO: Let providers register themselves
 
 const authProviders = {
-  [AuthProvider.GOOGLE]: new GoogleDeviceAuthHandler(),
-} satisfies Partial<Record<AuthProvider, AnyAuthHandler>>;
+  [AuthProviderType.GOOGLE]: new GoogleDeviceAuthHandler(),
+} satisfies Partial<Record<AuthProviderType, AnyAuthHandler>>;
 
-export function getAuthProvider(provider: AuthProvider): AnyAuthHandler {
-  const authProvider = authProviders[provider];
+export function getAuthProvider(provider: AuthProviderType): AnyAuthHandler {
+  const AuthProviderType = authProviders[provider];
 
-  if (!authProvider)
+  if (!AuthProviderType)
     throw new Error(`Unsupported auth provider: ${String(provider)}`);
 
-  return authProvider;
+  return AuthProviderType;
 }
 
 export function getAuthProviders(): Partial<
-  Record<AuthProvider, AnyAuthHandler>
+  Record<AuthProviderType, AnyAuthHandler>
 > {
   return authProviders;
 }

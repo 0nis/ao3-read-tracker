@@ -1,9 +1,9 @@
-import { AuthProvider } from "../../shared/enums";
+import { AuthProviderType } from "../../shared/enums";
 import { extensionStorage } from "../../../extension";
 import { ABBREVIATION } from "../../../../constants/global";
 
 export type StoredDeviceFlowState = {
-  provider: AuthProvider;
+  provider: AuthProviderType;
   deviceCode: string;
   userCode: string;
   verificationUrl: string;
@@ -15,7 +15,7 @@ export type StoredDeviceFlowState = {
 export class OAuthDeviceFlowStore {
   private key: string;
 
-  constructor(provider: AuthProvider) {
+  constructor(provider: AuthProviderType) {
     this.key = `${ABBREVIATION.toLowerCase()}.oauth-device-flow-${provider}`;
   }
 

@@ -1,5 +1,5 @@
 import { OAuthTokenResponse } from "../token-types";
-import { AuthProvider, DeviceFlowStatus } from "../../shared/enums";
+import { AuthProviderType, DeviceFlowStatus } from "../../shared/enums";
 
 export type DeviceCodeResponse = {
   deviceCode: string;
@@ -12,7 +12,7 @@ export type DeviceCodeResponse = {
 export type DeviceFlowStartResponse =
   | {
       ok: true;
-      provider: AuthProvider;
+      provider: AuthProviderType;
       verificationUrl: string;
       userCode: string;
       expiresIn: number;
@@ -24,7 +24,7 @@ export type DeviceFlowStartResponse =
     };
 
 export type DeviceFlowClientConfig = {
-  provider: AuthProvider;
+  provider: AuthProviderType;
   deviceCodeUrl: string;
   tokenUrl: string;
   clientId: string;
