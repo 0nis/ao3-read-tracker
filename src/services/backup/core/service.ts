@@ -93,11 +93,12 @@ export class BackupService {
       remoteTargetKind: target.data.kind,
     });
 
-    const pruneResult = await this.prune(
+    const pruneResult = await this.prune({
       provider,
-      target.data,
-      config.maxBackups,
-    );
+      target: target.data,
+      maxBackups: config.maxBackups,
+      maxAge: config.maxAge,
+    });
 
     if (!pruneResult.success)
       warn(
@@ -113,12 +114,17 @@ export class BackupService {
     };
   }
 
-  async prune(
-    provider: BackupProvider,
-    target: BackupTarget,
-    maxBackups?: number,
-    maxAge?: number,
-  ): Promise<BackupResponse<void>> {
+  async prune({
+    provider,
+    target,
+    maxBackups,
+    maxAge,
+  }: {
+    provider: BackupProvider;
+    target: BackupTarget;
+    maxBackups?: number;
+    maxAge?: number;
+  }): Promise<BackupResponse<void>> {
     if (
       (!maxBackups && !maxAge) ||
       (maxAge && maxAge <= 0) ||
