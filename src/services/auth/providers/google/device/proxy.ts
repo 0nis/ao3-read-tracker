@@ -1,4 +1,4 @@
-import { DeviceAuthService } from "../../base/service";
+import { DeviceAuthProxy } from "../../base/service";
 import {
   AuthMessageType,
   AuthProvider,
@@ -12,7 +12,7 @@ import {
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";
 import { sendRuntimeMessage } from "../../../../../utils/runtime";
 
-export class GoogleDeviceAuth implements DeviceAuthService {
+export class GoogleDeviceAuthProxy implements DeviceAuthProxy {
   async startDeviceFlow(): Promise<DeviceFlowStartResponse> {
     return await sendRuntimeMessage<DeviceFlowStartResponse>({
       type: AuthMessageType.START_DEVICE_FLOW,

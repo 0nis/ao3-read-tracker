@@ -16,7 +16,7 @@ participant Manager [
     ""manager""
 ]
 participant Proxy [
-    =GoogleDeviceAuth
+    =GoogleDeviceAuthProxy
     ""content-side proxy""
 ]
 participant BG [

@@ -1,11 +1,11 @@
-import { GoogleDeviceAuth } from "./service";
+import { GoogleDeviceAuthProxy } from "./proxy";
 import { DeviceFlowStatus } from "../../../shared/enums";
 import { backupAuthSync } from "../../../../backup/auth/sync";
 import { BackupProviderType } from "../../../../../enums/backups";
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";
 
 export class GoogleDeviceAuthManager {
-  private auth = new GoogleDeviceAuth();
+  private auth = new GoogleDeviceAuthProxy();
 
   async start(): Promise<DeviceFlowStartResponse> {
     return await this.auth.startDeviceFlow();
