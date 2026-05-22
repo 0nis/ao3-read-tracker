@@ -133,7 +133,6 @@ export class BackupService {
       return { success: true };
 
     const backups = await provider.list(target);
-
     if (!backups.success || !backups.data)
       return {
         success: false,
@@ -156,15 +155,29 @@ export class BackupService {
 
     if (maxBackups) backupsToDelete.push(...sorted.slice(maxBackups));
 
-    for (const backup of backupsToDelete) {
-      const deleted = await provider.delete(backup.id);
+    for (const backup of backupsToDelete)
+      await this.delete({
+        provider,
+        fileId: backup.id,
+      });
 
-      if (!deleted.success)
-        return {
-          success: false,
-          error: deleted.error ?? `Could not delete backup: ${backup.name}`,
-        };
-    }
+    return { success: true };
+  }
+
+  async delete({
+    provider,
+    fileId,
+  }: {
+    provider: BackupProvider;
+    fileId: string;
+  }): Promise<BackupResponse<void>> {
+    const deleted = await provider.delete(fileId);
+
+    if (!deleted.success)
+      return {
+        success: false,
+        error: deleted.error ?? "Could not delete backup.",
+      };
 
     return { success: true };
   }
