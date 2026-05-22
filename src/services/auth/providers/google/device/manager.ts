@@ -1,4 +1,4 @@
-import { GoogleDeviceAuth } from "./auth";
+import { GoogleDeviceAuth } from "./service";
 import { DeviceFlowStatus } from "../../../shared/enums";
 import { backupAuthSync } from "../../../../backup/auth/sync";
 import { BackupProviderType } from "../../../../../enums/backups";
