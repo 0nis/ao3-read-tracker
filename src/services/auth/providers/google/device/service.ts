@@ -1,4 +1,3 @@
-import { sendRuntimeMessage } from "../../helpers";
 import { DeviceAuthService } from "../../base/service";
 import {
   AuthMessageType,
@@ -11,6 +10,7 @@ import {
   AuthStatusResponse,
 } from "../../../shared/types";
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";
+import { sendRuntimeMessage } from "../../../../../utils/runtime";
 
 export class GoogleDeviceAuth implements DeviceAuthService {
   async startDeviceFlow(): Promise<DeviceFlowStartResponse> {
