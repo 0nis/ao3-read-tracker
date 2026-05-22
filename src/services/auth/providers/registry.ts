@@ -3,6 +3,8 @@ import { AnyAuthProvider } from "./base/provider";
 
 import { GoogleDeviceAuthProvider } from "./google/device/provider";
 
+// TODO: Let providers register themselves
+
 const authProviders = {
   [AuthProvider.GOOGLE]: new GoogleDeviceAuthProvider(),
 } satisfies Partial<Record<AuthProvider, AnyAuthProvider>>;
