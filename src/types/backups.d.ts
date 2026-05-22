@@ -49,7 +49,7 @@ export interface BackupConfig {
   maxBackups?: number;
 
   /** Maximum age of backups to keep in the cloud */
-  maxAge?: number;
+  maxAgeDays?: number;
 
   /** Timestamp of the last successful backup */
   lastBackedUpAt?: number;

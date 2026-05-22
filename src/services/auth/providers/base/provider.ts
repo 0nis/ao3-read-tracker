@@ -6,11 +6,6 @@ export interface AuthProviderBase {
 
   isAuthenticated(): Promise<boolean>;
   disconnect(): Promise<void>;
-
-  /**
-   * Returns a valid access token if available.
-   * Background-only consumers such as backup services can use this later.
-   */
   getValidAccessToken(): Promise<string | null>;
 }
 

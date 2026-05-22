@@ -97,7 +97,9 @@ export class BackupService {
       provider,
       target: target.data,
       maxBackups: config.maxBackups,
-      maxAge: config.maxAge,
+      maxAgeMs: config.maxAgeDays
+        ? config.maxAgeDays * 24 * 60 * 60 * 1000
+        : undefined,
     });
 
     if (!pruneResult.success)
@@ -118,19 +120,17 @@ export class BackupService {
     provider,
     target,
     maxBackups,
-    maxAge,
+    maxAgeMs,
   }: {
     provider: BackupProvider;
     target: BackupTarget;
     maxBackups?: number;
-    maxAge?: number;
+    maxAgeMs?: number;
   }): Promise<BackupResponse<void>> {
-    if (
-      (!maxBackups && !maxAge) ||
-      (maxAge && maxAge <= 0) ||
-      (maxBackups && maxBackups <= 0)
-    )
-      return { success: true };
+    const hasMaxAge = typeof maxAgeMs === "number" && maxAgeMs > 0;
+    const hasMaxBackups = typeof maxBackups === "number" && maxBackups > 0;
+
+    if (!hasMaxAge && !hasMaxBackups) return { success: true };
 
     const backups = await provider.list(target);
     if (!backups.success || !backups.data)
@@ -141,25 +141,24 @@ export class BackupService {
 
     const sorted = [...backups.data].sort((a, b) => b.createdAt - a.createdAt);
 
-    const backupsToDelete: BackupFile[] = [];
+    const backupsToDelete = new Map<string, BackupFile>();
 
-    if (maxAge)
-      backupsToDelete.push(
-        ...sorted.filter((backup) =>
-          this.isBackupExpired({
-            createdAt: backup.createdAt,
-            maxAge,
-          }),
-        ),
-      );
+    if (maxAgeMs)
+      for (const backup of sorted)
+        if (this.isBackupExpired({ createdAt: backup.createdAt, maxAgeMs }))
+          backupsToDelete.set(backup.id, backup);
 
-    if (maxBackups) backupsToDelete.push(...sorted.slice(maxBackups));
+    if (maxBackups)
+      for (const backup of sorted.slice(0, maxBackups))
+        backupsToDelete.set(backup.id, backup);
 
-    for (const backup of backupsToDelete)
-      await this.delete({
+    for (const backup of backupsToDelete.values()) {
+      const deleted = await this.delete({
         provider,
         fileId: backup.id,
       });
+      if (!deleted.success) return deleted;
+    }
 
     return { success: true };
   }
@@ -197,7 +196,7 @@ export class BackupService {
     return config;
   }
 
-  private isBackupExpired(backup: { createdAt: number; maxAge: number }) {
-    return Date.now() - backup.createdAt > backup.maxAge;
+  private isBackupExpired(backup: { createdAt: number; maxAgeMs: number }) {
+    return Date.now() - backup.createdAt > backup.maxAgeMs;
   }
 }
