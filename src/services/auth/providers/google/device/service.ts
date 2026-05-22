@@ -1,5 +1,5 @@
 import { sendRuntimeMessage } from "../../helpers";
-import { DeviceAuthService } from "../../../shared/service";
+import { DeviceAuthService } from "../../base/service";
 import {
   AuthMessageType,
   AuthProvider,

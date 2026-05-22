@@ -1,5 +1,5 @@
-import { AuthProvider, DeviceFlowStatus } from "./enums";
-import { DeviceFlowStartResponse } from "../oauth/device/types";
+import { AuthProvider, DeviceFlowStatus } from "../../shared/enums";
+import { DeviceFlowStartResponse } from "../../oauth/device/types";
 
 export interface AuthProviderBase {
   readonly provider: AuthProvider;

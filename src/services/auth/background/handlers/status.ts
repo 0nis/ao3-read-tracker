@@ -1,5 +1,5 @@
 import { errorMessage } from "../helpers";
-import { AnyAuthProvider } from "../../shared/provider";
+import { AnyAuthProvider } from "../../providers/base/provider";
 import { AuthStatusResponse } from "../../shared/types";
 
 export function handleStatus(

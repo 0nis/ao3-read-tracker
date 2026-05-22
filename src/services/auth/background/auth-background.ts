@@ -1,4 +1,4 @@
-import { getAuthProvider } from "../providers/provider-registry";
+import { getAuthProvider } from "../providers/registry";
 import { errorMessage, isAuthMessage } from "./helpers";
 
 import {
@@ -8,7 +8,7 @@ import {
 import { handleStatus } from "./handlers/status";
 import { handleDisconnect } from "./handlers/disconnect";
 
-import { AnyAuthProvider } from "../shared/provider";
+import { AnyAuthProvider } from "../providers/base/provider";
 import { AuthMessageType } from "../shared/enums";
 import { AuthMessage } from "../shared/types";
 import { debug } from "../../../shared/extension/logger";

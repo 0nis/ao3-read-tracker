@@ -1,5 +1,8 @@
 import { errorMessage, sendUnsupportedDeviceFlow } from "../helpers";
-import { AnyAuthProvider, supportsDeviceFlow } from "../../shared/provider";
+import {
+  AnyAuthProvider,
+  supportsDeviceFlow,
+} from "../../providers/base/provider";
 import { AuthMessage, AuthPollResponse } from "../../shared/types";
 import { DeviceFlowStartResponse } from "../../oauth/device/types";
 

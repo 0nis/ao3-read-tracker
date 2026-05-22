@@ -1,5 +1,5 @@
 import { errorMessage } from "../helpers";
-import { AnyAuthProvider } from "../../shared/provider";
+import { AnyAuthProvider } from "../../providers/base/provider";
 import { AuthDisconnectResponse } from "../../shared/types";
 
 export function handleDisconnect(

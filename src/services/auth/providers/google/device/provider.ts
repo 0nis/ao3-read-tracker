@@ -5,7 +5,7 @@ import { DeviceOAuthClient } from "../../../oauth/device/client";
 import { OAuthDeviceFlowStore } from "../../../storage/oauth/device-flow";
 import { OAuthTokenStore } from "../../../storage/oauth/tokens";
 
-import { DeviceAuthProvider } from "../../../shared/provider";
+import { DeviceAuthProvider } from "../../base/provider";
 import { AuthProvider, DeviceFlowStatus } from "../../../shared/enums";
 
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";

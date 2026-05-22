@@ -1,5 +1,5 @@
 import { AuthProvider } from "../shared/enums";
-import { AnyAuthProvider } from "../shared/provider";
+import { AnyAuthProvider } from "./base/provider";
 
 import { GoogleDeviceAuthProvider } from "./google/device/provider";
 

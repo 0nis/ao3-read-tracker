@@ -1,5 +1,5 @@
-import { DeviceFlowStartResponse } from "../oauth/device/types";
-import { DeviceFlowStatus } from "./enums";
+import { DeviceFlowStartResponse } from "../../oauth/device/types";
+import { DeviceFlowStatus } from "../../shared/enums";
 
 export interface AuthService {
   isAuthenticated(): Promise<boolean>;
