@@ -7,8 +7,8 @@ export function getBackupFileName({
   datetime = Date.now(),
   fileType = "json",
 }: {
-  type: string;
-  datetime: number;
+  type?: string;
+  datetime?: number;
   fileType?: string;
 }): string {
   return `${toKebabCase(getFullExtensionName())}_${type}_${getFormattedDateTimeForFilename(
