@@ -1,14 +1,14 @@
-import { BackupProvider } from "./provider";
+import { BackupHandler } from "./handler";
 import { BackupProviderType } from "../../../../enums/backups";
 
 class BackupProviderRegistry {
-  private readonly providers = new Map<BackupProviderType, BackupProvider>();
+  private readonly providers = new Map<BackupProviderType, BackupHandler>();
 
-  register(provider: BackupProvider): void {
+  register(provider: BackupHandler): void {
     this.providers.set(provider.provider, provider);
   }
 
-  get(providerType: BackupProviderType): BackupProvider {
+  get(providerType: BackupProviderType): BackupHandler {
     const provider = this.providers.get(providerType);
 
     if (!provider)

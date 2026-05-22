@@ -1,15 +1,15 @@
 import { AuthProvider } from "../shared/enums";
-import { AnyAuthProvider } from "./base/provider";
+import { AnyAuthHandler } from "./base/handler";
 
-import { GoogleDeviceAuthProvider } from "./google/device/provider";
+import { GoogleDeviceAuthHandler } from "./google/device/handler";
 
 // TODO: Let providers register themselves
 
 const authProviders = {
-  [AuthProvider.GOOGLE]: new GoogleDeviceAuthProvider(),
-} satisfies Partial<Record<AuthProvider, AnyAuthProvider>>;
+  [AuthProvider.GOOGLE]: new GoogleDeviceAuthHandler(),
+} satisfies Partial<Record<AuthProvider, AnyAuthHandler>>;
 
-export function getAuthProvider(provider: AuthProvider): AnyAuthProvider {
+export function getAuthProvider(provider: AuthProvider): AnyAuthHandler {
   const authProvider = authProviders[provider];
 
   if (!authProvider)
@@ -19,7 +19,7 @@ export function getAuthProvider(provider: AuthProvider): AnyAuthProvider {
 }
 
 export function getAuthProviders(): Partial<
-  Record<AuthProvider, AnyAuthProvider>
+  Record<AuthProvider, AnyAuthHandler>
 > {
   return authProviders;
 }

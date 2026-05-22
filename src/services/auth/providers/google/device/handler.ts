@@ -5,7 +5,7 @@ import { DeviceOAuthClient } from "../../../oauth/device/client";
 import { OAuthDeviceFlowStore } from "../../../storage/oauth/device-flow";
 import { OAuthTokenStore } from "../../../storage/oauth/tokens";
 
-import { DeviceAuthProvider } from "../../base/provider";
+import { DeviceAuthHandler } from "../../base/handler";
 import { AuthProvider, DeviceFlowStatus } from "../../../shared/enums";
 
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";
@@ -33,7 +33,7 @@ function toStoredState(
   };
 }
 
-export class GoogleDeviceAuthProvider implements DeviceAuthProvider {
+export class GoogleDeviceAuthHandler implements DeviceAuthHandler {
   readonly provider = AuthProvider.GOOGLE;
   readonly supportsDeviceFlow = true;
 

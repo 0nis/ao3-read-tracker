@@ -1,7 +1,7 @@
 import { ExportOptions } from "dexie-export-import";
 
 import { backupProviderRegistry } from "../providers/base/registry";
-import { BackupProvider } from "../providers/base/provider";
+import { BackupHandler } from "../providers/base/handler";
 import {
   BackupCreateResult,
   BackupFile,
@@ -25,9 +25,9 @@ export class BackupService {
     providerType: BackupProviderType,
     exportOptions: ExportOptions = {},
   ): Promise<BackupResponse<BackupCreateResult>> {
-    const provider = backupProviderRegistry.get(providerType);
+    const proxy = backupProviderRegistry.get(providerType);
 
-    const isAvailable = await provider.isAvailable();
+    const isAvailable = await proxy.isAvailable();
     if (!isAvailable)
       return {
         success: false,
@@ -42,7 +42,7 @@ export class BackupService {
       };
     const config = configResult.data;
 
-    const target = await provider.getTarget(config);
+    const target = await proxy.getTarget(config);
     if (!target.success || !target.data)
       return {
         success: false,
@@ -66,7 +66,7 @@ export class BackupService {
     const createdAt = Date.now();
     const content = await exported.data.text();
 
-    const uploaded = await provider.upload({
+    const uploaded = await proxy.upload({
       target: target.data,
       fileName: getBackupFileName({
         datetime: createdAt,
@@ -94,7 +94,7 @@ export class BackupService {
     });
 
     const pruneResult = await this.prune({
-      provider,
+      proxy,
       target: target.data,
       maxBackups: config.maxBackups,
       maxAgeMs: config.maxAgeDays
@@ -117,12 +117,12 @@ export class BackupService {
   }
 
   async prune({
-    provider,
+    proxy,
     target,
     maxBackups,
     maxAgeMs,
   }: {
-    provider: BackupProvider;
+    proxy: BackupHandler;
     target: BackupTarget;
     maxBackups?: number;
     maxAgeMs?: number;
@@ -132,7 +132,7 @@ export class BackupService {
 
     if (!hasMaxAge && !hasMaxBackups) return { success: true };
 
-    const backups = await provider.list(target);
+    const backups = await proxy.list(target);
     if (!backups.success || !backups.data)
       return {
         success: false,
@@ -154,7 +154,7 @@ export class BackupService {
 
     for (const backup of backupsToDelete.values()) {
       const deleted = await this.delete({
-        provider,
+        proxy,
         fileId: backup.id,
       });
       if (!deleted.success) return deleted;
@@ -164,13 +164,13 @@ export class BackupService {
   }
 
   async delete({
-    provider,
+    proxy,
     fileId,
   }: {
-    provider: BackupProvider;
+    proxy: BackupHandler;
     fileId: string;
   }): Promise<BackupResponse<void>> {
-    const deleted = await provider.delete(fileId);
+    const deleted = await proxy.delete(fileId);
 
     if (!deleted.success)
       return {

@@ -1,22 +1,22 @@
 import { errorMessage, sendUnsupportedDeviceFlow } from "../helpers";
 import {
-  AnyAuthProvider,
+  AnyAuthHandler,
   supportsDeviceFlow,
-} from "../../providers/base/provider";
+} from "../../providers/base/handler";
 import { AuthMessage, AuthPollResponse } from "../../shared/types";
 import { DeviceFlowStartResponse } from "../../oauth/device/types";
 
 export function handleStartDeviceFlow(
   message: AuthMessage,
-  provider: AnyAuthProvider,
+  handler: AnyAuthHandler,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  if (!supportsDeviceFlow(provider)) {
+  if (!supportsDeviceFlow(handler)) {
     sendUnsupportedDeviceFlow(message.provider, sendResponse);
     return false;
   }
 
-  provider
+  handler
     .startDeviceFlow()
     .then((response: DeviceFlowStartResponse) => {
       sendResponse(response);
@@ -33,10 +33,10 @@ export function handleStartDeviceFlow(
 
 export function handlePollDeviceFlow(
   message: AuthMessage,
-  provider: AnyAuthProvider,
+  handler: AnyAuthHandler,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  if (!supportsDeviceFlow(provider)) {
+  if (!supportsDeviceFlow(handler)) {
     sendResponse({
       ok: false,
       error: `Provider "${message.provider}" does not support device flow.`,
@@ -46,7 +46,7 @@ export function handlePollDeviceFlow(
     return false;
   }
 
-  provider
+  handler
     .pollDeviceFlow()
     .then((status) => {
       sendResponse({

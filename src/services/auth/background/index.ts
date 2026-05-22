@@ -8,7 +8,7 @@ import {
 import { handleStatus } from "./handlers/status";
 import { handleDisconnect } from "./handlers/disconnect";
 
-import { AnyAuthProvider } from "../providers/base/provider";
+import { AnyAuthHandler } from "../providers/base/handler";
 import { AuthMessageType } from "../shared/enums";
 import { AuthMessage } from "../shared/types";
 import { debug } from "../../../shared/extension/logger";
@@ -17,10 +17,10 @@ function handleAuthMessage(
   message: AuthMessage,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  let provider: AnyAuthProvider;
+  let handler: AnyAuthHandler;
 
   try {
-    provider = getAuthProvider(message.provider);
+    handler = getAuthProvider(message.provider);
   } catch (err) {
     sendResponse({
       ok: false,
@@ -31,16 +31,16 @@ function handleAuthMessage(
 
   switch (message.type) {
     case AuthMessageType.START_DEVICE_FLOW:
-      return handleStartDeviceFlow(message, provider, sendResponse);
+      return handleStartDeviceFlow(message, handler, sendResponse);
 
     case AuthMessageType.POLL_DEVICE_FLOW:
-      return handlePollDeviceFlow(message, provider, sendResponse);
+      return handlePollDeviceFlow(message, handler, sendResponse);
 
     case AuthMessageType.STATUS:
-      return handleStatus(provider, sendResponse);
+      return handleStatus(handler, sendResponse);
 
     case AuthMessageType.DISCONNECT:
-      return handleDisconnect(provider, sendResponse);
+      return handleDisconnect(handler, sendResponse);
 
     default: {
       sendResponse({
