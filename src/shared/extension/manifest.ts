@@ -1,3 +1,4 @@
+import { EXTENSION_NAME } from "../../constants/global";
 import { StorageResult } from "../../types/storage";
 import { error } from "./logger";
 
@@ -15,7 +16,15 @@ let cachedManifest: ExtensionManifest | null = null;
  * @returns The name of the extension without the 'AO3' prefix
  */
 export function getExtensionName(): string {
-  return getManifest().data?.name?.replace(/^AO3 /, "") ?? "Read Tracker";
+  const name = getManifest().data?.name || EXTENSION_NAME;
+  return name.replace(/^AO3 /, "");
+}
+
+/**
+ * @returns The full name of the extension, including the 'AO3' prefix
+ */
+export function getFullExtensionName(): string {
+  return getManifest().data?.name || EXTENSION_NAME;
 }
 
 /**
