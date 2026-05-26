@@ -1,14 +1,14 @@
-import { AuthProvider } from "../../auth/shared/enums";
+import { AuthProviderType } from "../../auth/shared/enums";
 import { BackupProviderType } from "../../../enums/backups";
 
 export const BACKUP_PROVIDER_AUTH_MAP: {
-  [K in BackupProviderType]: AuthProvider;
+  [K in BackupProviderType]: AuthProviderType;
 } = {
-  [BackupProviderType.GOOGLE_DRIVE]: AuthProvider.GOOGLE,
+  [BackupProviderType.GOOGLE_DRIVE]: AuthProviderType.GOOGLE,
 };
 
 export const BACKUP_AUTH_PROVIDER_MAP: {
-  [K in AuthProvider]: BackupProviderType;
+  [K in AuthProviderType]: BackupProviderType;
 } = {
-  [AuthProvider.GOOGLE]: BackupProviderType.GOOGLE_DRIVE,
+  [AuthProviderType.GOOGLE]: BackupProviderType.GOOGLE_DRIVE,
 };

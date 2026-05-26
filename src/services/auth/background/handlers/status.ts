@@ -1,12 +1,12 @@
 import { errorMessage } from "../helpers";
-import { AnyAuthProvider } from "../../shared/provider";
+import { AnyAuthHandler } from "../../providers/base";
 import { AuthStatusResponse } from "../../shared/types";
 
 export function handleStatus(
-  provider: AnyAuthProvider,
+  handler: AnyAuthHandler,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  provider
+  handler
     .isAuthenticated()
     .then((authenticated) => {
       sendResponse({

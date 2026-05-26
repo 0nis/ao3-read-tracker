@@ -1,5 +1,6 @@
-import { OAuthTokenResponse } from "../token-types";
-import { AuthProvider, DeviceFlowStatus } from "../../shared/enums";
+import { DeviceFlowStatus } from "./enums";
+import { OAuthTokenResponse } from "../types";
+import { AuthProviderType } from "../../shared/enums";
 
 export type DeviceCodeResponse = {
   deviceCode: string;
@@ -9,10 +10,19 @@ export type DeviceCodeResponse = {
   interval: number;
 };
 
+export type DeviceFlowClientConfig = {
+  provider: AuthProviderType;
+  deviceCodeUrl: string;
+  tokenUrl: string;
+  clientId: string;
+  clientSecret: string;
+  scope: string;
+};
+
 export type DeviceFlowStartResponse =
   | {
       ok: true;
-      provider: AuthProvider;
+      provider: AuthProviderType;
       verificationUrl: string;
       userCode: string;
       expiresIn: number;
@@ -23,14 +33,16 @@ export type DeviceFlowStartResponse =
       error: string;
     };
 
-export type DeviceFlowClientConfig = {
-  provider: AuthProvider;
-  deviceCodeUrl: string;
-  tokenUrl: string;
-  clientId: string;
-  clientSecret?: string;
-  scope: string;
-};
+export type DeviceFlowPollResponse =
+  | {
+      ok: true;
+      status: DeviceFlowStatus;
+    }
+  | {
+      ok: false;
+      error: string;
+      recoverable?: boolean;
+    };
 
 export type DeviceFlowPollResult =
   | {
@@ -41,3 +53,26 @@ export type DeviceFlowPollResult =
       status: DeviceFlowStatus.COMPLETE;
       token: OAuthTokenResponse;
     };
+
+export type RawDeviceCodeResponse = {
+  device_code?: string;
+  user_code?: string;
+  verification_url?: string;
+  verification_uri?: string;
+  expires_in?: number;
+  interval?: number;
+  error?: string;
+  error_description?: string;
+};
+
+export type RawTokenResponse = {
+  access_token?: string;
+  refresh_token?: string;
+  expires_in?: number;
+  refresh_token_expires_in?: number;
+  scope?: string;
+  token_type?: string;
+  error?: string;
+  error_description?: string;
+  error_uri?: string;
+};

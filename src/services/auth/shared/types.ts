@@ -1,8 +1,8 @@
-import { AuthMessageType, AuthProvider, DeviceFlowStatus } from "./enums";
+import { AuthMessageType, AuthProviderType } from "./enums";
 
 export type AuthMessage = {
   type: AuthMessageType;
-  provider: AuthProvider;
+  provider: AuthProviderType;
 };
 
 export type AuthStatusResponse =
@@ -14,17 +14,6 @@ export type AuthStatusResponse =
   | {
       ok: false;
       error: string;
-    };
-
-export type AuthPollResponse =
-  | {
-      ok: true;
-      status: DeviceFlowStatus;
-    }
-  | {
-      ok: false;
-      error: string;
-      recoverable?: boolean;
     };
 
 export type AuthDisconnectResponse =

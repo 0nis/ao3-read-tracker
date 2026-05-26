@@ -1,19 +1,22 @@
 import { errorMessage, sendUnsupportedDeviceFlow } from "../helpers";
-import { AnyAuthProvider, supportsDeviceFlow } from "../../shared/provider";
-import { AuthMessage, AuthPollResponse } from "../../shared/types";
-import { DeviceFlowStartResponse } from "../../oauth/device/types";
+import { AnyAuthHandler, supportsDeviceFlow } from "../../providers/base";
+import { AuthMessage } from "../../shared/types";
+import {
+  DeviceFlowStartResponse,
+  DeviceFlowPollResponse,
+} from "../../oauth/device/types";
 
 export function handleStartDeviceFlow(
   message: AuthMessage,
-  provider: AnyAuthProvider,
+  handler: AnyAuthHandler,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  if (!supportsDeviceFlow(provider)) {
+  if (!supportsDeviceFlow(handler)) {
     sendUnsupportedDeviceFlow(message.provider, sendResponse);
     return false;
   }
 
-  provider
+  handler
     .startDeviceFlow()
     .then((response: DeviceFlowStartResponse) => {
       sendResponse(response);
@@ -30,33 +33,28 @@ export function handleStartDeviceFlow(
 
 export function handlePollDeviceFlow(
   message: AuthMessage,
-  provider: AnyAuthProvider,
+  handler: AnyAuthHandler,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  if (!supportsDeviceFlow(provider)) {
-    sendResponse({
-      ok: false,
-      error: `Provider "${message.provider}" does not support device flow.`,
-      recoverable: false,
-    } satisfies AuthPollResponse);
-
+  if (!supportsDeviceFlow(handler)) {
+    sendUnsupportedDeviceFlow(message.provider, sendResponse);
     return false;
   }
 
-  provider
+  handler
     .pollDeviceFlow()
     .then((status) => {
       sendResponse({
         ok: true,
         status,
-      } satisfies AuthPollResponse);
+      } satisfies DeviceFlowPollResponse);
     })
     .catch((err) => {
       sendResponse({
         ok: false,
         error: errorMessage(err),
         recoverable: false,
-      } satisfies AuthPollResponse);
+      } satisfies DeviceFlowPollResponse);
     });
 
   return true;

@@ -1,12 +1,12 @@
 import { errorMessage } from "../helpers";
-import { AnyAuthProvider } from "../../shared/provider";
+import { AnyAuthHandler } from "../../providers/base";
 import { AuthDisconnectResponse } from "../../shared/types";
 
 export function handleDisconnect(
-  provider: AnyAuthProvider,
+  handler: AnyAuthHandler,
   sendResponse: (response: unknown) => void,
 ): boolean {
-  provider
+  handler
     .disconnect()
     .then(() => {
       sendResponse({

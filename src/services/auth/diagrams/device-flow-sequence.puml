@@ -1,5 +1,5 @@
-@startuml Google Drive Device OAuth Flow
-title Google Drive Device OAuth Flow
+@startuml Google Device OAuth Flow
+title Google Device OAuth Flow
 
 skinparam participant<<external>> {
     BackgroundColor #F3F3F3
@@ -11,21 +11,21 @@ participant UI [
     =Options Page UI
     ""content script""
 ]
-participant Manager [
-    =GoogleDeviceAuthManager
-    ""manager""
+participant Service [
+    =AuthService
+    ""service""
 ]
 participant Proxy [
-    =GoogleDeviceAuth
+    =AuthRuntimeProxy
     ""content-side proxy""
 ]
 participant BG [
     =Auth Background
     ""message router""
 ]
-participant Provider [
-    =GoogleDeviceAuthProvider
-    ""provider""
+participant Handler [
+    =GoogleDeviceAuthHandler
+    ""handler""
 ]
 participant Client [
     =DeviceOAuthClient
@@ -38,49 +38,61 @@ participant Google <<external>> [
     =Google OAuth
 ]
 
-User -> UI: Click "Connect Google Drive"
-UI -> Manager: start()
-Manager -> Proxy: startDeviceFlow()
-Proxy -> BG: runtime message\nSTART_DEVICE_FLOW
-BG -> Provider: startDeviceFlow()
-Provider -> Client: requestDeviceCode()
+User -> UI: Click "Connect Google"
+create Service
+UI -> Service: import authService singleton
+UI -> Service: startDeviceFlow()\nprovider GOOGLE
+Service -> Service: getProxy(GOOGLE)
+create Proxy
+Service -> Proxy: new AuthRuntimeProxy(GOOGLE)
+Service -> Proxy: startDeviceFlow()
+Proxy -> BG: runtime message\nSTART_DEVICE_FLOW\nprovider GOOGLE
+BG -> BG: get/create handler for GOOGLE
+create Handler
+BG -> Handler: new GoogleDeviceAuthHandler()
+create Client
+Handler -> Client: new DeviceOAuthClient(config)
+BG -> Handler: startDeviceFlow()
+Handler -> Client: requestDeviceCode()
 Client -> Google: POST /device/code\nclient_id + scope
 Google --> Client: device_code + user_code\nverification_url + interval
-Client --> Provider: normalized device code
-Provider -> ExtStorage: store pending device flow
-Provider --> BG: DeviceFlowStartResponse
+Client --> Handler: normalized device code
+Handler -> ExtStorage: store pending device flow
+Handler --> BG: DeviceFlowStartResponse
 BG --> Proxy: DeviceFlowStartResponse
-Proxy --> Manager: DeviceFlowStartResponse
-Manager --> UI: verificationUrl + userCode
+Proxy --> Service: DeviceFlowStartResponse
+Service --> UI: verificationUrl + userCode
 
 UI -> User: Show code + Google URL
 User -> Google: Open URL and enter code
 Google -> User: Account selection + consent
 
 loop Until approved or expired
-  UI -> Manager: poll()
-  Manager -> Proxy: pollDeviceFlow()
-  Proxy -> BG: runtime message\nPOLL_DEVICE_FLOW
-  BG -> Provider: pollDeviceFlow()
-  Provider -> ExtStorage: read pending device flow
-  Provider -> Client: pollToken(deviceCode)
+  UI -> Service: pollDeviceFlow()\nprovider GOOGLE
+  Service -> Service: getProxy(GOOGLE)
+  Service -> Proxy: pollDeviceFlow()
+  Proxy -> BG: runtime message\nPOLL_DEVICE_FLOW\nprovider GOOGLE
+  BG -> BG: get cached handler for GOOGLE
+  BG -> Handler: pollDeviceFlow()
+  Handler -> ExtStorage: read pending device flow
+  Handler -> Client: pollToken(deviceCode)
   Client -> Google: POST /token\ndevice_code + client credentials
   alt authorization pending
     Google --> Client: authorization_pending
-    Client --> Provider: PENDING
-    Provider --> BG: PENDING
+    Client --> Handler: PENDING
+    Handler --> BG: PENDING
     BG --> Proxy: PENDING
-    Proxy --> Manager: PENDING
+    Proxy --> Service: PENDING
   else approved
     Google --> Client: access_token + refresh_token
-    Client --> Provider: token response
-    Provider -> ExtStorage: store OAuth tokens
-    Provider -> ExtStorage: clear pending device flow
-    Provider --> BG: COMPLETE
+    Client --> Handler: token response
+    Handler -> ExtStorage: store OAuth tokens
+    Handler -> ExtStorage: clear pending device flow
+    Handler --> BG: COMPLETE
     BG --> Proxy: COMPLETE
-    Proxy --> Manager: COMPLETE
-    Manager -> Storage: store provider connected state
-    Manager --> UI: COMPLETE
+    Proxy --> Service: COMPLETE
+    Service -> Storage: store provider connected state
+    Service --> UI: COMPLETE
     UI -> User: Show "Connected"
   end
 end

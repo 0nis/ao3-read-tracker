@@ -1,3 +1,4 @@
+/** Stored in extension storage */
 export type OAuthStoredState = {
   accessToken: string;
   refreshToken?: string;
@@ -14,10 +15,4 @@ export type OAuthTokenResponse = {
   refreshTokenExpiresIn?: number;
   scope?: string;
   tokenType?: string;
-};
-
-export type OAuthErrorResponse = {
-  error: string;
-  errorDescription?: string;
-  errorUri?: string;
 };

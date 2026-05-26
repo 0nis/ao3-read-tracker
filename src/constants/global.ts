@@ -1,7 +1,10 @@
 export const ABBREVIATION: string = "EXT-RT";
+export const EXTENSION_NAME: string = "AO3 Read Tracker";
 
 export const DATABASE_NAME = "Ao3ReadTrackerDB";
 export const DATABASE_VERSION: number = 2;
+
+// TODO: Decide if we should move some of these to specific featuers instead, they aren't all global...
 
 export const EXTENSION_DISABLED_KEY = `${ABBREVIATION.toLowerCase()}.disabled`;
 export const PERSISTENT_STORAGE_KEY = `${ABBREVIATION.toLowerCase()}.persistent-storage`;

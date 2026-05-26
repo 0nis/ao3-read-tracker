@@ -2,7 +2,7 @@ import {
   GOOGLE_DEVICE_CLIENT_ID,
   GOOGLE_DEVICE_CLIENT_SECRET,
 } from "../../../../../constants/global";
-import { AuthProvider } from "../../../shared/enums";
+import { AuthProviderType } from "../../../shared/enums";
 import { DeviceFlowClientConfig } from "../../../oauth/device/types";
 
 export const GOOGLE_DEVICE_CODE_URL =
@@ -12,7 +12,7 @@ export const GOOGLE_REVOKE_URL = "https://oauth2.googleapis.com/revoke";
 export const GOOGLE_DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
 
 export const GOOGLE_DEVICE_OAUTH_CONFIG: DeviceFlowClientConfig = {
-  provider: AuthProvider.GOOGLE,
+  provider: AuthProviderType.GOOGLE,
   deviceCodeUrl: GOOGLE_DEVICE_CODE_URL,
   tokenUrl: GOOGLE_TOKEN_URL,
   clientId: GOOGLE_DEVICE_CLIENT_ID,

@@ -1,3 +1,4 @@
+/** Send a message to the background script of the extension */
 export function sendRuntimeMessage<TResponse>(
   message: unknown,
 ): Promise<TResponse> {
