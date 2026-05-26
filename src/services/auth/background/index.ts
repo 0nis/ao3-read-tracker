@@ -8,7 +8,7 @@ import {
 import { handleStatus } from "./handlers/status";
 import { handleDisconnect } from "./handlers/disconnect";
 
-import { AnyAuthHandler } from "../providers/base/handler";
+import { AnyAuthHandler } from "../providers/base";
 import { AuthMessageType } from "../shared/enums";
 import { AuthMessage } from "../shared/types";
 import { debug } from "../../../shared/extension/logger";

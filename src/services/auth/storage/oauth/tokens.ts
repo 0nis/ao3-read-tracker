@@ -1,5 +1,5 @@
 import { AuthProviderType } from "../../shared/enums";
-import { OAuthStoredState } from "../../oauth/token-types";
+import { OAuthStoredState } from "../../oauth/types";
 import { extensionStorage } from "../../../extension";
 import { ABBREVIATION } from "../../../../constants/global";
 

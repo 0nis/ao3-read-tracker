@@ -1,0 +1,2 @@
+export const REFRESH_BUFFER_MS = 60_000;
+export const SLOW_DOWN_INCREMENT_SECONDS = 5;

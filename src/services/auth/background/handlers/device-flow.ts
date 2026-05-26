@@ -1,10 +1,10 @@
 import { errorMessage, sendUnsupportedDeviceFlow } from "../helpers";
+import { AnyAuthHandler, supportsDeviceFlow } from "../../providers/base";
+import { AuthMessage } from "../../shared/types";
 import {
-  AnyAuthHandler,
-  supportsDeviceFlow,
-} from "../../providers/base/handler";
-import { AuthMessage, AuthPollResponse } from "../../shared/types";
-import { DeviceFlowStartResponse } from "../../oauth/device/types";
+  DeviceFlowStartResponse,
+  DeviceFlowPollResponse,
+} from "../../oauth/device/types";
 
 export function handleStartDeviceFlow(
   message: AuthMessage,
@@ -37,12 +37,7 @@ export function handlePollDeviceFlow(
   sendResponse: (response: unknown) => void,
 ): boolean {
   if (!supportsDeviceFlow(handler)) {
-    sendResponse({
-      ok: false,
-      error: `Provider "${message.provider}" does not support device flow.`,
-      recoverable: false,
-    } satisfies AuthPollResponse);
-
+    sendUnsupportedDeviceFlow(message.provider, sendResponse);
     return false;
   }
 
@@ -52,14 +47,14 @@ export function handlePollDeviceFlow(
       sendResponse({
         ok: true,
         status,
-      } satisfies AuthPollResponse);
+      } satisfies DeviceFlowPollResponse);
     })
     .catch((err) => {
       sendResponse({
         ok: false,
         error: errorMessage(err),
         recoverable: false,
-      } satisfies AuthPollResponse);
+      } satisfies DeviceFlowPollResponse);
     });
 
   return true;

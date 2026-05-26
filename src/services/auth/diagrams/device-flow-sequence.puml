@@ -1,5 +1,5 @@
-@startuml Google Drive Device OAuth Flow
-title Google Drive Device OAuth Flow
+@startuml Google Device OAuth Flow
+title Google Device OAuth Flow
 
 skinparam participant<<external>> {
     BackgroundColor #F3F3F3
@@ -16,7 +16,7 @@ participant Service [
     ""service""
 ]
 participant Proxy [
-    =GoogleDeviceAuthProxy
+    =AuthRuntimeProxy
     ""content-side proxy""
 ]
 participant BG [
@@ -38,10 +38,20 @@ participant Google <<external>> [
     =Google OAuth
 ]
 
-User -> UI: Click "Connect Google Drive"
+User -> UI: Click "Connect Google"
+create Service
+UI -> Service: import authService singleton
 UI -> Service: startDeviceFlow()\nprovider GOOGLE
+Service -> Service: getProxy(GOOGLE)
+create Proxy
+Service -> Proxy: new AuthRuntimeProxy(GOOGLE)
 Service -> Proxy: startDeviceFlow()
-Proxy -> BG: runtime message\nSTART_DEVICE_FLOW
+Proxy -> BG: runtime message\nSTART_DEVICE_FLOW\nprovider GOOGLE
+BG -> BG: get/create handler for GOOGLE
+create Handler
+BG -> Handler: new GoogleDeviceAuthHandler()
+create Client
+Handler -> Client: new DeviceOAuthClient(config)
 BG -> Handler: startDeviceFlow()
 Handler -> Client: requestDeviceCode()
 Client -> Google: POST /device/code\nclient_id + scope
@@ -58,9 +68,11 @@ User -> Google: Open URL and enter code
 Google -> User: Account selection + consent
 
 loop Until approved or expired
-  UI -> Service: pollDeviceFlow()
+  UI -> Service: pollDeviceFlow()\nprovider GOOGLE
+  Service -> Service: getProxy(GOOGLE)
   Service -> Proxy: pollDeviceFlow()
-  Proxy -> BG: runtime message\nPOLL_DEVICE_FLOW
+  Proxy -> BG: runtime message\nPOLL_DEVICE_FLOW\nprovider GOOGLE
+  BG -> BG: get cached handler for GOOGLE
   BG -> Handler: pollDeviceFlow()
   Handler -> ExtStorage: read pending device flow
   Handler -> Client: pollToken(deviceCode)

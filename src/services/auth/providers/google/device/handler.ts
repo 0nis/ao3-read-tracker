@@ -1,21 +1,16 @@
 import { GOOGLE_DEVICE_OAUTH_CONFIG, GOOGLE_REVOKE_URL } from "./config";
+import { REFRESH_BUFFER_MS, SLOW_DOWN_INCREMENT_SECONDS } from "./constants";
 
+import { DeviceAuthHandler } from "../../base";
 import { DeviceOAuthClient } from "../../../oauth/device/client";
 
-import { OAuthDeviceFlowStore } from "../../../storage/oauth/device-flow";
+import { OAuthDeviceFlowStore } from "../../../storage/oauth/device";
 import { OAuthTokenStore } from "../../../storage/oauth/tokens";
 
-import { DeviceAuthHandler } from "../../base/handler";
-import { AuthProviderType, DeviceFlowStatus } from "../../../shared/enums";
-
+import { AuthProviderType } from "../../../shared/enums";
+import { DeviceFlowStatus } from "../../../oauth/device/enums";
+import { OAuthStoredState, OAuthTokenResponse } from "../../../oauth/types";
 import { DeviceFlowStartResponse } from "../../../oauth/device/types";
-import {
-  OAuthStoredState,
-  OAuthTokenResponse,
-} from "../../../oauth/token-types";
-
-const REFRESH_BUFFER_MS = 60_000;
-const SLOW_DOWN_INCREMENT_SECONDS = 5;
 
 function toStoredState(
   token: OAuthTokenResponse,
