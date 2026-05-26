@@ -28,15 +28,13 @@ export type AnyAuthProxy =
   | (DeviceAuthProxy & RedirectAuthProxy);
 
 export function supportsDeviceFlow(
-  handler: AnyAuthProxy,
-): handler is DeviceAuthProxy {
-  return "supportsDeviceFlow" in handler && handler.supportsDeviceFlow === true;
+  proxy: AnyAuthProxy,
+): proxy is DeviceAuthProxy {
+  return "supportsDeviceFlow" in proxy && proxy.supportsDeviceFlow === true;
 }
 
 export function supportsRedirectFlow(
-  provider: AnyAuthProxy,
-): provider is RedirectAuthProxy {
-  return (
-    "supportsRedirectFlow" in provider && provider.supportsRedirectFlow === true
-  );
+  proxy: AnyAuthProxy,
+): proxy is RedirectAuthProxy {
+  return "supportsRedirectFlow" in proxy && proxy.supportsRedirectFlow === true;
 }

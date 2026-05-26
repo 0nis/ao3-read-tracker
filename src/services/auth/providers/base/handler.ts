@@ -35,9 +35,9 @@ export function supportsDeviceFlow(
 }
 
 export function supportsRedirectFlow(
-  provider: AnyAuthHandler,
-): provider is RedirectAuthHandler {
+  handler: AnyAuthHandler,
+): handler is RedirectAuthHandler {
   return (
-    "supportsRedirectFlow" in provider && provider.supportsRedirectFlow === true
+    "supportsRedirectFlow" in handler && handler.supportsRedirectFlow === true
   );
 }
