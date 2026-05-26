@@ -10,7 +10,9 @@ export function isAuthMessage(message: unknown): message is AuthMessage {
   const candidate = message as Partial<AuthMessage>;
 
   return (
-    typeof candidate.type === "string" && typeof candidate.provider === "string"
+    candidate.isAuthMessage === true &&
+    typeof candidate.type === "string" &&
+    typeof candidate.provider === "string"
   );
 }
 

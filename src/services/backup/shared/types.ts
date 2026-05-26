@@ -7,6 +7,7 @@ export interface BackupTarget {
 }
 
 export interface BackupFile {
+  provider: BackupProviderType;
   id: string;
   name: string;
   createdAt: number;

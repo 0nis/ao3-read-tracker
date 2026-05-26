@@ -222,3 +222,5 @@ export class BackupService {
     return Date.now() - backup.createdAt > backup.maxAgeMs;
   }
 }
+
+export const backupService = new BackupService();

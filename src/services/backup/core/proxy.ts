@@ -21,6 +21,7 @@ export class BackupRuntimeProxy {
 
   async isAvailable(): Promise<boolean> {
     const response = await sendRuntimeMessage<BackupIsAvailableResponse>({
+      isBackupMessage: true,
       type: BackupMessageType.IS_AVAILABLE,
       provider: this.provider,
     });
@@ -32,6 +33,7 @@ export class BackupRuntimeProxy {
 
   async getTarget(config: BackupConfig): Promise<BackupResponse<BackupTarget>> {
     return await sendRuntimeMessage<BackupGetTargetResponse>({
+      isBackupMessage: true,
       type: BackupMessageType.GET_TARGET,
       provider: this.provider,
       config,
@@ -40,6 +42,7 @@ export class BackupRuntimeProxy {
 
   async upload(input: BackupUploadInput): Promise<BackupResponse<BackupFile>> {
     return await sendRuntimeMessage<BackupUploadResponse>({
+      isBackupMessage: true,
       type: BackupMessageType.UPLOAD,
       provider: this.provider,
       input,
@@ -48,6 +51,7 @@ export class BackupRuntimeProxy {
 
   async list(target: BackupTarget): Promise<BackupResponse<BackupFile[]>> {
     return await sendRuntimeMessage<BackupListResponse>({
+      isBackupMessage: true,
       type: BackupMessageType.LIST,
       provider: this.provider,
       target,
@@ -56,6 +60,7 @@ export class BackupRuntimeProxy {
 
   async delete(fileId: string): Promise<BackupResponse<void>> {
     return await sendRuntimeMessage<BackupDeleteResponse>({
+      isBackupMessage: true,
       type: BackupMessageType.DELETE,
       provider: this.provider,
       fileId,

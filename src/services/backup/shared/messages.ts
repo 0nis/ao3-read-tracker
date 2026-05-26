@@ -17,6 +17,7 @@ export type BackupMessage =
   | BackupDeleteMessage;
 
 interface BackupBaseMessage {
+  isBackupMessage: true;
   type: BackupMessageType;
   provider: BackupProviderType;
 }

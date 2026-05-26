@@ -1,7 +1,7 @@
 export enum BackupMessageType {
-  IS_AVAILABLE = "BACKUP_IS_AVAILABLE",
-  GET_TARGET = "BACKUP_GET_TARGET",
-  UPLOAD = "BACKUP_UPLOAD",
-  LIST = "BACKUP_LIST",
-  DELETE = "BACKUP_DELETE",
+  IS_AVAILABLE = "backup:is-available",
+  GET_TARGET = "backup:get-target",
+  UPLOAD = "backup:upload",
+  LIST = "backup:list",
+  DELETE = "backup:delete",
 }

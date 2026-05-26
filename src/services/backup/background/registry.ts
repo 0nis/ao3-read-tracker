@@ -1,12 +1,16 @@
 import { BackupHandler } from "../providers/base";
 import { BackupProviderType } from "../../../enums/backups";
 
+import { GoogleBackupHandler } from "../providers/google-drive/handler";
+
 type BackupHandlerFactory = () => BackupHandler;
 
 export class BackupHandlerRegistry {
   private readonly factories: Partial<
     Record<BackupProviderType, BackupHandlerFactory>
-  > = {};
+  > = {
+    [BackupProviderType.GOOGLE_DRIVE]: () => new GoogleBackupHandler(),
+  };
 
   private readonly handlers = new Map<BackupProviderType, BackupHandler>();
 

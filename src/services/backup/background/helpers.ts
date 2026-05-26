@@ -6,7 +6,9 @@ export function isBackupMessage(message: unknown): message is BackupMessage {
   const candidate = message as Partial<BackupMessage>;
 
   return (
-    typeof candidate.type === "string" && typeof candidate.provider === "string"
+    candidate.isBackupMessage === true &&
+    typeof candidate.type === "string" &&
+    typeof candidate.provider === "string"
   );
 }
 
