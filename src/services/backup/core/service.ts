@@ -19,6 +19,7 @@ import { getBackupFileName } from "../../../shared/string";
 import { warn } from "../../../shared/extension/logger";
 import { BackupProviderType } from "../../../enums/backups";
 import { BackupConfig } from "../../../types/backups";
+import { daysToMs } from "../../../utils/date";
 
 export class BackupService {
   private readonly proxies = new Map<BackupProviderType, BackupRuntimeProxy>();
@@ -42,85 +43,65 @@ export class BackupService {
 
     const isAvailable = await proxy.isAvailable();
     if (!isAvailable)
-      return {
-        success: false,
-        error: `Backup provider is not available: ${providerType}`,
-      };
+      return this.failure(`Backup provider is not available: ${providerType}.`);
 
     const configResult = await this.getConfig(providerType);
-    if (!configResult.success || !configResult.data)
-      return {
-        success: false,
-        error:
-          !configResult.success && configResult.error
-            ? configResult.error
-            : `Could not get backup config for ${providerType}.`,
-      };
-    const config = configResult.data;
+    if (!configResult.success) return configResult;
+    const config = configResult.data!;
 
-    const target = await proxy.getTarget(config);
-    if (!target.success || !target.data)
-      return {
-        success: false,
-        error:
-          !target.success && target.error
-            ? target.error
-            : `Could not get backup target for ${providerType}.`,
-      };
+    const targetResult = this.requireData(
+      await proxy.getTarget(config),
+      `Could not get backup target for ${providerType}.`,
+    );
+    if (!targetResult.success) return targetResult;
+    const target = targetResult.data!;
 
-    const exported = await IoService.export(exportOptions);
-    if (!exported.success || !exported.data)
-      return {
-        success: false,
-        error: exported.error ?? "Could not export database.",
-      };
-    if (exported.data.size > MAX_DIRECT_BACKUP_UPLOAD_BYTES)
-      return {
-        success: false,
-        error:
-          "Backup is too large to upload through extension messaging right now.",
-      };
+    const exportedResult = this.requireData(
+      await IoService.export(exportOptions),
+      "Could not export database.",
+    );
+    if (!exportedResult.success) return exportedResult;
+    const exported = exportedResult.data!;
+
+    if (exported.size > MAX_DIRECT_BACKUP_UPLOAD_BYTES)
+      return this.failure(
+        `Backup file is too large for now (${exported.size} bytes). Max size is ${MAX_DIRECT_BACKUP_UPLOAD_BYTES} bytes.`,
+      );
 
     const createdAt = Date.now();
-    const content = await exported.data.text();
+    const content = await exported.text();
 
-    const uploaded = await proxy.upload({
-      target: target.data,
-      fileName: getBackupFileName({
-        datetime: createdAt,
-        type: "backup",
-        fileType: "json",
+    const uploadedResult = this.requireData(
+      await proxy.upload({
+        target: target,
+        fileName: getBackupFileName({
+          datetime: createdAt,
+          type: "backup",
+          fileType: "json",
+        }),
+        mimeType: BACKUP_MIME_TYPE,
+        content,
+        createdAt,
       }),
-      mimeType: BACKUP_MIME_TYPE,
-      content,
-      createdAt,
-    });
-
-    if (!uploaded.success || !uploaded.data)
-      return {
-        success: false,
-        error:
-          !uploaded.success && uploaded.error
-            ? uploaded.error
-            : "Could not upload backup.",
-      };
+      "Could not upload backup.",
+    );
+    if (!uploadedResult.success) return uploadedResult;
+    const uploaded = uploadedResult.data!;
 
     await StorageService.backupConfigs.update(providerType, {
       wasConnected: true,
       connected: true,
       lastBackedUpAt: createdAt,
-      remoteTarget: target.data.id,
-      remoteTargetName: target.data.name,
-      remoteTargetKind: target.data.kind,
+      remoteTarget: target.id,
+      remoteTargetName: target.name,
+      remoteTargetKind: target.kind,
     });
 
     const pruneResult = await this.prune({
       providerType,
-      target: target.data,
+      target: target,
       maxBackups: config.maxBackups,
-      maxAgeMs: config.maxAgeDays
-        ? config.maxAgeDays * 24 * 60 * 60 * 1000
-        : undefined,
+      maxAgeMs: config.maxAgeDays ? daysToMs(config.maxAgeDays) : undefined,
     });
 
     if (!pruneResult.success)
@@ -129,12 +110,9 @@ export class BackupService {
         pruneResult.error,
       );
 
-    return {
-      success: true,
-      data: {
-        file: uploaded.data,
-      },
-    };
+    return this.success({
+      file: uploaded,
+    });
   }
 
   async prune({
@@ -151,26 +129,25 @@ export class BackupService {
     const hasMaxAge = typeof maxAgeMs === "number" && maxAgeMs > 0;
     const hasMaxBackups = typeof maxBackups === "number" && maxBackups > 0;
 
-    if (!hasMaxAge && !hasMaxBackups) return { success: true, data: undefined };
+    if (!hasMaxAge && !hasMaxBackups) return this.successVoid();
 
     const proxy = this.getProxy(providerType);
     const backups = await proxy.list(target);
     if (!backups.success)
-      return {
-        success: false,
-        error: backups.error ?? "Could not list backups for pruning.",
-      };
-    if (!backups.data) return { success: true, data: undefined };
+      return this.failure(
+        backups.error ?? "Could not list backups for pruning.",
+      );
+    if (!backups.data) return this.successVoid();
 
     const sorted = [...backups.data].sort((a, b) => b.createdAt - a.createdAt);
     const backupsToDelete = new Map<string, BackupFile>();
 
-    if (maxAgeMs)
+    if (hasMaxAge)
       for (const backup of sorted)
         if (this.isBackupExpired({ createdAt: backup.createdAt, maxAgeMs }))
           backupsToDelete.set(backup.id, backup);
 
-    if (maxBackups)
+    if (hasMaxBackups)
       for (const backup of sorted.slice(maxBackups))
         backupsToDelete.set(backup.id, backup);
 
@@ -182,7 +159,7 @@ export class BackupService {
       if (!deleted.success) return deleted;
     }
 
-    return { success: true };
+    return this.successVoid();
   }
 
   async delete({
@@ -195,12 +172,9 @@ export class BackupService {
     const deleted = await this.getProxy(providerType).delete(fileId);
 
     if (!deleted.success)
-      return {
-        success: false,
-        error: deleted.error ?? "Could not delete backup.",
-      };
+      return this.failure(deleted.error ?? "Could not delete backup.");
 
-    return { success: true };
+    return this.successVoid();
   }
 
   private async getConfig(
@@ -209,17 +183,38 @@ export class BackupService {
     const config =
       await StorageService.backupConfigs.getByProvider(providerType);
 
-    if (!config.success || !config.data)
-      return {
-        success: false,
-        error: config.error ?? `No backup config found for ${providerType}.`,
-      };
-
-    return { success: true, data: config.data };
+    return this.requireData(
+      config,
+      `No backup config found for ${providerType}.`,
+    );
   }
 
   private isBackupExpired(backup: { createdAt: number; maxAgeMs: number }) {
     return Date.now() - backup.createdAt > backup.maxAgeMs;
+  }
+
+  private requireData<T>(
+    response: BackupResponse<T>,
+    fallbackError: string,
+  ): BackupResponse<T> {
+    if (!response.success || response.data === undefined)
+      return this.failure(
+        !response.success ? (response.error ?? fallbackError) : fallbackError,
+      );
+
+    return this.success(response.data);
+  }
+
+  private success<T>(data: T): BackupResponse<T> {
+    return { success: true, data };
+  }
+
+  private successVoid(): BackupResponse<void> {
+    return { success: true };
+  }
+
+  private failure<T = never>(error: unknown): BackupResponse<T> {
+    return { success: false, error };
   }
 }
 
