@@ -1,10 +1,16 @@
 import { BackupProviderType } from "../../../enums/backups";
 import {
+  BackupStartUploadResponse,
+  BackupUploadChunkResponse,
+} from "../shared/messages";
+import {
   BackupFile,
   BackupProviderCapabilities,
   BackupTarget,
-  BackupUploadInput,
+  BackupDirectUploadInput,
   BackupResponse,
+  BackupStartUploadInput,
+  BackupUploadChunkInput,
 } from "../shared/types";
 import { BackupConfig } from "../../../types/backups";
 
@@ -18,8 +24,20 @@ export interface BackupHandler {
   /** Gets or creates the provider's backup target. */
   getTarget(config: BackupConfig): Promise<BackupResponse<BackupTarget>>;
 
-  /** Uploads a file to the provider's backup target. */
-  upload(input: BackupUploadInput): Promise<BackupResponse<BackupFile>>;
+  /** Uploads a file to the provider's backup target, all at once. */
+  uploadDirect(
+    input: BackupDirectUploadInput,
+  ): Promise<BackupResponse<BackupFile>>;
+
+  /** Starts chunked upload of a file to the provider's backup target. */
+  startUpload(
+    input: BackupStartUploadInput,
+  ): Promise<BackupStartUploadResponse>;
+
+  /** Uploads a chunk of a file to the provider's backup target. */
+  uploadChunk(
+    input: BackupUploadChunkInput,
+  ): Promise<BackupUploadChunkResponse>;
 
   /** Lists the files in the provider's backup target. */
   list(target: BackupTarget): Promise<BackupResponse<BackupFile[]>>;

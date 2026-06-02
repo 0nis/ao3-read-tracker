@@ -13,11 +13,17 @@ import {
 } from "../../../../enums/backups";
 import { BackupConfig } from "../../../../types/backups";
 import {
+  BackupStartUploadResponse,
+  BackupUploadChunkResponse,
+} from "../../shared/messages";
+import {
+  BackupDirectUploadInput,
   BackupFile,
   BackupProviderCapabilities,
   BackupResponse,
+  BackupStartUploadInput,
   BackupTarget,
-  BackupUploadInput,
+  BackupUploadChunkInput,
 } from "../../shared/types";
 
 export class GoogleBackupHandler implements BackupHandler {
@@ -28,6 +34,8 @@ export class GoogleBackupHandler implements BackupHandler {
     canUseAppFolder: false,
     canUseUserFolder: true,
   };
+
+  private readonly uploadSessions = new Map<string, string>();
 
   private async getValidAccessToken(): Promise<string> {
     const authHandler = authHandlerRegistry.get(AuthProviderType.GOOGLE);
@@ -44,7 +52,8 @@ export class GoogleBackupHandler implements BackupHandler {
 
   async isAvailable(): Promise<boolean> {
     try {
-      return Boolean(await this.getValidAccessToken());
+      const available = Boolean(await this.getValidAccessToken());
+      return available;
     } catch {
       return false;
     }
@@ -84,7 +93,9 @@ export class GoogleBackupHandler implements BackupHandler {
     }
   }
 
-  async upload(input: BackupUploadInput): Promise<BackupResponse<BackupFile>> {
+  async uploadDirect(
+    input: BackupDirectUploadInput,
+  ): Promise<BackupResponse<BackupFile>> {
     try {
       const uploaded = await this.client.uploadBackup({
         folderId: input.target.id,
@@ -97,6 +108,78 @@ export class GoogleBackupHandler implements BackupHandler {
       return {
         success: true,
         data: toBackupFile(uploaded),
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: err,
+      };
+    }
+  }
+
+  async startUpload(
+    input: BackupStartUploadInput,
+  ): Promise<BackupStartUploadResponse> {
+    try {
+      const uploadUrl = await this.client.startResumableUpload({
+        folderId: input.target.id,
+        fileName: input.fileName,
+        mimeType: input.mimeType,
+        sizeBytes: input.sizeBytes,
+        createdAt: input.createdAt,
+      });
+
+      const uploadId = crypto.randomUUID();
+      this.uploadSessions.set(uploadId, uploadUrl);
+
+      return {
+        success: true,
+        data: { uploadId },
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: err,
+      };
+    }
+  }
+
+  async uploadChunk(
+    input: BackupUploadChunkInput,
+  ): Promise<BackupUploadChunkResponse> {
+    try {
+      const uploadUrl = this.uploadSessions.get(input.uploadId);
+
+      if (!uploadUrl)
+        return {
+          success: false,
+          error: "Backup upload session not found.",
+        };
+
+      const chunk = this.base64ToBytes(input.chunkBase64);
+
+      const file = await this.client.uploadResumableChunk({
+        uploadUrl,
+        chunk,
+        startByte: input.startByte,
+        endByteExclusive: input.endByteExclusive,
+        totalBytes: input.totalBytes,
+      });
+
+      if (!file)
+        return {
+          success: true,
+          data: { done: false },
+        };
+
+      this.uploadSessions.delete(input.uploadId);
+
+      return {
+        success: true,
+        data: {
+          done: true,
+          file: toBackupFile(file),
+        },
       };
     } catch (err) {
       return {
@@ -125,7 +208,6 @@ export class GoogleBackupHandler implements BackupHandler {
   async delete(fileId: string): Promise<BackupResponse<void>> {
     try {
       await this.client.trashFile(fileId);
-
       return {
         success: true,
       };
@@ -140,7 +222,6 @@ export class GoogleBackupHandler implements BackupHandler {
   async clear(target: BackupTarget): Promise<BackupResponse<void>> {
     try {
       await this.client.trashFile(target.id);
-
       return { success: true };
     } catch (err) {
       return {
@@ -155,5 +236,16 @@ export class GoogleBackupHandler implements BackupHandler {
     trashed?: boolean;
   }): boolean {
     return file.mimeType === GOOGLE_DRIVE_FOLDER_MIME_TYPE && !file.trashed;
+  }
+
+  private base64ToBytes(base64: string): Uint8Array {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    return bytes;
   }
 }

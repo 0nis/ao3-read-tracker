@@ -33,8 +33,14 @@ function handleBackupMessage(
         case BackupMessageType.GET_TARGET:
           return await handler.getTarget(message.config);
 
-        case BackupMessageType.UPLOAD:
-          return await handler.upload(message.input);
+        case BackupMessageType.DIRECT_UPLOAD:
+          return await handler.uploadDirect(message.input);
+
+        case BackupMessageType.START_UPLOAD:
+          return await handler.startUpload(message.input);
+
+        case BackupMessageType.UPLOAD_CHUNK:
+          return await handler.uploadChunk(message.input);
 
         case BackupMessageType.LIST:
           return await handler.list(message.target);
@@ -64,7 +70,7 @@ function handleBackupMessage(
 }
 
 export function registerBackupBackground(): void {
-  debug("Backup background registered.");
+  debug("Backup background registered");
 
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (!isBackupMessage(message)) return false;

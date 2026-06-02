@@ -20,8 +20,23 @@ export interface BackupUploadInput {
   target: BackupTarget;
   fileName: string;
   mimeType: string;
-  content: string;
   createdAt: number;
+}
+
+export interface BackupDirectUploadInput extends BackupUploadInput {
+  content: string;
+}
+
+export interface BackupStartUploadInput extends BackupUploadInput {
+  sizeBytes: number;
+}
+
+export interface BackupUploadChunkInput {
+  uploadId: string;
+  chunkBase64: string;
+  startByte: number;
+  endByteExclusive: number;
+  totalBytes: number;
 }
 
 export interface BackupCreateOptions {

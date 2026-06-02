@@ -99,6 +99,91 @@ export class GoogleDriveClient {
     );
   }
 
+  async startResumableUpload(input: {
+    folderId: string;
+    fileName: string;
+    mimeType: string;
+    sizeBytes: number;
+    createdAt: number;
+  }): Promise<string> {
+    const params = new URLSearchParams({
+      uploadType: "resumable",
+      fields: GOOGLE_DRIVE_FILE_FIELDS,
+    });
+
+    const metadata = {
+      name: input.fileName,
+      parents: [input.folderId],
+      mimeType: input.mimeType,
+      appProperties: {
+        ...GOOGLE_DRIVE_BACKUP_APP_PROPERTIES,
+        createdAt: String(input.createdAt),
+      },
+    };
+
+    const accessToken = await this.getAccessToken();
+
+    const response = await fetch(
+      `${GOOGLE_DRIVE_UPLOAD_BASE_URL}/files?${params}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json; charset=UTF-8",
+          "X-Upload-Content-Type": input.mimeType,
+          "X-Upload-Content-Length": String(input.sizeBytes),
+        },
+        body: JSON.stringify(metadata),
+      },
+    );
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new Error(
+        body
+          ? `Google Drive resumable upload failed: ${response.status} ${body}`
+          : `Google Drive resumable upload failed: ${response.status}`,
+      );
+    }
+
+    const location = response.headers.get("Location");
+    if (!location)
+      throw new Error("Google Drive did not return a resumable upload URL.");
+
+    return location;
+  }
+
+  async uploadResumableChunk(input: {
+    uploadUrl: string;
+    chunk: Uint8Array;
+    startByte: number;
+    endByteExclusive: number;
+    totalBytes: number;
+  }): Promise<GoogleDriveFile | null> {
+    const endByteInclusive = input.endByteExclusive - 1;
+
+    const response = await fetch(input.uploadUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Range": `bytes ${input.startByte}-${endByteInclusive}/${input.totalBytes}`,
+      },
+      body: this.toArrayBuffer(input.chunk),
+    });
+
+    if (response.status === 308) return null;
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new Error(
+        body
+          ? `Google Drive chunk upload failed: ${response.status} ${body}`
+          : `Google Drive chunk upload failed: ${response.status}`,
+      );
+    }
+
+    return (await response.json()) as GoogleDriveFile;
+  }
+
   async listBackups(folderId: string): Promise<GoogleDriveFile[]> {
     const files: GoogleDriveFile[] = [];
     let pageToken: string | undefined;
@@ -169,5 +254,12 @@ export class GoogleDriveClient {
     if (response.status === 204) return undefined as T;
 
     return (await response.json()) as T;
+  }
+
+  private toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+    return bytes.buffer.slice(
+      bytes.byteOffset,
+      bytes.byteOffset + bytes.byteLength,
+    ) as ArrayBuffer;
   }
 }

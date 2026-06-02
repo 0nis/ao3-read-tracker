@@ -4,7 +4,9 @@ import {
   BackupFile,
   BackupResponse,
   BackupTarget,
-  BackupUploadInput,
+  BackupDirectUploadInput,
+  BackupStartUploadInput,
+  BackupUploadChunkInput,
 } from "../shared/types";
 import { BackupMessageType } from "../shared/enums";
 import {
@@ -13,7 +15,9 @@ import {
   BackupGetTargetResponse,
   BackupIsAvailableResponse,
   BackupListResponse,
-  BackupUploadResponse,
+  BackupDirectUploadResponse,
+  BackupStartUploadResponse,
+  BackupUploadChunkResponse,
 } from "../shared/messages";
 import { sendRuntimeMessage } from "../../../utils/runtime";
 
@@ -41,10 +45,34 @@ export class BackupRuntimeProxy {
     });
   }
 
-  async upload(input: BackupUploadInput): Promise<BackupResponse<BackupFile>> {
-    return await sendRuntimeMessage<BackupUploadResponse>({
+  async directUpload(
+    input: BackupDirectUploadInput,
+  ): Promise<BackupResponse<BackupFile>> {
+    return await sendRuntimeMessage<BackupDirectUploadResponse>({
       isBackupMessage: true,
-      type: BackupMessageType.UPLOAD,
+      type: BackupMessageType.DIRECT_UPLOAD,
+      provider: this.provider,
+      input,
+    });
+  }
+
+  async startUpload(
+    input: BackupStartUploadInput,
+  ): Promise<BackupStartUploadResponse> {
+    return await sendRuntimeMessage<BackupStartUploadResponse>({
+      isBackupMessage: true,
+      type: BackupMessageType.START_UPLOAD,
+      provider: this.provider,
+      input,
+    });
+  }
+
+  async uploadChunk(
+    input: BackupUploadChunkInput,
+  ): Promise<BackupUploadChunkResponse> {
+    return await sendRuntimeMessage<BackupUploadChunkResponse>({
+      isBackupMessage: true,
+      type: BackupMessageType.UPLOAD_CHUNK,
       provider: this.provider,
       input,
     });

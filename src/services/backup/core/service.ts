@@ -1,6 +1,7 @@
 import { ExportOptions } from "dexie-export-import";
 
 import { BackupRuntimeProxy } from "./proxy";
+
 import {
   BackupCreateResult,
   BackupFile,
@@ -9,6 +10,7 @@ import {
 } from "../shared/types";
 import {
   BACKUP_MIME_TYPE,
+  CHUNK_SIZE_BYTES,
   MAX_DIRECT_BACKUP_UPLOAD_BYTES,
 } from "../shared/constants";
 
@@ -20,6 +22,16 @@ import { warn } from "../../../shared/extension/logger";
 import { BackupProviderType } from "../../../enums/backups";
 import { BackupConfig } from "../../../types/backups";
 import { daysToMs } from "../../../utils/date";
+
+type BackupUploadInput = {
+  proxy: BackupRuntimeProxy;
+  blob: Blob;
+  settings: {
+    fileName: string;
+    target: BackupTarget;
+    createdAt: number;
+  };
+};
 
 export class BackupService {
   private readonly proxies = new Map<BackupProviderType, BackupRuntimeProxy>();
@@ -63,26 +75,21 @@ export class BackupService {
     if (!exportedResult.success) return exportedResult;
     const exported = exportedResult.data!;
 
-    if (exported.size > MAX_DIRECT_BACKUP_UPLOAD_BYTES)
-      return this.failure(
-        `Backup file is too large for now (${exported.size} bytes). Max size is ${MAX_DIRECT_BACKUP_UPLOAD_BYTES} bytes.`,
-      );
-
     const createdAt = Date.now();
-    const content = await exported.text();
+    const settings = {
+      fileName: getBackupFileName({
+        datetime: createdAt,
+        type: "backup",
+        fileType: "json",
+      }),
+      target,
+      createdAt,
+    };
 
     const uploadedResult = this.requireData(
-      await proxy.upload({
-        target: target,
-        fileName: getBackupFileName({
-          datetime: createdAt,
-          type: "backup",
-          fileType: "json",
-        }),
-        mimeType: BACKUP_MIME_TYPE,
-        content,
-        createdAt,
-      }),
+      exported.size <= MAX_DIRECT_BACKUP_UPLOAD_BYTES
+        ? await this.uploadDirect({ proxy, blob: exported, settings })
+        : await this.uploadStream({ proxy, blob: exported, settings }),
       "Could not upload backup.",
     );
     if (!uploadedResult.success) return uploadedResult;
@@ -209,8 +216,84 @@ export class BackupService {
     );
   }
 
+  private async uploadDirect({
+    proxy,
+    blob,
+    settings: { fileName, target, createdAt },
+  }: BackupUploadInput): Promise<BackupResponse<BackupFile>> {
+    const content = await blob.text();
+
+    const response = await proxy.directUpload({
+      target: target,
+      fileName: fileName,
+      mimeType: BACKUP_MIME_TYPE,
+      content,
+      createdAt,
+    });
+
+    return response;
+  }
+
+  private async uploadStream({
+    proxy,
+    blob,
+    settings: { fileName, target, createdAt },
+  }: BackupUploadInput): Promise<BackupResponse<BackupFile>> {
+    const started = this.requireData(
+      await proxy.startUpload({
+        target,
+        fileName,
+        mimeType: BACKUP_MIME_TYPE,
+        sizeBytes: blob.size,
+        createdAt,
+      }),
+      "Could not start upload.",
+    );
+    if (!started.success) return started;
+
+    let finalFile: BackupFile | undefined;
+
+    for (let start = 0; start < blob.size; start += CHUNK_SIZE_BYTES) {
+      const end = Math.min(start + CHUNK_SIZE_BYTES, blob.size);
+      const chunk = blob.slice(start, end);
+      const chunkBase64 = await this.blobToBase64(chunk);
+
+      const uploaded = this.requireData(
+        await proxy.uploadChunk({
+          uploadId: started.data!.uploadId,
+          chunkBase64,
+          startByte: start,
+          endByteExclusive: end,
+          totalBytes: blob.size,
+        }),
+        "Could not upload backup chunk.",
+      );
+      if (!uploaded.success) return uploaded;
+
+      if (uploaded.data!.done) finalFile = uploaded.data!.file;
+    }
+
+    if (!finalFile)
+      return this.failure("Backup upload finished without file metadata.");
+
+    return this.success(finalFile);
+  }
+
   private isBackupExpired(backup: { createdAt: number; maxAgeMs: number }) {
     return Date.now() - backup.createdAt > backup.maxAgeMs;
+  }
+
+  private async blobToBase64(blob: Blob): Promise<string> {
+    const buffer = await blob.arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+
+    let binary = "";
+
+    for (const byte of bytes) {
+      binary += String.fromCharCode(byte);
+    }
+
+    return btoa(binary);
   }
 
   private requireData<T>(
