@@ -177,6 +177,26 @@ export class BackupService {
     return this.successVoid();
   }
 
+  async clear({
+    providerType,
+    target,
+  }: {
+    providerType: BackupProviderType;
+    target: BackupTarget;
+  }): Promise<BackupResponse<void>> {
+    const cleared = await this.getProxy(providerType).clear(target);
+
+    if (!cleared.success)
+      return this.failure(cleared.error ?? "Could not clear backups.");
+
+    await StorageService.backupConfigs.update(providerType, {
+      remoteTarget: undefined,
+      remoteTargetName: undefined,
+      remoteTargetKind: undefined,
+    });
+    return this.successVoid();
+  }
+
   private async getConfig(
     providerType: BackupProviderType,
   ): Promise<BackupResponse<BackupConfig>> {

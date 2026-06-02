@@ -8,6 +8,7 @@ import {
 } from "../shared/types";
 import { BackupMessageType } from "../shared/enums";
 import {
+  BackupClearResponse,
   BackupDeleteResponse,
   BackupGetTargetResponse,
   BackupIsAvailableResponse,
@@ -64,6 +65,15 @@ export class BackupRuntimeProxy {
       type: BackupMessageType.DELETE,
       provider: this.provider,
       fileId,
+    });
+  }
+
+  async clear(target: BackupTarget): Promise<BackupResponse<void>> {
+    return await sendRuntimeMessage<BackupClearResponse>({
+      isBackupMessage: true,
+      type: BackupMessageType.CLEAR,
+      provider: this.provider,
+      target,
     });
   }
 }

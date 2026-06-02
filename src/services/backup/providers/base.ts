@@ -26,4 +26,7 @@ export interface BackupHandler {
 
   /** Deletes a file from the provider's backup target. */
   delete(fileId: string): Promise<BackupResponse<void>>;
+
+  /** Deletes the entire backup target, including all files. */
+  clear(target: BackupTarget): Promise<BackupResponse<void>>;
 }

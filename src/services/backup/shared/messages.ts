@@ -14,7 +14,8 @@ export type BackupMessage =
   | BackupGetTargetMessage
   | BackupUploadMessage
   | BackupListMessage
-  | BackupDeleteMessage;
+  | BackupDeleteMessage
+  | BackupClearMessage;
 
 interface BackupBaseMessage {
   isBackupMessage: true;
@@ -46,8 +47,14 @@ export interface BackupDeleteMessage extends BackupBaseMessage {
   fileId: string;
 }
 
+export interface BackupClearMessage extends BackupBaseMessage {
+  type: BackupMessageType.CLEAR;
+  target: BackupTarget;
+}
+
 export type BackupIsAvailableResponse = BackupResponse<boolean>;
 export type BackupGetTargetResponse = BackupResponse<BackupTarget>;
 export type BackupUploadResponse = BackupResponse<BackupFile>;
 export type BackupListResponse = BackupResponse<BackupFile[]>;
 export type BackupDeleteResponse = BackupResponse<void>;
+export type BackupClearResponse = BackupResponse<void>;

@@ -137,6 +137,19 @@ export class GoogleBackupHandler implements BackupHandler {
     }
   }
 
+  async clear(target: BackupTarget): Promise<BackupResponse<void>> {
+    try {
+      await this.client.trashFile(target.id);
+
+      return { success: true };
+    } catch (err) {
+      return {
+        success: false,
+        error: err,
+      };
+    }
+  }
+
   private isUsableBackupFolder(file: {
     mimeType?: string;
     trashed?: boolean;

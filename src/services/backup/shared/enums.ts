@@ -4,4 +4,5 @@ export enum BackupMessageType {
   UPLOAD = "backup:upload",
   LIST = "backup:list",
   DELETE = "backup:delete",
+  CLEAR = "backup:clear",
 }

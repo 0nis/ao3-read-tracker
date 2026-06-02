@@ -42,6 +42,9 @@ function handleBackupMessage(
         case BackupMessageType.DELETE:
           return await handler.delete(message.fileId);
 
+        case BackupMessageType.CLEAR:
+          return await handler.clear(message.target);
+
         default:
           return {
             success: false,
