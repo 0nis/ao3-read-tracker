@@ -55,7 +55,7 @@ create Proxy
 Service -> Proxy: new BackupRuntimeProxy(GOOGLE_DRIVE)
 
 Service -> Proxy: isAvailable()
-Proxy -> BG: runtime message\nBACKUP_IS_AVAILABLE\nprovider GOOGLE_DRIVE
+Proxy -> BG: runtime message IS_AVAILABLE\nprovider GOOGLE_DRIVE
 BG -> BG: get/create handler for GOOGLE_DRIVE
 create Handler
 BG -> Handler: new GoogleBackupHandler()
@@ -73,7 +73,7 @@ Proxy --> Service: true
 Service -> Storage: read backup config
 
 Service -> Proxy: getTarget(config)
-Proxy -> BG: runtime message\nBACKUP_GET_TARGET\nprovider GOOGLE_DRIVE
+Proxy -> BG: runtime message GET_TARGET\nprovider GOOGLE_DRIVE
 BG -> BG: get cached handler for GOOGLE_DRIVE
 BG -> Handler: getTarget(config)
 
@@ -102,23 +102,70 @@ Exporter -> Storage: export IndexedDB database
 Storage --> Exporter: JSON Blob
 Exporter --> Service: JSON Blob
 
-Service -> Service: validate backup size
 Service -> Service: create backup filename
-Service -> Service: convert Blob to text
+Service -> Service: choose upload method\nbased on Blob size
 
-Service -> Proxy: upload(target, fileName, content)
-Proxy -> BG: runtime message\nBACKUP_UPLOAD\nprovider GOOGLE_DRIVE
-BG -> BG: get cached handler for GOOGLE_DRIVE
-BG -> Handler: upload(input)
-Handler -> Client: uploadBackup(input)
-Client -> Auth: getValidAccessToken()
-Auth --> Client: access token
-Client -> Google: POST /upload/drive/v3/files\nmultipart metadata + JSON
-Google --> Client: uploaded file metadata
-Client --> Handler: uploaded file
-Handler --> BG: BackupFile
-BG --> Proxy: BackupFile
-Proxy --> Service: BackupFile
+alt small enough for direct upload
+  Service -> Service: convert Blob to text
+
+  Service -> Proxy: directUpload(target, fileName, content)
+  Proxy -> BG: runtime message DIRECT_UPLOAD\nprovider GOOGLE_DRIVE
+  BG -> BG: get cached handler for GOOGLE_DRIVE
+  BG -> Handler: directUpload(input)
+  Handler -> Client: uploadBackup(input)
+  Client -> Auth: getValidAccessToken()
+  Auth --> Client: access token
+  Client -> Google: POST /upload/drive/v3/files\nmultipart metadata + JSON
+  Google --> Client: uploaded file metadata
+  Client --> Handler: uploaded file
+  Handler --> BG: BackupFile
+  BG --> Proxy: BackupFile
+  Proxy --> Service: BackupFile
+
+else large backup uses resumable upload
+  Service -> Proxy: startUpload(target, fileName, sizeBytes)
+  Proxy -> BG: runtime message START_UPLOAD\nprovider GOOGLE_DRIVE
+  BG -> BG: get cached handler for GOOGLE_DRIVE
+  BG -> Handler: startUpload(input)
+  Handler -> Client: startResumableUpload(input)
+  Client -> Auth: getValidAccessToken()
+  Auth --> Client: access token
+  Client -> Google: POST /upload/drive/v3/files\nuploadType=resumable\nmetadata only
+  Google --> Client: resumable upload URL
+  Client --> Handler: upload URL
+  Handler -> Handler: store upload session\nuploadId -> upload URL
+  Handler --> BG: uploadId
+  BG --> Proxy: uploadId
+  Proxy --> Service: uploadId
+
+  loop For each Blob chunk
+    Service -> Service: slice Blob chunk
+    Service -> Service: convert chunk to base64
+
+    Service -> Proxy: uploadChunk(uploadId, chunkBase64,\nbyte range)
+    Proxy -> BG: runtime message UPLOAD_CHUNK\nprovider GOOGLE_DRIVE
+    BG -> BG: get cached handler for GOOGLE_DRIVE
+    BG -> Handler: uploadChunk(input)
+    Handler -> Handler: get upload URL for uploadId
+    Handler -> Client: uploadResumableChunk(uploadUrl,\nchunk, byte range)
+    Client -> Google: PUT resumable upload URL\nContent-Range: bytes start-end/total
+
+    alt upload incomplete
+      Google --> Client: 308 Resume Incomplete
+      Client --> Handler: not done
+      Handler --> BG: done: false
+      BG --> Proxy: done: false
+      Proxy --> Service: done: false
+    else final chunk uploaded
+      Google --> Client: uploaded file metadata
+      Client --> Handler: uploaded file
+      Handler -> Handler: clear upload session
+      Handler --> BG: done: true\nBackupFile
+      BG --> Proxy: done: true\nBackupFile
+      Proxy --> Service: done: true\nBackupFile
+    end
+  end
+end
 
 Service -> Storage: update backup config\nremoteTarget + lastBackedUpAt
 
@@ -126,7 +173,7 @@ opt Retention enabled
   Service -> Service: prune()
 
   Service -> Proxy: list(target)
-  Proxy -> BG: runtime message\nBACKUP_LIST\nprovider GOOGLE_DRIVE
+  Proxy -> BG: runtime message LIST\nprovider GOOGLE_DRIVE
   BG -> BG: get cached handler for GOOGLE_DRIVE
   BG -> Handler: list(target)
   Handler -> Client: listBackups(folderId)
@@ -143,7 +190,7 @@ opt Retention enabled
 
   loop For each backup to delete
     Service -> Proxy: delete(fileId)
-    Proxy -> BG: runtime message\nBACKUP_DELETE\nprovider GOOGLE_DRIVE
+    Proxy -> BG: runtime message DELETE\nprovider GOOGLE_DRIVE
     BG -> BG: get cached handler for GOOGLE_DRIVE
     BG -> Handler: delete(fileId)
     Handler -> Client: trashFile(fileId)
