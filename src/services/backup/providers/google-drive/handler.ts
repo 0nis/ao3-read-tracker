@@ -1,17 +1,13 @@
-import { BackupHandler } from "../base";
-
 import { GoogleDriveClient } from "./client";
 import { toBackupFile } from "./mapper";
 import { GOOGLE_DRIVE_FOLDER_MIME_TYPE } from "./constants";
 
+import { BackupHandler } from "../base";
+
 import { AuthProviderType } from "../../../auth/shared/enums";
 import { authHandlerRegistry } from "../../../auth/background/registry";
 
-import {
-  BackupProviderType,
-  RemoteTargetKind,
-} from "../../../../enums/backups";
-import { BackupConfig } from "../../../../types/backups";
+import { base64ToBytes } from "../../shared/base64";
 import {
   BackupStartUploadResponse,
   BackupUploadChunkResponse,
@@ -25,6 +21,17 @@ import {
   BackupTarget,
   BackupUploadChunkInput,
 } from "../../shared/types";
+import {
+  backupFailure,
+  backupSuccess,
+  backupSuccessVoid,
+} from "../../shared/result";
+
+import {
+  BackupProviderType,
+  RemoteTargetKind,
+} from "../../../../enums/backups";
+import { BackupConfig } from "../../../../types/backups";
 
 export class GoogleBackupHandler implements BackupHandler {
   readonly provider = BackupProviderType.GOOGLE_DRIVE;
@@ -52,8 +59,7 @@ export class GoogleBackupHandler implements BackupHandler {
 
   async isAvailable(): Promise<boolean> {
     try {
-      const available = Boolean(await this.getValidAccessToken());
-      return available;
+      return Boolean(await this.getValidAccessToken());
     } catch {
       return false;
     }
@@ -65,31 +71,22 @@ export class GoogleBackupHandler implements BackupHandler {
         const existing = await this.client.getFile(config.remoteTarget);
 
         if (this.isUsableBackupFolder(existing))
-          return {
-            success: true,
-            data: {
-              id: existing.id,
-              kind: RemoteTargetKind.FOLDER,
-              name: existing.name,
-            },
-          };
+          return backupSuccess({
+            id: existing.id,
+            kind: RemoteTargetKind.FOLDER,
+            name: existing.name,
+          });
       }
 
       const created = await this.client.createBackupFolder();
 
-      return {
-        success: true,
-        data: {
-          id: created.id,
-          kind: RemoteTargetKind.FOLDER,
-          name: created.name,
-        },
-      };
+      return backupSuccess({
+        id: created.id,
+        kind: RemoteTargetKind.FOLDER,
+        name: created.name,
+      });
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
@@ -104,16 +101,9 @@ export class GoogleBackupHandler implements BackupHandler {
         content: input.content,
         createdAt: input.createdAt,
       });
-
-      return {
-        success: true,
-        data: toBackupFile(uploaded),
-      };
+      return backupSuccess(toBackupFile(uploaded));
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
@@ -132,15 +122,9 @@ export class GoogleBackupHandler implements BackupHandler {
       const uploadId = crypto.randomUUID();
       this.uploadSessions.set(uploadId, uploadUrl);
 
-      return {
-        success: true,
-        data: { uploadId },
-      };
+      return backupSuccess({ uploadId });
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
@@ -151,12 +135,9 @@ export class GoogleBackupHandler implements BackupHandler {
       const uploadUrl = this.uploadSessions.get(input.uploadId);
 
       if (!uploadUrl)
-        return {
-          success: false,
-          error: "Backup upload session not found.",
-        };
+        return backupFailure("Upload session not found: " + input.uploadId);
 
-      const chunk = this.base64ToBytes(input.chunkBase64);
+      const chunk = base64ToBytes(input.chunkBase64);
 
       const file = await this.client.uploadResumableChunk({
         uploadUrl,
@@ -166,26 +147,16 @@ export class GoogleBackupHandler implements BackupHandler {
         totalBytes: input.totalBytes,
       });
 
-      if (!file)
-        return {
-          success: true,
-          data: { done: false },
-        };
+      if (!file) return backupSuccess({ done: false });
 
       this.uploadSessions.delete(input.uploadId);
 
-      return {
-        success: true,
-        data: {
-          done: true,
-          file: toBackupFile(file),
-        },
-      };
+      return backupSuccess({
+        done: true,
+        file: toBackupFile(file),
+      });
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
@@ -193,41 +164,27 @@ export class GoogleBackupHandler implements BackupHandler {
     try {
       const files = await this.client.listBackups(target.id);
 
-      return {
-        success: true,
-        data: files.map(toBackupFile),
-      };
+      return backupSuccess(files.map(toBackupFile));
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
   async delete(fileId: string): Promise<BackupResponse<void>> {
     try {
       await this.client.trashFile(fileId);
-      return {
-        success: true,
-      };
+      return backupSuccessVoid();
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
   async clear(target: BackupTarget): Promise<BackupResponse<void>> {
     try {
       await this.client.trashFile(target.id);
-      return { success: true };
+      return backupSuccessVoid();
     } catch (err) {
-      return {
-        success: false,
-        error: err,
-      };
+      return backupFailure(err);
     }
   }
 
@@ -236,16 +193,5 @@ export class GoogleBackupHandler implements BackupHandler {
     trashed?: boolean;
   }): boolean {
     return file.mimeType === GOOGLE_DRIVE_FOLDER_MIME_TYPE && !file.trashed;
-  }
-
-  private base64ToBytes(base64: string): Uint8Array {
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-
-    for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
-
-    return bytes;
   }
 }

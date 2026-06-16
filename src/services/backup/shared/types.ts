@@ -56,9 +56,9 @@ export interface BackupProviderCapabilities {
 export type BackupResponse<T = void> =
   | {
       success: true;
-      data?: T;
+      data: T;
     }
   | {
       success: false;
-      error?: Error | string | unknown;
+      error: Error | string | unknown;
     };
