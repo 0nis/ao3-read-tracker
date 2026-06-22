@@ -117,6 +117,12 @@ export const getFormattedDateTimeForFilename = (timestamp: number): string => {
   );
 };
 
+/** Converts days to milliseconds */
+export const daysToMs = (days?: number): number | undefined => {
+  if (!days || days <= 0) return undefined;
+  return days * 24 * 60 * 60 * 1000;
+};
+
 const formatDateSafely = (
   timestamp: number | undefined,
   formatter: (ts: number) => string,

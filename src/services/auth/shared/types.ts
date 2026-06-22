@@ -1,6 +1,7 @@
 import { AuthMessageType, AuthProviderType } from "./enums";
 
 export type AuthMessage = {
+  isAuthMessage: true;
   type: AuthMessageType;
   provider: AuthProviderType;
 };

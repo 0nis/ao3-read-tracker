@@ -12,6 +12,7 @@ export class AuthRuntimeProxy {
 
   async startDeviceFlow(): Promise<DeviceFlowStartResponse> {
     return await sendRuntimeMessage<DeviceFlowStartResponse>({
+      isAuthMessage: true,
       type: AuthMessageType.START_DEVICE_FLOW,
       provider: this.provider,
     });
@@ -19,6 +20,7 @@ export class AuthRuntimeProxy {
 
   async pollDeviceFlow(): Promise<DeviceFlowStatus> {
     const response = await sendRuntimeMessage<DeviceFlowPollResponse>({
+      isAuthMessage: true,
       type: AuthMessageType.POLL_DEVICE_FLOW,
       provider: this.provider,
     });
@@ -30,6 +32,7 @@ export class AuthRuntimeProxy {
 
   async isAuthenticated(): Promise<boolean> {
     const response = await sendRuntimeMessage<AuthStatusResponse>({
+      isAuthMessage: true,
       type: AuthMessageType.STATUS,
       provider: this.provider,
     });
@@ -41,6 +44,7 @@ export class AuthRuntimeProxy {
 
   async disconnect(): Promise<void> {
     const response = await sendRuntimeMessage<AuthDisconnectResponse>({
+      isAuthMessage: true,
       type: AuthMessageType.DISCONNECT,
       provider: this.provider,
     });
