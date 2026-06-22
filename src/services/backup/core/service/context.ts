@@ -27,11 +27,10 @@ export class BackupContextResolver {
     const proxy = this.providers.getProxy(providerType);
 
     const isAvailable = await proxy.isAvailable();
-    if (!isAvailable) {
+    if (!isAvailable)
       return backupFailure(
         `Backup provider is not available: ${providerType}.`,
       );
-    }
 
     const configResult = await this.getConfig(providerType);
     if (!configResult.success) return configResult;
