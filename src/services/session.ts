@@ -9,5 +9,9 @@ export const SessionStorage = () => {
       sessionStorage.removeItem(key);
       return res;
     },
+
+    get(key: string): string | null {
+      return sessionStorage.getItem(key) ?? null;
+    },
   };
 };

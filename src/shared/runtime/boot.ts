@@ -2,17 +2,19 @@ import { isAlive } from "./state";
 import { disable } from "./recovery";
 import { kill } from "./lifecycle";
 
+import { warn } from "../extension/logger";
 import { App } from "../../app";
 import { db } from "../../data/db";
+
 import { localMemory } from "../../services/memory";
-import { warn } from "../extension/logger";
 import { reportExtensionFailure } from "../../shared/extension/dialogs";
+import { addGlobalListener } from "../../utils/listeners";
 import { ExtensionDisabledData } from "../../types/memory";
 import {
   EXTENSION_DISABLED_KEY,
   PERSISTENT_STORAGE_KEY,
 } from "../../constants/global";
-import { addGlobalListener } from "../../utils/listeners";
+import { backupScheduler } from "../../services/backup/core/scheduler";
 
 export async function boot() {
   const res = localMemory.get<ExtensionDisabledData>(EXTENSION_DISABLED_KEY);
@@ -51,6 +53,7 @@ async function openDb() {
 async function initApp() {
   try {
     await App.init();
+    await backupScheduler.start();
   } catch (err) {
     reportExtensionFailure(
       "⚠️ Extension %name% (v%version%) failed to initialize! ⚠️",
